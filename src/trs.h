@@ -263,4 +263,10 @@ extern int timer_hz;
 extern int timer_overclock_rate;
 extern int timer_overclock;
 
+int put_twobyte(Ushort n, FILE* f);
+int put_fourbyte(Uint n, FILE* f);
+int get_twobyte(Ushort *n, FILE* f);
+int get_fourbyte(Uint *n, FILE* f);
+
+
 #endif /*_TRS_H*/
