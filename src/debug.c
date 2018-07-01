@@ -108,6 +108,8 @@ Running:\n\
 Printing:\n\
     dump\n\
         Print the values of the Z-80 registers.\n\
+    in <port>\n\
+        Read the value of the given I/O port.\n\
     list\n\
     list <addr>\n\
     list <start addr> , <end addr>\n\
@@ -145,8 +147,9 @@ Traps:\n\
         Set a trap to watch specified hex address for changes.\n\
 Miscellaneous:\n\
     assign $<reg> = <value>\n\
+    assign I<port> = <value>\n\
     assign <addr> = <value>\n\
-        Change the value of a register, register pair, or memory byte.\n\
+        Change the value of a register, register pair, I/O or memory byte.\n\
     timeroff\n\
     timeron\n\
         Disable/enable the emulated TRS-80 real time clock interrupt.\n\
@@ -607,6 +610,15 @@ void debug_shell()
 		    }
 		}
 	    }
+	    else if(!strcmp(command, "in"))
+	    {
+		int port;
+
+		if(sscanf(input, "in %x", &port) == 1)
+			printf("in %x = %x\n", port, z80_in(port));
+		else
+			printf("A port must be specified.\n");
+	    }
 	    else if(!strcmp(command, "next") || !strcmp(command, "nextint"))
 	    {
 		int is_call = 0, is_rst = 0;
@@ -737,6 +749,10 @@ void debug_shell()
 		    } else {
 			DebugOutput("Unrecognized register name %s.\n", regname);
 		    }
+		}
+		else if(sscanf(input, "%*s I%x = %x", &addr, &value) == 2)
+		{
+		    z80_out(addr, value);
 		}
 		else if(sscanf(input, "%*s %x = %x", &addr, &value) == 2)
 		{
