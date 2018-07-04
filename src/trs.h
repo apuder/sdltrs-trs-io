@@ -220,6 +220,9 @@ extern int trs_disk_motoroff(void);
 
 extern int huffman_ram;
 extern int supermem;
+extern int selector;
+
+extern void selector_out(unsigned char);
 
 extern void mem_video_page(int which);
 extern void mem_bank(int which);
