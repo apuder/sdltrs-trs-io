@@ -225,6 +225,8 @@ extern int selector;
 
 extern void selector_out(unsigned char);
 
+extern int lowercase;
+
 extern void mem_video_page(int which);
 extern void mem_bank(int which);
 extern void mem_map(int which);

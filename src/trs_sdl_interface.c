@@ -297,6 +297,7 @@ static void trs_opt_hypermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_selector(char *arg, int intarg, char *stringarg);
 static void trs_opt_le18(char *arg, int intarg, char *stringarg);
+static void trs_opt_lower(char *arg, int intarg, char *stringarg);
 
 trs_opt options[] = {
 {"scale",trs_opt_scale,1,0,NULL},
@@ -386,6 +387,8 @@ trs_opt options[] = {
 {"noselector",trs_opt_selector,0,0,NULL},
 {"le18",trs_opt_le18,0,1,NULL},
 {"nole18",trs_opt_le18,0,0,NULL},
+{"lower",trs_opt_lower,0,1,NULL},
+{"nolower",trs_opt_lower,0,0,NULL},
 };
 
 static int num_options = sizeof(options)/sizeof(trs_opt);
@@ -591,6 +594,10 @@ int trs_write_config_file(char *filename)
     fprintf(config_file, "le18\n");
   else
     fprintf(config_file, "nole18\n");
+  if (lowercase)
+    fprintf(config_file, "lower\n");
+  else
+    fprintf(config_file, "nolower\n");
 
   fclose(config_file);
   return 0;
@@ -944,6 +951,11 @@ static void trs_opt_selector(char *arg, int intarg, char *stringarg)
 static void trs_opt_le18(char *arg, int intarg, char *stringarg)
 {
   lowe_le18 = intarg;
+}
+
+static void trs_opt_lower(char *arg, int intarg, char *stringarg)
+{
+  lowercase = intarg;
 }
 
 int trs_load_config_file(char *alternate_file)
@@ -3729,6 +3741,7 @@ void trs_main_save(FILE *file)
   trs_save_int(file,&key_queue_head,1);
   trs_save_int(file,&key_queue_entries,1);
   trs_save_int(file,&lowe_le18,1);
+  trs_save_int(file,&lowercase,1);
 }
 
 void trs_main_load(FILE *file)
@@ -3757,6 +3770,7 @@ void trs_main_load(FILE *file)
   trs_load_int(file,&key_queue_head,1);
   trs_load_int(file,&key_queue_entries,1);
   trs_load_int(file,&lowe_le18,1);
+  trs_load_int(file,&lowercase,1);
 }
 
 void trs_sdl_cleanup(void)

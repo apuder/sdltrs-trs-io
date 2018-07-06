@@ -97,6 +97,7 @@ int bank_offset[2];
 #define VIDEO_PAGE_0 0
 #define VIDEO_PAGE_1 1024
 int video_offset = (-VIDEO_START + VIDEO_PAGE_0);
+int lowercase;
 int romin = 0; /* Model 4p */
 unsigned int bank_base = 0x10000;
 unsigned char mem_command = 0;
@@ -545,19 +546,18 @@ void trs80_model1_write_mmio(int address, int value)
 {
   if (address >= VIDEO_START) {
     int vaddr = address + video_offset;
-    /* FIXME: this should be a command line option */
-#if UPPERCASE
-    /*
-     * Video write.  Hack here to make up for the missing bit 6
-     * video ram, emulating the gate in Z30.
-     */
-    if (trs_model == 1) {
-      if(value & 0xa0)
-        value &= 0xbf;
-      else
-        value |= 0x40;
+    if (!lowercase) {
+      /*
+       * Video write.  Hack here to make up for the missing bit 6
+       * video ram, emulating the gate in Z30.
+       */
+      if (trs_model == 1) {
+        if(value & 0xa0)
+          value &= 0xbf;
+        else
+          value |= 0x40;
+      }
     }
-#endif
     if (video[vaddr] != value) {
       video[vaddr] = value;
       trs_screen_write_char(vaddr, value);

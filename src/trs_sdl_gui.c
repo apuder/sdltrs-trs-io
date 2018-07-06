@@ -2380,12 +2380,13 @@ void trs_gui_model(void)
   char *on_off_choices[2] = {"           Off  ","           On   "};
   MENU_ENTRY model_menu[] = 
   {{"Model                                                       ",MENU_NORMAL_TYPE,1},
-   {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE,2},
-   {"Microlab Emulation                                          ",MENU_NORMAL_TYPE,3},
-   {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE,4},
-   {"Alpha Technologies HyperMem Memory Expansion                ",MENU_NORMAL_TYPE,5},
-   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,6},
-   {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE,7},
+   {"Lowercase Modification                                      ",MENU_NORMAL_TYPE,2},
+   {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE,3},
+   {"Microlab Emulation                                          ",MENU_NORMAL_TYPE,4},
+   {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE,5},
+   {"Alpha Technologies HyperMem Memory Expansion                ",MENU_NORMAL_TYPE,6},
+   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,7},
+   {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE,8},
    {"",0,-1}};
    int selection = 0;
    int model_selection = 0, last_model_selection;
@@ -2407,12 +2408,13 @@ void trs_gui_model(void)
          break;
      }
      strcpy(&model_menu[0].title[40],model_choices[model_selection]);
-     strcpy(&model_menu[1].title[45],on_off_choices[lowe_le18]);
-     strcpy(&model_menu[2].title[45],on_off_choices[grafyx_get_microlabs()]);
-     strcpy(&model_menu[3].title[45],on_off_choices[huffman_ram]);
-     strcpy(&model_menu[4].title[45],on_off_choices[hypermem]);
-     strcpy(&model_menu[5].title[45],on_off_choices[supermem]);
-     strcpy(&model_menu[6].title[45],on_off_choices[selector]);
+     strcpy(&model_menu[1].title[45],on_off_choices[lowercase]);
+     strcpy(&model_menu[2].title[45],on_off_choices[lowe_le18]);
+     strcpy(&model_menu[3].title[45],on_off_choices[grafyx_get_microlabs()]);
+     strcpy(&model_menu[4].title[45],on_off_choices[huffman_ram]);
+     strcpy(&model_menu[5].title[45],on_off_choices[hypermem]);
+     strcpy(&model_menu[6].title[45],on_off_choices[supermem]);
+     strcpy(&model_menu[7].title[45],on_off_choices[selector]);
      
      selection = trs_gui_display_menu("SDLTRS Model Selection Menu",model_menu, selection);
      switch(selection) {
@@ -2439,33 +2441,37 @@ void trs_gui_model(void)
          }
          break;
        case 1:
+         lowercase = trs_gui_display_popup("Lowercase",on_off_choices,2,
+                                                       lowercase);
+         break;
+       case 2:
          lowe_le18 = trs_gui_display_popup("LE18",on_off_choices,2,
                                                   lowe_le18);
          break;
-       case 2:
+       case 3:
          state = trs_gui_display_popup("Microlabs",on_off_choices,2,
                                                    grafyx_get_microlabs());
          grafyx_set_microlabs(state);
          break;                                          
-       case 3:
+       case 4:
          huffman_ram = trs_gui_display_popup("Huffman",on_off_choices,2,
                                                        huffman_ram);
          if (huffman_ram)
            hypermem = 0;
          break;
-       case 4:
+       case 5:
          hypermem = trs_gui_display_popup("HyperMem",on_off_choices,2,
                                                      hypermem);
           if (hypermem)
             huffman_ram = 0;
           break;
-       case 5:
+       case 6:
          supermem = trs_gui_display_popup("SuperMem",on_off_choices,2,
                                                      supermem);
          if (supermem)
            selector = 0;
          break;
-       case 6:
+       case 7:
          selector = trs_gui_display_popup("Selector",on_off_choices,2,
                                                      selector);
          if (selector)
