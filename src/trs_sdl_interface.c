@@ -296,6 +296,7 @@ static void trs_opt_huffman(char *arg, int intarg, char *stringarg);
 static void trs_opt_hypermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_selector(char *arg, int intarg, char *stringarg);
+static void trs_opt_le18(char *arg, int intarg, char *stringarg);
 
 trs_opt options[] = {
 {"scale",trs_opt_scale,1,0,NULL},
@@ -383,6 +384,8 @@ trs_opt options[] = {
 {"nosupermem",trs_opt_supermem,0,0,NULL},
 {"selector",trs_opt_selector,0,1,NULL},
 {"noselector",trs_opt_selector,0,0,NULL},
+{"le18",trs_opt_le18,0,1,NULL},
+{"nole18",trs_opt_le18,0,0,NULL},
 };
 
 static int num_options = sizeof(options)/sizeof(trs_opt);
@@ -583,6 +586,11 @@ int trs_write_config_file(char *filename)
     fprintf(config_file, "selector\n");
   else
     fprintf(config_file, "noselector\n");
+
+  if (lowe_le18)
+    fprintf(config_file, "le18\n");
+  else
+    fprintf(config_file, "nole18\n");
 
   fclose(config_file);
   return 0;
@@ -931,6 +939,11 @@ static void trs_opt_supermem(char *arg, int intarg, char *stringarg)
 static void trs_opt_selector(char *arg, int intarg, char *stringarg)
 {
   selector = intarg;
+}
+
+static void trs_opt_le18(char *arg, int intarg, char *stringarg)
+{
+  lowe_le18 = intarg;
 }
 
 int trs_load_config_file(char *alternate_file)
@@ -3286,6 +3299,68 @@ int grafyx_m3_active()
 }
 
 /*
+ *     The Lowe Electronics LE18 is yet another fairly simple
+ *     I/O based 384x192 graphics adapter writing 6bits per
+ *     TRS80 character
+ *
+ *     Port EC (R)
+ *     7: goes high for blanking - can spin until high to avoid noise
+ *     6: on/off status
+ *     5-0: pixel data bit 0 is left
+ *
+ *     Port ED (W)
+ *     7-6: unused
+ *     5-0: X position (chars)
+ *     Port EE (W)
+ *     7-0: Y position (lines)
+ *
+ *     Port EF (W)
+ *     7-1: unused
+ *     0: hi res (1 = on)
+ */
+
+static unsigned char le18_x, le18_y, le18_on;
+int lowe_le18;
+
+void lowe_le18_reset(void)
+{
+}
+
+void lowe_le18_write_x(int value)
+{
+  le18_x = value & 31;
+}
+
+void lowe_le18_write_y(int value)
+{
+  le18_y = value;
+}
+
+int lowe_le18_read(void)
+{
+  if (!lowe_le18)
+    return 0xFF;
+  return (grafyx_unscaled[le18_y][le18_x] & 0x1F) | 0x80
+          | ((le18_on) ? 0x40 : 0x00);
+}
+
+void lowe_le18_write_data(int value)
+{
+  if (lowe_le18)
+    grafyx_write_byte(le18_x, le18_y, value & 0x1F);
+}
+
+void lowe_le18_write_control(int value)
+{
+  if (lowe_le18 && ((le18_on ^ value) & 1)) {
+    le18_on ^= 1;
+    grafyx_enable = le18_on;
+    grafyx_overlay = le18_on;
+    trs_screen_refresh();
+  }
+}
+
+/*
  * Support for Model I HRG1B 384*192 graphics card
  * (sold in Germany for Model I and Video Genie by RB-Elektronik).
  *
@@ -3633,6 +3708,7 @@ void trs_main_save(FILE *file)
   trs_save_int(file,key_queue,KEY_QUEUE_SIZE);
   trs_save_int(file,&key_queue_head,1);
   trs_save_int(file,&key_queue_entries,1);
+  trs_save_int(file,&lowe_le18,1);
 }
 
 void trs_main_load(FILE *file)
@@ -3660,6 +3736,7 @@ void trs_main_load(FILE *file)
   trs_load_int(file,key_queue,KEY_QUEUE_SIZE);
   trs_load_int(file,&key_queue_head,1);
   trs_load_int(file,&key_queue_entries,1);
+  trs_load_int(file,&lowe_le18,1);
 }
 
 void trs_sdl_cleanup(void)
