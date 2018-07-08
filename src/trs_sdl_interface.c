@@ -3331,7 +3331,7 @@ void lowe_le18_write_x(int value)
   /* This really is 0-255. The unit has 16K x 6bit of RAM
      of which only 12K is displayed. You can use the rest
      as a 4K x 6bit area for .. not a lot really */
-  le18_x = value & 31;
+  le18_x = value & 63;
 }
 
 void lowe_le18_write_y(int value)
