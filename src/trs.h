@@ -219,6 +219,7 @@ extern void trs_disk_debug(void);
 extern int trs_disk_motoroff(void);
 
 extern int huffman_ram;
+extern int hypermem;
 extern int supermem;
 extern int selector;
 
