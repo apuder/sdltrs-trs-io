@@ -2382,8 +2382,9 @@ void trs_gui_model(void)
   {{"Model                                                       ",MENU_NORMAL_TYPE,1},
    {"Microlab Emulation                                          ",MENU_NORMAL_TYPE,3},
    {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE,4},
-   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,5},
-   {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE,6},
+   {"Alpha Technologies HyperMem Memory Expansion                ",MENU_NORMAL_TYPE,5},
+   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,6},
+   {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE,7},
    {"",0,-1}};
    int selection = 0;
    int model_selection = 0, last_model_selection;
@@ -2407,8 +2408,9 @@ void trs_gui_model(void)
      strcpy(&model_menu[0].title[40],model_choices[model_selection]);
      strcpy(&model_menu[1].title[45],on_off_choices[grafyx_get_microlabs()]);
      strcpy(&model_menu[2].title[45],on_off_choices[huffman_ram]);
-     strcpy(&model_menu[3].title[45],on_off_choices[supermem]);
-     strcpy(&model_menu[4].title[45],on_off_choices[selector]);
+     strcpy(&model_menu[3].title[45],on_off_choices[hypermem]);
+     strcpy(&model_menu[4].title[45],on_off_choices[supermem]);
+     strcpy(&model_menu[5].title[45],on_off_choices[selector]);
      
      selection = trs_gui_display_menu("SDLTRS Model Selection Menu",model_menu, selection);
      switch(selection) {
@@ -2442,18 +2444,27 @@ void trs_gui_model(void)
        case 2:
          huffman_ram = trs_gui_display_popup("Huffman",on_off_choices,2,
                                                        huffman_ram);
+         if (huffman_ram)
+           hypermem = 0;
          break;
        case 3:
+         hypermem = trs_gui_display_popup("HyperMem",on_off_choices,2,
+                                                     hypermem);
+          if (hypermem)
+            huffman_ram = 0;
+          break;
+       case 4:
          supermem = trs_gui_display_popup("SuperMem",on_off_choices,2,
                                                      supermem);
          if (supermem)
            selector = 0;
          break;
-       case 4:
+       case 5:
          selector = trs_gui_display_popup("Selector",on_off_choices,2,
                                                      selector);
          if (selector)
           supermem = 0;
+         break;
      }
   }
 }

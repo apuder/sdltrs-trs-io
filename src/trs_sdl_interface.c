@@ -293,6 +293,7 @@ static void trs_opt_mousepointer(char *arg, int intarg, char *stringarg);
 static void trs_opt_joybuttonmap(char *arg, int intarg, char *stringarg);
 static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg);
 static void trs_opt_huffman(char *arg, int intarg, char *stringarg);
+static void trs_opt_hypermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_selector(char *arg, int intarg, char *stringarg);
 
@@ -376,6 +377,8 @@ trs_opt options[] = {
 {"nojoyaxismapped",trs_opt_joyaxismapped,0,0,NULL},
 {"huffman",trs_opt_huffman,0,1,NULL},
 {"nohuffman",trs_opt_huffman,0,0,NULL},
+{"hypermem",trs_opt_hypermem,0,1,NULL},
+{"nohypermem",trs_opt_hypermem,0,0,NULL},
 {"supermem",trs_opt_supermem,0,1,NULL},
 {"nosupermem",trs_opt_supermem,0,0,NULL},
 {"selector",trs_opt_selector,0,1,NULL},
@@ -568,6 +571,10 @@ int trs_write_config_file(char *filename)
     fprintf(config_file, "huffman\n");
   else
     fprintf(config_file, "nohuffman\n");
+  if (hypermem)
+    fprintf(config_file, "hypermem\n");
+  else
+    fprintf(config_file, "nohypermem\n");
   if (supermem)
     fprintf(config_file, "supermem\n");
   else
@@ -905,6 +912,13 @@ static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg)
 static void trs_opt_huffman(char *arg, int intarg, char *stringarg)
 {
   huffman_ram = intarg;
+}
+
+static void trs_opt_hypermem(char *arg, int intarg, char *stringarg)
+{
+  hypermem = intarg;
+  if (hypermem)
+    huffman_ram = 0;
 }
 
 static void trs_opt_supermem(char *arg, int intarg, char *stringarg)

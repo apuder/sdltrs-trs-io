@@ -897,6 +897,7 @@ void trs_mem_save(FILE *file)
   trs_save_int(file, &video_offset, 1);
   trs_save_int(file, &romin, 1);
   trs_save_int(file, &huffman_ram, 1);
+  trs_save_int(file, &hypermem, 1);
   trs_save_int(file, &supermem, 1);
   trs_save_int(file, &selector, 1);
 }
@@ -913,6 +914,7 @@ void trs_mem_load(FILE *file)
   trs_load_int(file, &video_offset, 1);
   trs_load_int(file, &romin, 1);
   trs_load_int(file, &huffman_ram, 1);
+  trs_load_int(file, &hypermem, 1);
   trs_load_int(file, &supermem, 1);
   trs_load_int(file, &selector, 1);
   if (trs_model <= 3) {
