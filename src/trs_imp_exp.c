@@ -728,8 +728,8 @@ void do_emt_opendisk()
       od[i].oflag = oflag;
       if (od[i].fd >= 0)
         od[i].xtrshard = 1;
-        xtrshard_fd[hard_unit] = od[i].fd;
-        od[i].xtrshard_unit = hard_unit;
+      xtrshard_fd[hard_unit] = od[i].fd;
+      od[i].xtrshard_unit = hard_unit;
     } else {
       od[i].fd = -1;
     }

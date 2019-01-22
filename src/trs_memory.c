@@ -240,6 +240,7 @@ void selector_out(unsigned char value)
 
 void trs_exit()
 {
+extern void trs_sdl_cleanup();
 #ifdef MACOSX
     trs_mac_save_defaults();
 #endif
@@ -312,7 +313,7 @@ void mem_map(int which)
     memory_map = which + (trs_model << 4) + (romin << 2);
 }
 
-void mem_romin(state)
+void mem_romin(int state)
 {
     romin = (state & 1);
     memory_map = (memory_map & ~4) + (romin << 2);

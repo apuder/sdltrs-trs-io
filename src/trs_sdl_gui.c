@@ -137,6 +137,8 @@ static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static int trs_gui_config_management(void);
 static char *trs_gui_get_key_name(int key);
+static int trs_gui_virtual_keyboard(void);
+static int trs_gui_display_question(char *text);
 
 void trs_gui_write_text_len(char *text, int len, int x, int y, int invert)
 {
@@ -549,7 +551,7 @@ int trs_gui_readdirectory(char *path, int browse_dir)
   directory = opendir(path);
   if (directory) {
     trs_gui_create_filename_list();
-	while (dir_entry = readdir(directory)) {
+	while ((dir_entry = readdir(directory))) {
 
 	  if (strcmp(dir_entry->d_name, ".") == 0)
 		continue;
@@ -606,7 +608,6 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
   char current_dir[FILENAME_MAX];
   char limited_dir[80];
   char title[64];
-  int new_dir_len;
   char *new_dir;
   
   strcpy(current_dir, path);
@@ -721,7 +722,6 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
         case SDLK_RETURN:
           if (*filenamelist[current_first + selection] == '<') {          
             new_dir = filenamelist[current_first + selection];
-            new_dir_len = strlen(&new_dir[1]);
             selection = 0;
             current_first = 0;
           
@@ -2085,7 +2085,7 @@ void trs_gui_joystick_save_mapping(void)
 {
   FILE *config_file;
   struct stat st;
-  char *ptr, string[256], joy_string[256], *new_config_string;
+  char *ptr, string[256], *new_config_string;
   int i, index = 0;
 
 #ifdef _WIN32
@@ -2454,7 +2454,7 @@ void trs_gui_model(void)
    {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE,8},
    {"",0,-1}};
    int selection = 0;
-   int model_selection = 0, last_model_selection;
+   int model_selection = 0;
    int done = 0;
    int state;
    
@@ -2487,7 +2487,6 @@ void trs_gui_model(void)
          done = 1;
          break;
        case 0:
-         last_model_selection = model_selection;
          model_selection = trs_gui_display_popup("Model",model_choices,4,
                                             model_selection);
          switch(model_selection) {

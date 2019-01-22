@@ -60,3 +60,6 @@ void trs_expand_dir(char *dir, char *expanded_dir);
 
 void trs_gui_get_virtual_key(void);
 void trs_gui_joy_gui(void);
+
+extern void trs_gui_save_rect(int x, int y, int w, int h);
+extern void trs_gui_restore_rect(int x, int y, int w, int h);

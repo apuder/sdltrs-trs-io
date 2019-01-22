@@ -222,7 +222,7 @@ void trs_save_short(FILE *file, short *buffer, int count)
     byte = unum & 0xFF;
     fwrite(&byte,1,1,file);
     unum = unum >> 8;
-    byte = unum & 0x7F | sign;
+    byte = (unum & 0x7F) | sign;
     fwrite(&byte,1,1,file);
   }
 }
@@ -274,7 +274,7 @@ void trs_save_int(FILE *file, int *buffer, int count)
     byte = unum & 0xFF;
     fwrite(&byte,1,1,file);
     unum = unum >> 8;
-    byte = unum & 0x7F | sign;
+    byte = (unum & 0x7F) | sign;
     fwrite(&byte,1,1,file);
   }
 }

@@ -78,6 +78,12 @@
 
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 
+extern void trs_gui_load_single_state(void);
+extern void trs_gui_save_single_state(void);
+
+extern int trs_timer_is_turbo(void);
+extern int trs_timer_switch_turbo(void);
+
 #define MAX_RECTS 2048
 #define WHITE 0xffffff
 #define BLACK 0
@@ -166,7 +172,7 @@ static Uint32 bright_red;
 static int paste_state = PASTE_IDLE;
 static int paste_lastkey = FALSE;
 extern int  PasteManagerStartPaste(void);
-extern void PasteManagerStartCopy(unsigned char *string);
+extern void PasteManagerStartCopy(char *string);
 extern int PasteManagerGetChar(unsigned short *character);
 
 #define COPY_OFF       0
@@ -1061,7 +1067,6 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 
   for (i = 1; i < argc; i++) {
 	int argAvail = ((i + 1) < argc);		/* is argument available? */
-	int argMissing = FALSE;
 
 	for (j=0;j<num_options;j++) {
       if (argv[i][0] == '-') {
@@ -1069,8 +1074,6 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 	      if (options[j].hasArg) {
 		    if (argAvail) {
 		      (*options[j].handler)(argv[++i],options[j].intArg,options[j].strArg);  
-		    } else {
-			  argMissing = TRUE;
   		    }
 	  	  } else
 		      (*options[j].handler)(NULL,options[j].intArg,options[j].strArg); 
@@ -1521,7 +1524,7 @@ void ProcessCopySelection(int selectAll)
 				return;
 #endif			
 			if ((copyStatus == COPY_IDLE) &&
-				(mouse & SDL_BUTTON(1) == 0)) {
+				((mouse & SDL_BUTTON(1)) == 0)) {
 				return;		
 			}
 #ifdef MACOSX			
@@ -1826,9 +1829,9 @@ void trs_get_event(int wait)
 	        keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
 #ifdef MACOSX
-	  if (keysym.mod & MENU_MOD == 0) {
+	  if ((keysym.mod & MENU_MOD) == 0) {
 #else
-	  if (keysym.mod & KMOD_CTRL == 0) {
+	  if ((keysym.mod & KMOD_CTRL) == 0) {
 #endif
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
@@ -2382,7 +2385,7 @@ void
 boxes_init(int foreground, int background, int width, int height, int expanded)
 {
   SDL_Rect fullrect;
-  int graphics_char, bit, p;
+  int graphics_char, bit;
   SDL_Rect bits[6];
 
   /*
@@ -2415,7 +2418,7 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
     /* Clear everything */
     SDL_FillRect(trs_box[expanded][graphics_char], &fullrect, background);
     
-    for (bit = 0, p = 0; bit < 6; ++bit) {
+    for (bit = 0 ; bit < 6; ++bit) {
       if (graphics_char & (1 << bit)) {
       	SDL_FillRect(trs_box[expanded][graphics_char], &bits[bit], foreground);
       }
@@ -2748,7 +2751,6 @@ void trs_hard_led(int drive, int on_off)
 void trs_screen_write_char(int position, int char_index)
 {
   int row,col,destx,desty;
-  int plane;
   SDL_Rect srcRect, destRect;
 
   trs_screen[position] = char_index;
@@ -2805,7 +2807,6 @@ void trs_screen_write_char(int position, int char_index)
 	(currentmode & (ALTERNATE+INVERSE)) == 0) {
       char_index -= 0x40;
     }
-    plane = 1;
     switch (currentmode & ~ALTERNATE) {
     case NORMAL:
       srcRect.x = 0;
@@ -3114,16 +3115,11 @@ void grafyx_redraw(void)
 {
   int i, j;
   char exp[MAX_SCALE];
-  int screen_x, screen_y, on_screen;
   int x,y;
   char byte;
   
   for (y=0;y<G_YSIZE;y++) {
     for (x=0;x<G_XSIZE;x++) {
-    screen_x = ((x - grafyx_xoffset + G_XSIZE) % G_XSIZE);
-    screen_y = ((y - grafyx_yoffset + G_YSIZE) % G_YSIZE);
-    on_screen = screen_x < row_chars &&
-                screen_y < col_chars*cur_char_height/scale_y;
       byte = grafyx_unscaled[y][x];
       switch (scale_x) {
       default:

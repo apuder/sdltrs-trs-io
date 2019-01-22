@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <limits.h>
+#include <time.h>
 #include <X11/Xutil.h>
 
 #include "SDL/SDL.h"
@@ -27,7 +28,7 @@ static Time _cliptime = CurrentTime;
 static char *clipboard = NULL;
 
 /* Maximum size to send or receive per request. */
-#define MIN(a,b) (a<b ? a : b)
+#define MIN(a,b) (((a) < (b)) ? a : b)
 #define MAX_CHUNK_SIZE(display)                                    \
     MIN(262144, /* 65536 * 4 */                                    \
         (XExtendedMaxRequestSize (display)) == 0                   \
@@ -42,7 +43,7 @@ static int firstTime = 1;
 
 /* Extern emulator routines */
 extern int trs_paste_started();
-extern void trs_copy_ended();
+extern void trs_end_copy();
 
 static int init_scrap(void)
 {
@@ -98,7 +99,6 @@ static void put_scrap(int srclen, char *src)
 {
   int dstlen;
   char *dst;
-  int result;
 
   dstlen = srclen;
   dst = (char *)malloc(dstlen);
@@ -109,11 +109,11 @@ static void put_scrap(int srclen, char *src)
   Lock_Display();
 
   XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
-      _atom_CLIPBOARD, XA_STRING, 8, PropModeReplace, dst, dstlen);
+      _atom_CLIPBOARD, XA_STRING, 8, PropModeReplace, (unsigned char *)dst, dstlen);
 
   XSync (SDL_Display, False);
   if ( lost_scrap() ) {
-    result = XSetSelectionOwner(SDL_Display, _atom_CLIPBOARD, SDL_Window, CurrentTime);
+    XSetSelectionOwner(SDL_Display, _atom_CLIPBOARD, SDL_Window, CurrentTime);
   }
   Unlock_Display();
 }
@@ -152,7 +152,6 @@ static void get_scrap(int *dstlen, char **dst)
 {
   Window owner;
   Atom source;
-  Atom selection;
   time_t start;
   Atom sel_type;
   int sel_format;
@@ -166,7 +165,6 @@ static void get_scrap(int *dstlen, char **dst)
   int step = 1;
   XEvent ev;
   Time timestamp;
-  Atom format;
 
   *dstlen = 0;
 

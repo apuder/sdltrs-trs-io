@@ -85,7 +85,7 @@ void trs_printer_open(void)
   }
 }
 
-void trs_printer_write(value)
+void trs_printer_write(int value)
 {
   if (trs_printer == TEXT_PRINTER) {
     if (!printer_open)
