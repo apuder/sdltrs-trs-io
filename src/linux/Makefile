@@ -6,7 +6,7 @@ LINKOBJ  = blit.o debug.o dis.o error.o load_cmd.o load_hex.o main.o trs_mkdisk.
 LIBS =  -lSDL -lXt -lX11
 INCS =  
 BIN  = sdltrs
-CFLAGS = $(INCS) -g 
+CFLAGS = $(INCS) -g -Wall -O2
 
 .PHONY: all all-before all-after clean clean-custom
 
