@@ -1062,7 +1062,7 @@ transition_in()
 }
 
 /* If the motor has been on for 1 second (emulated time), the i/o port
-   has been neither read nor written, and the Z-80 program has 1500
+   has been neither read nor written, and the Z80 program has 1500
    bps rise or fall interrupts enabled, then give it one of each just
    to get things going. */
 void
@@ -1077,7 +1077,7 @@ trs_cassette_kickoff(int dummy)
   }
 }
 
-/* Z-80 program is turning motor on or off */
+/* Z80 program is turning motor on or off */
 void trs_cassette_motor(int value)
 {
   if (value) {

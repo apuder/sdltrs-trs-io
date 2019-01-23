@@ -883,7 +883,7 @@
 								</object>
 								<object class="NSMenuItem" id="804691275">
 									<reference key="NSMenu" ref="941443924"/>
-									<string key="NSTitle">TRS80 Model</string>
+									<string key="NSTitle">TRS-80 Model</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -891,12 +891,12 @@
 									<reference key="NSMixedImage" ref="482768259"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="403090371">
-										<string key="NSTitle">TRS80 Model</string>
+										<string key="NSTitle">TRS-80 Model</string>
 										<object class="NSMutableArray" key="NSMenuItems">
 											<bool key="EncodedWithXMLCoder">YES</bool>
 											<object class="NSMenuItem" id="444126645">
 												<reference key="NSMenu" ref="403090371"/>
-												<string key="NSTitle">TRS80 Model 1</string>
+												<string key="NSTitle">TRS-80 Model 1</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -905,7 +905,7 @@
 											</object>
 											<object class="NSMenuItem" id="302072165">
 												<reference key="NSMenu" ref="403090371"/>
-												<string key="NSTitle">TRS80 Model 3</string>
+												<string key="NSTitle">TRS-80 Model 3</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -915,7 +915,7 @@
 											</object>
 											<object class="NSMenuItem" id="958345689">
 												<reference key="NSMenu" ref="403090371"/>
-												<string key="NSTitle">TRS80 Model 4</string>
+												<string key="NSTitle">TRS-80 Model 4</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -925,7 +925,7 @@
 											</object>
 											<object class="NSMenuItem" id="484209313">
 												<reference key="NSMenu" ref="403090371"/>
-												<string key="NSTitle">TRS80 Model 4p</string>
+												<string key="NSTitle">TRS-80 Model 4p</string>
 												<string key="NSKeyEquiv"/>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>

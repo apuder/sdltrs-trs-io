@@ -2067,7 +2067,7 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{58, 145}, {766, 89}}</string>
 				<int key="NSWTFlags">1886912512</int>
-				<string key="NSWindowTitle">TRS80 Media</string>
+				<string key="NSWindowTitle">TRS-80 Media</string>
 				<string key="NSWindowClass">TrsMediaWindow</string>
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>

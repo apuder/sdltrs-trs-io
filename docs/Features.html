@@ -63,7 +63,7 @@ History</a>
 <big style="font-weight: bold; text-decoration: underline;"><big><a name="Overview"></a>Overview<br>
 </big></big><br>
 
-sdltrs is built on top of a Z-80 emulator, with added routines to
+sdltrs is built on top of a Z80 emulator, with added routines to
 support keyboard and video I/O through a SDL interface. The hardware
 emulation can operate as a TRS-80 Model I, Model III, Model 4, or Model
 4P.<br>
@@ -102,7 +102,7 @@ not provided for all operating systems.<br>
 
 <br>
 
-The Z-80 emulator has a debugger called zbx. You can enter the debugger
+The Z80 emulator has a debugger called zbx. You can enter the debugger
 either by starting sdltrs with the -debug flag or by pressing F9 while
 sdltrs is running. The debugger runs in the command line terminal
 window that you started sdltrs from, or on the Mac OS X port, from a
@@ -114,7 +114,7 @@ information.<br>
 Special support in the emulator allows the program to block when
 waiting for information from the keyboard. This will work only for
 programs that wait for keyboard input using the standard Model I/III
-ROM call; the emulator decides whether to block the Z-80 program when
+ROM call; the emulator decides whether to block the Z80 program when
 it tries to read from the keyboard memory by pattern-matching its stack.<br>
 
 <br>
@@ -859,10 +859,10 @@ ent unit number.<br>
 
 <br>
 
-Technical note: XTRSHARD/DCT is a small Z-80 program that implements
+Technical note: XTRSHARD/DCT is a small Z80 program that implements
 all the required functions of an LDOS disk driver. Instead of talking
 to a real (or emulated) hard disk controller, however, it uses special
-support in sdltrs that allows Z-80 programs to open, close, read, and
+support in sdltrs that allows Z80 programs to open, close, read, and
 write host files directly. This support is described further in the
 "Data import and export" section below.<br>
 
@@ -915,7 +915,7 @@ drive. Detailed instructions are beyond the scope of this manual page.
 
 <br>
 
-Several Z-80 programs for data import and export from various TRS-80
+Several Z80 programs for data import and export from various TRS-80
 operating systems are included with sdltrs on two emulated floppy
 images. These programs use special support in the emulator to read and
 write external host files, discussed further at the end of this
@@ -1193,7 +1193,7 @@ happens when it is used with sdltrs.<br>
 <br>
 
 Also see SETTIME/CMD in the "Data import and export" section above for
-another way to get the correct time into a Z-80 operating system
+another way to get the correct time into a Z80 operating system
 running under sdltrs.<br>
 
 <br>

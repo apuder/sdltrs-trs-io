@@ -281,12 +281,12 @@ emulate.&nbsp; -model1 is the default.<br>
       <td style="vertical-align: top;">-keystretch cycles</td>
       <td style="vertical-align: top;">Fine-tune the keyboard behavior.
 To prevent keystrokes from being lost, sdltrs "stretches" the intervals
-between key transitions, so that the Z-80 program has time to see each
-transition before the next one occurs. Whenever the Z-80 program reads
+between key transitions, so that the Z80 program has time to see each
+transition before the next one occurs. Whenever the Z80 program reads
 the keyboard matrix and sees an emulated key go up or down, sdltrs
-waits cycles Z-80 clock cycles (T-states) before it allows the program
+waits cycles Z80 clock cycles (T-states) before it allows the program
 to see another key transition. Key transitions that are received during
-the waiting period or when the Z-80 program
+the waiting period or when the Z80 program
 is not reading the keyboard are held in a queue. The default stretch
 value is 4000 cycles; it should seldom if ever be necessary to change
 it.</td>
@@ -396,7 +396,7 @@ value set by -doublestep or -nodoublestep.<br>
 z0,z1,z2,z3,z4,z5,z6,z7</td>
       <td style="vertical-align: top;">Selectively set whether drives
 are emulated as 5-inch or 8-inch. If zU is 5, the
-drive will appear to Z-80 software as 5-inch; if 8, as
+drive will appear to Z80 software as 5-inch; if 8, as
 8-inch. The default setting (as reflected in the documentation
 above) is 5,5,5,5,8,8,8,8. You can omit values from the end of
 the list; those drives will get the default values. Setting one

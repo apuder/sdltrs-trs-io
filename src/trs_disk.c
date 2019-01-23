@@ -3687,7 +3687,7 @@ real_write()
     if (raw_cmd.reply[1] & 0x04) {
       state.status |= TRSDISK_NOTFOUND;
       /* Could have been due to wrong sector size.  Presumably
-         the Z-80 software will do some retries, so we'll cause
+         the Z80 software will do some retries, so we'll cause
          it to try the next sector size next time. */
       if (trs_disk_debug_flags & DISKDEBUG_REALSIZE) {
 	debug("real_write not found: side %d tk %d sec %d size 0%d phytk %d\n",

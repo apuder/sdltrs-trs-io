@@ -114,7 +114,7 @@ struct z80_state_struct
     /* To signal a maskable interrupt, set irq TRUE.  The CPU does not
      * turn off irq; the external device must turn it off when
      * appropriately tickled by some IO port or memory address that it
-     * decodes.  INT is level triggered, so Z-80 code must tickle the
+     * decodes.  INT is level triggered, so Z80 code must tickle the
      * device before reenabling interrupts.
      *
      * There is no support as yet for fetching an interrupt vector or

@@ -838,7 +838,7 @@ int trs_kb_mem_read(int address)
     }
 
     /* After each key state change, impose a timeout before the next one
-       so that the Z-80 program doesn't miss any by polling too rarely,
+       so that the Z80 program doesn't miss any by polling too rarely,
        and so that we don't tickle the bugs in some common TRS-80 keyboard
        drivers that strike if two keys change simultaneously */
     if (key_stretch_timeout - z80_state.t_count > TSTATE_T_MID) {

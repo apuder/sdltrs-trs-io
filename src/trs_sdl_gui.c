@@ -2877,7 +2877,7 @@ void trs_gui(void)
    {"Hard Disk Management   (SHIFT-ALT-D)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE,3},
 #endif   
-   {"TRS80 Model Selection",MENU_NORMAL_TYPE,4},
+   {"TRS-80 Model Selection",MENU_NORMAL_TYPE,4},
    {"Configuration/State File Management",MENU_NORMAL_TYPE,5},
    {"Printer Management",MENU_NORMAL_TYPE,6},
    {"Select Default Directories",MENU_NORMAL_TYPE,7},

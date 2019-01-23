@@ -152,7 +152,7 @@
     IBOutlet id model3FontPulldown;
     IBOutlet id model4FontPulldown;
 	IBOutlet id ledStatusButton;
-    // TRS80 items
+    // TRS-80 items
     IBOutlet id trsModelPulldown;
     IBOutlet id trsGraphicsPulldown;
     IBOutlet id shiftBracketButton;

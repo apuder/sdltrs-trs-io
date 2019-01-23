@@ -39,7 +39,7 @@
  *
  * Features to make transferring files into and out of the emulator
  * (etc.) easier, using a set of emulator traps (instructions that
- * don't exist in a real Z-80).
+ * don't exist in a real Z80).
  *
  * ED20-ED21 reserved; used by Jeff Vavasour Model III/4 emulator
  *

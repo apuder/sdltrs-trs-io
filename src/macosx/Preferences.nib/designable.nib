@@ -1297,7 +1297,7 @@ LCAyMDA1AAAAAA</bytes>
 													<int key="NSPeriodicInterval">75</int>
 													<object class="NSMenuItem" key="NSMenuItem" id="381325324">
 														<reference key="NSMenu" ref="1039211370"/>
-														<string key="NSTitle">TRS80 Model 1</string>
+														<string key="NSTitle">TRS-80 Model 1</string>
 														<string key="NSKeyEquiv"/>
 														<int key="NSKeyEquivModMask">1048576</int>
 														<int key="NSMnemonicLoc">2147483647</int>
@@ -1317,7 +1317,7 @@ LCAyMDA1AAAAAA</bytes>
 															<reference ref="381325324"/>
 															<object class="NSMenuItem" id="834759304">
 																<reference key="NSMenu" ref="1039211370"/>
-																<string key="NSTitle">TRS80 Model 3</string>
+																<string key="NSTitle">TRS-80 Model 3</string>
 																<string key="NSKeyEquiv"/>
 																<int key="NSKeyEquivModMask">1048576</int>
 																<int key="NSMnemonicLoc">2147483647</int>
@@ -1328,7 +1328,7 @@ LCAyMDA1AAAAAA</bytes>
 															</object>
 															<object class="NSMenuItem" id="362040152">
 																<reference key="NSMenu" ref="1039211370"/>
-																<string key="NSTitle">TRS80 Model 4</string>
+																<string key="NSTitle">TRS-80 Model 4</string>
 																<string key="NSKeyEquiv"/>
 																<int key="NSKeyEquivModMask">1048576</int>
 																<int key="NSMnemonicLoc">2147483647</int>
@@ -1339,7 +1339,7 @@ LCAyMDA1AAAAAA</bytes>
 															</object>
 															<object class="NSMenuItem" id="228017285">
 																<reference key="NSMenu" ref="1039211370"/>
-																<string key="NSTitle">TRS80 Model 4p</string>
+																<string key="NSTitle">TRS-80 Model 4p</string>
 																<string key="NSKeyEquiv"/>
 																<int key="NSKeyEquivModMask">1048576</int>
 																<int key="NSMnemonicLoc">2147483647</int>
@@ -1365,7 +1365,7 @@ LCAyMDA1AAAAAA</bytes>
 												<object class="NSTextFieldCell" key="NSCell" id="535012617">
 													<int key="NSCellFlags">67239424</int>
 													<int key="NSCellFlags2">4194304</int>
-													<string key="NSContents">TRS80 Model</string>
+													<string key="NSContents">TRS-80 Model</string>
 													<reference key="NSSupport" ref="1051896196"/>
 													<reference key="NSControlView" ref="240186911"/>
 													<reference key="NSBackgroundColor" ref="515958407"/>
@@ -3020,7 +3020,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 										</object>
 										<string key="NSFrame">{{10, 33}, {713, 374}}</string>
 									</object>
-									<string key="NSLabel">TRS80</string>
+									<string key="NSLabel">TRS-80</string>
 									<reference key="NSColor" ref="515958407"/>
 									<reference key="NSTabView" ref="8831442"/>
 								</object>
