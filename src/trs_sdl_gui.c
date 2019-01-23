@@ -2381,6 +2381,8 @@ void trs_gui_model(void)
   MENU_ENTRY model_menu[] = 
   {{"Model                                                       ",MENU_NORMAL_TYPE,1},
    {"Microlab Emulation                                          ",MENU_NORMAL_TYPE,3},
+   {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE,4},
+   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,5},
    {"",0,-1}};
    int selection = 0;
    int model_selection = 0, last_model_selection;
@@ -2403,6 +2405,8 @@ void trs_gui_model(void)
      }
      strcpy(&model_menu[0].title[40],model_choices[model_selection]);
      strcpy(&model_menu[1].title[45],on_off_choices[grafyx_get_microlabs()]);
+     strcpy(&model_menu[2].title[45],on_off_choices[huffman_ram]);
+     strcpy(&model_menu[3].title[45],on_off_choices[supermem]);
      
      selection = trs_gui_display_menu("SDLTRS Model Selection Menu",model_menu, selection);
      switch(selection) {
@@ -2433,6 +2437,14 @@ void trs_gui_model(void)
                                                    grafyx_get_microlabs());
          grafyx_set_microlabs(state);
          break;                                          
+       case 2:
+         huffman_ram = trs_gui_display_popup("Huffman",on_off_choices,2,
+                                                       huffman_ram);
+         break;
+       case 3:
+         supermem = trs_gui_display_popup("SuperMem",on_off_choices,2,
+                                                     supermem);
+          break;
      }
   }
 }

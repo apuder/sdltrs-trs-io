@@ -292,6 +292,8 @@ static void trs_opt_turborate(char *arg, int intarg, char *stringarg);
 static void trs_opt_mousepointer(char *arg, int intarg, char *stringarg);
 static void trs_opt_joybuttonmap(char *arg, int intarg, char *stringarg);
 static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg);
+static void trs_opt_huffman(char *arg, int intarg, char *stringarg);
+static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
 
 trs_opt options[] = {
 {"scale",trs_opt_scale,1,0,NULL},
@@ -371,6 +373,10 @@ trs_opt options[] = {
 {"joybuttonmap",trs_opt_joybuttonmap,1,0,NULL},
 {"joyaxismapped",trs_opt_joyaxismapped,0,1,NULL},
 {"nojoyaxismapped",trs_opt_joyaxismapped,0,0,NULL},
+{"huffman",trs_opt_huffman,0,1,NULL},
+{"nohuffman",trs_opt_huffman,0,0,NULL},
+{"supermem",trs_opt_supermem,0,1,NULL},
+{"nosupermem",trs_opt_supermem,0,0,NULL},
 };
 
 static int num_options = sizeof(options)/sizeof(trs_opt);
@@ -554,6 +560,15 @@ int trs_write_config_file(char *filename)
     fprintf(config_file, "joyaxismapped\n");
   else
     fprintf(config_file, "nojoyaxismapped\n");
+
+  if (huffman_ram)
+    fprintf(config_file, "huffman\n");
+  else
+    fprintf(config_file, "nohuffman\n");
+  if (supermem)
+    fprintf(config_file, "supermem\n");
+  else
+    fprintf(config_file, "nosupermem\n");
 
   fclose(config_file);
   return 0;
@@ -878,6 +893,16 @@ static void trs_opt_joybuttonmap(char *arg, int intarg, char *stringarg)
 static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg)
 {
   jaxis_mapped = intarg;
+}
+
+static void trs_opt_huffman(char *arg, int intarg, char *stringarg)
+{
+  huffman_ram = intarg;
+}
+
+static void trs_opt_supermem(char *arg, int intarg, char *stringarg)
+{
+  supermem = intarg;
 }
 
 int trs_load_config_file(char *alternate_file)

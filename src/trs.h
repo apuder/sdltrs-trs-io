@@ -218,9 +218,14 @@ extern void trs_uart_set_empty(int dummy);
 extern void trs_disk_debug(void);
 extern int trs_disk_motoroff(void);
 
+extern int huffman_ram;
+extern int supermem;
+
 extern void mem_video_page(int which);
 extern void mem_bank(int which);
 extern void mem_map(int which);
+void mem_bank_base(int bits);
+int mem_read_bank_base(void);
 extern void mem_romin(int state);
 
 extern void trs_debug(void);

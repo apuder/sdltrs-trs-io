@@ -77,7 +77,9 @@
 /* Interrupt latch register in EI (Model 1) */
 #define TRS_INTLATCH(addr) (((addr)&~3) == 0x37e0)
 
-Uchar memory[0x20001]; /* +1 so strings from mem_pointer are NUL-terminated */
+/* We allow for 2MB of banked memory via port 0x94. That is the extreme limit
+   of the port mods rather than anything normal (512K might be more 'normal' */
+Uchar memory[0x200001]; /* +1 so strings from mem_pointer are NUL-terminated */
 Uchar *rom;
 int trs_rom_size;
 Uchar *video;
@@ -91,6 +93,10 @@ int bank_offset[2];
 #define VIDEO_PAGE_1 1024
 int video_offset = (-VIDEO_START + VIDEO_PAGE_0);
 int romin = 0; /* Model 4p */
+unsigned int bank_base = 0x10000;
+unsigned char mem_command = 0;
+int huffman_ram = 0;
+int supermem = 0;
 
 /*SUPPRESS 53*/
 /*SUPPRESS 112*/
@@ -113,20 +119,63 @@ void mem_bank(int command)
 	break;
       case 3:
 	bank_offset[0] = 0 << 15;
-	bank_offset[1] = 2 << 15;
+	bank_offset[1] = (0 << 15) + bank_base;
 	break;
       case 6:
-	bank_offset[0] = 2 << 15;
+	bank_offset[0] = (0 << 15) + bank_base;
 	bank_offset[1] = 0 << 15;
 	break;
       case 7:
-	bank_offset[0] = 3 << 15;
+	bank_offset[0] = (1 << 15) + bank_base;
 	bank_offset[1] = 0 << 15;
 	break;
       default:
 	error("unknown mem_bank command %d", command);
 	break;
     }
+    mem_command = command;
+}
+
+/*
+ *	Dave Huffman (and some other) memory expansions. These decode
+ *	port 0x94 off U50 as follows
+ *
+ *	7: only used with Z180 board (not emulated - would need Z180 emulation!)
+ *	6: write protect - not emulated
+ *	5: sometimes used for > 4MHz turbo mod
+ *	4-0: Bits A20-A16 of the alt bank
+ *
+ *	Starts as 1 on a reset so that you get the 'classic' memory map
+ *
+ *	This port is read-write and the drivers depend upon it
+ *	(See RAMDV364.ASM)
+ */
+
+void mem_bank_base(int bits)
+{
+	if (huffman_ram) {
+		bits &= 0x1F;
+		bank_base = bits << 16;
+		mem_bank(mem_command);
+	}
+	/* For the model 1 with the Alpha products SuperMem the top 32K
+	   switches between 32K banks. We keep them at 64K+ in the array */
+	if (trs_model < 4 && supermem) {
+		/* Emulate a 512Kb system which is a fairly typical board.
+		   256/512/768/1024K were available for the Model I and
+		   more for the model III */
+		bits &= 0x0F; /* 15 bits of address + 4bits logical */
+		bank_base = bits << 15;
+	}
+}
+
+int mem_read_bank_base(void)
+{
+	if (huffman_ram)
+		return (bank_base >> 16) & 0x1F;
+	if (trs_model < 4 && supermem)
+		return bank_base >> 15;
+	return 0xFF;
 }
 
 void trs_exit()
@@ -162,6 +211,8 @@ void trs_reset(int poweron)
     if (trs_model >= 4) {
         /* Turn off various memory map and video mode bits */
 	z80_out(0x84, 0);
+	if (huffman_ram)
+		z80_out(0x94, 0);
     }
     if (trs_model >= 3) {
 	grafyx_write_mode(0);
@@ -173,6 +224,7 @@ void trs_reset(int poweron)
     }
     if (trs_model == 1) {
 	hrg_onoff(0);		/* Switch off HRG1B hi-res graphics. */
+	bank_base = 0;
     }
     trs_kb_reset();  /* Part of keyboard stretch kludge */
 
@@ -246,6 +298,10 @@ int mem_read(int address)
 
     switch (memory_map) {
       case 0x10: /* Model I */
+        /* A Model 4 using a model 1 map doesn't do this shift with
+           a Supermem card */
+        if (trs_model == 1 && address >= 32768)
+          return memory[address + bank_base];
 	if (address >= VIDEO_START) return memory[address];
 	if (address < trs_rom_size) return memory[address];
 	if (address == TRSDISK_DATA) return trs_disk_data_read();
@@ -258,6 +314,10 @@ int mem_read(int address)
 	return 0xff;
 
       case 0x30: /* Model III */
+         /* A Model 4 using a model 1 map doesn't do this shift with
+            a Supermem card */
+        if (trs_model == 3 && address >= 32768)
+	  return memory[address + bank_base];
 	if (address >= RAM_START) return memory[address];
 	if (address == PRINTER_ADDRESS)	return trs_printer_read();
 	if (address < trs_rom_size) return memory[address];
@@ -308,6 +368,7 @@ int mem_read(int address)
       case 0x53: /* Model 4P map 3, boot ROM out */
       case 0x57: /* Model 4P map 3, boot ROM in */
 	return memory[address + bank_offset[address>>15]];
+
     }
     /* not reached */
     return 0xff;
@@ -319,7 +380,11 @@ void mem_write(int address, int value)
 
     switch (memory_map) {
       case 0x10: /* Model I */
-	if (address >= RAM_START) {
+        /* A Model 4 using a model 1 map doesn't do this shift with
+           a Supermem card */
+        if (trs_model == 1 && address >= 32768)
+          memory[address + bank_base] = value;
+        else if (address >= RAM_START) {
 	    memory[address] = value;
 	} else if (address >= VIDEO_START) {
 	    int vaddr = address + video_offset;
@@ -355,7 +420,11 @@ void mem_write(int address, int value)
 	break;
 
       case 0x30: /* Model III */
-	if (address >= RAM_START) {
+        /* A Model 4 using a model 1 map doesn't do this shift with
+           a Supermem card */
+        if (trs_model == 3 && address >= 32768)
+            memory[address + bank_base] = value;
+	else if (address >= RAM_START) {
 	    memory[address] = value;
 	} else if (address >= VIDEO_START) {
 	    int vaddr = address + video_offset;
@@ -452,6 +521,8 @@ Uchar *mem_pointer(int address, int writing)
     switch (memory_map + (writing << 3)) {
       case 0x10: /* Model I reading */
       case 0x30: /* Model III reading */
+        if (trs_model < 4 && address >= 32768)
+	    return &memory[address + bank_base];
 	if (address >= VIDEO_START) return &memory[address];
 	if (address < trs_rom_size) return &rom[address];
 	return NULL;
@@ -574,7 +645,7 @@ mem_block_transfer(Ushort dest, Ushort source, int direction, Ushort count)
 
 void trs_mem_save(FILE *file)
 {
-  trs_save_uchar(file, memory, 0x20001);
+  trs_save_uchar(file, memory, 0x200001);
   trs_save_int(file, &trs_rom_size, 1);
   trs_save_int(file, &trs_video_size, 1);
   trs_save_uchar(file, rom_4, MAX_ROM_SIZE+1);
@@ -583,11 +654,13 @@ void trs_mem_save(FILE *file)
   trs_save_int(file, bank_offset, 2);
   trs_save_int(file, &video_offset, 1);
   trs_save_int(file, &romin, 1);
+  trs_save_int(file, &huffman_ram, 1);
+  trs_save_int(file, &supermem, 1);
 }
 
 void trs_mem_load(FILE *file)
 {
-  trs_load_uchar(file, memory, 0x20001);
+  trs_load_uchar(file, memory, 0x200001);
   trs_load_int(file, &trs_rom_size, 1);
   trs_load_int(file, &trs_video_size, 1);
   trs_load_uchar(file, rom_4, MAX_ROM_SIZE+1);
@@ -596,6 +669,8 @@ void trs_mem_load(FILE *file)
   trs_load_int(file, bank_offset, 2);
   trs_load_int(file, &video_offset, 1);
   trs_load_int(file, &romin, 1);
+  trs_load_int(file, &huffman_ram, 1);
+  trs_load_int(file, &supermem, 1);
   if (trs_model <= 3) {
     rom = &memory[ROM_START];
     video = &memory[VIDEO_START];
