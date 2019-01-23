@@ -61,7 +61,7 @@
    will be blocked, including file writes to the host filesystem and shell
    command execution.
  */
-int trs_emtsafe = 0;
+int trs_emtsafe = 1;
 
 /* New emulator traps */
 typedef struct {

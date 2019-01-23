@@ -672,7 +672,7 @@ void trs_set_to_defaults(void)
 #ifdef MACOSX
   strcpy(trs_printer_command,"open %s");
 #endif
-  trs_emtsafe = 0;
+  trs_emtsafe = 1;
 }
 
 static void trs_opt_scale(char *arg, int intarg, char *stringarg)
