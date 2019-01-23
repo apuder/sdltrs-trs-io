@@ -724,7 +724,7 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
 {
   if (isdigit(*arg)) {
     trs_charset1 = atoi(arg);
-    if (trs_charset1 < 0 || (trs_charset1 > 3  && trs_charset != 10))
+    if (trs_charset1 < 0 || (trs_charset1 > 3 && trs_charset1 != 10))
       trs_charset1 = 3;
   } else if (arg[0] == 'e'/*early*/) {
      trs_charset1 = 0;
