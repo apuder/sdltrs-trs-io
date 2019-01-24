@@ -698,6 +698,25 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
             }
           }        
           break;
+        case SDLK_HOME:
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
+          selection = current_first = 0;
+          trs_gui_clear_rect(2,2,60,12);
+          for (i=0;i<drawcount;i++)
+             trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
+          trs_x_flush();
+          break;
+        case SDLK_END:
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
+          selection = drawcount-1;
+          current_first = filenamecount-drawcount;
+          trs_gui_clear_rect(2,2,60,12);
+          for (i=0;i<drawcount;i++)
+             trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
+          trs_x_flush();
+          break;
         case SDLK_RETURN:
           if (*filenamelist[current_first + selection] == '<') {          
             new_dir = filenamelist[current_first + selection];
@@ -980,6 +999,19 @@ int trs_gui_display_popup(char* title, char **entry,
         trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
         trs_x_flush();
         break;
+      case SDLK_HOME:
+        trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
+        selection = 0;
+        trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
+        trs_x_flush();
+        break;
+      case SDLK_END:
+        trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
+        selection = entry_count-1;
+        trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
+        trs_x_flush();
+        break;
+      case SDLK_SPACE:
       case SDLK_RETURN:
         done = 1;
         break;
@@ -995,7 +1027,7 @@ int trs_gui_display_popup(char* title, char **entry,
 
 int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
 {
-  int num = 0,invert,key;
+  int num = 0,invert,i,key;
   int done = 0;
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
@@ -1014,11 +1046,26 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
 
   do {
     key = trs_gui_get_key();
+    if (key >= '0' && key <= 'z') {
+      for (i=0;i<num+1;i++) {
+        if (tolower(*entry[i].title) == key && selection != i) {
+          trs_gui_write_text(entry[selection].title, 2, selection+2,0);
+          selection = i;
+          while(entry[selection].type == MENU_TITLE_TYPE) {
+            if (selection < num)
+              selection ++;
+          }
+          trs_gui_write_text(entry[selection].title, 2, selection+2,1);
+          trs_x_flush();
+          break;
+        }
+      }
+    } else
     switch(key) {
       case SDLK_DOWN:
         trs_gui_write_text(entry[selection].title, 2, selection+2,0);
         do {
-          if (selection < num) 
+          if (selection < num)
             selection ++;
           else 
             selection = 0;
@@ -1037,7 +1084,24 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
         trs_gui_write_text(entry[selection].title, 2, selection+2,1);
         trs_x_flush();
         break;
-       case SDLK_BACKSPACE:
+      case SDLK_HOME:
+        trs_gui_write_text(entry[selection].title, 2, selection+2,0);
+        selection = 0;
+        while(entry[selection].type == MENU_TITLE_TYPE) {
+          if (selection < num)
+            selection ++;
+        }
+        trs_gui_write_text(entry[selection].title, 2, selection+2,1);
+        trs_x_flush();
+        break;
+      case SDLK_END:
+        trs_gui_write_text(entry[selection].title, 2, selection+2,0);
+        selection = num;
+        trs_gui_write_text(entry[selection].title, 2, selection+2,1);
+        trs_x_flush();
+        break;
+      case SDLK_DELETE:
+      case SDLK_BACKSPACE:
         if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
             (entry[selection].type == MENU_HARD_BROWSE_TYPE) ||
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
