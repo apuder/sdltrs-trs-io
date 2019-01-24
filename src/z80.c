@@ -990,40 +990,20 @@ static void do_ldi()
 
 static void do_ldir()
 {
-    /* repeating block load with increment */
-    int moved, undoc;
-
-    moved = mem_block_transfer(REG_DE, REG_HL, 1, REG_BC);
-    T_COUNT(((REG_BC-1) & 0xffff) * 21 + 16);
-
-    /* set registers to final values */
-    REG_DE += REG_BC;
-    REG_HL += REG_BC;
-    REG_BC = 0;
-
-    /* set up flags */
-    undoc = REG_A + moved;
-    REG_F = (REG_F & (CARRY_MASK | ZERO_MASK | SIGN_MASK)) 
-      | (undoc & UNDOC3_MASK) | ((undoc & 2) ? UNDOC5_MASK : 0);
+    do_ldi();
+    if(OVERFLOW_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
 }
 
 static void do_lddr()
 {
-    /* repeating block load with decrement */
-    int moved, undoc;
-
-    moved = mem_block_transfer(REG_DE, REG_HL, -1, REG_BC);
-    T_COUNT(((REG_BC-1) & 0xffff) * 21 + 16);
-
-    /* set registers to final values */
-    REG_DE -= REG_BC;
-    REG_HL -= REG_BC;
-    REG_BC = 0;
-
-    /* set up flags */
-    undoc = REG_A + moved;
-    REG_F = (REG_F & (CARRY_MASK | ZERO_MASK | SIGN_MASK)) 
-      | (undoc & UNDOC3_MASK) | ((undoc & 2) ? UNDOC5_MASK : 0);
+    do_ldd();
+    if(OVERFLOW_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
 }
 
 static void do_ld_a_i()

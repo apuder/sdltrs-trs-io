@@ -252,8 +252,6 @@ extern void mem_write_rom(int address, int value);
 extern int mem_read_word(int address);
 extern void mem_write_word(int address, int value);
 Uchar *mem_pointer(int address, int writing);
-extern int mem_block_transfer(Ushort dest, Ushort source, int direction,
-			      Ushort count);
 extern int load_hex(); /* returns highest address loaded + 1 */
 extern void debug(const char *fmt, ...);
 extern void error(const char *fmt, ...);

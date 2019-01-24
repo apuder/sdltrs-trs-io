@@ -875,54 +875,6 @@ Uchar *mem_pointer(int address, int writing)
     return NULL;
 }
 
-/*
- * Block move instructions, for LDIR and LDDR instructions.
- *
- * Direction is either +1 or -1.  
- *
- * Note that a count of zero => move 64K bytes.
- *
- * These can be special cased to do fun stuff like fast
- * video scrolling.
- */
-int
-mem_block_transfer(Ushort dest, Ushort source, int direction, Ushort count)
-{
-    int ret;
-    /* special case for screen scroll */
-    if(0 && (trs_model <= 3 || (memory_map & 3) < 2) &&
-       (dest == VIDEO_START) && (source == VIDEO_START + 0x40) &&
-       (count == 0x3c0) && (direction > 0) && !grafyx_m3_active())
-    {
-	/* scroll screen one line */
-        unsigned char *p = video, *q = video + 0x40;
-	trs_screen_scroll();
-	do { *p++ = ret = *q++; } while (count--);
-    }
-    else
-    {
-	if(direction > 0)
-	{
-	    do
-	    {
-		mem_write(dest++, ret = mem_read(source++));
-		count--;
-	    }
-	    while(count);
-	}
-	else
-	{
-	    do
-	    {
-		mem_write(dest--, ret = mem_read(source--));
-		count--;
-	    }
-	    while(count);
-	}
-    }
-    return ret;
-}
-
 void trs_mem_save(FILE *file)
 {
   trs_save_uchar(file, memory, 0x200001);
