@@ -2069,9 +2069,9 @@ void trs_get_event(int wait)
             if (!ret) {
               trs_screen_init();
               grafyx_redraw();
-              trs_screen_refresh();
-              trs_x_flush();
             }
+            trs_screen_refresh();
+            trs_x_flush();
           }
           break;
         case SDLK_EQUALS:
