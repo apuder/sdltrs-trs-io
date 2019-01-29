@@ -537,7 +537,7 @@ void debug_shell()
 	{
 	    if(!strcmp(command, "help") || !strcmp(command, "?"))
 	    {
-		DebugOutput(help_message);
+		DebugOutput("%s", help_message);
 	    }
 	    else if (!strcmp(command, "zbxinfo"))
 	    {

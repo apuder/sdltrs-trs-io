@@ -2062,7 +2062,7 @@ void trs_gui_joystick_display_map(int show_active)
         case PAUSE:  sprintf(text, "<PAUSE>");  break;
         case JOYGUI: sprintf(text, "<JOYGUI>"); break;
         default:
-          sprintf(text, trs_gui_get_key_name(jbutton_map[i]));
+          sprintf(text, "%s", trs_gui_get_key_name(jbutton_map[i]));
           break;
       }
       trs_gui_write_text(text, 4 + first_x + column*column_width, first_y + row + 1, show_active ? jbutton_active[i] : 0);

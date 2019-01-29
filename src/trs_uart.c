@@ -167,7 +167,7 @@ trs_uart_init(int reset_button)
   return;
 #else
   if (initialized == 1 && uart.fd != -1) close(uart.fd);
-  if (trs_uart_name == NULL || trs_uart_name[0] == '\000') {
+  if (trs_uart_name[0] == '\000') {
     /* Emulate having no serial port */
     initialized = -1;
     return;
