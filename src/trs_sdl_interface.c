@@ -2075,24 +2075,28 @@ void trs_get_event(int wait)
           }
           break;
         case SDLK_EQUALS:
-          scale_x++;
-          if (scale_x > MAX_SCALE)
-            scale_x = 1;
-          scale_y = scale_x * 2;
-          trs_screen_init();
-          grafyx_redraw();
-          trs_screen_refresh();
-          trs_x_flush();
+          if (!fullscreen) {
+            scale_x++;
+            if (scale_x > MAX_SCALE)
+              scale_x = 1;
+            scale_y = scale_x * 2;
+            trs_screen_init();
+            grafyx_redraw();
+            trs_screen_refresh();
+            trs_x_flush();
+          }
           break;
         case SDLK_MINUS:
-          scale_x--;
-          if (scale_x < 1)
-            scale_x = MAX_SCALE;
-          scale_y = scale_x * 2;
-          trs_screen_init();
-          grafyx_redraw();
-          trs_screen_refresh();
-          trs_x_flush();
+          if (!fullscreen) {
+            scale_x--;
+            if (scale_x < 1)
+              scale_x = MAX_SCALE;
+            scale_y = scale_x * 2;
+            trs_screen_init();
+            grafyx_redraw();
+            trs_screen_refresh();
+            trs_x_flush();
+          }
           break;
         case SDLK_p:
           trs_paused = !trs_paused;
