@@ -187,6 +187,8 @@ static int selectionEndX = 0;
 static int selectionEndY = 0;
 int requestSelectAll = FALSE;
 
+extern void trs_gui_keys_sdltrs(void);
+
 /* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
 
 /* True size of graphics memory -- some is offscreen */
@@ -2019,6 +2021,11 @@ void trs_get_event(int wait)
             trs_screen_refresh();
             trs_x_flush();
           }
+          break;
+        case SDLK_k:
+          trs_gui_keys_sdltrs();
+          trs_screen_refresh();
+          trs_x_flush();
           break;
         case SDLK_l:
 #ifdef MACOSX

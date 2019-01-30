@@ -139,6 +139,7 @@ static int trs_gui_config_management(void);
 static char *trs_gui_get_key_name(int key);
 static int trs_gui_virtual_keyboard(void);
 static int trs_gui_display_question(char *text);
+void trs_gui_keys_sdltrs(void);
 
 void trs_gui_write_text_len(char *text, int len, int x, int y, int invert)
 {
@@ -2685,6 +2686,32 @@ void trs_gui_about_sdltrs(void)
   } while (!done);
 }
 
+void trs_gui_keys_sdltrs(void)
+{
+  trs_gui_clear_screen();
+  trs_gui_frame(0,0,64,16);
+  trs_gui_write_text("Keys in SDLTRS", 2, 0, 0);
+
+  trs_gui_write_text("F1-F3: TRS-80 Model 4/4P F1-F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
+  trs_gui_write_text("F4: TRS-80 Model 4/4P CapsLock  Insert: TRS-80 Underscore   ", 2, 2, 0);
+  trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
+  trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Ctrl + C/V/A: Copy/Paste/All", 2, 4, 0);
+  trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + =/-: Scale Window ", 2, 5, 0);
+  trs_gui_write_text("F8: Exit SDLTRS immediately     LeftAlt + Enter: Fullscreen ", 2, 6, 0);
+  trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
+  trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + D: Hard Disk Menu     ", 2, 8, 0);
+  trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
+  trs_gui_write_text("F12: Enter Joystick GUI Menu    Alt + l/s: Load/Save State  ", 2, 10, 0);
+  trs_gui_write_text("ESC: TRS-80 Break Key           Alt + r/w: Read/Write Config", 2, 11, 0);
+  trs_gui_write_text("Home/Clear: TRS-80 Clear Key    Alt + p: Pause the Emulator ", 2, 12, 0);
+  trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Alt + 0-9: Insert Disk Drive", 2, 13, 0);
+  trs_gui_write_text("RightAlt: TRS-80 Shifted Down   Shift-Alt + 0-9: Remove Disk", 2, 14, 0);
+  trs_gui_center_text("Press Any Key To Return", 15, 1);
+  trs_x_flush();
+
+  trs_gui_get_key();
+}
+
 void trs_gui_write_config(void)
 {
   char filename[FILENAME_MAX];
@@ -2889,6 +2916,11 @@ void trs_gui(void)
    {"Joystick Settings",MENU_NORMAL_TYPE,10},
    {"Miscellaneous Settings",MENU_NORMAL_TYPE,11},
    {"About SDLTRS",MENU_NORMAL_TYPE,12},
+#ifdef MACOSX
+   {"Keys in SDLTRS         (CMD-K)",MENU_NORMAL_TYPE,13},
+#else
+   {"Keys in SDLTRS         (ALT-K)",MENU_NORMAL_TYPE,13},
+#endif
    {"",0,-1}};
    int selection = 0;
    int done = 0;
@@ -2952,6 +2984,9 @@ void trs_gui(void)
          break;
        case 11:
          trs_gui_about_sdltrs();
+         break;
+       case 12:
+         trs_gui_keys_sdltrs();
          break;
      }
   }
