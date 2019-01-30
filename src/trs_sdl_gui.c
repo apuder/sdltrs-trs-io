@@ -2041,7 +2041,7 @@ void trs_gui_joystick_unmap_all_buttons(void)
 void trs_gui_joystick_display_map(int show_active)
 {
   int first_x = 2, first_y = 10;
-  int rows = 4, columns = 5; // Should equal N_JOYBUTTONS
+  int rows = 4, columns = 5; /* Should equal N_JOYBUTTONS */
   int column_width = 12;
   int row, column, i;
   char text[62];
@@ -2573,7 +2573,7 @@ void trs_gui_default_dirs(void)
      trs_gui_limit_string(trs_disk_set_dir,&default_menu[7].title[2],59);
      trs_gui_limit_string(trs_state_dir,&default_menu[9].title[2],59);
      trs_gui_limit_string(trs_printer_dir,&default_menu[11].title[2],59);
-     // print current defaults
+     /* print current defaults */
      selection = trs_gui_display_menu("SDLTRS Default Directory Menu",default_menu, selection);
      switch(selection) {
        case -1:

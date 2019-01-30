@@ -2286,7 +2286,7 @@ void trs_get_event(int wait)
 
     default:
 #if XDEBUG	    
-//      debug("Unhandled event: type %d\n", event.type);
+/*      debug("Unhandled event: type %d\n", event.type); */
 #endif
       break;
     }
@@ -2643,7 +2643,7 @@ void trs_screen_refresh()
       trs_screen_write_char(i, trs_screen[i]);
     }
   }
-  drawnRectCount = MAX_RECTS; // Will force redraw of whole screen
+  drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
 void trs_disk_led(int drive, int on_off)
@@ -2907,7 +2907,7 @@ void trs_gui_refresh()
   for (i = 0; i < screen_chars; i++) 
       trs_gui_write_char(i, trs_gui_screen[i], trs_gui_screen_invert[i]);
 
-  drawnRectCount = MAX_RECTS; // Will force redraw of whole screen
+  drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
 void trs_gui_write_char(int position, int char_index, int invert)
@@ -3783,5 +3783,5 @@ void trs_sdl_cleanup(void)
             SDL_FreeSurface(trs_box[i][ch]);
     SDL_FreeSurface(image);
 
-    SDL_Quit(); // Will free screen
+    SDL_Quit(); /* Will free screen */
 }

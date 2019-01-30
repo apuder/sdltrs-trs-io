@@ -100,7 +100,7 @@ unsigned int cycles_per_timer;
    with the system date and time.
  */
 #define NEWDOS_DATETIME_VALID_BYTE  0xa5
-// Model 1
+/* Model 1 */
 #define NEWDOS_DATETIME_VALID_ADDR  0x43ab
 #define NEWDOS_MONTH                0x43b1
 #define NEWDOS_DAY                  0x43b0
@@ -108,7 +108,7 @@ unsigned int cycles_per_timer;
 #define NEWDOS_HOUR                 0x43ae
 #define NEWDOS_MIN                  0x43ad
 #define NEWDOS_SEC                  0x43ac
-// Model 3
+/* Model 3 */
 #define NEWDOS3_DATETIME_VALID_ADDR 0x42cb
 #define NEWDOS3_MONTH               0x42d1
 #define NEWDOS3_DAY                 0x42d0

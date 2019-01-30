@@ -260,7 +260,7 @@ void trs_reset(int poweron)
     /* Reset devices (Model I SYSRES, Model III/4 RESET) */
     trs_cassette_reset();
     trs_timer_speed(0);
-    trs_disk_init(poweron); // also inits trs_hard and trs_stringy
+    trs_disk_init(poweron); /* also inits trs_hard and trs_stringy */
     /* I'm told that the hard disk controller is enabled on powerup */
     /* XXX should trs_hard_init do this, then? */
     trs_hard_out(TRS_HARD_CONTROL,

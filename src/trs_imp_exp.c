@@ -540,12 +540,12 @@ void do_emt_getcwd()
   REG_BC = strlen(result);
 }
 
-// fixme - document codes that were removed.
+/* fixme - document codes that were removed. */
 void do_emt_misc()
 {
   switch (REG_A) {
   case 0:
-// Removed for sdltrs - mdg */
+/* Removed for sdltrs - mdg */
     REG_HL = 0;
     break;
   case 1:
@@ -584,12 +584,12 @@ void do_emt_misc()
     grafyx_set_microlabs(REG_HL);
     break;
   case 12:
-// Removed for sdltrs - mdg */
+/* Removed for sdltrs - mdg */
     REG_HL = 0;
     REG_BC = 0;
     break;
   case 13:
-// Removed for sdltrs - mdg */
+/* Removed for sdltrs - mdg */
     break;
   case 14:
     REG_HL = stretch_amount;
@@ -605,10 +605,10 @@ void do_emt_misc()
     break;
   case 18:
     REG_HL = 0; 
-// Removed for sdltrs - mdg */
+/* Removed for sdltrs - mdg */
     break;
   case 19:
-// Removed for sdltrs - mdg */
+/* Removed for sdltrs - mdg */
     break;
   case 20:
     REG_HL = trs_disk_truedam;

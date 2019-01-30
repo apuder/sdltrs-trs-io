@@ -439,7 +439,7 @@ int z80_in(int port)
   if (trs_model == 1) {
     /* Model I only */
     switch (port) {
-#if 0 // Conflicts with joystick port
+#if 0 /* Conflicts with joystick port */
     case 0x00: /* HRG off (undocumented) */
 #endif
     case 0x01: /* HRG on (undocumented) */
