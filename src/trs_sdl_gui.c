@@ -628,7 +628,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
   trs_gui_frame(0,0,64,16);
   if (browse_dir) {
     sprintf(title,"Choose%sDirectory",type);
-    trs_gui_center_text("TAB selects directory",14,1);
+    trs_gui_center_text("TAB selects directory",15,1);
   }
   else
     sprintf(title,"Select%sFile To Load",type);
@@ -637,10 +637,10 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
   trs_gui_center_text(limited_dir,1,0);
   trs_gui_readdirectory(current_dir, browse_dir);
 
-  if (filenamecount < 12)
+  if (filenamecount < 13)
     drawcount = filenamecount;
   else
-    drawcount = 12;
+    drawcount = 13;
   trs_gui_write_text(filenamelist[0],2,2,1);
   for (i=1;i<drawcount;i++)
     trs_gui_write_text(filenamelist[i],2,2+i,0);
@@ -653,17 +653,17 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
         if (tolower(*filenamelist[i]) >= key)
           break;
       }
-      if (filenamecount <= 12) {
+      if (filenamecount <= 13) {
         current_first = 0;
         selection = i;
-      } else if (i + 12 > filenamecount) {
-        current_first = filenamecount - 12;
+      } else if (i + 13 > filenamecount) {
+        current_first = filenamecount - 13;
         selection = i - current_first;
       } else {
         current_first = i;
         selection = 0;
       }
-      trs_gui_clear_rect(2,2,60,12);
+      trs_gui_clear_rect(2,2,60,13);
       for (i=0;i<drawcount;i++)
         trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
       trs_gui_write_text(filenamelist[current_first+selection],2,2+selection,1);
@@ -679,7 +679,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
           } else {
             if (current_first < filenamecount-drawcount) {
               current_first++;
-              trs_gui_clear_rect(2,2,60,12);
+              trs_gui_clear_rect(2,2,60,13);
               for (i=0;i<drawcount-1;i++)
                  trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
               trs_gui_write_text(filenamelist[current_first+i],2,2+i,1);
@@ -697,7 +697,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
           else {
             if (current_first > 0) {
               current_first--;
-              trs_gui_clear_rect(2,2,60,12);
+              trs_gui_clear_rect(2,2,60,13);
               trs_gui_write_text(filenamelist[current_first],2,2,1);
               for (i=1;i<drawcount;i++)
                 trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
@@ -708,7 +708,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
         case SDLK_HOME:
           trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           selection = current_first = 0;
-          trs_gui_clear_rect(2,2,60,12);
+          trs_gui_clear_rect(2,2,60,13);
           for (i=0;i<drawcount;i++)
              trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
           trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
@@ -718,7 +718,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
           trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           selection = drawcount-1;
           current_first = filenamecount-drawcount;
-          trs_gui_clear_rect(2,2,60,12);
+          trs_gui_clear_rect(2,2,60,13);
           for (i=0;i<drawcount;i++)
              trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
           trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
@@ -750,17 +750,17 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
 #endif              
             }
 
-            trs_gui_clear_rect(1,1,62,13);
+            trs_gui_clear_rect(1,1,62,14);
             trs_gui_limit_string(current_dir, limited_dir, 62);
             trs_gui_center_text(limited_dir,1,0);
             
             trs_gui_delete_filename_list();  
             trs_gui_readdirectory(current_dir, browse_dir);
 
-            if (filenamecount < 12)
+            if (filenamecount < 13)
               drawcount = filenamecount;
             else
-              drawcount = 12;
+              drawcount = 13;
             trs_gui_write_text(filenamelist[0],2,2,1);
             for (i=1;i<drawcount;i++)
               trs_gui_write_text(filenamelist[i],2,2+i,0);
@@ -777,17 +777,17 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
             current_dir[2] = '\\';
             current_dir[3] = 0; 
             
-            trs_gui_clear_rect(1,1,62,13);
+            trs_gui_clear_rect(1,1,62,14);
             trs_gui_limit_string(current_dir, limited_dir, 62);
             trs_gui_center_text(limited_dir,1,0);
             
             trs_gui_delete_filename_list();  
             trs_gui_readdirectory(current_dir, browse_dir);
 
-            if (filenamecount < 12)
+            if (filenamecount < 13)
               drawcount = filenamecount;
             else
-              drawcount = 12;
+              drawcount = 13;
             trs_gui_write_text(filenamelist[0],2,2,1);
             for (i=1;i<drawcount;i++)
               trs_gui_write_text(filenamelist[i],2,2+i,0);
