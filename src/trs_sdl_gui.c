@@ -140,6 +140,7 @@ static char *trs_gui_get_key_name(int key);
 static int trs_gui_virtual_keyboard(void);
 static int trs_gui_display_question(char *text);
 void trs_gui_keys_sdltrs(void);
+int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text_len(char *text, int len, int x, int y, int invert)
 {
@@ -2710,6 +2711,11 @@ void trs_gui_keys_sdltrs(void)
   trs_x_flush();
 
   trs_gui_get_key();
+}
+
+int trs_gui_exit_sdltrs(void)
+{
+  return trs_gui_display_question("Exit SDLTRS?");
 }
 
 void trs_gui_write_config(void)

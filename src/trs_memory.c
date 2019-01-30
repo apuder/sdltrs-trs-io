@@ -241,6 +241,13 @@ void selector_out(unsigned char value)
 void trs_exit()
 {
 extern void trs_sdl_cleanup();
+extern int trs_gui_exit_sdltrs();
+
+    if (!trs_gui_exit_sdltrs()) {
+      trs_screen_refresh();
+      trs_x_flush();
+      return;
+    }
 #ifdef MACOSX
     trs_mac_save_defaults();
 #endif
