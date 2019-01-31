@@ -706,6 +706,30 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
             }
           }        
           break;
+        case SDLK_PAGEUP:
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
+          current_first -= drawcount;
+          if (current_first < 0)
+            current_first = selection = 0;
+          trs_gui_clear_rect(2,2,60,13);
+          for (i=0;i<drawcount;i++)
+            trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
+          trs_x_flush();
+          break;
+        case SDLK_PAGEDOWN:
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
+          current_first += drawcount;
+          if (current_first > filenamecount-drawcount) {
+            current_first = filenamecount-drawcount;
+            selection = drawcount-1;
+          }
+          trs_gui_clear_rect(2,2,60,13);
+          for (i=0;i<drawcount;i++)
+            trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
+          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
+          trs_x_flush();
+          break;
         case SDLK_HOME:
           trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           selection = current_first = 0;
