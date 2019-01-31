@@ -337,7 +337,7 @@ int trs_gui_get_key(void)
              trs_gui_refresh();
              trs_x_flush();
              break;
-          case SDLK_EQUALS:
+          case SDLK_PLUS:
             if (!fullscreen) {
               scale_x++;
               if (scale_x > MAX_SCALE)
@@ -2701,7 +2701,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F4: TRS-80 Model 4/4P CapsLock  Insert: TRS-80 Underscore   ", 2, 2, 0);
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Ctrl + C/V/A: Copy/Paste/All", 2, 4, 0);
-  trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + =/-: Scale Window ", 2, 5, 0);
+  trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + +/-: Scale Window ", 2, 5, 0);
   trs_gui_write_text("F8: Exit SDLTRS immediately     LeftAlt + Enter: Fullscreen ", 2, 6, 0);
   trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + D: Hard Disk Menu     ", 2, 8, 0);

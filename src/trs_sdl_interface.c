@@ -2083,7 +2083,7 @@ void trs_get_event(int wait)
             trs_x_flush();
           }
           break;
-        case SDLK_EQUALS:
+        case SDLK_PLUS:
           if (!fullscreen) {
             scale_x++;
             if (scale_x > MAX_SCALE)
