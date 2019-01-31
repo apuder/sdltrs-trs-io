@@ -242,10 +242,15 @@ void trs_exit()
 {
 extern void trs_sdl_cleanup();
 extern int trs_gui_exit_sdltrs();
+static int recursion = 0;
+
+    if (recursion) return;
+    recursion = 1;
 
     if (!trs_gui_exit_sdltrs()) {
       trs_screen_refresh();
       trs_x_flush();
+      recursion = 0;
       return;
     }
 #ifdef MACOSX
