@@ -987,6 +987,10 @@ int trs_gui_display_popup(char* title, char **entry,
 
   do {
     key = trs_gui_get_key();
+    if (entry_count == 2) {
+      if (tolower(key) == 'n') return 0;
+      if (tolower(key) == 'y') return 1;
+    }
     switch(key) {
       case SDLK_DOWN:
         trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
