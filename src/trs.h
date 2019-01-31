@@ -103,7 +103,7 @@ extern int trs_parse_command_line(int argc, char **argv, int *debug);
 extern int trs_write_config_file(char *filename);
 extern int trs_load_config_file(char *alternate_file);
 
-extern void trs_screen_init(void);
+extern void trs_screen_init(int gui_init);
 extern void screen_init();
 extern void trs_flip_fullscreen(void);
 extern void trs_rom_init(void);

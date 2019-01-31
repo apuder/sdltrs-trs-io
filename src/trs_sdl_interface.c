@@ -1132,7 +1132,7 @@ void trs_flip_fullscreen(void)
     if (scale_x != 1) {
       scale_x = 1;
       scale_y = 2;
-      trs_screen_init();
+      trs_screen_init(0);
       grafyx_redraw();
       trs_screen_refresh();
     }
@@ -1152,7 +1152,7 @@ void trs_flip_fullscreen(void)
 #endif		
       scale_x = window_scale_x;
       scale_y = window_scale_y;
-      trs_screen_init();
+      trs_screen_init(0);
       grafyx_redraw();
       trs_screen_refresh();
     }
@@ -1224,7 +1224,7 @@ void trs_screen_caption(int turbo)
     SDL_WM_SetCaption(title,NULL);
 }
 
-void trs_screen_init()
+void trs_screen_init(int gui_init)
 {
   SDL_Color colors[2];
   int i;
@@ -1335,11 +1335,13 @@ void trs_screen_init()
   trs_disk_led(-1,0);
   trs_hard_led(-1,0);
 
-  for (i = 0; i < 2048; i++) {
-    trs_gui_screen[i] = ' ';
-    trs_gui_screen_invert[i] = 0;
-    trs_gui_screen_copy[i] = ' ';
-    trs_gui_screen_invert_copy[i] = 0;
+  if (gui_init) {
+    for (i = 0; i < 2048; i++) {
+      trs_gui_screen[i] = ' ';
+      trs_gui_screen_invert[i] = 0;
+      trs_gui_screen_copy[i] = ' ';
+      trs_gui_screen_invert_copy[i] = 0;
+    }
   }
 }
 
@@ -2039,7 +2041,7 @@ void trs_get_event(int wait)
             trs_gui_load_state();   
             trs_pause_audio(0);
             SDL_EnableKeyRepeat(0,0);
-            trs_screen_init();
+            trs_screen_init(1);
             grafyx_redraw();
             trs_screen_refresh();
             trs_x_flush();
@@ -2074,7 +2076,7 @@ void trs_get_event(int wait)
             trs_pause_audio(0);
             SDL_EnableKeyRepeat(0,0);
             if (!ret) {
-              trs_screen_init();
+              trs_screen_init(1);
               grafyx_redraw();
             }
             trs_screen_refresh();
@@ -2087,7 +2089,7 @@ void trs_get_event(int wait)
             if (scale_x > MAX_SCALE)
               scale_x = 1;
             scale_y = scale_x * 2;
-            trs_screen_init();
+            trs_screen_init(1);
             grafyx_redraw();
             trs_screen_refresh();
             trs_x_flush();
@@ -2099,7 +2101,7 @@ void trs_get_event(int wait)
             if (scale_x < 1)
               scale_x = MAX_SCALE;
             scale_y = scale_x * 2;
-            trs_screen_init();
+            trs_screen_init(1);
             grafyx_redraw();
             trs_screen_refresh();
             trs_x_flush();
@@ -2364,7 +2366,7 @@ void trs_screen_640x240(int flag)
   }
   screen_chars = row_chars * col_chars;
   if (resize) {
-    trs_screen_init();
+    trs_screen_init(1);
   } else {
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
     top_margin = (TRS_CHAR_HEIGHT4 * scale_y * 24 -

@@ -333,7 +333,7 @@ int trs_gui_get_key(void)
            case SDLK_1:
              scale_x = 1;
              scale_y = 2;
-             trs_screen_init();
+             trs_screen_init(0);
              trs_gui_refresh();
              trs_x_flush();
              break;
@@ -343,7 +343,7 @@ int trs_gui_get_key(void)
               if (scale_x > MAX_SCALE)
                 scale_x = 1;
               scale_y = scale_x * 2;
-              trs_screen_init();
+              trs_screen_init(0);
               trs_gui_refresh();
               trs_x_flush();
             }
@@ -354,7 +354,7 @@ int trs_gui_get_key(void)
               if (scale_x < 1)
                 scale_x = MAX_SCALE;
               scale_y = scale_x * 2;
-              trs_screen_init();
+              trs_screen_init(0);
               trs_gui_refresh();
               trs_x_flush();
             }
@@ -2779,7 +2779,7 @@ static int trs_gui_config_management(void)
          break;
        case 1:
          trs_gui_load_state();
-         trs_screen_init();
+         trs_screen_init(1);
          grafyx_redraw();
          done = 1;
          read = 1;   
@@ -2894,7 +2894,7 @@ void trs_gui_new_machine(void)
   mem_init(); 
   trs_disk_init(0);
   trs_rom_init();
-  trs_screen_init();
+  trs_screen_init(1);
   screen_init();
   trs_timer_init();
   trs_reset(1);    
@@ -3045,7 +3045,7 @@ void trs_gui(void)
     resize3 = gui_resize3;
     resize4 = gui_resize4;
     window_border_width = gui_border_width;
-    trs_screen_init();
+    trs_screen_init(1);
     grafyx_redraw();
   }
 }

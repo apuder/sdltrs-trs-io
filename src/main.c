@@ -196,14 +196,14 @@ int SDLmain(int argc, char *argv[])
     mem_init();
     trs_disk_init(0);
     trs_rom_init();
-    trs_screen_init();
+    trs_screen_init(1);
     screen_init();
     trs_timer_init();
 
     trs_reset(1);
     if (init_state_file[0] != 0) {
       trs_state_load(init_state_file);
-      trs_screen_init();
+      trs_screen_init(1);
       trs_screen_refresh();
       }
 #ifdef MACOSX
