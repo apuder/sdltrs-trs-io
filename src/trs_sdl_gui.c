@@ -307,7 +307,7 @@ int trs_gui_get_key(void)
      SDL_WaitEvent(&event);
      switch(event.type) {
        case SDL_QUIT:
-         trs_exit();
+         trs_exit(0);
          break;
        case SDL_ACTIVEEVENT:
          break;
@@ -317,12 +317,12 @@ int trs_gui_get_key(void)
            switch (event.key.keysym.sym) {
 #ifdef MACOSX
            case SDLK_q:
-             trs_exit();
+             trs_exit(1);
              break;
 #endif             
 #ifdef _WIN32
            case SDLK_F4:
-             trs_exit();
+             trs_exit(1);
              break;
 #endif             
            case SDLK_RETURN:
@@ -364,7 +364,7 @@ int trs_gui_get_key(void)
            }
          }
          else if (event.key.keysym.sym == SDLK_F8)
-            trs_exit();
+            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
          else if (event.key.keysym.sym < 0x100 && 
                event.key.keysym.unicode >= 0x20 && 
                event.key.keysym.unicode <= 0x7E) 
@@ -1957,11 +1957,11 @@ int trs_gui_joystick_get_button(void)
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
-        trs_exit();
+        trs_exit(0);
         break;
       case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_F8)
-          trs_exit();
+          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
         else if (event.key.keysym.sym == SDLK_ESCAPE)
           return -1;
         break;
@@ -2214,11 +2214,11 @@ void trs_gui_joystick_map_joystick(void)
       if (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-          trs_exit();
+          trs_exit(0);
           break;
         case SDL_KEYDOWN:
           if (event.key.keysym.sym == SDLK_F8)
-            trs_exit();
+            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
           else if (event.key.keysym.sym == SDLK_ESCAPE)
             checking = 0;
           break;
@@ -2702,7 +2702,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Ctrl + C/V/A: Copy/Paste/All", 2, 4, 0);
   trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + +/-: Scale Window ", 2, 5, 0);
-  trs_gui_write_text("F8: Exit SDLTRS immediately     LeftAlt + Enter: Fullscreen ", 2, 6, 0);
+  trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  LeftAlt + Enter: Fullscreen ", 2, 6, 0);
   trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + D: Hard Disk Menu     ", 2, 8, 0);
   trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
@@ -3233,7 +3233,7 @@ void trs_gui_joy_gui(void)
       trs_hard_led(-1, 0);
       break;
     case EXIT:
-      trs_exit();
+      trs_exit(1);
       break;
   }
 }

@@ -549,7 +549,7 @@ void do_emt_misc()
     REG_HL = 0;
     break;
   case 1:
-    trs_exit();
+    trs_exit(0);
     break;
   case 2:
     trs_debug();

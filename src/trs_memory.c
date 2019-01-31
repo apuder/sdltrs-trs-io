@@ -238,7 +238,7 @@ void selector_out(unsigned char value)
 		bank_base = 0;
 }
 
-void trs_exit()
+void trs_exit(int confirm)
 {
 extern void trs_sdl_cleanup();
 extern int trs_gui_exit_sdltrs();
@@ -247,7 +247,7 @@ static int recursion = 0;
     if (recursion) return;
     recursion = 1;
 
-    if (!trs_gui_exit_sdltrs()) {
+    if (confirm && !trs_gui_exit_sdltrs()) {
       trs_screen_refresh();
       trs_x_flush();
       recursion = 0;
