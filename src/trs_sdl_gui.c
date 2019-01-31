@@ -307,7 +307,7 @@ int trs_gui_get_key(void)
      SDL_WaitEvent(&event);
      switch(event.type) {
        case SDL_QUIT:
-         trs_exit(0);
+         trs_exit(0, 0);
          break;
        case SDL_ACTIVEEVENT:
          break;
@@ -317,12 +317,12 @@ int trs_gui_get_key(void)
            switch (event.key.keysym.sym) {
 #ifdef MACOSX
            case SDLK_q:
-             trs_exit(1);
+             trs_exit(1, 1);
              break;
 #endif             
 #ifdef _WIN32
            case SDLK_F4:
-             trs_exit(1);
+             trs_exit(1, 1);
              break;
 #endif             
            case SDLK_RETURN:
@@ -364,7 +364,7 @@ int trs_gui_get_key(void)
            }
          }
          else if (event.key.keysym.sym == SDLK_F8)
-            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
+            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT), 1);
          else if (event.key.keysym.sym < 0x100 && 
                event.key.keysym.unicode >= 0x20 && 
                event.key.keysym.unicode <= 0x7E) 
@@ -1957,11 +1957,11 @@ int trs_gui_joystick_get_button(void)
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
-        trs_exit(0);
+        trs_exit(0, 0);
         break;
       case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_F8)
-          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
+          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT), 1);
         else if (event.key.keysym.sym == SDLK_ESCAPE)
           return -1;
         break;
@@ -2214,11 +2214,11 @@ void trs_gui_joystick_map_joystick(void)
       if (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-          trs_exit(0);
+          trs_exit(0, 0);
           break;
         case SDL_KEYDOWN:
           if (event.key.keysym.sym == SDLK_F8)
-            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
+            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT), 1);
           else if (event.key.keysym.sym == SDLK_ESCAPE)
             checking = 0;
           break;
@@ -3233,7 +3233,7 @@ void trs_gui_joy_gui(void)
       trs_hard_led(-1, 0);
       break;
     case EXIT:
-      trs_exit(1);
+      trs_exit(1, 1);
       break;
   }
 }

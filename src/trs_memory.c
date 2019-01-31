@@ -238,20 +238,29 @@ void selector_out(unsigned char value)
 		bank_base = 0;
 }
 
-void trs_exit(int confirm)
+void trs_exit(int confirm, int gui)
 {
 extern void trs_sdl_cleanup();
+extern void trs_gui_save_rect(int x, int y, int w, int h);
+extern void trs_gui_restore_rect(int x, int y, int w, int h);
 extern int trs_gui_exit_sdltrs();
 static int recursion = 0;
 
     if (recursion) return;
     recursion = 1;
 
-    if (confirm && !trs_gui_exit_sdltrs()) {
-      trs_screen_refresh();
-      trs_x_flush();
-      recursion = 0;
-      return;
+    if (confirm) {
+      if (gui)
+        trs_gui_save_rect(0, 0, 63, 15);
+      if (!trs_gui_exit_sdltrs()) {
+        if (gui)
+          trs_gui_restore_rect(0, 0, 63, 15);
+        else
+          trs_screen_refresh();
+        trs_x_flush();
+        recursion = 0;
+        return;
+      }
     }
 #ifdef MACOSX
     trs_mac_save_defaults();

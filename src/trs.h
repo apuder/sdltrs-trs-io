@@ -122,7 +122,7 @@ extern void trs_disk_led(int drive, int on_off);
 extern void trs_hard_led(int drive, int on_off);
 
 extern void trs_reset(int poweron);
-extern void trs_exit(int confirm);
+extern void trs_exit(int confirm, int gui);
 
 extern void trs_kb_reset(void);
 extern void trs_kb_bracket(int shifted);
