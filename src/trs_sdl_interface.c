@@ -1832,23 +1832,13 @@ void trs_get_event(int wait)
         debug("KeyDown: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
 	        keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
-#ifdef MACOSX
 	  if ((keysym.mod & MENU_MOD) == 0) {
-#else
-	  if ((keysym.mod & KMOD_CTRL) == 0) {
-#endif
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
-#ifdef MACOSX
 	  else if (keysym.sym != SDLK_c && 
 		  keysym.sym != SDLK_LMETA && 
 		  keysym.sym != SDLK_RMETA) {
-#else
-	  else if (keysym.sym != SDLK_c &&
-		  keysym.sym != SDLK_LCTRL &&
-		  keysym.sym != SDLK_RCTRL) {
-#endif
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
@@ -1897,7 +1887,7 @@ void trs_get_event(int wait)
         break;
       }
 #if !defined(MACOSX)
-      if (keysym.mod & KMOD_CTRL) {
+      if (keysym.mod & MENU_MOD) {
         char *string;
 
         switch (keysym.sym) {

@@ -2724,9 +2724,9 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F1-F3: TRS-80 Model 4/4P F1-F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
   trs_gui_write_text("F4: TRS-80 Model 4/4P CapsLock  Insert: TRS-80 Underscore   ", 2, 2, 0);
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
-  trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Ctrl + C/V/A: Copy/Paste/All", 2, 4, 0);
-  trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + +/-: Scale Window ", 2, 5, 0);
-  trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  LeftAlt + Enter: Fullscreen ", 2, 6, 0);
+  trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  LeftAlt + +/-: Scale Window ", 2, 4, 0);
+  trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + Enter: Fullscreen ", 2, 5, 0);
+  trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt + a/c/v: All/Copy/Paste ", 2, 6, 0);
   trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + D: Hard Disk Menu     ", 2, 8, 0);
   trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
