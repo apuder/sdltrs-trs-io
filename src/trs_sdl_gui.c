@@ -611,6 +611,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
   int current_first = 0;
   int done = 0;
   int drawcount;
+  int redraw = 1;
   char current_dir[FILENAME_MAX];
   char limited_dir[80];
   char title[64];
@@ -642,13 +643,18 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
     drawcount = filenamecount;
   else
     drawcount = 13;
-  trs_gui_write_text(filenamelist[0],2,2,1);
-  for (i=1;i<drawcount;i++)
-    trs_gui_write_text(filenamelist[i],2,2+i,0);
-  trs_x_flush();
 
   do {
+    if (redraw) {
+      trs_gui_clear_rect(2,2,60,13);
+      for (i=0;i<drawcount;i++)
+        trs_gui_write_text(filenamelist[current_first+i],2,i+2,0);
+      redraw = 0;
+    }
+    trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,1);
+    trs_x_flush();
     key = trs_gui_get_key();
+    trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,0);
     if (key >= '0' && key <= 'z') {
       for (i=0;i<filenamecount-1;i++) {
         if (tolower(*filenamelist[i]) >= key)
@@ -664,90 +670,52 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
         current_first = i;
         selection = 0;
       }
-      trs_gui_clear_rect(2,2,60,13);
-      for (i=0;i<drawcount;i++)
-        trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-      trs_gui_write_text(filenamelist[current_first+selection],2,2+selection,1);
-      trs_x_flush();
+      redraw = 1;
     } else {
       switch(key) {
         case SDLK_DOWN:
           if (selection < drawcount-1) {
-            trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
             selection ++;
-            trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
-            trs_x_flush();
           } else {
             if (current_first < filenamecount-drawcount) {
               current_first++;
-              trs_gui_clear_rect(2,2,60,13);
-              for (i=0;i<drawcount-1;i++)
-                 trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-              trs_gui_write_text(filenamelist[current_first+i],2,2+i,1);
-              trs_x_flush();
+              redraw = 1;
             }
-          }         
+          }
           break;
         case SDLK_UP:
          if (selection > 0) {
-            trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
             selection --;
-            trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
-            trs_x_flush();
           }
           else {
             if (current_first > 0) {
               current_first--;
-              trs_gui_clear_rect(2,2,60,13);
-              trs_gui_write_text(filenamelist[current_first],2,2,1);
-              for (i=1;i<drawcount;i++)
-                trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-              trs_x_flush();
+              redraw = 1;
             }
-          }        
+          }
           break;
         case SDLK_PAGEUP:
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           current_first -= drawcount;
           if (current_first < 0)
             current_first = selection = 0;
-          trs_gui_clear_rect(2,2,60,13);
-          for (i=0;i<drawcount;i++)
-            trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
-          trs_x_flush();
+          redraw = 1;
           break;
         case SDLK_PAGEDOWN:
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           current_first += drawcount;
           if (current_first > filenamecount-drawcount) {
             current_first = filenamecount-drawcount;
             selection = drawcount-1;
           }
-          trs_gui_clear_rect(2,2,60,13);
-          for (i=0;i<drawcount;i++)
-            trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
-          trs_x_flush();
+          redraw = 1;
           break;
         case SDLK_HOME:
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           selection = current_first = 0;
-          trs_gui_clear_rect(2,2,60,13);
-          for (i=0;i<drawcount;i++)
-             trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
-          trs_x_flush();
+          redraw = 1;
           break;
         case SDLK_END:
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,0);
           selection = drawcount-1;
           current_first = filenamecount-drawcount;
-          trs_gui_clear_rect(2,2,60,13);
-          for (i=0;i<drawcount;i++)
-             trs_gui_write_text(filenamelist[current_first+i],2,2+i,0);
-          trs_gui_write_text(filenamelist[current_first + selection], 2, selection+2,1);
-          trs_x_flush();
+          redraw = 1;
           break;
         case SDLK_RETURN:
           if (*filenamelist[current_first + selection] == '<') {          
@@ -786,10 +754,8 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
               drawcount = filenamecount;
             else
               drawcount = 13;
-            trs_gui_write_text(filenamelist[0],2,2,1);
-            for (i=1;i<drawcount;i++)
-              trs_gui_write_text(filenamelist[i],2,2+i,0);
-            trs_x_flush();
+
+            redraw = 1;
           }
 #ifdef _WIN32
           /* Select a new drive */
@@ -813,10 +779,8 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
               drawcount = filenamecount;
             else
               drawcount = 13;
-            trs_gui_write_text(filenamelist[0],2,2,1);
-            for (i=1;i<drawcount;i++)
-              trs_gui_write_text(filenamelist[i],2,2+i,0);
-            trs_x_flush();
+
+            redraw = 1;
           }  
 #endif              
           else
@@ -987,7 +951,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
 int trs_gui_display_popup(char* title, char **entry, 
                           int entry_count, int selection)
 {
-  int num = 0,invert,key;
+  int num = 0,key;
   int done = 0;
   int max_len = 0;
   int first_x, first_y;
@@ -1004,47 +968,36 @@ int trs_gui_display_popup(char* title, char **entry,
   trs_gui_write_text(title, first_x+1, first_y-1, 0);
   
   for (num=0;num<entry_count;num++) {
-    invert = (num == selection);                 
-    trs_gui_write_text(entry[num], first_x, first_y+num,invert);
-    }
-  trs_x_flush();
+    trs_gui_write_text(entry[num], first_x, first_y+num,0);
+  }
 
   do {
+    trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
+    trs_x_flush();
     key = trs_gui_get_key();
     if (entry_count == 2) {
       if (tolower(key) == 'n') return 0;
       if (tolower(key) == 'y') return 1;
     }
+    trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
     switch(key) {
       case SDLK_DOWN:
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
         if (selection < entry_count-1) 
           selection ++;
         else 
           selection = 0;
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
-        trs_x_flush();
         break;
       case SDLK_UP:
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
         if (selection > 0)
           selection --;
         else
           selection = entry_count-1;
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
-        trs_x_flush();
         break;
       case SDLK_HOME:
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
         selection = 0;
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
-        trs_x_flush();
         break;
       case SDLK_END:
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
         selection = entry_count-1;
-        trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
-        trs_x_flush();
         break;
       case SDLK_SPACE:
       case SDLK_RETURN:
@@ -1062,7 +1015,7 @@ int trs_gui_display_popup(char* title, char **entry,
 
 int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
 {
-  int num = 0,invert,i,key;
+  int num = 0,i,key;
   int done = 0;
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
@@ -1071,69 +1024,55 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
   trs_gui_write_text(title, 2, 0, 0);
   
   while(entry[num].value != -1)
-    {
-    invert = (num == selection);                 
-    trs_gui_write_text(entry[num].title, 2, num+2,invert);
+  {
+    trs_gui_write_text(entry[num].title, 2, num+2,0);
     num++;
-    }
+  }
   num--;
-  trs_x_flush();
 
   do {
+    trs_gui_write_text(entry[selection].title, 2, selection+2,1);
+    trs_x_flush();
     key = trs_gui_get_key();
+    trs_gui_write_text(entry[selection].title, 2, selection+2,0);
     if (key >= '0' && key <= 'z') {
       for (i=0;i<num+1;i++) {
         if (tolower(*entry[i].title) == key && selection != i) {
-          trs_gui_write_text(entry[selection].title, 2, selection+2,0);
           selection = i;
           while(entry[selection].type == MENU_TITLE_TYPE) {
             if (selection < num)
               selection ++;
           }
-          trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-          trs_x_flush();
           break;
         }
       }
     } else
     switch(key) {
       case SDLK_DOWN:
-        trs_gui_write_text(entry[selection].title, 2, selection+2,0);
         do {
           if (selection < num)
             selection ++;
           else 
             selection = 0;
         } while(entry[selection].type == MENU_TITLE_TYPE);
-        trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-        trs_x_flush();
         break;
       case SDLK_UP:
-        trs_gui_write_text(entry[selection].title, 2, selection+2,0);
         do {
           if (selection > 0)
             selection --;
           else
             selection = num;
         } while(entry[selection].type == MENU_TITLE_TYPE);
-        trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-        trs_x_flush();
         break;
       case SDLK_HOME:
-        trs_gui_write_text(entry[selection].title, 2, selection+2,0);
         selection = 0;
         while(entry[selection].type == MENU_TITLE_TYPE) {
           if (selection < num)
             selection ++;
         }
-        trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-        trs_x_flush();
         break;
       case SDLK_END:
-        trs_gui_write_text(entry[selection].title, 2, selection+2,0);
         selection = num;
-        trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-        trs_x_flush();
         break;
       case SDLK_DELETE:
       case SDLK_BACKSPACE:
@@ -1149,8 +1088,6 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
           }
           trs_gui_clear_rect(2,selection+2,60,1);
           entry[selection].title[0]=' ';
-          trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-          trs_x_flush();
         }
         done = 1;
         break;
@@ -1187,8 +1124,6 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
             trs_cassette_insert(filename);
           }
           trs_gui_clear_rect(2,selection+2,60,1);
-          trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-          trs_x_flush();
           }
         done = 1;
         break;
