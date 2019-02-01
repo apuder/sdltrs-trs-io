@@ -1714,7 +1714,7 @@ void call_function(int function)
     trs_hard_led(-1, 0);
   }
   else if (function == EXIT)
-    trs_exit(0, 0);
+    trs_exit(0);
   else {
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
     trs_pause_audio(1);
@@ -1813,7 +1813,7 @@ void trs_get_event(int wait)
     }
     switch(event.type) {
     case SDL_QUIT:
-     trs_exit(0, 0);
+     trs_exit(0);
      break;
     case SDL_ACTIVEEVENT:
       if (event.active.state & SDL_APPACTIVE) {
@@ -1869,7 +1869,7 @@ void trs_get_event(int wait)
         keysym.sym = 0;
         break;
       case SDLK_F8:
-        trs_exit(!(keysym.mod & KMOD_SHIFT), 0);
+        trs_exit(!(keysym.mod & KMOD_SHIFT));
         keysym.unicode = 0;
         keysym.sym = 0;
         break;
@@ -1918,7 +1918,7 @@ void trs_get_event(int wait)
         switch (keysym.sym) {
 #ifdef MACOSX        
         case SDLK_q:
-          trs_exit(1, 0);
+          trs_exit(1);
           break;
         case SDLK_COMMA:
           trs_run_mac_prefs();
@@ -1942,7 +1942,7 @@ void trs_get_event(int wait)
 #endif          
 #ifdef _WIN32        
         case SDLK_F4:
-          trs_exit(1, 0);
+          trs_exit(1);
           break;
 #endif          
         case SDLK_RETURN:
