@@ -1863,7 +1863,7 @@ void trs_gui_display_management(void)
          sprintf(input,"%06X",local_gui_foreground);
          ret = trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,0);
          if (!ret)
-           gui_foreground = strtol(input, NULL, 16);
+           local_gui_foreground = strtol(input, NULL, 16);
          break;
        case 4:
          charset1_selection = trs_gui_display_popup("Charset Model 1",font1_choices,5,
