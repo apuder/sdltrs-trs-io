@@ -1950,36 +1950,35 @@ void trs_get_event(int wait)
           trs_screen_refresh();
           break;
         case SDLK_d:
-          if (keysym.mod & KMOD_SHIFT) {
 #ifdef MACOSX
-            if (!fullscreen) {
-              MediaManagerRunHardManagement();
-            } else
+          if (!fullscreen) {
+            MediaManagerRunDiskManagement();
+          } else
 #endif
-            {
-              SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-              trs_pause_audio(1);
-              trs_gui_hard_management();
-              trs_pause_audio(0);
-              SDL_EnableKeyRepeat(0,0);
-              trs_screen_refresh();
-              trs_x_flush();
-            }
-          } else {
+          {
+            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+            trs_pause_audio(1);
+            trs_gui_disk_management();
+            trs_pause_audio(0);
+            SDL_EnableKeyRepeat(0,0);
+            trs_screen_refresh();
+            trs_x_flush();
+          }
+          break;
+      case SDLK_h:
 #ifdef MACOSX
-            if (!fullscreen) {
-              MediaManagerRunDiskManagement();
-            } else
+          if (!fullscreen) {
+            MediaManagerRunHardManagement();
+          } else
 #endif
-            {
-              SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-              trs_pause_audio(1);
-              trs_gui_disk_management();
-              trs_pause_audio(0);
-              SDL_EnableKeyRepeat(0,0);
-              trs_screen_refresh();
-              trs_x_flush();
-            }
+          {
+            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+            trs_pause_audio(1);
+            trs_gui_hard_management();
+            trs_pause_audio(0);
+            SDL_EnableKeyRepeat(0,0);
+            trs_screen_refresh();
+            trs_x_flush();
           }
           break;
         case SDLK_t:

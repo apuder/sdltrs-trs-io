@@ -2663,7 +2663,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + Enter: Fullscreen ", 2, 5, 0);
   trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt + a/c/v: All/Copy/Paste ", 2, 6, 0);
   trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
-  trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + D: Hard Disk Menu     ", 2, 8, 0);
+  trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + h: Hard Disk Menu     ", 2, 8, 0);
   trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
   trs_gui_write_text("F12: Enter Joystick GUI Menu    Alt + l/s: Load/Save State  ", 2, 10, 0);
   trs_gui_write_text("ESC: TRS-80 Break Key           Alt + r/w: Read/Write Config", 2, 11, 0);
@@ -2869,11 +2869,11 @@ void trs_gui(void)
   {
 #ifdef MACOSX  
    {"Floppy Disk Management (CMD-D)",MENU_NORMAL_TYPE,1},
-   {"Hard Disk Management   (SHIFT-CMD-D)",MENU_NORMAL_TYPE,2},
+   {"Hard Disk Management   (CMD-H)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (CMD-T)",MENU_NORMAL_TYPE,3},
 #else
    {"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE,1},
-   {"Hard Disk Management   (SHIFT-ALT-D)",MENU_NORMAL_TYPE,2},
+   {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE,3},
 #endif   
    {"TRS-80 Model/Graphics/Memory Selection",MENU_NORMAL_TYPE,4},
