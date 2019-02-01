@@ -1251,7 +1251,10 @@ void trs_screen_init(int gui_init)
     cur_char_height = TRS_CHAR_HEIGHT * scale_y;
   } else {
     cur_char_width = TRS_CHAR_WIDTH * scale_x;
-    cur_char_height = TRS_CHAR_HEIGHT4 * scale_y;
+    if (screen640x240 || text80x24)
+      cur_char_height = TRS_CHAR_HEIGHT4 * scale_y;
+    else
+      cur_char_height = TRS_CHAR_HEIGHT * scale_y;
   }
 
   imageSize.width = 8*G_XSIZE*scale_x;
