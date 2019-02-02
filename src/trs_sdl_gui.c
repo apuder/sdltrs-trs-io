@@ -850,7 +850,6 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
   input_length = strlen(input);
   pos = input_length;
   length = input_length;
-  length = pos;
   if (pos > (60-1))
     first_disp = pos-60;
   else
@@ -885,9 +884,18 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
             first_disp++;
           pos++;
           }
-       break;
-      case SDLK_BACKSPACE:
+        break;
       case SDLK_HOME:
+        first_disp = pos = 0;
+        break;
+      case SDLK_END:
+        pos = length;
+        if (pos > 60)
+          first_disp = pos-(60-1);
+        else
+          first_disp = 0;
+        break;
+      case SDLK_BACKSPACE:
         if (pos>0) {
           for (i=pos;i<length;i++)
             output[i-1] = output[i];
