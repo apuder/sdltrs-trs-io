@@ -133,7 +133,6 @@ extern void trs_xlate_keysym(int keysym);
 extern void queue_key(int key);
 extern int dequeue_key(void);
 extern void clear_key_queue(void);
-extern void trs_skip_next_kbwait(void);
 extern int stretch_amount;
 extern int trs_kb_bracket_state;
 
