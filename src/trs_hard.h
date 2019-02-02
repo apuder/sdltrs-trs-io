@@ -38,7 +38,7 @@
  * Definitions for the Radio Shack TRS-80 Model I/III/4/4P
  * hard disk controller.  This is a Western Digital WD1000/WD1010
  * mapped at ports 0xc8-0xcf, plus control registers at 0xc0-0xc1.
- * 
+ *
  * Definitions inferred from various drivers and sketchy documents
  * found in odd corners.  Anyone have a real WD10xx data sheet?
  */
@@ -65,7 +65,7 @@ extern int trs_hard_getwriteprotect(int unit);
  * Tandy-specific registers
  */
 
-/* Write protect switch register (read only): 
+/* Write protect switch register (read only):
  *  abcd--pi
  *  a = drive 0 write protected
  *  b = drive 1 write protected
@@ -79,7 +79,7 @@ extern int trs_hard_getwriteprotect(int unit);
 #define TRS_HARD_WPSOME 0x02
 #define TRS_HARD_INTRQ  0x01 /* not emulated */
 
-/* Control register (read(?)/write): 
+/* Control register (read(?)/write):
  *  ---sdw--
  *  s = software reset
  *  d = device enable
@@ -112,7 +112,7 @@ extern int trs_hard_getwriteprotect(int unit);
 /* Error register (read only):
  *  bdin-atm
  *  b = block marked bad
- *  e = uncorrectable error in data 
+ *  e = uncorrectable error in data
  *  i = uncorrectable error in id (unused?)
  *  n = id not found
  *  - = unused
@@ -167,7 +167,7 @@ extern int trs_hard_getwriteprotect(int unit);
 #define TRS_HARD_HEADSHIFT  0
 #define TRS_HARD_MAXHEADS   8
 
-/* Status register (read only): 
+/* Status register (read only):
  *  brwsdcie
  *  b = busy
  *  r = drive ready
@@ -197,7 +197,7 @@ extern int trs_hard_getwriteprotect(int unit);
 
 #define TRS_HARD_CMDMASK 0xf0
 
-/* Restore: 
+/* Restore:
  *  0001rrrr
  *  rrrr = step rate; 0000=35us, else rrrr*0.5ms
  */
@@ -215,7 +215,7 @@ extern int trs_hard_getwriteprotect(int unit);
 
 /* Write sector:
  *  00110m00
- *  m = multiple sector flag (not emulated!) 
+ *  m = multiple sector flag (not emulated!)
  */
 #define TRS_HARD_WRITE 0x30
 

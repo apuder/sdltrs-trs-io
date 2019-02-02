@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -197,7 +197,7 @@ struct z80_state_struct
  *
  *	7   6   5   4   3   2   1   0
  *	S   Z   -   H   -  P/V  N   C
- *	
+ *
  *	C	Carry
  *	N	Subtract
  *	P/V	Parity/Overflow

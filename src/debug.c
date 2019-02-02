@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -259,7 +259,7 @@ static void set_trap(int address, int flag)
     {
 	i = 0;
 	while(trap_table[i].valid) ++i;
-	
+
 	trap_table[i].valid = 1;
 	trap_table[i].address = address;
 	trap_table[i].flag = flag;
@@ -423,9 +423,9 @@ static void debug_run()
 		print_instructions = 0;
 	    }
 	}
-	
+
 	if(print_instructions) disassemble(REG_PC);
-	
+
 	continuous = (!print_instructions && num_traps == 0);
 	if (z80_run(continuous)) {
 	  DebugOutput("emt_debug instruction executed.\n");
@@ -530,7 +530,7 @@ void debug_shell()
     strcpy(input, DebuggerInput());
 #else
 	if (fgets(input, MAXLINE, stdin) == NULL) break;
-#endif    
+#endif
 #endif
 
 	if(sscanf(input, "%s", command))
@@ -558,7 +558,7 @@ void debug_shell()
 	    else if(!strcmp(command, "delete"))
 	    {
 		int i;
-                
+
 		if(!strncmp(input, "delete *", 8))
 		{
 		    clear_all_traps();
@@ -758,7 +758,7 @@ void debug_shell()
 		{
 		    mem_write(addr, value);
 		}
-		else 
+		else
 		{
 		    DebugOutput("Syntax error.  (Type \"help\" for commands.)\n");
 		}
@@ -942,7 +942,7 @@ test_sub(int a, int b)
     Uchar flags;
 
     result = a - b;
-    
+
     flags = 0;
 
     if(result & 0x80) flags |= SIGN_MASK;

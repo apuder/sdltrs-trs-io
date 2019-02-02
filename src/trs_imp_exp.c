@@ -38,7 +38,7 @@
  * trs_imp_exp.c
  *
  * Features to make transferring files into and out of the emulator
- *  easier.  
+ *  easier.
  */
 
 #include <stdio.h>
@@ -184,18 +184,18 @@ void do_emt_setddir()
   }
   strcpy(trs_disk_dir,(char *)mem_pointer(REG_HL, 0));
   if (trs_disk_dir[0] == '~' &&
-#ifdef _WIN32  
+#ifdef _WIN32
       (trs_disk_dir[1] == '\\' || trs_disk_dir[1] == '\0')) {
 #else
       (trs_disk_dir[1] == '/' || trs_disk_dir[1] == '\0')) {
-#endif                       
+#endif
     char* home = getenv("HOME");
     if (home) {
-#ifdef _WIN32              
+#ifdef _WIN32
       sprintf(trs_disk_dir, "%s\\%s", home, trs_disk_dir+1);
 #else
       sprintf(trs_disk_dir, "%s/%s", home, trs_disk_dir+1);
-#endif      
+#endif
     }
   }
   REG_A = 0;
@@ -257,7 +257,7 @@ void do_emt_read()
 {
   int size;
   int i;
-  
+
   if (REG_HL + REG_BC > 0x10000) {
     REG_A = EFAULT;
     REG_F &= ~ZERO_MASK;
@@ -284,7 +284,7 @@ void do_emt_write()
 {
   int size;
   int i;
-  
+
   if (trs_emtsafe) {
     error("potentially dangerous emulator trap blocked");
     REG_A = EACCES;
@@ -450,7 +450,7 @@ void do_emt_closedir()
     REG_A = EBADF;
     REG_F &= ~ZERO_MASK;
     return;
-  }	
+  }
   ok = closedir(dir[i].dir);
   dir[i].dir = NULL;
   if (ok >= 0) {
@@ -472,7 +472,7 @@ void do_emt_readdir()
     REG_F &= ~ZERO_MASK;
     REG_BC = 0xFFFF;
     return;
-  }	
+  }
   if (REG_HL + REG_BC > 0x10000) {
     REG_A = EFAULT;
     REG_F &= ~ZERO_MASK;
@@ -569,14 +569,14 @@ void do_emt_misc()
   case 7:
     trs_disk_setsize(REG_BC, REG_HL);
     break;
-#ifdef __linux    
+#ifdef __linux
   case 8:
     REG_HL = trs_disk_getstep(REG_BC);
     break;
   case 9:
     trs_disk_setstep(REG_BC, REG_HL);
     break;
-#endif   
+#endif
   case 10:
     REG_HL = grafyx_get_microlabs();
     break;
@@ -604,7 +604,7 @@ void do_emt_misc()
     trs_disk_doubler = REG_HL;
     break;
   case 18:
-    REG_HL = 0; 
+    REG_HL = 0;
 /* Removed for sdltrs - mdg */
     break;
   case 19:
@@ -641,11 +641,11 @@ void do_emt_ftruncate()
   for (i=0; i<8; i++) {
     offset = offset + (mem_read(REG_HL + i) << i*8);
   }
-#ifdef _WIN32  
+#ifdef _WIN32
   result = chsize(REG_DE, offset);
 #else
   result = ftruncate(REG_DE, offset);
-#endif  
+#endif
   if (result == 0) {
     REG_A = 0;
     REG_F |= ZERO_MASK;
@@ -691,16 +691,16 @@ void do_emt_opendisk()
   if (*name == '\\' || *trs_disk_dir == '\0') {
 #else
   if (*name == '/' || *trs_disk_dir == '\0') {
-#endif            
+#endif
     qname = strdup(name);
   } else {
     qname = (char *)malloc(strlen(trs_disk_dir) + 1 + strlen(name) + 1);
     strcpy(qname, trs_disk_dir);
-#ifdef _WIN32    
+#ifdef _WIN32
     strcat(qname, "\\");
 #else
     strcat(qname, "/");
-#endif    
+#endif
     strcat(qname, name);
   }
   for (i = 0; i < MAX_OPENDISK; i++) {
@@ -758,8 +758,8 @@ int do_emt_closefd(int odindex)
       if (xtrshard_fd[i] == od[odindex].fd)
         xtrshard_fd[i] = -1;
     }
-  } 
-  return(close(od[odindex].fd));                         
+  }
+  return(close(od[odindex].fd));
 }
 
 void do_emt_closedisk()
@@ -804,7 +804,7 @@ void do_emt_closedisk()
 void do_emt_resetdisk()
 {
   int i;
-  
+
   for (i = 0; i < MAX_OPENDISK; i++) {
     if (od[i].inuse) {
       do_emt_closefd(i);
@@ -812,7 +812,7 @@ void do_emt_resetdisk()
       od[i].xtrshard = 0;
       od[i].filename[0] = 0;
     }
-  } 
+  }
 }
 
 void trs_imp_exp_save(FILE *file)
@@ -820,7 +820,7 @@ void trs_imp_exp_save(FILE *file)
   int i;
   int one = 1;
   int zero = 0;
-  
+
   for (i=0;i<MAX_OPENDIR;i++) {
     if (dir[i].dir == NULL)
       trs_save_int(file, &zero, 1);
@@ -878,7 +878,7 @@ void trs_imp_exp_load(FILE *file)
   for (i=0;i<MAX_OPENDISK;i++) {
     if (od[i].inuse) {
       od[i].fd = open(od[i].filename, od[i].oflag);
-      if (od[i].xtrshard) 
+      if (od[i].xtrshard)
         xtrshard_fd[od[i].xtrshard_unit] = od[i].fd;
     }
   }

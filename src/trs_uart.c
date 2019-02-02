@@ -90,9 +90,9 @@ static struct {
 
   int fd;
   int fdflags;
-#ifndef _WIN32  
+#ifndef _WIN32
   struct termios t;
-#endif  
+#endif
 } uart;
 
 static int trs_uart_wordbits[] = TRS_UART_WORDBITS_TABLE;
@@ -103,7 +103,7 @@ xlate_baud(int trs_baud)
 {
 #ifdef _WIN32
   return 0;
-#else                 
+#else
   switch (trs_baud) {
   case TRS_UART_50:
     return B50;
@@ -152,7 +152,7 @@ xlate_baud(int trs_baud)
     return B19200;
   }
   return B0;  /* not reached */
-#endif  
+#endif
 }
 
 void
@@ -262,7 +262,7 @@ trs_uart_baud_out(int value)
 #endif
 #ifdef _WIN32
   return;
-#else  
+#else
   if (initialized == 1 && uart.baud == value) return;
   if (initialized == 0) trs_uart_init(0);
   if (initialized == -1) return;
@@ -286,7 +286,7 @@ trs_uart_baud_out(int value)
       error("can't set attributes of %s: %s", trs_uart_name, strerror(errno));
     }
   }
-#endif  
+#endif
 }
 
 void
@@ -308,7 +308,7 @@ trs_uart_check_avail()
 {
 #ifdef _WIN32
   return 0;
-#else                      
+#else
   if (initialized == 1 && uart.bufleft == 0 && uart.fd != -1) {
     /* check for data available */
     int rc;
@@ -345,7 +345,7 @@ trs_uart_check_avail()
   debug("trs_uart_check_avail returns %d\n", uart.bufleft);
 #endif
   return uart.bufleft;
-#endif  
+#endif
 }
 
 int
@@ -371,7 +371,7 @@ trs_uart_control_out(int value)
 {
 #ifdef _WIN32
   return;
-#else                           
+#else
   int err;
   int cflag = HUPCL|CREAD|CLOCAL;
 #if UARTDEBUG
@@ -412,7 +412,7 @@ trs_uart_control_out(int value)
       error("can't send break on %s: %s", trs_uart_name, strerror(errno));
     }
   }
-#endif  
+#endif
 }
 
 int
@@ -441,7 +441,7 @@ trs_uart_data_out(int value)
 {
 #ifdef _WIN32
   return;
-#else                        
+#else
   int err;
 
 #if UARTDEBUG
@@ -467,14 +467,14 @@ trs_uart_data_out(int value)
     }
     trs_uart_snd_interrupt(0);
     trs_schedule_event(trs_uart_set_empty, 1, uart.tstates);
-  }  
-#endif    
+  }
+#endif
 }
 
 void trs_uart_save(FILE *file)
 {
   int inited = 0;
-  
+
   trs_save_filename(file,trs_uart_name);
   trs_save_int(file,&trs_uart_switches,1);
   trs_save_int(file,&inited,1);

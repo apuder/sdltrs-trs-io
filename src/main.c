@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -129,7 +129,7 @@ int trs_load_rom(char *filename)
 void trs_load_compiled_rom(int size, unsigned char rom[])
 {
     int i;
-    
+
     trs_rom_size = size;
     for(i = 0; i < size; ++i)
     {
@@ -155,44 +155,44 @@ int SDLmain(int argc, char *argv[])
 
 #ifndef MACOSX
     putenv("SDL_VIDEO_CENTERED=1");
-#endif	
-    
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) { 
+#endif
+
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
         fprintf(stderr, "Failed to initialize SDL library");
   	    exit(1);
     }
-        
+
     /* Enable Unicode key translations */
-    SDL_EnableUNICODE(TRUE); 
+    SDL_EnableUNICODE(TRUE);
 
     argc = trs_parse_command_line(argc, argv, &debug);
     if (argc > 1) {
       fprintf(stderr, "%s: erroneous argument %s\n", program_name, argv[1]);
       exit(1);
     }
-    
-    trs_set_keypad_joystick();    
+
+    trs_set_keypad_joystick();
     trs_open_joystick();
-    
+
     if (stat(trs_disk_dir, &st) < 0) {
       strcpy(trs_disk_dir,".");
-    }                   
+    }
     if (stat(trs_hard_dir, &st) < 0) {
       strcpy(trs_hard_dir,".");
-    }                   
+    }
     if (stat(trs_cass_dir, &st) < 0) {
       strcpy(trs_cass_dir,".");
-    }                   
+    }
     if (stat(trs_state_dir, &st) < 0) {
       strcpy(trs_state_dir,".");
-    }                   
+    }
     if (stat(trs_disk_set_dir, &st) < 0) {
       strcpy(trs_disk_set_dir,".");
-    }                   
+    }
     if (stat(trs_printer_dir, &st) < 0) {
       strcpy(trs_printer_dir,".");
-    }                   
- 
+    }
+
     mem_init();
     trs_disk_init(0);
     trs_rom_init();
@@ -209,7 +209,7 @@ int SDLmain(int argc, char *argv[])
 #ifdef MACOSX
 	TrsOriginSet();
 #endif
-	
+
     if (!debug || fullscreen) {
       /* Run continuously until exit or request to enter debugger */
       z80_run(TRUE);

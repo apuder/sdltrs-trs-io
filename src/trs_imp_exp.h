@@ -56,10 +56,10 @@
  *         drivers varied in whether coordinate values ranged from 0 to
  *         XSIZE or 0 to XSIZE-1. This driver will return values up to
  *         XSIZE if XSIZE is odd, up to XSIZE-1 if XSIZE is even, thus
- *         finessing the issue. 3. The sensitivity value is ignored. 4. The 
+ *         finessing the issue. 3. The sensitivity value is ignored. 4. The
  *         mouse is assumed to have 3 buttons.  5. The set operations always
  *         return success.)
- *  
+ *
  *      GET MOUSE CURSOR POSITION
  *         Before, B  = 1
  *         After,  HL = mouse cursor X value (0 to XSIZE-1)
@@ -68,26 +68,26 @@
  *                      Bit 0: Reset if right button pressed
  *                      Bit 1: Reset if middle button pressed (both buttons)
  *                      Bit 2: Reset if left button pressed
- *  
+ *
  *      SET MOUSE CURSOR POSITION
  *         Before, B  = 2
  *                 HL = X value (0 - XSIZE-1)
  *                 DE = Y value (0 - YSIZE-1)
  *         After,  AF = Z flag set if operation was successful
- *  
+ *
  *      GET SENSITIVITY AND MAXIMUM VALUES
  *         Before, B  = 3
  *         After,  HL = current X maximum (XSIZE)
  *                 DE = current Y maximum (YSIZE)
  *                 A  = current sensitivity (0 - 3)
- *  
+ *
  *      SET SENSITIVITY AND MAXIMUM VALUES
  *         Before, B =  4
  *                 HL = new X maximum (XSIZE)
  *                 DE = new Y maximum (YSIZE)
  *                 C  = sensitivity (0 - 3); 3 is most sensitive
  *         After,  AF = Z flag set if operation was successful
- *  
+ *
  *      GET MOUSE TYPE
  *         Before, B =  5
  *         After,  A =  0 if 2-button, 1 if 3-button

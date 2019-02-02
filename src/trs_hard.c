@@ -136,7 +136,7 @@ void trs_hard_attach(int drive, char *diskname)
     fclose(state.d[drive].file);
   strcpy(state.d[drive].filename, diskname);
   if (open_drive(drive) == 0) {
-    trs_hard_remove(drive); 
+    trs_hard_remove(drive);
   }
   trs_impexp_xtrshard_attach(drive, diskname);
 }
@@ -150,13 +150,13 @@ void trs_hard_remove(int drive)
   state.d[drive].file = NULL;
 }
 
-char* 
+char*
 trs_hard_getfilename(int unit)
 {
   return state.d[unit].filename;
 }
 
-int 
+int
 trs_hard_getwriteprotect(int unit)
 {
   return state.d[unit].writeprot;
@@ -214,7 +214,7 @@ int trs_hard_in(int port)
   }
 #if HARDDEBUG1
   debug("%02x -> %02x\n", port, v);
-#endif  
+#endif
   return v;
 }
 
@@ -223,7 +223,7 @@ void trs_hard_out(int port, int value)
 {
 #if HARDDEBUG1
   debug("%02x <- %02x\n", port, value);
-#endif  
+#endif
   switch (port) {
   case TRS_HARD_WP:
     break;
@@ -396,7 +396,7 @@ static void hard_seek(int cmd)
   find_sector(TRS_HARD_READY | TRS_HARD_SEEKDONE);
 }
 
-/* 
+/*
  * 1) Make sure the file for the current drive is open.  If the file
  * cannot be opened, return 0 and set the controller error status.
  *
@@ -416,7 +416,7 @@ static int open_drive(int drive)
    return 1;
   if (d->filename[0] == 0)
     goto fail;
-	
+
   /* First try opening for reading and writing */
   d->file = fopen(d->filename, "rb+");
   if (d->file == NULL) {
@@ -448,7 +448,7 @@ static int open_drive(int drive)
   /* Use the number of secs/track that RSHARD requires */
   d->secs = TRS_HARD_SEC_PER_TRK;
 
-  /* Header gives only secs/cyl.  Compute number of heads from 
+  /* Header gives only secs/cyl.  Compute number of heads from
      this and the assumed number of secs/track. */
   d->heads = (rhh.sec ? rhh.sec : 256) / d->secs;
 
@@ -467,7 +467,7 @@ static int open_drive(int drive)
   state.status = TRS_HARD_READY | TRS_HARD_SEEKDONE | TRS_HARD_ERR;
   state.error = TRS_HARD_NFERR;
   return 0;
-}    
+}
 
 /*
  * Check whether the current position is in bounds for the geometry.
@@ -571,7 +571,7 @@ static void trs_save_harddrive(FILE *file, Drive *d)
 static void trs_load_harddrive(FILE *file, Drive *d)
 {
   int file_not_null;
-  
+
   trs_load_int(file,&file_not_null,1);
   if (file_not_null)
     d->file = (FILE *) 1;
@@ -587,7 +587,7 @@ static void trs_load_harddrive(FILE *file, Drive *d)
 void trs_hard_save(FILE *file)
 {
   int i;
-  
+
   trs_save_int(file, &state.present, 1);
   trs_save_uchar(file, &state.control, 1);
   trs_save_uchar(file, &state.data, 1);
@@ -607,9 +607,9 @@ void trs_hard_save(FILE *file)
 void trs_hard_load(FILE *file)
 {
   int i;
-    
+
   for (i=0;i<TRS_HARD_MAXDRIVES;i++) {
-    if (state.d[i].file != NULL) 
+    if (state.d[i].file != NULL)
       fclose(state.d[i].file);
   }
   trs_load_int(file, &state.present, 1);

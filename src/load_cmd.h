@@ -24,24 +24,24 @@
 /* Load the /cmd file f into the given memory, optionally selecting
  * out an ISAM or PDS member.  Return LOAD_CMD_OK for success if f was a
  * normal /cmd file, LOAD_CMD_ISAM for success if it was an ISAM file,
- * LOAD_CMD_PDS for success if this was a PDS file, LOAD_CMD_EOF for 
+ * LOAD_CMD_PDS for success if this was a PDS file, LOAD_CMD_EOF for
  * failure due to premature end of file, LOAD_CMD_NOT_FOUND for ISAM
  * or PDF member not found, or a positive number B for an unknown or
- * badly formatted load block of typecode B (load file format error). 
+ * badly formatted load block of typecode B (load file format error).
  *
  * Optional flags:
  *
  * If loadmap is not NULL, it must point to an array of 2**16
  * bytes.  Each byte in the return value will have a count (mod 256)
  * of the number of times that memory location was loaded.  Usually each
- * count will be 0 or 1, of course. 
- * 
+ * count will be 0 or 1, of course.
+ *
  * If verbosity is VERBOSITY_QUIET, print nothing.  If verbosity is
  * VERBOSITY_TEXT, print module headers, PDS headers, patch names, and
  * copyright notices.  If verbosity is VERBOSITY_MAP, also print load
  * map information as we go along, but coalesce adjacent blocks that
  * load contiguously into memory.  If verbosity is VERBOSITY_DETAILED,
- * don't coalesce. 
+ * don't coalesce.
  *
  * If isam is not -1, search for the given isam member number and load
  * it instead of loading the whole file.

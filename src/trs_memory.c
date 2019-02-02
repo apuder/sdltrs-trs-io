@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -777,7 +777,7 @@ static Uchar *trs80_model1_mmio_addr(int address, int writing)
 /*
  * Get a pointer to the given address.  Note that there is no checking
  * whether the next virtual address is physically contiguous.  The
- * caller is responsible for making sure his strings don't span 
+ * caller is responsible for making sure his strings don't span
  * memory map boundaries.
  *
  * Needs to die...

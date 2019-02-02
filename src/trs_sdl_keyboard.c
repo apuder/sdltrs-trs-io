@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -193,7 +193,7 @@ KeyTable ascii_key_table[] = {
 /* 0x1c */    { TK_NULL, TK_Neutral },
 /* 0x1d */    { TK_NULL, TK_Neutral },
 /* 0x1e */    { TK_NULL, TK_Neutral },
-/* 0x1f */    { TK_NULL, TK_Neutral }, 
+/* 0x1f */    { TK_NULL, TK_Neutral },
 /* 0x20 */    { TK_Space, TK_Neutral },
 /* 0x21 */    { TK_1, TK_ForceShift },
 /* 0x22 */    { TK_2, TK_ForceShift },
@@ -540,7 +540,7 @@ void trs_kb_heartbeat()
 
 void trs_kb_bracket(int shifted)
 {
-  /* Set the shift state for the emulation of the "[ {", "\ |", 
+  /* Set the shift state for the emulation of the "[ {", "\ |",
      "] }", "^ ~", and "_ DEL" keys.  Some Model 4 keyboard drivers
      decode these with [ shifted and { unshifted, etc., while most
      other keyboard drivers either ignore them or decode them with
@@ -585,7 +585,7 @@ void trs_joy_button_up(void)
 void trs_joy_hat(unsigned char value)
 {
   joystate &= (TK_Fire & 0x1f);
-  
+
   switch(value) {
     case SDL_HAT_CENTERED:
       break;
@@ -647,7 +647,7 @@ void trs_open_joystick(void)
 {
   static SDL_Joystick *open_joy = NULL;
   int num_joysticks = SDL_NumJoysticks();
-  
+
   if (open_joy != NULL) {
     SDL_JoystickClose(open_joy);
     open_joy = NULL;
@@ -664,14 +664,14 @@ void trs_open_joystick(void)
 void trs_joy_axis(unsigned char axis, short value)
 {
   int dir;
-  
+
   if (value < -JOY_BOUNCE)
     dir = -1;
   else if (value > JOY_BOUNCE)
     dir = 1;
   else
     dir = 0;
-    
+
   if (axis == 0) {
     switch (dir) {
       case -1:

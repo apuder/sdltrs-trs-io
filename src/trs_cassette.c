@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -48,7 +48,7 @@
  *  85/90 sound.  "Game sound" is defined as output to the cassette
  *  port when the cassette motor is off, or output to the Model III/4
  *  sound option card (a 1-bit DAC).
- * 
+ *
  *
  */
 
@@ -189,7 +189,7 @@ struct {
     { 128,  0 },
     { 1673, 0 },
     { -1,  -1 }
-  }}    
+  }}
 };
 
 /* States and thresholds for conversion to .cas on output */
@@ -343,7 +343,7 @@ put_sample(Uchar sample, int convert, FILE* f)
     return;
   }
   putc(sample, f);
-}    
+}
 
 /* Get an 8-byte unsigned sample, if necessary converting from a
  * different sample format and/or reducing stereo to mono.  */
@@ -452,23 +452,23 @@ parse_wav_header(FILE *f)
     cassette_position = wave_data_offset;
   }
   return 0;
-}  
+}
 
 static void trs_sdl_sound_update(void *userdata, Uint8 * stream, int len)
 {
   if (sound_ring_count == 0) {
-    memset (stream, cassette_silence, len); 
+    memset (stream, cassette_silence, len);
   } else {
 	int num_to_read;
-	
+
 	if (sound_ring_count > len)
 	   num_to_read = len;
-	else 
+	else
 	   num_to_read = sound_ring_count;
-	   
+
     if (sound_ring_read_ptr + num_to_read > sound_ring_end) {
 	  int len_to_end = sound_ring_end - sound_ring_read_ptr;
-	   
+
       memcpy(stream, sound_ring_read_ptr, len_to_end);
 	  memcpy(stream + len_to_end, sound_ring,  num_to_read - len_to_end);
   	  memset(stream, cassette_silence, len - num_to_read);
@@ -489,10 +489,10 @@ static int
 set_audio_format(int state)
 {
   SDL_AudioSpec desired, obtained;
-  
+
   SDL_CloseAudio();
   soundDeviceOpen = FALSE;
-        
+
   desired.freq = cassette_sample_rate;
   desired.format = AUDIO_U8;
   desired.samples = 1 << FRAGSIZE;
@@ -507,7 +507,7 @@ set_audio_format(int state)
   }
   soundDeviceOpen = TRUE;
   if (obtained.format != AUDIO_U8 && obtained.format != AUDIO_S16) {
-      error("requested audio format 0x%x, got 0x%x", 
+      error("requested audio format 0x%x, got 0x%x",
 	        desired.format, obtained.format);
       errno = EINVAL;
       return -1;
@@ -518,18 +518,18 @@ set_audio_format(int state)
     errno = EINVAL;
     return -1;
   }
-  
+
   if (abs(obtained.freq - desired.freq) > desired.freq/20) {
-    error("requested sample rate %d Hz, got %d Hz", 
+    error("requested sample rate %d Hz, got %d Hz",
 	       desired.freq, obtained.freq);
     errno = EINVAL;
     return -1;
   }
-  
+
   cassette_afmt = obtained.format;
   cassette_stereo = (obtained.channels == 2);
   cassette_silence = obtained.silence;
-  
+
   SDL_PauseAudio(0);
 
   return 0;
@@ -543,7 +543,7 @@ trs_cassette_insert(char *filename)
 
    strcpy(cassette_filename, filename);
    cassette_position = 0;
-   
+
    len = strlen(filename);
    if (len >= 3)
      extension = filename + len - 3;
@@ -551,17 +551,17 @@ trs_cassette_insert(char *filename)
      extension = filename;
    if (strcasecmp(extension,"CPT") == 0)
      cassette_format = CPT_FORMAT;
-   else if (strcasecmp(extension,"WAV") == 0) { 
+   else if (strcasecmp(extension,"WAV") == 0) {
      cassette_format = WAV_FORMAT;
      if (cassette_position < wave_data_offset) {
        cassette_position = wave_data_offset;
        }
      }
-   else 
+   else
      cassette_format = CAS_FORMAT;
 }
 
-void 
+void
 trs_cassette_remove(void)
 {
    cassette_filename[0] = 0;
@@ -569,7 +569,7 @@ trs_cassette_remove(void)
    cassette_format = DIRECT_FORMAT;
 }
 
-char* 
+char*
 trs_cassette_getfilename(void)
 {
   return cassette_filename;
@@ -579,13 +579,13 @@ int trs_get_cassette_length(void)
 {
   int res;
   struct stat st;
-  
+
   if (cassette_filename[0] == 0)
     return 0;
   res = stat(cassette_filename, &st);
   if (res == -1)
     return 0;
-  return st.st_size;  
+  return st.st_size;
 }
 
 int trs_get_cassette_position(void)
@@ -660,7 +660,7 @@ int assert_state(int state)
     if (state == SOUND || state == ORCH90) {
       cassette_format = DIRECT_FORMAT;
       cassette_filename[0] = 0;
-    } 
+    }
     if (cassette_format == DIRECT_FORMAT) {
         cassette_sample_rate = cassette_default_sample_rate;
       if (set_audio_format(state) < 0) {
@@ -668,7 +668,7 @@ int assert_state(int state)
         cassette_file = NULL;
         cassette_state = FAILED;
         return -1;
-      }	
+      }
     } else if (cassette_format == WAV_FORMAT) {
       cassette_file = fopen(cassette_filename, "rb+");
       if (cassette_file == NULL) {
@@ -702,7 +702,7 @@ int assert_state(int state)
     }
     break;
   }
-    
+
   cassette_state = state;
   return 0;
 }
@@ -733,7 +733,7 @@ transition_out(int value)
     cassette_roundoff_error = delta_us - ddelta_us;
     fprintf(cassette_file, "%d %lu\n", value, delta_us);
     break;
-    
+
   case CPT_FORMAT:
     /* Encode value and delta_us in two bytes if delta_us is small enough.
        Pack bits as ddddddddddddddvv and store this value in little-
@@ -832,7 +832,7 @@ transition_out(int value)
 	}
       }
       break;
-      
+
     case ST_500GOTDAT:
       if (cassette_value == 2 && value == 0) {
 	/* End of data pulse; watch for end of next clock */
@@ -852,7 +852,7 @@ transition_out(int value)
 	cassette_pulsestate = ST_250GOTCLK;
       }
       break;
-      
+
     case ST_250GOTCLK:
       if (cassette_value == 0 && value == 1) {
 	/* Low speed, start of next pulse. */
@@ -869,7 +869,7 @@ transition_out(int value)
 	}
       }
       break;
-      
+
     case ST_250GOTDAT:
       if (cassette_value == 2 && value == 0) {
 	/* End of data pulse; watch for end of next clock */
@@ -927,7 +927,7 @@ transition_in()
       ret = 1;
     }
     break;
-    
+
   case CPT_FORMAT:
     c = get_twobyte(&code, cassette_file);
     if (c == -1) break;
@@ -1195,7 +1195,7 @@ trs_orch90_out(int channels, int value)
   }
   if (value != FLUSH &&
       new_left == orch90_left && new_right == orch90_right) return;
-  
+
   ddelta_us = (z80_state.t_count - cassette_transition) / z80_state.clockMHz
     - cassette_roundoff_error;
   if (ddelta_us > 300000.0) {
@@ -1245,7 +1245,7 @@ trs_cassette_update(int dummy)
 	cassette_value = cassette_next;
 	cassette_transition += cassette_delta;
 
-	/* Remember last nonzero value to get hysteresis in 1500 bps 
+	/* Remember last nonzero value to get hysteresis in 1500 bps
 	   zero-crossing detector */
 	if (cassette_value != 0) cassette_lastnonzero = cassette_value;
 
@@ -1322,7 +1322,7 @@ void trs_pause_audio(int pause)
     SDL_PauseAudio(pause);
 }
 
-void 
+void
 trs_cassette_save(FILE *file)
 {
   trs_save_filename(file, cassette_filename);
@@ -1357,11 +1357,11 @@ trs_cassette_save(FILE *file)
   trs_save_int(file, &soundDeviceOpen, 1);
 }
 
-void 
+void
 trs_cassette_load(FILE *file)
 {
   int currentOpened = soundDeviceOpen;
-  
+
   trs_load_filename(file, cassette_filename);
   trs_load_int(file, &cassette_position, 1);
   trs_load_int(file, &cassette_format, 1);

@@ -6,20 +6,20 @@ typedef struct {
   Uchar id1;       /* 0: Identifier #1: 56H */
   Uchar id2;       /* 1: Identifier #2: CBH */
   Uchar ver;       /* 2: Version of format: 10H = version 1.0 */
-  Uchar cksum;     /* 3: Simple checksum: 
+  Uchar cksum;     /* 3: Simple checksum:
 		      To calculate, add together bytes 0 to 31 of header
 		      (excepting byte 3), then XOR result with 4CH */
   Uchar blks;      /* 4: Number of 256 byte blocks in header: should be 1 */
   Uchar mb4;       /* 5: Not used, but HDFORMAT sets to 4 */
   Uchar media;     /* 6: Media type: 0 for hard disk */
   Uchar flag1;     /* 7: Flags #1:
-		      bit 7: Write protected: 0 for no, 1 for yes 
+		      bit 7: Write protected: 0 for no, 1 for yes
                              [xtrshard/dct ignores for now]
 		      bit 6: Must be 0
 		      bit 5 - 0: reserved */
   Uchar flag2;     /* 8: Flags #2: reserved */
   Uchar flag3;     /* 9: Flags #3: reserved */
-  Uchar crtr;      /* 10: Created by: 
+  Uchar crtr;      /* 10: Created by:
 		      14H = HDFORMAT
 		      42H = xtrs mkdisk
                       80H = Cervasio xtrshard port to Vavasour M4 emulator */
@@ -41,7 +41,7 @@ typedef struct {
   Uchar dcyl;      /* 31: Directory cylinder [mkdisk sets to 1; xtrs ignores]*/
   char label[32];  /* 32: Volume label: 31 bytes terminated by 0 */
   char filename[8];/* 64 - 71: 8 characters of filename (without extension)
-		      [Cervasio addition.  xtrs actually doesn't limit this 
+		      [Cervasio addition.  xtrs actually doesn't limit this
                        to 8 chars or strip the extension] */
   Uchar res2[184]; /* 72 - 255: reserved */
 } ReedHardHeader;

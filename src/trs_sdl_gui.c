@@ -55,7 +55,7 @@
 #define TOP_LEFT_CORNER     151
 #define TOP_RIGHT_CORNER    171
 #define BOTTOM_LEFT_CORNER  181
-#define BOTTOM_RIGHT_CORNER 186 
+#define BOTTOM_RIGHT_CORNER 186
 
 #define MENU_NORMAL_TYPE          1
 #define MENU_TITLE_TYPE           2
@@ -114,7 +114,7 @@ static void trs_gui_quicksort(char **start, char **end, int (*sort_function) ())
 static void trs_gui_delete_filename_list(void);
 static int trs_gui_readdirectory(char *path, int browse_dir);
 static int trs_gui_input_string(char *title, char* input, char* output, int file);
-static int trs_gui_display_popup(char* title, char **entry, 
+static int trs_gui_display_popup(char* title, char **entry,
                           int entry_count, int selection);
 static int trs_gui_display_popup_matrix(char* title, char **entry,
                           int rows, int columns, int selection);
@@ -146,7 +146,7 @@ void trs_gui_write_text_len(char *text, int len, int x, int y, int invert)
 {
   int position = x + y * 64;
   int i;
-  
+
   for (i=0;i<len;i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
@@ -159,7 +159,7 @@ void trs_gui_write_text(char *text, int x, int y, int invert)
 void trs_gui_write_text_char(char text, int x, int y, int invert)
 {
   int position = x + y * 64;
-  
+
   trs_gui_write_char(position,text,invert);
 }
 
@@ -167,7 +167,7 @@ void trs_gui_center_text(char *text, int y, int invert)
 {
   int position = (64-strlen(text))/2 + y * 64;
   int i;
-  
+
   for (i=0;i<strlen(text);i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
@@ -193,7 +193,7 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
 {
      char clear[w+1];
      int i;
-     
+
      for (i=0;i<w;i++)
        clear[i]=' ';
      clear[i] = 0;
@@ -205,7 +205,7 @@ void trs_gui_limit_string(char *orig, char *limited, int limit)
 {
   int len_first_part;
   int pos_second_part;
-  
+
   if (strlen(orig) > limit) {
     len_first_part = (limit-3)/2;
     pos_second_part = strlen(orig) - (limit - len_first_part - 3);
@@ -221,63 +221,63 @@ void trs_expand_dir(char *dir, char *expanded_dir)
 {
   int i;
 
-#ifdef _WIN32  
+#ifdef _WIN32
   if (dir[0] == '\\' || dir[1] == ':') {
 #else
   if (dir[0] == '/' || dir[1] == ':') {
-#endif             
+#endif
     strcpy(expanded_dir, dir);
     return;
   }
-  
+
   getcwd(expanded_dir,FILENAME_MAX);
-#ifdef _WIN32  
+#ifdef _WIN32
   if (strncmp(dir,"..\\",3) == 0) {
-#else                           
+#else
   if (strncmp(dir,"../",3) == 0) {
 #endif
     dir += 3;
     for (i=strlen(expanded_dir)-1;i>0;i--) {
-#ifdef _WIN32  
+#ifdef _WIN32
       if (expanded_dir[i] == '\\') {
-#else                          
+#else
       if (expanded_dir[i] == '/') {
-#endif                          
+#endif
         expanded_dir[i]=0;
           break;
       }
-    }  
+    }
   }
-#ifdef _WIN32  
+#ifdef _WIN32
   else if (strncmp(dir,".\\",2) == 0) {
-#else 
+#else
   else if (strncmp(dir,"./",2) == 0) {
-#endif      
+#endif
     dir += 2;
   }
   else if (strcmp(dir,".") == 0) {
     dir ++;
   }
-#ifdef _WIN32  
+#ifdef _WIN32
   strcat(expanded_dir,"\\");
 #else
   strcat(expanded_dir,"/");
-#endif  
+#endif
   strcat(expanded_dir, dir);
 }
 
 int trs_remove_dir(char *file, char *dir)
 {
   int i;
-  
+
   strcpy(dir, file);
-  
+
     for (i=strlen(dir)-1;i>0;i--) {
-#ifdef _WIN32        
+#ifdef _WIN32
       if (dir[i] == '\\') {
 #else
       if (dir[i] == '/') {
-#endif                 
+#endif
         dir[i+1]=0;
         return 1;
       }
@@ -289,7 +289,7 @@ void trs_add_extension(char *filename, char *ext)
 {
     int flen = strlen(filename);
     int elen = strlen(ext);
-    
+
     if (flen > elen) {
       if (strcmp(&filename[flen - elen],ext) != 0)
          strcat(filename, ext);
@@ -319,12 +319,12 @@ int trs_gui_get_key(void)
            case SDLK_q:
              trs_exit(2);
              break;
-#endif             
+#endif
 #ifdef _WIN32
            case SDLK_F4:
              trs_exit(2);
              break;
-#endif             
+#endif
            case SDLK_RETURN:
              trs_flip_fullscreen();
              trs_gui_refresh();
@@ -365,11 +365,11 @@ int trs_gui_get_key(void)
          }
          else if (event.key.keysym.sym == SDLK_F8)
             trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
-         else if (event.key.keysym.sym < 0x100 && 
-               event.key.keysym.unicode >= 0x20 && 
-               event.key.keysym.unicode <= 0x7E) 
+         else if (event.key.keysym.sym < 0x100 &&
+               event.key.keysym.unicode >= 0x20 &&
+               event.key.keysym.unicode <= 0x7E)
              return(event.key.keysym.unicode);
-         else 
+         else
            return(event.key.keysym.sym);
          break;
        case SDL_JOYBUTTONDOWN:
@@ -421,16 +421,16 @@ int trs_gui_get_key(void)
          }
          break;
      }
-   } while(!done);   
-   return(0); 
+   } while(!done);
+   return(0);
 }
 
 void trs_gui_display_message(char* title, char *message)
 {
   int key;
   int done = 0;
-  trs_gui_frame(1,6,62,3);   
-  trs_gui_clear_rect(2,7,60,1); 
+  trs_gui_frame(1,6,62,3);
+  trs_gui_clear_rect(2,7,60,1);
   trs_gui_write_text(title, 3, 6, 0);
   trs_gui_write_text(message, 5, 7, 0);
   trs_x_flush();
@@ -448,8 +448,8 @@ void trs_gui_display_message(char* title, char *message)
 
 void trs_gui_display_pause()
 {
-  trs_gui_frame(1,6,62,3);   
-  trs_gui_clear_rect(2,7,60,1); 
+  trs_gui_frame(1,6,62,3);
+  trs_gui_clear_rect(2,7,60,1);
   trs_gui_center_text("Emulation Paused", 7, 0);
   trs_x_flush();
 }
@@ -470,7 +470,7 @@ void trs_gui_add_to_filename_list(char * filename)
 {
   filenamelist[filenamecount++] = filename;
   if (filenamecount == filenamelistsize) {
-    filenamelist = (char **) realloc(filenamelist, 2 * 
+    filenamelist = (char **) realloc(filenamelist, 2 *
                                      filenamelistsize * sizeof(char*));
     filenamelistsize *= 2;
   }
@@ -488,7 +488,7 @@ int trs_gui_filename_cmp(char *name1, char *name2)
   }
   if (name2[0] == '[')
     return -1;
-#endif    
+#endif
   if (name1[0] == '<') {
     if (name2[0] != '<')
       return -1;
@@ -502,7 +502,7 @@ int trs_gui_filename_cmp(char *name1, char *name2)
   else if (name2[0] == '<')
     return 1;
 
-  return strcasecmp(name1, name2);   
+  return strcasecmp(name1, name2);
 }
 
 void trs_gui_quicksort(char **start, char **end, int (*sort_function) ())
@@ -534,7 +534,7 @@ void trs_gui_quicksort(char **start, char **end, int (*sort_function) ())
 void trs_gui_delete_filename_list(void)
 {
   int i;
-  
+
   for (i=0;i<filenamecount;i++)
     free(filenamelist[i]);
   filenamecount = 0;
@@ -549,11 +549,11 @@ int trs_gui_readdirectory(char *path, int browse_dir)
   char *filename_pos;
   struct dirent *dir_entry;
   struct stat st;
-  
+
   strcpy(pathname, path);
   pathlen = strlen(path);
   filename_pos = pathname + pathlen;
-  
+
   directory = opendir(path);
   if (directory) {
     trs_gui_create_filename_list();
@@ -562,7 +562,7 @@ int trs_gui_readdirectory(char *path, int browse_dir)
 	  if (strcmp(dir_entry->d_name, ".") == 0)
 		continue;
 
-      strcpy(filename_pos, dir_entry->d_name);	
+      strcpy(filename_pos, dir_entry->d_name);
       stat(pathname, &st);
       if (st.st_mode & S_IFDIR) {
         int dirname_len;
@@ -572,13 +572,13 @@ int trs_gui_readdirectory(char *path, int browse_dir)
           strcpy(filename + 1, dir_entry->d_name);
           filename[dirname_len + 1] = '>';
           filename[dirname_len + 2] = 0;
-        } 
+        }
       }	else if (browse_dir){
         continue;
       }else {
         filename = (char *) strdup(dir_entry->d_name);
       }
-      if (!filename) 
+      if (!filename)
         return(-1);
       trs_gui_add_to_filename_list(filename);
     }
@@ -597,7 +597,7 @@ int trs_gui_readdirectory(char *path, int browse_dir)
 		}
     }
 #endif
-    
+
     trs_gui_quicksort(filenamelist, filenamelist+filenamecount,
                       trs_gui_filename_cmp);
   }
@@ -616,17 +616,17 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
   char limited_dir[80];
   char title[64];
   char *new_dir;
-  
+
   strcpy(current_dir, path);
-#ifdef _WIN32  
+#ifdef _WIN32
   if (current_dir[strlen(current_dir)-1] != '\\')
     strcat(current_dir,"\\");
 #else
   if (current_dir[strlen(current_dir)-1] != '/')
     strcat(current_dir,"/");
-#endif    
+#endif
 
-  trs_gui_clear_screen();  
+  trs_gui_clear_screen();
   trs_gui_frame(0,0,64,16);
   if (browse_dir) {
     sprintf(title,"Choose%sDirectory",type);
@@ -718,36 +718,36 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
           redraw = 1;
           break;
         case SDLK_RETURN:
-          if (*filenamelist[current_first + selection] == '<') {          
+          if (*filenamelist[current_first + selection] == '<') {
             new_dir = filenamelist[current_first + selection];
             selection = 0;
             current_first = 0;
-          
+
             if (new_dir[1] == '.' && new_dir[2] == '.') {
               for (i=strlen(current_dir)-2;i>0;i--) {
-#ifdef _WIN32                  
+#ifdef _WIN32
                 if (current_dir[i] == '\\') {
 #else
                 if (current_dir[i] == '/') {
-#endif                                   
+#endif
                   current_dir[i+1]=0;
                   break;
                 }
               }
             } else {
               strcat(current_dir, &new_dir[1]);
-#ifdef _WIN32              
+#ifdef _WIN32
               current_dir[strlen(current_dir)-1] = '\\';
 #else
               current_dir[strlen(current_dir)-1] = '/';
-#endif              
+#endif
             }
 
             trs_gui_clear_rect(1,1,62,14);
             trs_gui_limit_string(current_dir, limited_dir, 62);
             trs_gui_center_text(limited_dir,1,0);
-            
-            trs_gui_delete_filename_list();  
+
+            trs_gui_delete_filename_list();
             trs_gui_readdirectory(current_dir, browse_dir);
 
             if (filenamecount < 13)
@@ -766,13 +766,13 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
             current_dir[0] = new_dir[1];
             current_dir[1] = new_dir[2];
             current_dir[2] = '\\';
-            current_dir[3] = 0; 
-            
+            current_dir[3] = 0;
+
             trs_gui_clear_rect(1,1,62,14);
             trs_gui_limit_string(current_dir, limited_dir, 62);
             trs_gui_center_text(limited_dir,1,0);
-            
-            trs_gui_delete_filename_list();  
+
+            trs_gui_delete_filename_list();
             trs_gui_readdirectory(current_dir, browse_dir);
 
             if (filenamecount < 13)
@@ -781,13 +781,13 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
               drawcount = 13;
 
             redraw = 1;
-          }  
-#endif              
+          }
+#endif
           else
             done = 1;
           break;
         case SDLK_TAB:
-          if (browse_dir) 
+          if (browse_dir)
             done = 1;
           break;
         case SDLK_ESCAPE:
@@ -803,7 +803,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
     if (browse_dir) {
       char *new_dir;
       new_dir = filenamelist[current_first + selection];
-      
+
       if (new_dir[1] != '.' && new_dir[2] != '.') {
 #ifdef _WIN32
         if (new_dir[0] == '[') {
@@ -811,16 +811,16 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
           filename[1] = new_dir[2];
           filename[2] = '\\';
           filename[3] = 0;
-        } else 
-#endif  
-        {    
+        } else
+#endif
+        {
         strcat(filename, &new_dir[1]);
-#ifdef _WIN32       
+#ifdef _WIN32
         filename[strlen(filename)-1] = '\\';
 #else
         filename[strlen(filename)-1] = '/';
-#endif   
-        }     
+#endif
+        }
       }
       trs_gui_clear_rect(1,14,62,1);
       }
@@ -845,7 +845,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
   int length;
   int first_disp;
   int invert;
- 
+
   strcpy(output, input);
   input_length = strlen(input);
   pos = input_length;
@@ -855,16 +855,16 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
     first_disp = pos-60;
   else
     first_disp = 0;
-  
-  trs_gui_frame(1,6,62,3);   
-  trs_gui_clear_rect(2,7,60,1); 
+
+  trs_gui_frame(1,6,62,3);
+  trs_gui_clear_rect(2,7,60,1);
   trs_gui_write_text(title, 3, 6, 0);
 
   do {
     trs_gui_clear_rect(2,7,60,1);
     for (i=0;i<60;i++) {
       invert = (first_disp + i == pos);
-      if (first_disp + i >= length) 
+      if (first_disp + i >= length)
         trs_gui_write_text_char(' ',2+i,7,invert);
       else
         trs_gui_write_text_char(output[first_disp+i],2+i,7,invert);
@@ -875,7 +875,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
       case SDLK_LEFT:
         if (pos>0) {
           if (pos == first_disp)
-            first_disp--; 
+            first_disp--;
           pos--;
         }
         break;
@@ -891,9 +891,9 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
         if (pos>0) {
           for (i=pos;i<length;i++)
             output[i-1] = output[i];
-          length--;             
+          length--;
           if (pos == first_disp)
-            first_disp--; 
+            first_disp--;
           pos--;
         }
         break;
@@ -901,7 +901,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
         if (pos<length) {
           for (i=pos;i<length-1;i++)
             output[i] = output[i+1];
-          length--;             
+          length--;
         }
         break;
       case SDLK_RETURN:
@@ -926,29 +926,29 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
             first_disp = pos-60;
           else
             first_disp = 0;
-          trs_gui_frame(1,6,62,3);    
+          trs_gui_frame(1,6,62,3);
           trs_gui_write_text(title, 3, 6, 0);
         }
         break;
       default:
-        if (key >= 0x20 && key <= 0xFF) { 
+        if (key >= 0x20 && key <= 0xFF) {
           for (i=length;i>pos;i--)
-            output[i] = output[i-1];             
+            output[i] = output[i-1];
           output[pos] = (char) key;
           if (pos == first_disp + (60 - 1))
             first_disp ++;
           pos++;
           length++;
         }
-        break;      
+        break;
     }
   } while (!done);
-  
+
   output[length] = 0;
   return(ret_code);
 }
 
-int trs_gui_display_popup(char* title, char **entry, 
+int trs_gui_display_popup(char* title, char **entry,
                           int entry_count, int selection)
 {
   int num = 0,key;
@@ -956,17 +956,17 @@ int trs_gui_display_popup(char* title, char **entry,
   int max_len = 0;
   int first_x, first_y;
   int saved_selection = selection;
-  
+
   for (num=0;num<entry_count;num++) {
     if (strlen(entry[num]) > max_len)
-      max_len = strlen(entry[num]);                 
+      max_len = strlen(entry[num]);
     }
   first_x = (64-max_len)/2;
   first_y = (16-entry_count)/2;
 
   trs_gui_frame(first_x-1,first_y-1,max_len+2,entry_count+2);
   trs_gui_write_text(title, first_x+1, first_y-1, 0);
-  
+
   for (num=0;num<entry_count;num++) {
     trs_gui_write_text(entry[num], first_x, first_y+num,0);
   }
@@ -982,9 +982,9 @@ int trs_gui_display_popup(char* title, char **entry,
     trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
     switch(key) {
       case SDLK_DOWN:
-        if (selection < entry_count-1) 
+        if (selection < entry_count-1)
           selection ++;
-        else 
+        else
           selection = 0;
         break;
       case SDLK_UP:
@@ -1009,7 +1009,7 @@ int trs_gui_display_popup(char* title, char **entry,
         break;
     }
   } while (!done);
-  
+
   return(selection);
 }
 
@@ -1019,10 +1019,10 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
   int done = 0;
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
-  
+
   trs_gui_frame(0,0,64,16);
   trs_gui_write_text(title, 2, 0, 0);
-  
+
   while(entry[num].value != -1)
   {
     trs_gui_write_text(entry[num].title, 2, num+2,0);
@@ -1052,7 +1052,7 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
         do {
           if (selection < num)
             selection ++;
-          else 
+          else
             selection = 0;
         } while(entry[selection].type == MENU_TITLE_TYPE);
         break;
@@ -1147,13 +1147,13 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
         break;
     }
   } while (!done);
-  
+
   return(selection);
 }
 
 void trs_gui_hard_creation(void)
 {
-  MENU_ENTRY disk_creation_menu[] = 
+  MENU_ENTRY disk_creation_menu[] =
   {{"Cylinder Count                                              ",MENU_NORMAL_TYPE,1},
    {"Sector Count                                                ",MENU_NORMAL_TYPE,2},
    {"Granularity                                                 ",MENU_NORMAL_TYPE,3},
@@ -1210,7 +1210,7 @@ void trs_gui_hard_creation(void)
              if ((sector_count % 32) != 0) {
                trs_gui_display_message("Warning",
                    "Sector not a mult of 32 is incompatible with WD1000/1010");
-               if (sector_count > 32) 
+               if (sector_count > 32)
                  trs_gui_display_message("Warning",
                      "Sector is incompatible with Matthew Reed's emulators");
                }
@@ -1265,11 +1265,11 @@ void trs_gui_hard_creation(void)
          }
          filename[0] = 0;
          trs_expand_dir(trs_hard_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename, TAB selects directory", 
+         ret = trs_gui_input_string("Enter Filename, TAB selects directory",
                                     browse_dir,filename, 1);
          if (ret)
            break;
-         ret = trs_create_blank_hard(filename, cylinder_count, sector_count, 
+         ret = trs_create_blank_hard(filename, cylinder_count, sector_count,
                                      granularity, dir_sector);
          if (ret)
            trs_gui_display_message("Error","Error creating Hard Disk Image");
@@ -1286,7 +1286,7 @@ void trs_gui_hard_creation(void)
 
 void trs_gui_disk_creation(void)
 {
-  MENU_ENTRY disk_creation_menu[] = 
+  MENU_ENTRY disk_creation_menu[] =
   {{"Image Type                                                  ",MENU_NORMAL_TYPE,1},
    {"Number of Sides                                             ",MENU_NORMAL_TYPE,2},
    {"Density                                                     ",MENU_NORMAL_TYPE,3},
@@ -1313,7 +1313,7 @@ void trs_gui_disk_creation(void)
    int done = 0, ret;
    char filename[FILENAME_MAX];
    char browse_dir[FILENAME_MAX];
-   
+
    while(!done) {
      strcpy(&disk_creation_menu[0].title[52],image_type_choices[image_type]);
      strcpy(&disk_creation_menu[1].title[52],num_sides_choices[num_sides-1]);
@@ -1352,7 +1352,7 @@ void trs_gui_disk_creation(void)
        case 6:
          filename[0] = 0;
          trs_expand_dir(trs_disk_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename, TAB selects directory", 
+         ret = trs_gui_input_string("Enter Filename, TAB selects directory",
                                     browse_dir,filename, 1);
          if (ret)
            break;
@@ -1377,7 +1377,7 @@ void trs_gui_disk_creation(void)
 
 void trs_gui_cassette_creation(void)
 {
-  MENU_ENTRY cassette_creation_menu[] = 
+  MENU_ENTRY cassette_creation_menu[] =
   {{"Image Type                                                  ",MENU_NORMAL_TYPE,1},
    {"Insert Created Disk Into Drive                              ",MENU_NORMAL_TYPE,6},
    {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE,2},
@@ -1392,7 +1392,7 @@ void trs_gui_cassette_creation(void)
    FILE *cassette_file;
    char filename[FILENAME_MAX];
    char browse_dir[FILENAME_MAX];
-   
+
    while(!done) {
      strcpy(&cassette_creation_menu[0].title[54],image_type_choices[image_type]);
      strcpy(&cassette_creation_menu[1].title[52],drive_choices[drive_insert]);
@@ -1411,7 +1411,7 @@ void trs_gui_cassette_creation(void)
        case 2:
          filename[0] = 0;
          trs_expand_dir(trs_cass_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory", 
+         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                                     browse_dir,filename, 1);
          if (ret)
            break;
@@ -1463,7 +1463,7 @@ void trs_gui_cassette_creation(void)
 
 void trs_gui_disk_sizes(void)
 {
-  MENU_ENTRY disk_sizes_menu[] = 
+  MENU_ENTRY disk_sizes_menu[] =
   {{"",MENU_NORMAL_TYPE,1},
    {"",MENU_NORMAL_TYPE,2},
    {"",MENU_NORMAL_TYPE,3},
@@ -1482,7 +1482,7 @@ void trs_gui_disk_sizes(void)
    for (i=0;i<8;i++) {
        gui_disk_sizes[i] = trs_disk_getsize(i);
    }
-   
+
    while(!done) {
      trs_gui_clear_screen();
      for (i=0;i<8;i++) {
@@ -1513,7 +1513,7 @@ void trs_gui_disk_sizes(void)
 #ifdef __linux
 void trs_gui_disk_steps(void)
 {
-  MENU_ENTRY disk_steps_menu[] = 
+  MENU_ENTRY disk_steps_menu[] =
   {{"",MENU_NORMAL_TYPE,1},
    {"",MENU_NORMAL_TYPE,2},
    {"",MENU_NORMAL_TYPE,3},
@@ -1532,7 +1532,7 @@ void trs_gui_disk_steps(void)
    for (i=0;i<8;i++) {
        gui_disk_steps[i] = trs_disk_getstep(i);
    }
-   
+
    while(!done) {
      trs_gui_clear_screen();
      for (i=0;i<8;i++) {
@@ -1563,19 +1563,19 @@ void trs_gui_disk_steps(void)
 
 void trs_gui_disk_options(void)
 {
-  MENU_ENTRY disk_menu[] = 
+  MENU_ENTRY disk_menu[] =
   {{"Doubler Type                                                ",MENU_NORMAL_TYPE,1},
    {"True DAM Emulation                                          ",MENU_NORMAL_TYPE,2},
    {"Set Drive Sizes",MENU_NORMAL_TYPE,3},
-#ifdef __linux   
+#ifdef __linux
    {"Set Drive Steps",MENU_NORMAL_TYPE,4},
-#endif   
+#endif
    {"",0,-1}};
    char *on_off_choices[2] =     {"       Off","        On"};
    char *doubler_choices[4] =     {"      None","    Percom","     Tandy","      Both"};
    int selection = 0;
    int done = 0;
-   
+
    while(!done) {
      sprintf(&disk_menu[0].title[50],"%s",doubler_choices[trs_disk_doubler]);
      sprintf(&disk_menu[1].title[50],"%s",on_off_choices[trs_disk_truedam]);
@@ -1593,11 +1593,11 @@ void trs_gui_disk_options(void)
        case 2:
          trs_gui_disk_sizes();
          break;
-#ifdef __linux         
+#ifdef __linux
        case 3:
          trs_gui_disk_steps();
          break;
-#endif         
+#endif
        case -1:
          done = 1;
          break;
@@ -1607,7 +1607,7 @@ void trs_gui_disk_options(void)
 
 void trs_gui_disk_management(void)
 {
-  MENU_ENTRY disk_menu[] = 
+  MENU_ENTRY disk_menu[] =
   {{" Disk 0:",MENU_FLOPPY_BROWSE_TYPE,1},
    {" Disk 1:",MENU_FLOPPY_BROWSE_TYPE,2},
    {" Disk 2:",MENU_FLOPPY_BROWSE_TYPE,3},
@@ -1627,11 +1627,11 @@ void trs_gui_disk_management(void)
    int selection = 0;
    int done = 0;
    int i;
-   
+
    while(!done) {
      for (i=0;i<8;i++) {
        char *diskname;
-       
+
        diskname = trs_disk_getfilename(i);
        if (diskname[0] == 0)
          strcpy(&disk_menu[i].title[8], "Empty");
@@ -1641,14 +1641,14 @@ void trs_gui_disk_management(void)
          disk_menu[i].title[0]='*';
        else
          disk_menu[i].title[0]=' ';
-     }   
+     }
      trs_gui_clear_screen();
      selection = trs_gui_display_menu("SDLTRS Floppy Menu",disk_menu, selection);
      switch(selection) {
        case 8:
          filename[0] = 0;
          trs_expand_dir(trs_disk_set_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory", 
+         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                                     browse_dir,filename, 1);
          if (ret)
            break;
@@ -1677,7 +1677,7 @@ void trs_gui_disk_management(void)
 
 void trs_gui_hard_management(void)
 {
-  MENU_ENTRY hard_menu[] = 
+  MENU_ENTRY hard_menu[] =
   {{" Hard 0:",MENU_HARD_BROWSE_TYPE,1},
    {" Hard 1:",MENU_HARD_BROWSE_TYPE,2},
    {" Hard 2:",MENU_HARD_BROWSE_TYPE,3},
@@ -1692,22 +1692,22 @@ void trs_gui_hard_management(void)
    int selection = 0;
    int done = 0;
    int i;
-   
+
    while(!done) {
      for (i=0;i<4;i++) {
          char *diskname;
-         
+
          diskname = trs_hard_getfilename(i);
          if (diskname[0] == 0)
            strcpy(&hard_menu[i].title[8],"Empty");
-         else         
+         else
            trs_gui_limit_string(diskname,&hard_menu[i].title[8],52);
          if (trs_hard_getwriteprotect(i))
            hard_menu[i].title[0]='*';
          else
            hard_menu[i].title[0]=' ';
      }
-   
+
      trs_gui_clear_screen();
      selection = trs_gui_display_menu("SDLTRS Hard Disk Menu",
                                       hard_menu, selection);
@@ -1715,7 +1715,7 @@ void trs_gui_hard_management(void)
        case 4:
          filename[0] = 0;
          trs_expand_dir(trs_disk_set_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory", 
+         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                                     browse_dir,filename, 1);
          if (ret)
            break;
@@ -1741,7 +1741,7 @@ void trs_gui_hard_management(void)
 
 void trs_gui_cassette_management(void)
 {
-  MENU_ENTRY cass_menu[] = 
+  MENU_ENTRY cass_menu[] =
   {{"Cass   :",MENU_CASS_BROWSE_TYPE,1},
    {"Cassette Position                                           ",MENU_NORMAL_TYPE,10},
    {"Create Blank Cassette",MENU_NORMAL_TYPE,3},
@@ -1751,22 +1751,22 @@ void trs_gui_cassette_management(void)
    int done = 0;
    int new_position;
    int ret;
-      
+
    while(!done) {
      char *cass_name = trs_cassette_getfilename();
-     
+
      if (cass_name[0] == 0)
        strcpy(&cass_menu[0].title[8],"Empty");
      else
        trs_gui_limit_string(cass_name,&cass_menu[0].title[8],52);
-     
+
      trs_gui_clear_screen();
      sprintf(&cass_menu[1].title[36],"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());
      selection = trs_gui_display_menu("SDLTRS Cassette Menu",cass_menu, selection);
      switch(selection) {
        case 1:
          sprintf(posititon_string,"%d",trs_get_cassette_position());
-         ret = trs_gui_input_string("Enter Cassette Position in Bytes", 
+         ret = trs_gui_input_string("Enter Cassette Position in Bytes",
                                     "",posititon_string, 1);
          if (ret)
            break;
@@ -1786,7 +1786,7 @@ void trs_gui_cassette_management(void)
 
 void trs_gui_display_management(void)
 {
-  MENU_ENTRY display_menu[] = 
+  MENU_ENTRY display_menu[] =
   {{"Emulator Background Color                                   ",MENU_NORMAL_TYPE,1},
    {"Emulator Foreground Color                                   ",MENU_NORMAL_TYPE,2},
    {"GUI Background Color                                        ",MENU_NORMAL_TYPE,3},
@@ -1816,15 +1816,15 @@ void trs_gui_display_management(void)
    char *font34_choices[8] =  {"            katakana",
                                "       international",
                                "                bold"};
-   
+
    if (local_trs_charset1 == 10)
      charset1_selection = 4;
    else
      charset1_selection = local_trs_charset1;
    charset3_selection = local_trs_charset3 - 4;
    charset4_selection = local_trs_charset4 - 7;
-                               
-   
+
+
    while(!done) {
      trs_gui_clear_screen();
      sprintf(&display_menu[0].title[52],"0x%06X",local_background);
@@ -2206,7 +2206,7 @@ void trs_gui_joystick_map_joystick(void)
 
 void trs_gui_joystick_management(void)
 {
-  MENU_ENTRY display_menu[] = 
+  MENU_ENTRY display_menu[] =
   {{"Use Keypad for Joystick                                     ",MENU_NORMAL_TYPE,1},
    {"USB Joystick/Gamepad                                        ",MENU_NORMAL_TYPE,2},
    {"Map Joystick to Keys/Functions                              ",MENU_NORMAL_TYPE,5},
@@ -2217,10 +2217,10 @@ void trs_gui_joystick_management(void)
    char *keypad_choices[2] =     {"      No","     Yes"};
    char *joystick_choices[MAX_JOYSTICKS+1];
    char joystick_strings[MAX_JOYSTICKS+1][64];
-   
+
    for (i=0;i<MAX_JOYSTICKS+1;i++)
      joystick_choices[i] = joystick_strings[i];
-   
+
    while(!done) {
      trs_gui_clear_screen();
      sprintf(&display_menu[0].title[52],"%s",keypad_choices[gui_keypad_joystick]);
@@ -2243,7 +2243,7 @@ void trs_gui_joystick_management(void)
          for (i=0;i<num_joysticks;i++) {
            sprintf(joystick_choices[i+1],"Joystick %1d - %47s",i,
                    SDL_JoystickName(i));
-                   }          
+                   }
          if ((gui_joystick_num == -1) || (gui_joystick_num >= num_joysticks))
            joy_index = 0;
          else
@@ -2268,7 +2268,7 @@ void trs_gui_joystick_management(void)
 
 void trs_gui_misc_management(void)
 {
-  MENU_ENTRY misc_menu[] = 
+  MENU_ENTRY misc_menu[] =
   {{"Shift Bracket Emulation                                     ",MENU_NORMAL_TYPE,1},
    {"Turbo Mode                                                  ",MENU_NORMAL_TYPE,2},
    {"Turbo Speed                                                 ",MENU_NORMAL_TYPE,3},
@@ -2283,7 +2283,7 @@ void trs_gui_misc_management(void)
    int selection = 0;
    int done = 0;
    int ret, state;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      sprintf(&misc_menu[0].title[50],"%s",on_off_choices[trs_kb_bracket_state]);
@@ -2300,7 +2300,7 @@ void trs_gui_misc_management(void)
        case 0:
          state = trs_gui_display_popup("Bracket",on_off_choices,2,
                                                    trs_kb_bracket_state);
-         trs_kb_bracket(state);                                          
+         trs_kb_bracket(state);
          break;
 	   case 1:
 		 state = trs_gui_display_popup("Turbo",on_off_choices,2,
@@ -2325,7 +2325,7 @@ void trs_gui_misc_management(void)
        case 4:
          state = trs_gui_display_popup("Emtsafe",on_off_choices,2,
                                                    trs_emtsafe);
-         trs_emtsafe=state;                                          
+         trs_emtsafe=state;
          break;
        case 5:
          sprintf(input,"%2X",trs_uart_switches);
@@ -2352,22 +2352,22 @@ void trs_gui_misc_management(void)
 
 void trs_gui_printer_management(void)
 {
-  MENU_ENTRY printer_menu[] = 
+  MENU_ENTRY printer_menu[] =
   {{"Printer Type                                                ",MENU_NORMAL_TYPE,1},
    {"Close and Reopen Printer Output File",MENU_NORMAL_TYPE,2},
    {"Printer Command:",MENU_TITLE_TYPE,3},
    {"   ",MENU_NORMAL_TYPE,3},
    {"",0,-1}};
-#ifdef MACOSX   
+#ifdef MACOSX
    char *printer_choices[4] =     {"      None","      Text","     Epson","   CGP-115"};
 #else
    char *printer_choices[2] =     {"      None","      Text"};
-#endif   
+#endif
    char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
    int ret;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      sprintf(&printer_menu[0].title[50],"%s",printer_choices[trs_printer]);
@@ -2377,13 +2377,13 @@ void trs_gui_printer_management(void)
 
      switch(selection) {
        case 0:
-#ifdef MACOSX       
+#ifdef MACOSX
          trs_printer = trs_gui_display_popup("Printer",printer_choices,4,
                                                    trs_printer);
 #else
          trs_printer = trs_gui_display_popup("Printer",printer_choices,2,
                                                    trs_printer);
-#endif                                                   
+#endif
          break;
        case 1:
          if (trs_printer_reset() != -1)
@@ -2412,7 +2412,7 @@ void trs_gui_model(void)
                             "  TRS-80 Model 4",
                             " TRS-80 Model 4P"};
   char *on_off_choices[2] = {"            Off","             On"};
-  MENU_ENTRY model_menu[] = 
+  MENU_ENTRY model_menu[] =
   {{"Model                                                       ",MENU_NORMAL_TYPE,1},
    {"Lowercase Modification for Model I                          ",MENU_NORMAL_TYPE,2},
    {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE,3},
@@ -2426,7 +2426,7 @@ void trs_gui_model(void)
    int model_selection = 0;
    int done = 0;
    int state;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      switch(local_trs_model) {
@@ -2449,7 +2449,7 @@ void trs_gui_model(void)
      strcpy(&model_menu[5].title[45],on_off_choices[hypermem]);
      strcpy(&model_menu[6].title[45],on_off_choices[supermem]);
      strcpy(&model_menu[7].title[45],on_off_choices[selector]);
-     
+
      selection = trs_gui_display_menu("SDLTRS Model/Graphic/Memory Selection Menu",model_menu, selection);
      switch(selection) {
        case -1:
@@ -2485,7 +2485,7 @@ void trs_gui_model(void)
          state = trs_gui_display_popup("Grafyx",on_off_choices,2,
                                                 grafyx_get_microlabs());
          grafyx_set_microlabs(state);
-         break;                                          
+         break;
        case 4:
          huffman_ram = trs_gui_display_popup("Huffman",on_off_choices,2,
                                                        huffman_ram);
@@ -2516,7 +2516,7 @@ void trs_gui_model(void)
 
 void trs_gui_default_dirs(void)
 {
-  MENU_ENTRY default_menu[] = 
+  MENU_ENTRY default_menu[] =
   {{"Default Floppy Disk Directory:",MENU_TITLE_TYPE,1},
    {"   ",MENU_NORMAL_TYPE,2},
    {"Default Hard Disk Directory:",MENU_TITLE_TYPE,3},
@@ -2533,7 +2533,7 @@ void trs_gui_default_dirs(void)
    char browse_dir[FILENAME_MAX];
    int selection = 1;
    int done = 0;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      trs_gui_limit_string(trs_disk_dir,&default_menu[1].title[2],59);
@@ -2578,7 +2578,7 @@ void trs_gui_default_dirs(void)
 
 void trs_gui_rom_files(void)
 {
-  MENU_ENTRY romfile_menu[] = 
+  MENU_ENTRY romfile_menu[] =
   {{"Model 1 ROM File:",MENU_TITLE_TYPE,1},
    {"   ",MENU_NORMAL_TYPE,2},
    {"Model 3 ROM File:",MENU_TITLE_TYPE,3},
@@ -2589,7 +2589,7 @@ void trs_gui_rom_files(void)
    char browse_dir[FILENAME_MAX];
    int selection = 1;
    int done = 0;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      trs_gui_limit_string(romfile,&romfile_menu[1].title[2],60);
@@ -2624,7 +2624,7 @@ void trs_gui_about_sdltrs(void)
   trs_gui_clear_screen();
   trs_gui_frame(0,0,64,16);
   trs_gui_write_text("About SDLTRS", 2, 0, 0);
-  
+
   trs_gui_center_text("SDLTRS",3,0);
   trs_gui_center_text("Version 1.1.0",4,0);
   trs_gui_center_text("http://sdltrs.sourceforge.net",5,0);
@@ -2677,7 +2677,7 @@ void trs_gui_write_config(void)
   int ret;
 
   trs_expand_dir(".",browse_dir);
-  ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory", 
+  ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                               browse_dir,filename, 1);
   if (ret)
     return;
@@ -2708,18 +2708,18 @@ static int trs_gui_config_management(void)
    {"Load Emulator State      (CMD-L)",MENU_NORMAL_TYPE,2},
    {"Write Configuration File (CMD-W)",MENU_NORMAL_TYPE,3},
    {"Read Configuration File  (CMD-R)",MENU_NORMAL_TYPE,4},
-#else   
+#else
   {{"Save Emulator State      (ALT-S)",MENU_NORMAL_TYPE,1},
    {"Load Emulator State      (ALT-L)",MENU_NORMAL_TYPE,2},
    {"Write Configuration File (ALT-W)",MENU_NORMAL_TYPE,3},
    {"Read Configuration File  (ALT-R)",MENU_NORMAL_TYPE,4},
-#endif   
+#endif
    {"",0,-1}};
    int selection = 0;
    int done = 0;
    int ret;
    int read = 0;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      selection = trs_gui_display_menu("SDLTRS Configuration Files Menu",
@@ -2727,14 +2727,14 @@ static int trs_gui_config_management(void)
 
      switch(selection) {
        case 0:
-         trs_gui_save_state();   
+         trs_gui_save_state();
          break;
        case 1:
          trs_gui_load_state();
          trs_screen_init(1);
          grafyx_redraw();
          done = 1;
-         read = 1;   
+         read = 1;
          break;
        case 2:
          trs_model = local_trs_model;
@@ -2775,7 +2775,7 @@ void trs_gui_save_state(void)
 
   filename[0] = 0;
   trs_expand_dir(trs_state_dir, browse_dir);
-  ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory", 
+  ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                               browse_dir,filename, 1);
   if (ret)
     return;
@@ -2843,20 +2843,20 @@ void trs_gui_new_machine(void)
 {
   trs_screen_var_reset();
   romin = 0;
-  mem_init(); 
+  mem_init();
   trs_disk_init(0);
   trs_rom_init();
   trs_screen_init(1);
   screen_init();
   trs_timer_init();
-  trs_reset(1);    
+  trs_reset(1);
 }
 
 void trs_gui(void)
 {
-  MENU_ENTRY main_menu[] = 
+  MENU_ENTRY main_menu[] =
   {
-#ifdef MACOSX  
+#ifdef MACOSX
    {"Floppy Disk Management (CMD-D)",MENU_NORMAL_TYPE,1},
    {"Hard Disk Management   (CMD-H)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (CMD-T)",MENU_NORMAL_TYPE,3},
@@ -2864,7 +2864,7 @@ void trs_gui(void)
    {"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE,1},
    {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE,3},
-#endif   
+#endif
    {"TRS-80 Model/Graphics/Memory Selection",MENU_NORMAL_TYPE,4},
    {"Configuration/State File Management",MENU_NORMAL_TYPE,5},
    {"Printer Management",MENU_NORMAL_TYPE,6},
@@ -2882,22 +2882,22 @@ void trs_gui(void)
    {"",0,-1}};
    int selection = 0;
    int done = 0;
-   
-   local_trs_model = trs_model; 
+
+   local_trs_model = trs_model;
    local_trs_charset1 = trs_charset1;
    local_trs_charset3 = trs_charset3;
    local_trs_charset4 = trs_charset4;
    local_foreground = foreground;
-   local_background = background; 
+   local_background = background;
    local_gui_foreground = gui_foreground;
-   local_gui_background = gui_background; 
+   local_gui_background = gui_background;
    gui_show_led = trs_show_led;
    gui_resize3 = resize3;
    gui_resize4 = resize4;
    gui_border_width = window_border_width;
    gui_keypad_joystick = trs_keypad_joystick;
    gui_joystick_num = trs_joystick_num;
-   
+
    while(!done) {
      trs_gui_clear_screen();
      selection = trs_gui_display_menu("SDLTRS Main Menu",main_menu, selection);
@@ -2953,12 +2953,12 @@ void trs_gui(void)
     trs_keypad_joystick = gui_keypad_joystick;
     trs_set_keypad_joystick();
   }
- 
+
   if (trs_joystick_num != gui_joystick_num) {
     trs_joystick_num = gui_joystick_num;
     trs_open_joystick();
   }
-  
+
   if (trs_model != local_trs_model) {
     trs_model = local_trs_model;
     trs_charset1 = local_trs_charset1;

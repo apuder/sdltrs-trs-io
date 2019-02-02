@@ -60,7 +60,7 @@ unsigned short CALC_CRC1a(unsigned short crc, unsigned char byte)
 
 /* Recompute the CRC with len bytes appended. */
 unsigned short calc_crc(unsigned short crc,
-			unsigned char const *buf, int len) 
+			unsigned char const *buf, int len)
 {
   while (len--) {
     crc = calc_crc1(crc, *buf++);

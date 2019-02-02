@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -312,7 +312,7 @@ static struct opcode major[256] = {
 	{ "call	%02x%02xh",	A_16 },		/* cd */
 	{ "adc	a,%02xh",	A_8 },		/* ce */
 	{ "rst	8",		A_0 },		/* cf */
-	
+
 	{ "ret	nc",		A_0 },		/* d0 */
 	{ "pop	de",		A_0 },		/* d1 */
 	{ "jp	nc,%02x%02xh",	A_16 },		/* d2 */
@@ -321,7 +321,7 @@ static struct opcode major[256] = {
 	{ "push	de",		A_0 },		/* d5 */
 	{ "sub	%02xh",		A_8 },		/* d6 */
 	{ "rst	10h",		A_0 },		/* d7 */
-	
+
 	{ "ret	c",		A_0 },		/* d8 */
 	{ "exx",		A_0 },		/* d9 */
 	{ "jp	c,%02x%02xh",	A_16 },		/* da */
@@ -330,7 +330,7 @@ static struct opcode major[256] = {
 	{ 0,			1 },		/* dd */
 	{ "sbc	a,%02xh",	A_8 },		/* de */
 	{ "rst	18h",		A_0 },		/* df */
-	
+
 	{ "ret	po",		A_0 },		/* e0 */
 	{ "pop	hl",		A_0 },		/* e1 */
 	{ "jp	po,%02x%02xh",	A_16 },		/* e2 */
@@ -348,7 +348,7 @@ static struct opcode major[256] = {
 	{ 0,			2 },		/* ed */
 	{ "xor	%02xh",		A_8 },		/* ee */
 	{ "rst	28h",		A_0 },		/* ef */
-	
+
 	{ "ret	p",		A_0 },		/* f0 */
 	{ "pop	af",		A_0 },		/* f1 */
 	{ "jp	p,%02x%02xh",	A_16 },		/* f2 */
@@ -357,7 +357,7 @@ static struct opcode major[256] = {
 	{ "push	af",		A_0 },		/* f5 */
 	{ "or	%02xh",		A_8 },		/* f6 */
 	{ "rst	30h",		A_0 },		/* f7 */
-	
+
 	{ "ret	m",		A_0 },		/* f8 */
 	{ "ld	sp,hl",		A_0 },		/* f9 */
 	{ "jp	m,%02x%02xh",	A_16 },		/* fa */
@@ -378,7 +378,7 @@ static struct opcode minor[6][256] = {
 	{ "rlc	l",		A_0 },		/* cb05 */
 	{ "rlc	(hl)",		A_0 },		/* cb06 */
 	{ "rlc	a",		A_0 },		/* cb07 */
-	
+
 	{ "rrc	b",		A_0 },		/* cb08 */
 	{ "rrc	c",		A_0 },		/* cb09 */
 	{ "rrc	d",		A_0 },		/* cb0a */
@@ -387,7 +387,7 @@ static struct opcode minor[6][256] = {
 	{ "rrc	l",		A_0 },		/* cb0d */
 	{ "rrc	(hl)",		A_0 },		/* cb0e */
 	{ "rrc	a",		A_0 },		/* cb0f */
-	
+
 	{ "rl	b",		A_0 },		/* cb10 */
 	{ "rl	c",		A_0 },		/* cb11 */
 	{ "rl	d",		A_0 },		/* cb12 */
@@ -396,7 +396,7 @@ static struct opcode minor[6][256] = {
 	{ "rl	l",		A_0 },		/* cb15 */
 	{ "rl	(hl)",		A_0 },		/* cb16 */
 	{ "rl	a",		A_0 },		/* cb17 */
-	
+
 	{ "rr	b",		A_0 },		/* cb18 */
 	{ "rr	c",		A_0 },		/* cb19 */
 	{ "rr	d",		A_0 },		/* cb1a */
@@ -405,7 +405,7 @@ static struct opcode minor[6][256] = {
 	{ "rr	l",		A_0 },		/* cb1d */
 	{ "rr	(hl)",		A_0 },		/* cb1e */
 	{ "rr	a",		A_0 },		/* cb1f */
-	
+
 	{ "sla	b",		A_0 },		/* cb20 */
 	{ "sla	c",		A_0 },		/* cb21 */
 	{ "sla	d",		A_0 },		/* cb22 */
@@ -414,7 +414,7 @@ static struct opcode minor[6][256] = {
 	{ "sla	l",		A_0 },		/* cb25 */
 	{ "sla	(hl)",		A_0 },		/* cb26 */
 	{ "sla	a",		A_0 },		/* cb27 */
-	
+
 	{ "sra	b",		A_0 },		/* cb28 */
 	{ "sra	c",		A_0 },		/* cb29 */
 	{ "sra	d",		A_0 },		/* cb2a */
@@ -423,7 +423,7 @@ static struct opcode minor[6][256] = {
 	{ "sra	l",		A_0 },		/* cb2d */
 	{ "sra	(hl)",		A_0 },		/* cb2e */
 	{ "sra	a",		A_0 },		/* cb2f */
-	
+
 	{ "slia	b",		A_0 },		/* cb30 [undoc] */
 	{ "slia	c",		A_0 },		/* cb31 [undoc] */
 	{ "slia	d",		A_0 },		/* cb32 [undoc] */
@@ -432,7 +432,7 @@ static struct opcode minor[6][256] = {
 	{ "slia	l",		A_0 },		/* cb35 [undoc] */
 	{ "slia	(hl)",		A_0 },		/* cb36 [undoc] */
 	{ "slia	a",		A_0 },		/* cb37 [undoc] */
-	
+
 	{ "srl	b",		A_0 },		/* cb38 */
 	{ "srl	c",		A_0 },		/* cb39 */
 	{ "srl	d",		A_0 },		/* cb3a */
@@ -441,7 +441,7 @@ static struct opcode minor[6][256] = {
 	{ "srl	l",		A_0 },		/* cb3d */
 	{ "srl	(hl)",		A_0 },		/* cb3e */
 	{ "srl	a",		A_0 },		/* cb3f */
-	
+
 	{ "bit	0,b",		A_0 },		/* cb40 */
 	{ "bit	0,c",		A_0 },		/* cb41 */
 	{ "bit	0,d",		A_0 },		/* cb42 */
@@ -450,7 +450,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	0,l",		A_0 },		/* cb45 */
 	{ "bit	0,(hl)",	A_0 },		/* cb46 */
 	{ "bit	0,a",		A_0 },		/* cb47 */
-	
+
 	{ "bit	1,b",		A_0 },		/* cb48 */
 	{ "bit	1,c",		A_0 },		/* cb49 */
 	{ "bit	1,d",		A_0 },		/* cb4a */
@@ -459,7 +459,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	1,l",		A_0 },		/* cb4d */
 	{ "bit	1,(hl)",	A_0 },		/* cb4e */
 	{ "bit	1,a",		A_0 },		/* cb4f */
-	
+
 	{ "bit	2,b",		A_0 },		/* cb50 */
 	{ "bit	2,c",		A_0 },		/* cb51 */
 	{ "bit	2,d",		A_0 },		/* cb52 */
@@ -468,7 +468,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	2,l",		A_0 },		/* cb55 */
 	{ "bit	2,(hl)",	A_0 },		/* cb56 */
 	{ "bit	2,a",		A_0 },		/* cb57 */
-	
+
 	{ "bit	3,b",		A_0 },		/* cb58 */
 	{ "bit	3,c",		A_0 },		/* cb59 */
 	{ "bit	3,d",		A_0 },		/* cb5a */
@@ -477,7 +477,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	3,l",		A_0 },		/* cb5d */
 	{ "bit	3,(hl)",	A_0 },		/* cb5e */
 	{ "bit	3,a",		A_0 },		/* cb5f */
-	
+
 	{ "bit	4,b",		A_0 },		/* cb60 */
 	{ "bit	4,c",		A_0 },		/* cb61 */
 	{ "bit	4,d",		A_0 },		/* cb62 */
@@ -486,7 +486,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	4,l",		A_0 },		/* cb65 */
 	{ "bit	4,(hl)",	A_0 },		/* cb66 */
 	{ "bit	4,a",		A_0 },		/* cb67 */
-	
+
 	{ "bit	5,b",		A_0 },		/* cb68 */
 	{ "bit	5,c",		A_0 },		/* cb69 */
 	{ "bit	5,d",		A_0 },		/* cb6a */
@@ -495,7 +495,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	5,l",		A_0 },		/* cb6d */
 	{ "bit	5,(hl)",	A_0 },		/* cb6e */
 	{ "bit	5,a",		A_0 },		/* cb6f */
-	
+
 	{ "bit	6,b",		A_0 },		/* cb70 */
 	{ "bit	6,c",		A_0 },		/* cb71 */
 	{ "bit	6,d",		A_0 },		/* cb72 */
@@ -504,7 +504,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	6,l",		A_0 },		/* cb75 */
 	{ "bit	6,(hl)",	A_0 },		/* cb76 */
 	{ "bit	6,a",		A_0 },		/* cb77 */
-	
+
 	{ "bit	7,b",		A_0 },		/* cb78 */
 	{ "bit	7,c",		A_0 },		/* cb79 */
 	{ "bit	7,d",		A_0 },		/* cb7a */
@@ -513,7 +513,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	7,l",		A_0 },		/* cb7d */
 	{ "bit	7,(hl)",	A_0 },		/* cb7e */
 	{ "bit	7,a",		A_0 },		/* cb7f */
-	
+
 	{ "res	0,b",		A_0 },		/* cb80 */
 	{ "res	0,c",		A_0 },		/* cb81 */
 	{ "res	0,d",		A_0 },		/* cb82 */
@@ -522,7 +522,7 @@ static struct opcode minor[6][256] = {
 	{ "res	0,l",		A_0 },		/* cb85 */
 	{ "res	0,(hl)",	A_0 },		/* cb86 */
 	{ "res	0,a",		A_0 },		/* cb87 */
-	
+
 	{ "res	1,b",		A_0 },		/* cb88 */
 	{ "res	1,c",		A_0 },		/* cb89 */
 	{ "res	1,d",		A_0 },		/* cb8a */
@@ -531,7 +531,7 @@ static struct opcode minor[6][256] = {
 	{ "res	1,l",		A_0 },		/* cb8d */
 	{ "res	1,(hl)",	A_0 },		/* cb8e */
 	{ "res	1,a",		A_0 },		/* cb8f */
-	
+
 	{ "res	2,b",		A_0 },		/* cb90 */
 	{ "res	2,c",		A_0 },		/* cb91 */
 	{ "res	2,d",		A_0 },		/* cb92 */
@@ -540,7 +540,7 @@ static struct opcode minor[6][256] = {
 	{ "res	2,l",		A_0 },		/* cb95 */
 	{ "res	2,(hl)",	A_0 },		/* cb96 */
 	{ "res	2,a",		A_0 },		/* cb97 */
-	
+
 	{ "res	3,b",		A_0 },		/* cb98 */
 	{ "res	3,c",		A_0 },		/* cb99 */
 	{ "res	3,d",		A_0 },		/* cb9a */
@@ -549,7 +549,7 @@ static struct opcode minor[6][256] = {
 	{ "res	3,l",		A_0 },		/* cb9d */
 	{ "res	3,(hl)",	A_0 },		/* cb9e */
 	{ "res	3,a",		A_0 },		/* cb9f */
-	
+
 	{ "res	4,b",		A_0 },		/* cba0 */
 	{ "res	4,c",		A_0 },		/* cba1 */
 	{ "res	4,d",		A_0 },		/* cba2 */
@@ -558,7 +558,7 @@ static struct opcode minor[6][256] = {
 	{ "res	4,l",		A_0 },		/* cba5 */
 	{ "res	4,(hl)",	A_0 },		/* cba6 */
 	{ "res	4,a",		A_0 },		/* cba7 */
-	
+
 	{ "res	5,b",		A_0 },		/* cba8 */
 	{ "res	5,c",		A_0 },		/* cba9 */
 	{ "res	5,d",		A_0 },		/* cbaa */
@@ -567,7 +567,7 @@ static struct opcode minor[6][256] = {
 	{ "res	5,l",		A_0 },		/* cbad */
 	{ "res	5,(hl)",	A_0 },		/* cbae */
 	{ "res	5,a",		A_0 },		/* cbaf */
-	
+
 	{ "res	6,b",		A_0 },		/* cbb0 */
 	{ "res	6,c",		A_0 },		/* cbb1 */
 	{ "res	6,d",		A_0 },		/* cbb2 */
@@ -576,7 +576,7 @@ static struct opcode minor[6][256] = {
 	{ "res	6,l",		A_0 },		/* cbb5 */
 	{ "res	6,(hl)",	A_0 },		/* cbb6 */
 	{ "res	6,a",		A_0 },		/* cbb7 */
-	
+
 	{ "res	7,b",		A_0 },		/* cbb8 */
 	{ "res	7,c",		A_0 },		/* cbb9 */
 	{ "res	7,d",		A_0 },		/* cbba */
@@ -585,7 +585,7 @@ static struct opcode minor[6][256] = {
 	{ "res	7,l",		A_0 },		/* cbbd */
 	{ "res	7,(hl)",	A_0 },		/* cbbe */
 	{ "res	7,a",		A_0 },		/* cbbf */
-	
+
 	{ "set	0,b",		A_0 },		/* cbc0 */
 	{ "set	0,c",		A_0 },		/* cbc1 */
 	{ "set	0,d",		A_0 },		/* cbc2 */
@@ -594,7 +594,7 @@ static struct opcode minor[6][256] = {
 	{ "set	0,l",		A_0 },		/* cbc5 */
 	{ "set	0,(hl)",	A_0 },		/* cbc6 */
 	{ "set	0,a",		A_0 },		/* cbc7 */
-	
+
 	{ "set	1,b",		A_0 },		/* cbc8 */
 	{ "set	1,c",		A_0 },		/* cbc9 */
 	{ "set	1,d",		A_0 },		/* cbca */
@@ -603,7 +603,7 @@ static struct opcode minor[6][256] = {
 	{ "set	1,l",		A_0 },		/* cbcd */
 	{ "set	1,(hl)",	A_0 },		/* cbce */
 	{ "set	1,a",		A_0 },		/* cbcf */
-	
+
 	{ "set	2,b",		A_0 },		/* cbd0 */
 	{ "set	2,c",		A_0 },		/* cbd1 */
 	{ "set	2,d",		A_0 },		/* cbd2 */
@@ -612,7 +612,7 @@ static struct opcode minor[6][256] = {
 	{ "set	2,l",		A_0 },		/* cbd5 */
 	{ "set	2,(hl)",	A_0 },		/* cbd6 */
 	{ "set	2,a",		A_0 },		/* cbd7 */
-	
+
 	{ "set	3,b",		A_0 },		/* cbd8 */
 	{ "set	3,c",		A_0 },		/* cbd9 */
 	{ "set	3,d",		A_0 },		/* cbda */
@@ -621,7 +621,7 @@ static struct opcode minor[6][256] = {
 	{ "set	3,l",		A_0 },		/* cbdd */
 	{ "set	3,(hl)",	A_0 },		/* cbde */
 	{ "set	3,a",		A_0 },		/* cbdf */
-	
+
 	{ "set	4,b",		A_0 },		/* cbe0 */
 	{ "set	4,c",		A_0 },		/* cbe1 */
 	{ "set	4,d",		A_0 },		/* cbe2 */
@@ -630,7 +630,7 @@ static struct opcode minor[6][256] = {
 	{ "set	4,l",		A_0 },		/* cbe5 */
 	{ "set	4,(hl)",	A_0 },		/* cbe6 */
 	{ "set	4,a",		A_0 },		/* cbe7 */
-	
+
 	{ "set	5,b",		A_0 },		/* cbe8 */
 	{ "set	5,c",		A_0 },		/* cbe9 */
 	{ "set	5,d",		A_0 },		/* cbea */
@@ -639,7 +639,7 @@ static struct opcode minor[6][256] = {
 	{ "set	5,l",		A_0 },		/* cbed */
 	{ "set	5,(hl)",	A_0 },		/* cbee */
 	{ "set	5,a",		A_0 },		/* cbef */
-	
+
 	{ "set	6,b",		A_0 },		/* cbf0 */
 	{ "set	6,c",		A_0 },		/* cbf1 */
 	{ "set	6,d",		A_0 },		/* cbf2 */
@@ -648,7 +648,7 @@ static struct opcode minor[6][256] = {
 	{ "set	6,l",		A_0 },		/* cbf5 */
 	{ "set	6,(hl)",	A_0 },		/* cbf6 */
 	{ "set	6,a",		A_0 },		/* cbf7 */
-	
+
 	{ "set	7,b",		A_0 },		/* cbf8 */
 	{ "set	7,c",		A_0 },		/* cbf9 */
 	{ "set	7,d",		A_0 },		/* cbfa */
@@ -1030,7 +1030,7 @@ static struct opcode minor[6][256] = {
 	{ "retn",		A_0 },		/* ed45 */
 	{ "im	0",		A_0 },		/* ed46 */
 	{ "ld	i,a",		A_0 },		/* ed47 */
-	
+
 	{ "in	c,(c)",		A_0 },		/* ed48 */
 	{ "out	(c),c",		A_0 },		/* ed49 */
 	{ "adc	hl,bc",		A_0 },		/* ed4a */
@@ -1077,7 +1077,7 @@ static struct opcode minor[6][256] = {
 	{ "ret\t\t\t;undoc equiv",A_0 },	/* ed6d [undoc] */
 	{ undefined,		A_0 },		/* ed6e */
 	{ "rld",		A_0 },		/* ed6f */
-	
+
 	{ "in	(c)",		A_0 },		/* ed70 [undoc] */
 	{ "out	(c),0",		A_0 },		/* ed71 [undoc] */
 	{ "sbc	hl,sp",		A_0 },		/* ed72 */
@@ -1538,7 +1538,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rlc (ix+%02xh)",	A_8P },	/* ddcb..05 [undoc] */
 	{ "rlc	(ix+%02xh)",		A_8P },	/* ddcb..06 */
 	{ "ld	a,rlc (ix+%02xh)",	A_8P },	/* ddcb..07 [undoc] */
-	
+
 	{ "ld	b,rrc (ix+%02xh)",	A_8P },	/* ddcb..08 [undoc] */
 	{ "ld	c,rrc (ix+%02xh)",	A_8P },	/* ddcb..09 [undoc] */
 	{ "ld	d,rrc (ix+%02xh)",	A_8P },	/* ddcb..0a [undoc] */
@@ -1547,7 +1547,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rrc (ix+%02xh)",	A_8P },	/* ddcb..0d [undoc] */
 	{ "rrc	(ix+%02xh)",		A_8P },	/* ddcb..0e */
 	{ "ld	a,rrc (ix+%02xh)",	A_8P },	/* ddcb..0f [undoc] */
-	
+
 	{ "ld	b,rl (ix+%02xh)",	A_8P },	/* ddcb..10 [undoc] */
 	{ "ld	c,rl (ix+%02xh)",	A_8P },	/* ddcb..11 [undoc] */
 	{ "ld	d,rl (ix+%02xh)",	A_8P },	/* ddcb..12 [undoc] */
@@ -1556,7 +1556,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rl (ix+%02xh)",	A_8P },	/* ddcb..15 [undoc] */
 	{ "rl	(ix+%02xh)",		A_8P },	/* ddcb..16 */
 	{ "ld	a,rl (ix+%02xh)",	A_8P },	/* ddcb..17 [undoc] */
-	
+
 	{ "ld	b,rr (ix+%02xh)",	A_8P },	/* ddcb..18 [undoc] */
 	{ "ld	c,rr (ix+%02xh)",	A_8P },	/* ddcb..19 [undoc] */
 	{ "ld	d,rr (ix+%02xh)",	A_8P },	/* ddcb..1a [undoc] */
@@ -1565,7 +1565,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rr (ix+%02xh)",	A_8P },	/* ddcb..1d [undoc] */
 	{ "rr	(ix+%02xh)",		A_8P },	/* ddcb..1e */
 	{ "ld	a,rr (ix+%02xh)",	A_8P },	/* ddcb..1f [undoc] */
-	
+
 	{ "ld	b,sla (ix+%02xh)",	A_8P },	/* ddcb..20 [undoc] */
 	{ "ld	c,sla (ix+%02xh)",	A_8P },	/* ddcb..21 [undoc] */
 	{ "ld	d,sla (ix+%02xh)",	A_8P },	/* ddcb..22 [undoc] */
@@ -1574,7 +1574,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,sla (ix+%02xh)",	A_8P },	/* ddcb..25 [undoc] */
 	{ "sla	(ix+%02xh)",		A_8P },	/* ddcb..26 */
 	{ "ld	a,sla (ix+%02xh)",	A_8P },	/* ddcb..27 [undoc] */
-	
+
 	{ "ld	b,sra (ix+%02xh)",	A_8P },	/* ddcb..28 [undoc] */
 	{ "ld	c,sra (ix+%02xh)",	A_8P },	/* ddcb..29 [undoc] */
 	{ "ld	d,sra (ix+%02xh)",	A_8P },	/* ddcb..2a [undoc] */
@@ -1583,7 +1583,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,sra (ix+%02xh)",	A_8P },	/* ddcb..2d [undoc] */
 	{ "sra	(ix+%02xh)",		A_8P },	/* ddcb..2e */
 	{ "ld	a,sra (ix+%02xh)",	A_8P },	/* ddcb..2f [undoc] */
-	
+
 	{ "ld	b,slia (ix+%02xh)",	A_8P },	/* ddcb..30 [undoc] */
 	{ "ld	c,slia (ix+%02xh)",	A_8P },	/* ddcb..31 [undoc] */
 	{ "ld	d,slia (ix+%02xh)",	A_8P },	/* ddcb..32 [undoc] */
@@ -1592,7 +1592,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,slia (ix+%02xh)",	A_8P },	/* ddcb..35 [undoc] */
 	{ "slia	(ix+%02xh)",		A_8P },	/* ddcb..36 [undoc] */
 	{ "ld	a,slia (ix+%02xh)",	A_8P },	/* ddcb..37 [undoc] */
-	
+
 	{ "ld	b,srl (ix+%02xh)",	A_8P },	/* ddcb..38 [undoc] */
 	{ "ld	c,srl (ix+%02xh)",	A_8P },	/* ddcb..39 [undoc] */
 	{ "ld	d,srl (ix+%02xh)",	A_8P },	/* ddcb..3a [undoc] */
@@ -1601,7 +1601,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,srl (ix+%02xh)",	A_8P },	/* ddcb..3d [undoc] */
 	{ "srl	(ix+%02xh)",		A_8P },	/* ddcb..3e */
 	{ "ld	a,srl (ix+%02xh)",	A_8P },	/* ddcb..3f [undoc] */
-	
+
 	{ "bit	0,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..40 [undoc] */
 	{ "bit	0,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..41 [undoc] */
 	{ "bit	0,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..42 [undoc] */
@@ -1610,7 +1610,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	0,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..45 [undoc] */
 	{ "bit	0,(ix+%02xh)",	A_8P },		     /* ddcb..46 */
 	{ "bit	0,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..47 [undoc] */
-	
+
 	{ "bit	1,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..48 [undoc] */
 	{ "bit	1,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..49 [undoc] */
 	{ "bit	1,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..4a [undoc] */
@@ -1628,7 +1628,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	2,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..55 [undoc] */
 	{ "bit	2,(ix+%02xh)",	A_8P },		     /* ddcb..56 */
 	{ "bit	2,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..57 [undoc] */
-	
+
 	{ "bit	3,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..58 [undoc] */
 	{ "bit	3,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..59 [undoc] */
 	{ "bit	3,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..5a [undoc] */
@@ -1646,7 +1646,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	4,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..65 [undoc] */
 	{ "bit	4,(ix+%02xh)",	A_8P },		     /* ddcb..66 */
 	{ "bit	4,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..67 [undoc] */
-	
+
 	{ "bit	5,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..68 [undoc] */
 	{ "bit	5,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..69 [undoc] */
 	{ "bit	5,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..6a [undoc] */
@@ -1664,7 +1664,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	6,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..75 [undoc] */
 	{ "bit	6,(ix+%02xh)",	A_8P },		     /* ddcb..76 */
 	{ "bit	6,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..77 [undoc] */
-	
+
 	{ "bit	7,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..78 [undoc] */
 	{ "bit	7,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..79 [undoc] */
 	{ "bit	7,(ix+%02xh)\t;undoc equiv", A_8P }, /* ddcb..7a [undoc] */
@@ -1682,7 +1682,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 0,(ix+%02xh)",	A_8P },	/* ddcb..85 [undoc] */
 	{ "res	0,(ix+%02xh)",		A_8P },	/* ddcb..86 */
 	{ "ld	a,res 0,(ix+%02xh)",	A_8P },	/* ddcb..87 [undoc] */
-	
+
 	{ "ld	b,res 1,(ix+%02xh)",	A_8P },	/* ddcb..88 [undoc] */
 	{ "ld	c,res 1,(ix+%02xh)",	A_8P },	/* ddcb..89 [undoc] */
 	{ "ld	d,res 1,(ix+%02xh)",	A_8P },	/* ddcb..8a [undoc] */
@@ -1691,7 +1691,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 1,(ix+%02xh)",	A_8P },	/* ddcb..8d [undoc] */
 	{ "res	1,(ix+%02xh)",		A_8P },	/* ddcb..8e */
 	{ "ld	a,res 1,(ix+%02xh)",	A_8P },	/* ddcb..8f [undoc] */
-	
+
 	{ "ld	b,res 2,(ix+%02xh)",	A_8P },	/* ddcb..90 [undoc] */
 	{ "ld	c,res 2,(ix+%02xh)",	A_8P },	/* ddcb..91 [undoc] */
 	{ "ld	d,res 2,(ix+%02xh)",	A_8P },	/* ddcb..92 [undoc] */
@@ -1700,7 +1700,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 2,(ix+%02xh)",	A_8P },	/* ddcb..95 [undoc] */
 	{ "res	2,(ix+%02xh)",		A_8P },	/* ddcb..96 */
 	{ "ld	a,res 2,(ix+%02xh)",	A_8P },	/* ddcb..97 [undoc] */
-	
+
 	{ "ld	b,res 3,(ix+%02xh)",	A_8P },	/* ddcb..98 [undoc] */
 	{ "ld	c,res 3,(ix+%02xh)",	A_8P },	/* ddcb..99 [undoc] */
 	{ "ld	d,res 3,(ix+%02xh)",	A_8P },	/* ddcb..9a [undoc] */
@@ -1709,7 +1709,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 3,(ix+%02xh)",	A_8P },	/* ddcb..9d [undoc] */
 	{ "res	3,(ix+%02xh)",		A_8P },	/* ddcb..9e */
 	{ "ld	a,res 3,(ix+%02xh)",	A_8P },	/* ddcb..9f [undoc] */
-	
+
 	{ "ld	b,res 4,(ix+%02xh)",	A_8P },	/* ddcb..a0 [undoc] */
 	{ "ld	c,res 4,(ix+%02xh)",	A_8P },	/* ddcb..a1 [undoc] */
 	{ "ld	d,res 4,(ix+%02xh)",	A_8P },	/* ddcb..a2 [undoc] */
@@ -1718,7 +1718,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 4,(ix+%02xh)",	A_8P },	/* ddcb..a5 [undoc] */
 	{ "res	4,(ix+%02xh)",		A_8P },	/* ddcb..a6 */
 	{ "ld	a,res 4,(ix+%02xh)",	A_8P },	/* ddcb..a7 [undoc] */
-	
+
 	{ "ld	b,res 5,(ix+%02xh)",	A_8P },	/* ddcb..a8 [undoc] */
 	{ "ld	c,res 5,(ix+%02xh)",	A_8P },	/* ddcb..a9 [undoc] */
 	{ "ld	d,res 5,(ix+%02xh)",	A_8P },	/* ddcb..aa [undoc] */
@@ -1727,7 +1727,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 5,(ix+%02xh)",	A_8P },	/* ddcb..ad [undoc] */
 	{ "res	5,(ix+%02xh)",		A_8P },	/* ddcb..ae */
 	{ "ld	a,res 5,(ix+%02xh)",	A_8P },	/* ddcb..af [undoc] */
-	
+
 	{ "ld	b,res 6,(ix+%02xh)",	A_8P },	/* ddcb..b0 [undoc] */
 	{ "ld	c,res 6,(ix+%02xh)",	A_8P },	/* ddcb..b1 [undoc] */
 	{ "ld	d,res 6,(ix+%02xh)",	A_8P },	/* ddcb..b2 [undoc] */
@@ -1736,7 +1736,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 6,(ix+%02xh)",	A_8P },	/* ddcb..b5 [undoc] */
 	{ "res	6,(ix+%02xh)",		A_8P },	/* ddcb..b6 */
 	{ "ld	a,res 6,(ix+%02xh)",	A_8P },	/* ddcb..b7 [undoc] */
-	
+
 	{ "ld	b,res 7,(ix+%02xh)",	A_8P },	/* ddcb..b8 [undoc] */
 	{ "ld	c,res 7,(ix+%02xh)",	A_8P },	/* ddcb..b9 [undoc] */
 	{ "ld	d,res 7,(ix+%02xh)",	A_8P },	/* ddcb..ba [undoc] */
@@ -1745,7 +1745,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 7,(ix+%02xh)",	A_8P },	/* ddcb..bd [undoc] */
 	{ "res	7,(ix+%02xh)",		A_8P },	/* ddcb..be */
 	{ "ld	a,res 7,(ix+%02xh)",	A_8P },	/* ddcb..bf [undoc] */
-	
+
 	{ "ld	b,set 0,(ix+%02xh)",	A_8P },	/* ddcb..c0 [undoc] */
 	{ "ld	c,set 0,(ix+%02xh)",	A_8P },	/* ddcb..c1 [undoc] */
 	{ "ld	d,set 0,(ix+%02xh)",	A_8P },	/* ddcb..c2 [undoc] */
@@ -1754,7 +1754,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 0,(ix+%02xh)",	A_8P },	/* ddcb..c5 [undoc] */
 	{ "set	0,(ix+%02xh)",		A_8P },	/* ddcb..c6 */
 	{ "ld	a,set 0,(ix+%02xh)",	A_8P },	/* ddcb..c7 [undoc] */
-	
+
 	{ "ld	b,set 1,(ix+%02xh)",	A_8P },	/* ddcb..c8 [undoc] */
 	{ "ld	c,set 1,(ix+%02xh)",	A_8P },	/* ddcb..c9 [undoc] */
 	{ "ld	d,set 1,(ix+%02xh)",	A_8P },	/* ddcb..ca [undoc] */
@@ -1763,7 +1763,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 1,(ix+%02xh)",	A_8P },	/* ddcb..cd [undoc] */
 	{ "set	1,(ix+%02xh)",		A_8P },	/* ddcb..ce */
 	{ "ld	a,set 1,(ix+%02xh)",	A_8P },	/* ddcb..cf [undoc] */
-	
+
 	{ "ld	b,set 2,(ix+%02xh)",	A_8P },	/* ddcb..d0 [undoc] */
 	{ "ld	c,set 2,(ix+%02xh)",	A_8P },	/* ddcb..d1 [undoc] */
 	{ "ld	d,set 2,(ix+%02xh)",	A_8P },	/* ddcb..d2 [undoc] */
@@ -1772,7 +1772,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 2,(ix+%02xh)",	A_8P },	/* ddcb..d5 [undoc] */
 	{ "set	2,(ix+%02xh)",		A_8P },	/* ddcb..d6 */
 	{ "ld	a,set 2,(ix+%02xh)",	A_8P },	/* ddcb..d7 [undoc] */
-	
+
 	{ "ld	b,set 3,(ix+%02xh)",	A_8P },	/* ddcb..d8 [undoc] */
 	{ "ld	c,set 3,(ix+%02xh)",	A_8P },	/* ddcb..d9 [undoc] */
 	{ "ld	d,set 3,(ix+%02xh)",	A_8P },	/* ddcb..da [undoc] */
@@ -1781,7 +1781,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 3,(ix+%02xh)",	A_8P },	/* ddcb..dd [undoc] */
 	{ "set	3,(ix+%02xh)",		A_8P },	/* ddcb..de */
 	{ "ld	a,set 3,(ix+%02xh)",	A_8P },	/* ddcb..df [undoc] */
-	
+
 	{ "ld	b,set 4,(ix+%02xh)",	A_8P },	/* ddcb..e0 [undoc] */
 	{ "ld	c,set 4,(ix+%02xh)",	A_8P },	/* ddcb..e1 [undoc] */
 	{ "ld	d,set 4,(ix+%02xh)",	A_8P },	/* ddcb..e2 [undoc] */
@@ -1790,7 +1790,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 4,(ix+%02xh)",	A_8P },	/* ddcb..e5 [undoc] */
 	{ "set	4,(ix+%02xh)",		A_8P },	/* ddcb..e6 */
 	{ "ld	a,set 4,(ix+%02xh)",	A_8P },	/* ddcb..e7 [undoc] */
-	
+
 	{ "ld	b,set 5,(ix+%02xh)",	A_8P },	/* ddcb..e8 [undoc] */
 	{ "ld	c,set 5,(ix+%02xh)",	A_8P },	/* ddcb..e9 [undoc] */
 	{ "ld	d,set 5,(ix+%02xh)",	A_8P },	/* ddcb..ea [undoc] */
@@ -1799,7 +1799,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 5,(ix+%02xh)",	A_8P },	/* ddcb..ed [undoc] */
 	{ "set	5,(ix+%02xh)",		A_8P },	/* ddcb..ee */
 	{ "ld	a,set 5,(ix+%02xh)",	A_8P },	/* ddcb..ef [undoc] */
-	
+
 	{ "ld	b,set 6,(ix+%02xh)",	A_8P },	/* ddcb..f0 [undoc] */
 	{ "ld	c,set 6,(ix+%02xh)",	A_8P },	/* ddcb..f1 [undoc] */
 	{ "ld	d,set 6,(ix+%02xh)",	A_8P },	/* ddcb..f2 [undoc] */
@@ -1808,7 +1808,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 6,(ix+%02xh)",	A_8P },	/* ddcb..f5 [undoc] */
 	{ "set	6,(ix+%02xh)",		A_8P },	/* ddcb..f6 */
 	{ "ld	a,set 6,(ix+%02xh)",	A_8P },	/* ddcb..f7 [undoc] */
-	
+
 	{ "ld	b,set 7,(ix+%02xh)",	A_8P },	/* ddcb..f8 [undoc] */
 	{ "ld	c,set 7,(ix+%02xh)",	A_8P },	/* ddcb..f9 [undoc] */
 	{ "ld	d,set 7,(ix+%02xh)",	A_8P },	/* ddcb..fa [undoc] */
@@ -1827,7 +1827,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rlc (iy+%02xh)",	A_8P },	/* fdcb..05 [undoc] */
 	{ "rlc	(iy+%02xh)",		A_8P },	/* fdcb..06 */
 	{ "ld	a,rlc (iy+%02xh)",	A_8P },	/* fdcb..07 [undoc] */
-	
+
 	{ "ld	b,rrc (iy+%02xh)",	A_8P },	/* fdcb..08 [undoc] */
 	{ "ld	c,rrc (iy+%02xh)",	A_8P },	/* fdcb..09 [undoc] */
 	{ "ld	d,rrc (iy+%02xh)",	A_8P },	/* fdcb..0a [undoc] */
@@ -1836,7 +1836,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rrc (iy+%02xh)",	A_8P },	/* fdcb..0d [undoc] */
 	{ "rrc	(iy+%02xh)",		A_8P },	/* fdcb..0e */
 	{ "ld	a,rrc (iy+%02xh)",	A_8P },	/* fdcb..0f [undoc] */
-	
+
 	{ "ld	b,rl (iy+%02xh)",	A_8P },	/* fdcb..10 [undoc] */
 	{ "ld	c,rl (iy+%02xh)",	A_8P },	/* fdcb..11 [undoc] */
 	{ "ld	d,rl (iy+%02xh)",	A_8P },	/* fdcb..12 [undoc] */
@@ -1845,7 +1845,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rl (iy+%02xh)",	A_8P },	/* fdcb..15 [undoc] */
 	{ "rl	(iy+%02xh)",		A_8P },	/* fdcb..16 */
 	{ "ld	a,rl (iy+%02xh)",	A_8P },	/* fdcb..17 [undoc] */
-	
+
 	{ "ld	b,rr (iy+%02xh)",	A_8P },	/* fdcb..18 [undoc] */
 	{ "ld	c,rr (iy+%02xh)",	A_8P },	/* fdcb..19 [undoc] */
 	{ "ld	d,rr (iy+%02xh)",	A_8P },	/* fdcb..1a [undoc] */
@@ -1854,7 +1854,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,rr (iy+%02xh)",	A_8P },	/* fdcb..1d [undoc] */
 	{ "rr	(iy+%02xh)",		A_8P },	/* fdcb..1e */
 	{ "ld	a,rr (iy+%02xh)",	A_8P },	/* fdcb..1f [undoc] */
-	
+
 	{ "ld	b,sla (iy+%02xh)",	A_8P },	/* fdcb..20 [undoc] */
 	{ "ld	c,sla (iy+%02xh)",	A_8P },	/* fdcb..21 [undoc] */
 	{ "ld	d,sla (iy+%02xh)",	A_8P },	/* fdcb..22 [undoc] */
@@ -1863,7 +1863,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,sla (iy+%02xh)",	A_8P },	/* fdcb..25 [undoc] */
 	{ "sla	(iy+%02xh)",		A_8P },	/* fdcb..26 */
 	{ "ld	a,sla (iy+%02xh)",	A_8P },	/* fdcb..27 [undoc] */
-	
+
 	{ "ld	b,sra (iy+%02xh)",	A_8P },	/* fdcb..28 [undoc] */
 	{ "ld	c,sra (iy+%02xh)",	A_8P },	/* fdcb..29 [undoc] */
 	{ "ld	d,sra (iy+%02xh)",	A_8P },	/* fdcb..2a [undoc] */
@@ -1872,7 +1872,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,sra (iy+%02xh)",	A_8P },	/* fdcb..2d [undoc] */
 	{ "sra	(iy+%02xh)",		A_8P },	/* fdcb..2e */
 	{ "ld	a,sra (iy+%02xh)",	A_8P },	/* fdcb..2f [undoc] */
-	
+
 	{ "ld	b,slia (iy+%02xh)",	A_8P },	/* fdcb..30 [undoc] */
 	{ "ld	c,slia (iy+%02xh)",	A_8P },	/* fdcb..31 [undoc] */
 	{ "ld	d,slia (iy+%02xh)",	A_8P },	/* fdcb..32 [undoc] */
@@ -1881,7 +1881,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,slia (iy+%02xh)",	A_8P },	/* fdcb..35 [undoc] */
 	{ "slia	(iy+%02xh)",		A_8P },	/* fdcb..36 [undoc] */
 	{ "ld	a,slia (iy+%02xh)",	A_8P },	/* fdcb..37 [undoc] */
-	
+
 	{ "ld	b,srl (iy+%02xh)",	A_8P },	/* fdcb..38 [undoc] */
 	{ "ld	c,srl (iy+%02xh)",	A_8P },	/* fdcb..39 [undoc] */
 	{ "ld	d,srl (iy+%02xh)",	A_8P },	/* fdcb..3a [undoc] */
@@ -1890,7 +1890,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,srl (iy+%02xh)",	A_8P },	/* fdcb..3d [undoc] */
 	{ "srl	(iy+%02xh)",		A_8P },	/* fdcb..3e */
 	{ "ld	a,srl (iy+%02xh)",	A_8P },	/* fdcb..3f [undoc] */
-	
+
 	{ "bit	0,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..40 [undoc] */
 	{ "bit	0,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..41 [undoc] */
 	{ "bit	0,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..42 [undoc] */
@@ -1899,7 +1899,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	0,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..45 [undoc] */
 	{ "bit	0,(iy+%02xh)",	A_8P },		     /* fdcb..46 */
 	{ "bit	0,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..47 [undoc] */
-	
+
 	{ "bit	1,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..48 [undoc] */
 	{ "bit	1,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..49 [undoc] */
 	{ "bit	1,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..4a [undoc] */
@@ -1917,7 +1917,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	2,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..55 [undoc] */
 	{ "bit	2,(iy+%02xh)",	A_8P },		     /* fdcb..56 */
 	{ "bit	2,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..57 [undoc] */
-	
+
 	{ "bit	3,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..58 [undoc] */
 	{ "bit	3,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..59 [undoc] */
 	{ "bit	3,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..5a [undoc] */
@@ -1935,7 +1935,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	4,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..65 [undoc] */
 	{ "bit	4,(iy+%02xh)",	A_8P },		     /* fdcb..66 */
 	{ "bit	4,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..67 [undoc] */
-	
+
 	{ "bit	5,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..68 [undoc] */
 	{ "bit	5,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..69 [undoc] */
 	{ "bit	5,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..6a [undoc] */
@@ -1953,7 +1953,7 @@ static struct opcode minor[6][256] = {
 	{ "bit	6,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..75 [undoc] */
 	{ "bit	6,(iy+%02xh)",	A_8P },		     /* fdcb..76 */
 	{ "bit	6,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..77 [undoc] */
-	
+
 	{ "bit	7,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..78 [undoc] */
 	{ "bit	7,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..79 [undoc] */
 	{ "bit	7,(iy+%02xh)\t;undoc equiv", A_8P }, /* fdcb..7a [undoc] */
@@ -1971,7 +1971,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 0,(iy+%02xh)",	A_8P },	/* fdcb..85 [undoc] */
 	{ "res	0,(iy+%02xh)",		A_8P },	/* fdcb..86 */
 	{ "ld	a,res 0,(iy+%02xh)",	A_8P },	/* fdcb..87 [undoc] */
-	
+
 	{ "ld	b,res 1,(iy+%02xh)",	A_8P },	/* fdcb..88 [undoc] */
 	{ "ld	c,res 1,(iy+%02xh)",	A_8P },	/* fdcb..89 [undoc] */
 	{ "ld	d,res 1,(iy+%02xh)",	A_8P },	/* fdcb..8a [undoc] */
@@ -1980,7 +1980,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 1,(iy+%02xh)",	A_8P },	/* fdcb..8d [undoc] */
 	{ "res	1,(iy+%02xh)",		A_8P },	/* fdcb..8e */
 	{ "ld	a,res 1,(iy+%02xh)",	A_8P },	/* fdcb..8f [undoc] */
-	
+
 	{ "ld	b,res 2,(iy+%02xh)",	A_8P },	/* fdcb..90 [undoc] */
 	{ "ld	c,res 2,(iy+%02xh)",	A_8P },	/* fdcb..91 [undoc] */
 	{ "ld	d,res 2,(iy+%02xh)",	A_8P },	/* fdcb..92 [undoc] */
@@ -1989,7 +1989,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 2,(iy+%02xh)",	A_8P },	/* fdcb..95 [undoc] */
 	{ "res	2,(iy+%02xh)",		A_8P },	/* fdcb..96 */
 	{ "ld	a,res 2,(iy+%02xh)",	A_8P },	/* fdcb..97 [undoc] */
-	
+
 	{ "ld	b,res 3,(iy+%02xh)",	A_8P },	/* fdcb..98 [undoc] */
 	{ "ld	c,res 3,(iy+%02xh)",	A_8P },	/* fdcb..99 [undoc] */
 	{ "ld	d,res 3,(iy+%02xh)",	A_8P },	/* fdcb..9a [undoc] */
@@ -1998,7 +1998,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 3,(iy+%02xh)",	A_8P },	/* fdcb..9d [undoc] */
 	{ "res	3,(iy+%02xh)",		A_8P },	/* fdcb..9e */
 	{ "ld	a,res 3,(iy+%02xh)",	A_8P },	/* fdcb..9f [undoc] */
-	
+
 	{ "ld	b,res 4,(iy+%02xh)",	A_8P },	/* fdcb..a0 [undoc] */
 	{ "ld	c,res 4,(iy+%02xh)",	A_8P },	/* fdcb..a1 [undoc] */
 	{ "ld	d,res 4,(iy+%02xh)",	A_8P },	/* fdcb..a2 [undoc] */
@@ -2007,7 +2007,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 4,(iy+%02xh)",	A_8P },	/* fdcb..a5 [undoc] */
 	{ "res	4,(iy+%02xh)",		A_8P },	/* fdcb..a6 */
 	{ "ld	a,res 4,(iy+%02xh)",	A_8P },	/* fdcb..a7 [undoc] */
-	
+
 	{ "ld	b,res 5,(iy+%02xh)",	A_8P },	/* fdcb..a8 [undoc] */
 	{ "ld	c,res 5,(iy+%02xh)",	A_8P },	/* fdcb..a9 [undoc] */
 	{ "ld	d,res 5,(iy+%02xh)",	A_8P },	/* fdcb..aa [undoc] */
@@ -2016,7 +2016,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 5,(iy+%02xh)",	A_8P },	/* fdcb..ad [undoc] */
 	{ "res	5,(iy+%02xh)",		A_8P },	/* fdcb..ae */
 	{ "ld	a,res 5,(iy+%02xh)",	A_8P },	/* fdcb..af [undoc] */
-	
+
 	{ "ld	b,res 6,(iy+%02xh)",	A_8P },	/* fdcb..b0 [undoc] */
 	{ "ld	c,res 6,(iy+%02xh)",	A_8P },	/* fdcb..b1 [undoc] */
 	{ "ld	d,res 6,(iy+%02xh)",	A_8P },	/* fdcb..b2 [undoc] */
@@ -2025,7 +2025,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 6,(iy+%02xh)",	A_8P },	/* fdcb..b5 [undoc] */
 	{ "res	6,(iy+%02xh)",		A_8P },	/* fdcb..b6 */
 	{ "ld	a,res 6,(iy+%02xh)",	A_8P },	/* fdcb..b7 [undoc] */
-	
+
 	{ "ld	b,res 7,(iy+%02xh)",	A_8P },	/* fdcb..b8 [undoc] */
 	{ "ld	c,res 7,(iy+%02xh)",	A_8P },	/* fdcb..b9 [undoc] */
 	{ "ld	d,res 7,(iy+%02xh)",	A_8P },	/* fdcb..ba [undoc] */
@@ -2034,7 +2034,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,res 7,(iy+%02xh)",	A_8P },	/* fdcb..bd [undoc] */
 	{ "res	7,(iy+%02xh)",		A_8P },	/* fdcb..be */
 	{ "ld	a,res 7,(iy+%02xh)",	A_8P },	/* fdcb..bf [undoc] */
-	
+
 	{ "ld	b,set 0,(iy+%02xh)",	A_8P },	/* fdcb..c0 [undoc] */
 	{ "ld	c,set 0,(iy+%02xh)",	A_8P },	/* fdcb..c1 [undoc] */
 	{ "ld	d,set 0,(iy+%02xh)",	A_8P },	/* fdcb..c2 [undoc] */
@@ -2043,7 +2043,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 0,(iy+%02xh)",	A_8P },	/* fdcb..c5 [undoc] */
 	{ "set	0,(iy+%02xh)",		A_8P },	/* fdcb..c6 */
 	{ "ld	a,set 0,(iy+%02xh)",	A_8P },	/* fdcb..c7 [undoc] */
-	
+
 	{ "ld	b,set 1,(iy+%02xh)",	A_8P },	/* fdcb..c8 [undoc] */
 	{ "ld	c,set 1,(iy+%02xh)",	A_8P },	/* fdcb..c9 [undoc] */
 	{ "ld	d,set 1,(iy+%02xh)",	A_8P },	/* fdcb..ca [undoc] */
@@ -2052,7 +2052,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 1,(iy+%02xh)",	A_8P },	/* fdcb..cd [undoc] */
 	{ "set	1,(iy+%02xh)",		A_8P },	/* fdcb..ce */
 	{ "ld	a,set 1,(iy+%02xh)",	A_8P },	/* fdcb..cf [undoc] */
-	
+
 	{ "ld	b,set 2,(iy+%02xh)",	A_8P },	/* fdcb..d0 [undoc] */
 	{ "ld	c,set 2,(iy+%02xh)",	A_8P },	/* fdcb..d1 [undoc] */
 	{ "ld	d,set 2,(iy+%02xh)",	A_8P },	/* fdcb..d2 [undoc] */
@@ -2061,7 +2061,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 2,(iy+%02xh)",	A_8P },	/* fdcb..d5 [undoc] */
 	{ "set	2,(iy+%02xh)",		A_8P },	/* fdcb..d6 */
 	{ "ld	a,set 2,(iy+%02xh)",	A_8P },	/* fdcb..d7 [undoc] */
-	
+
 	{ "ld	b,set 3,(iy+%02xh)",	A_8P },	/* fdcb..d8 [undoc] */
 	{ "ld	c,set 3,(iy+%02xh)",	A_8P },	/* fdcb..d9 [undoc] */
 	{ "ld	d,set 3,(iy+%02xh)",	A_8P },	/* fdcb..da [undoc] */
@@ -2070,7 +2070,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 3,(iy+%02xh)",	A_8P },	/* fdcb..dd [undoc] */
 	{ "set	3,(iy+%02xh)",		A_8P },	/* fdcb..de */
 	{ "ld	a,set 3,(iy+%02xh)",	A_8P },	/* fdcb..df [undoc] */
-	
+
 	{ "ld	b,set 4,(iy+%02xh)",	A_8P },	/* fdcb..e0 [undoc] */
 	{ "ld	c,set 4,(iy+%02xh)",	A_8P },	/* fdcb..e1 [undoc] */
 	{ "ld	d,set 4,(iy+%02xh)",	A_8P },	/* fdcb..e2 [undoc] */
@@ -2079,7 +2079,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 4,(iy+%02xh)",	A_8P },	/* fdcb..e5 [undoc] */
 	{ "set	4,(iy+%02xh)",		A_8P },	/* fdcb..e6 */
 	{ "ld	a,set 4,(iy+%02xh)",	A_8P },	/* fdcb..e7 [undoc] */
-	
+
 	{ "ld	b,set 5,(iy+%02xh)",	A_8P },	/* fdcb..e8 [undoc] */
 	{ "ld	c,set 5,(iy+%02xh)",	A_8P },	/* fdcb..e9 [undoc] */
 	{ "ld	d,set 5,(iy+%02xh)",	A_8P },	/* fdcb..ea [undoc] */
@@ -2088,7 +2088,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 5,(iy+%02xh)",	A_8P },	/* fdcb..ed [undoc] */
 	{ "set	5,(iy+%02xh)",		A_8P },	/* fdcb..ee */
 	{ "ld	a,set 5,(iy+%02xh)",	A_8P },	/* fdcb..ef [undoc] */
-	
+
 	{ "ld	b,set 6,(iy+%02xh)",	A_8P },	/* fdcb..f0 [undoc] */
 	{ "ld	c,set 6,(iy+%02xh)",	A_8P },	/* fdcb..f1 [undoc] */
 	{ "ld	d,set 6,(iy+%02xh)",	A_8P },	/* fdcb..f2 [undoc] */
@@ -2097,7 +2097,7 @@ static struct opcode minor[6][256] = {
 	{ "ld	l,set 6,(iy+%02xh)",	A_8P },	/* fdcb..f5 [undoc] */
 	{ "set	6,(iy+%02xh)",		A_8P },	/* fdcb..f6 */
 	{ "ld	a,set 6,(iy+%02xh)",	A_8P },	/* fdcb..f7 [undoc] */
-	
+
 	{ "ld	b,set 7,(iy+%02xh)",	A_8P },	/* fdcb..f8 [undoc] */
 	{ "ld	c,set 7,(iy+%02xh)",	A_8P },	/* fdcb..f9 [undoc] */
 	{ "ld	d,set 7,(iy+%02xh)",	A_8P },	/* fdcb..fa [undoc] */
@@ -2114,7 +2114,7 @@ int disassemble(unsigned short pc)
     int	i, j;
     struct opcode	*code;
     int	addr;
-    
+
     addr = pc;
     i = mem_read(pc++);
     if (!major[i].name)

@@ -30,8 +30,8 @@ void trs_protect_disk(int drive, int writeprot);
 void trs_protect_hard(int drive, int writeprot);
 int trs_create_blank_jv1(char *fname);
 int trs_create_blank_jv3(char *fname);
-int trs_create_blank_dmk(char *fname, int sides, int density, 
+int trs_create_blank_dmk(char *fname, int sides, int density,
                          int eight, int ignden);
-int trs_create_blank_hard(char *fname, int cyl, int sec, 
+int trs_create_blank_hard(char *fname, int cyl, int sec,
                           int gran, int dir);
 

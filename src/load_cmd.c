@@ -10,7 +10,7 @@
 /* TRS-80 DOS /cmd file loader.
  *
  * See the LDOS Quarterly, April 1, 1982 (Vol 1, No 4), for documentation
- *  of the TRS-80 DOS /cmd file format. 
+ *  of the TRS-80 DOS /cmd file format.
  */
 
 #include <stdio.h>
@@ -38,7 +38,7 @@ load_cmd(FILE* f, unsigned char memory[1<<16],
   } else {
     xferaddr = &dummy;
   }
-  
+
   for (;;) {
     c = getc(f); /* get block type code */
     if (c != 1 /* not loading bytes into memory */) {
@@ -133,9 +133,9 @@ load_cmd(FILE* f, unsigned char memory[1<<16],
       if (isam != -1) return status;
       if (verbosity >= VERBOSITY_MAP) {
 	fprintf(outf, "seek ptr = 0x%06lx\n", ftell(f));
-      }      
+      }
       break;
-	    
+
     case 5: /* module header */
       if (verbosity >= VERBOSITY_TEXT) {
 	fprintf(outf, "module header = \"");
@@ -234,7 +234,7 @@ load_cmd(FILE* f, unsigned char memory[1<<16],
 	*xferaddr = iaddr;
       }
       break;
-	    
+
     case 0x0a: /* end of ISAM directory */
       if (verbosity >= VERBOSITY_MAP) {
 	fprintf(outf, "end of ISAM directory\n");

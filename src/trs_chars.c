@@ -22,7 +22,7 @@ char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT] = {
      and the lowercase letters with descenders (plus 'a') are
      raised. Level II Basic put the odd symbols on the screen instead
      of uppercase if you did a homebrew lowercase conversion and did
-     not replace the CG.  
+     not replace the CG.
   */
   { 0x00,0x1f,0x11,0x11,0x11,0x11,0x11,0x1f,0x00,0x00,0x00,0x00 },
   { 0x00,0x1f,0x01,0x01,0x01,0x01,0x01,0x01,0x00,0x00,0x00,0x00 },
@@ -163,7 +163,7 @@ char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT] = {
      including the arrows.  It has odd symbols in positions 0-31, and
      lowercase letters with descenders (plus 'a') are raised. Level II
      Basic put the odd symbols on the screen if you did a homebrew
-     lowercase conversion and did not replace the CG.  
+     lowercase conversion and did not replace the CG.
   */
   { 0x00,0x1f,0x11,0x11,0x11,0x11,0x11,0x1f,0x00,0x00,0x00,0x00 },
   { 0x00,0x1f,0x01,0x01,0x01,0x01,0x01,0x01,0x00,0x00,0x00,0x00 },
@@ -302,7 +302,7 @@ char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT] = {
      the Radio Shack lowercase modification. Positions 0-31 are a copy
      of the uppercase letters, to work around a bug (?) in the Level
      II ROM. All characters without descenders are moved up one row.
-     I'm not sure I got all the changes exactly right -- help?  
+     I'm not sure I got all the changes exactly right -- help?
   */
   { 0x0e,0x11,0x10,0x16,0x15,0x15,0x0e,0x00,0x00,0x00,0x00,0x00 },
   { 0x04,0x0a,0x11,0x11,0x1f,0x11,0x11,0x00,0x00,0x00,0x00,0x00 },

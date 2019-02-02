@@ -25,12 +25,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -77,8 +77,8 @@ void z80_out(int port, int value)
   switch (port) {
   case TRS_HARD_WP:       /* 0xC0 */
   case TRS_HARD_CONTROL:  /* 0xC1 */
-  case TRS_HARD_DATA:     /* 0xC8 */ 
-  case TRS_HARD_ERROR:    /* 0xC9 */ /*=TRS_HARD_PRECOMP*/ 
+  case TRS_HARD_DATA:     /* 0xC8 */
+  case TRS_HARD_ERROR:    /* 0xC9 */ /*=TRS_HARD_PRECOMP*/
   case TRS_HARD_SECCNT:   /* 0xCA */
   case TRS_HARD_SECNUM:   /* 0xCB */
   case TRS_HARD_CYLLO:    /* 0xCC */
@@ -407,8 +407,8 @@ int z80_in(int port)
     goto done;
   case TRS_HARD_WP:       /* 0xC0 */
   case TRS_HARD_CONTROL:  /* 0xC1 */
-  case TRS_HARD_DATA:     /* 0xC8 */ 
-  case TRS_HARD_ERROR:    /* 0xC9 */ /*=TRS_HARD_PRECOMP*/ 
+  case TRS_HARD_DATA:     /* 0xC8 */
+  case TRS_HARD_ERROR:    /* 0xC9 */ /*=TRS_HARD_PRECOMP*/
   case TRS_HARD_SECCNT:   /* 0xCA */
   case TRS_HARD_SECNUM:   /* 0xCB */
   case TRS_HARD_CYLLO:    /* 0xCC */
@@ -500,8 +500,8 @@ int z80_in(int port)
       break;
     case TRS_HARD_WP:      /* 0xC0 */
     case TRS_HARD_CONTROL: /* 0xC1 */
-    case TRS_HARD_DATA:    /* 0xC8 */ 
-    case TRS_HARD_ERROR:   /* 0xC9 */ /*=TRS_HARD_PRECOMP*/ 
+    case TRS_HARD_DATA:    /* 0xC8 */
+    case TRS_HARD_ERROR:   /* 0xC9 */ /*=TRS_HARD_PRECOMP*/
     case TRS_HARD_SECCNT:  /* 0xCA */
     case TRS_HARD_SECNUM:  /* 0xCB */
     case TRS_HARD_CYLLO:   /* 0xCC */

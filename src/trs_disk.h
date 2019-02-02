@@ -105,7 +105,7 @@ extern int trs_disk_truedam;
 #define TRSDISK_DATA    0x37ef
 
 /* FDC port space in Model III */
-#define TRSDISK3_INTERRUPT 0xe4 
+#define TRSDISK3_INTERRUPT 0xe4
 #define TRSDISK3_COMMAND   0xf0  /* writing */
 #define TRSDISK3_STATUS    0xf0  /* reading */
 #define TRSDISK3_TRACK     0xf1

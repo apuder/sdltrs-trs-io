@@ -21,7 +21,7 @@ static void CopyBlitImageTo1Byte(int width, int height, Uint8 *src,
 				byte = *src++;
 			}
 			bit = (byte&0x80)>>7;
-			if ( bit ) 
+			if ( bit )
  			   *dst = map[1];
             else
                *dst = map[0];
@@ -45,7 +45,7 @@ static void CopyBlitImageTo2Byte(int width, int height, Uint8 *src,
 				byte = *src++;
 			}
 			bit = (byte&0x80)>>7;
-			if ( bit ) 
+			if ( bit )
 			   *dst = map[1];
             else
                *dst = map[0];
@@ -100,7 +100,7 @@ static void CopyBlitImageTo4Byte(int width, int height, Uint8 *src,
 				byte = *src++;
 			}
 			bit = (byte&0x80)>>7;
-			if ( bit ) 
+			if ( bit )
     		   *dst = map[1];
             else
                *dst = map[0];
@@ -230,7 +230,7 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
 	int  bpp;
 	unsigned alpha;
 	Uint32 mapValue;
-	
+
 	if (blitMap != NULL)
 		free(blitMap);
 
@@ -248,19 +248,19 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
                                    alpha);
 		switch (dst->BytesPerPixel) {
 			case 1:
-				map[i*bpp] = (Uint8)mapValue; 
-			case 2: 
-				*((Uint16 *)(&map[i*bpp])) = (Uint16)mapValue;	
-				break;							
-			case 3: 
+				map[i*bpp] = (Uint8)mapValue;
+			case 2:
+				*((Uint16 *)(&map[i*bpp])) = (Uint16)mapValue;
+				break;
+			case 3:
                 map[i*bpp] = mapValue >> 16;
                 map[i*bpp+1] = mapValue >> 8;
                 map[i*bpp+2] = mapValue & 0xFF;
 			    break;
-	        case 4: 
-			    *((Uint32 *)(&map[i*bpp])) = (Uint32)mapValue;	
-			    break;	
-		}				
+	        case 4:
+			    *((Uint32 *)(&map[i*bpp])) = (Uint32)mapValue;
+			    break;
+		}
 	}
 	blitMap = map;
 }

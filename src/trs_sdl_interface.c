@@ -26,12 +26,12 @@
  * Copyright (C) 1992 Clarendon Hill Software.
  *
  * Permission is granted to any individual or institution to use, copy,
- * or redistribute this software, provided this copyright notice is retained. 
+ * or redistribute this software, provided this copyright notice is retained.
  *
  * This software is provided "as is" without any expressed or implied
  * warranty.  If this software brings on any sort of damage -- physical,
  * monetary, emotional, or brain -- too bad.  You've got no one to blame
- * but yourself. 
+ * but yourself.
  *
  * The software may be modified for your own purposes, but modified versions
  * must retain this notice.
@@ -219,7 +219,7 @@ unsigned char grafyx_xoffset = 0, grafyx_yoffset = 0;
 #define G3_ENABLE   0x40
 #define G3_COMMAND  0x20
 #define G3_YLOW(v)  (((v)&0x1e)>>1)
-     
+
 typedef struct image_size_type {
     unsigned int width;
     unsigned int height;
@@ -358,9 +358,9 @@ trs_opt options[] = {
 {"hideled",trs_opt_led,0,0,NULL},
 {"doubler",trs_opt_doubler,1,0,NULL},
 {"sizemap",trs_opt_sizemap,1,0,NULL},
-#ifdef __linux      
+#ifdef __linux
 {"stepmap",trs_opt_stepmap,1,0,NULL},
-#endif      
+#endif
 {"truedam",trs_opt_truedam,0,1,NULL},
 {"notruedam",trs_opt_truedam,0,0,NULL},
 {"samplerate",trs_opt_samplerate,1,0,NULL},
@@ -400,7 +400,7 @@ trs_opt options[] = {
 };
 
 static int num_options = sizeof(options)/sizeof(trs_opt);
-  
+
 /* Private routines */
 void bitmap_init();
 void trs_event_init();
@@ -413,17 +413,17 @@ char *title;
 static void stripWhitespace (char *inputStr)
   {
   char *start, *end;
-  
+
   start = inputStr;
-  while (*start && (*start == ' '|| *start == '\t' || *start == '\r' || *start == '\n')) 
+  while (*start && (*start == ' '|| *start == '\t' || *start == '\r' || *start == '\n'))
     start++;
   memmove(inputStr, start, strlen(start) + 1);
   end = inputStr + strlen(inputStr) - 1;
-  while (*end && (*end == ' ' || *end == '\t' || *end == '\r' || *end == '\n')) 
+  while (*end && (*end == ' ' || *end == '\t' || *end == '\r' || *end == '\n'))
     end--;
   *(end + 1) = '\0';
   }
-  
+
 int trs_write_config_file(char *filename)
 {
   FILE *config_file;
@@ -450,7 +450,7 @@ int trs_write_config_file(char *filename)
     case 5:
       fprintf(config_file,"4P\n");
       break;
-    } 
+    }
   fprintf(config_file,"charset1=%d\n",trs_charset1);
   fprintf(config_file,"charset3=%d\n",trs_charset3);
   fprintf(config_file,"charset4=%d\n",trs_charset4);
@@ -483,7 +483,7 @@ int trs_write_config_file(char *filename)
     case TRSDISK_NODOUBLER:
       fprintf(config_file,"nodoubler\n");
       break;
-  } 
+  }
   fprintf(config_file, "sizemap=%d,%d,%d,%d,%d,%d,%d,%d\n",
           trs_disk_getsize(0),
           trs_disk_getsize(1),
@@ -493,7 +493,7 @@ int trs_write_config_file(char *filename)
           trs_disk_getsize(5),
           trs_disk_getsize(6),
           trs_disk_getsize(7));
-#ifdef __linux          
+#ifdef __linux
   fprintf(config_file, "stepmap=%d,%d,%d,%d,%d,%d,%d,%d\n",
           trs_disk_getstep(0),            /* Corrected to trs_disk_getstep vs getsize  */
           trs_disk_getstep(1),            /* Corrected by Larry Kraemer 08-01-2011 */
@@ -503,7 +503,7 @@ int trs_write_config_file(char *filename)
           trs_disk_getstep(5),
           trs_disk_getstep(6),
           trs_disk_getstep(7));
-#endif          
+#endif
   fprintf(config_file,"%struedam\n",trs_disk_truedam ? "" : "no");
   fprintf(config_file,"samplerate=%d\n",cassette_default_sample_rate);
   fprintf(config_file,"serial=%s\n",trs_uart_name);
@@ -524,22 +524,22 @@ int trs_write_config_file(char *filename)
 
   for (i=0;i<8;i++) {
     char *diskname;
-    
-    diskname = trs_disk_getfilename(i); 
+
+    diskname = trs_disk_getfilename(i);
     if (diskname[0] != 0)
       fprintf(config_file,"disk%d=%s\n",i,diskname);
   }
   for (i=0;i<4;i++) {
     char *diskname;
-    
-    diskname = trs_hard_getfilename(i); 
+
+    diskname = trs_hard_getfilename(i);
     if (diskname[0] != 0)
       fprintf(config_file,"hard%d=%s\n",i,diskname);
   }
-  
+
   {
     char *cassname;
-    
+
     cassname = trs_cassette_getfilename();
     if (cassname[0] != 0)
       fprintf(config_file,"cassette=%s\n",cassname);
@@ -572,7 +572,7 @@ void trs_set_to_defaults(void)
   for (i=0;i<4;i++)
     trs_hard_remove(i);
   trs_cassette_remove();
-  
+
   scale_x = 1;
   scale_y = 2;
   resize3 = 1;
@@ -673,7 +673,7 @@ static void trs_opt_model(char *arg, int intarg, char *stringarg)
   } else if (strcasecmp(arg, "4P") == 0 ||
              strcasecmp(arg, "IVp") == 0) {
     trs_model = 5;
-  } else 
+  } else
     trs_model = 1;
 }
 static void trs_opt_model2(char *arg, int intarg, char *stringarg)
@@ -793,9 +793,9 @@ static void trs_opt_sizemap(char *arg, int intarg, char *stringarg)
   sscanf(arg, "%d,%d,%d,%d,%d,%d,%d,%d",
          &disksizes[0], &disksizes[1], &disksizes[2], &disksizes[3],
          &disksizes[4], &disksizes[5], &disksizes[6], &disksizes[7]);
-#ifdef MACOSX		 
+#ifdef MACOSX
   disksizesLoaded = TRUE;
-#endif  
+#endif
 }
 #ifdef __linux
 static void trs_opt_stepmap(char *arg, int intarg, char *stringarg)
@@ -931,7 +931,7 @@ int trs_load_config_file(char *alternate_file)
 	}
 #endif
 
-  if (alternate_file) 
+  if (alternate_file)
     strcpy(trs_config_file,alternate_file);
   else
 #ifdef __linux
@@ -943,15 +943,15 @@ int trs_load_config_file(char *alternate_file)
 #else
     strcpy(trs_config_file,"./sdltrs.t8c");
 #endif
-  
+
   trs_set_to_defaults();
-  
+
   config_file = fopen(trs_config_file,"r");
   if (config_file == NULL) {
     trs_write_config_file(trs_config_file);
     return(0);
   }
-  
+
   while (fgets(line, sizeof(line), config_file)) {
 	arg = strchr(line, '=');
 	if (arg != NULL) {
@@ -960,20 +960,20 @@ int trs_load_config_file(char *alternate_file)
     }
 
     stripWhitespace(line);
-	
+
 	for (i=0;i<num_options;i++) {
 	  if (strcasecmp(line, options[i].name) == 0) {
 	    if (options[i].hasArg) {
 		  if (arg) {
-			(*options[i].handler)(arg,options[i].intArg,options[i].strArg);  
+			(*options[i].handler)(arg,options[i].intArg,options[i].strArg);
 		  }
 		} else
-			(*options[i].handler)(NULL,options[i].intArg,options[i].strArg); 
+			(*options[i].handler)(NULL,options[i].intArg,options[i].strArg);
 		break;
       }
     }
   }
-  
+
   trs_disk_setsizes();
   trs_disk_setsteps();
   return 1;
@@ -1012,9 +1012,9 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 #ifdef MACOSX
   trs_get_mac_prefs();
   disksizesLoaded = FALSE;
-#endif  
+#endif
 
-  if (alt_config_file[0] == 0)  
+  if (alt_config_file[0] == 0)
     trs_load_config_file(NULL);
   else
     trs_load_config_file(alt_config_file);
@@ -1027,10 +1027,10 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
         if (strcasecmp(&argv[i][1], options[j].name) == 0) {
 	      if (options[j].hasArg) {
 		    if (argAvail) {
-		      (*options[j].handler)(argv[++i],options[j].intArg,options[j].strArg);  
+		      (*options[j].handler)(argv[++i],options[j].intArg,options[j].strArg);
   		    }
 	  	  } else
-		      (*options[j].handler)(NULL,options[j].intArg,options[j].strArg); 
+		      (*options[j].handler)(NULL,options[j].intArg,options[j].strArg);
 		  break;
         }
       }
@@ -1042,14 +1042,14 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 #endif
   trs_disk_setsizes();
   trs_disk_setsteps();
-  
+
   return 1;
 }
 
 void trs_disk_setsizes(void)
 {
   int j;
-  
+
   for (j=0; j<=7; j++) {
     if (disksizes[j] == 5 || disksizes[j] == 8) {
             trs_disk_setsize(j, disksizes[j]);
@@ -1060,7 +1060,7 @@ void trs_disk_setsizes(void)
 void trs_disk_setsteps(void)
 {            /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
   int j;
-  
+
   for (j=0; j<=7; j++) {
     if (disksteps[j] == 1 || disksteps[j] == 2) {
             trs_disk_setstep(j, disksteps[j]);
@@ -1072,7 +1072,7 @@ void trs_flip_fullscreen(void)
 {
   static int window_scale_x = 1;
   static int window_scale_y = 2;
-  
+
   copyStatus = COPY_IDLE;
   fullscreen = !fullscreen;
   if (fullscreen) {
@@ -1089,19 +1089,19 @@ void trs_flip_fullscreen(void)
       trs_screen_refresh();
     }
     else {
-      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, 
+      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                 SDL_ANYFORMAT | SDL_FULLSCREEN);
       SDL_ShowCursor(SDL_DISABLE);
       }
     }
   else {
-#ifdef MACOSX	  
+#ifdef MACOSX
 	TrsWindowCreate(OrigWidth, OrigHeight);
     TrsOriginRestore();
 	if (1) {
-#else	  
+#else
     if (window_scale_x != 1) {
-#endif		
+#endif
       scale_x = window_scale_x;
       scale_y = window_scale_y;
       trs_screen_init(0);
@@ -1109,11 +1109,11 @@ void trs_flip_fullscreen(void)
       trs_screen_refresh();
     }
     else {
-      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, 
+      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                 SDL_ANYFORMAT);
       SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 	 }
-#ifdef MACOSX	  
+#ifdef MACOSX
 	 TrsOriginRestore();
 #endif
   }
@@ -1128,27 +1128,27 @@ void trs_rom_init(void)
   switch(trs_model) {
     case 1:
       if (romfile[0] != 0) {
-        if (trs_load_rom(romfile) == 0) 
+        if (trs_load_rom(romfile) == 0)
           break;
-      } 
-      if (trs_rom1_size > 0) 
+      }
+      if (trs_rom1_size > 0)
         trs_load_compiled_rom(trs_rom1_size, trs_rom1);
       break;
     case 3:
     case 4:
       if (romfile3[0] != 0){
-        if (trs_load_rom(romfile3) == 0) 
+        if (trs_load_rom(romfile3) == 0)
           break;
-      } 
-      if (trs_rom3_size > 0) 
+      }
+      if (trs_rom3_size > 0)
         trs_load_compiled_rom(trs_rom3_size, trs_rom3);
       break;
     case 5:
       if (romfile4p[0] != 0){
-        if (trs_load_rom(romfile4p) == 0) 
+        if (trs_load_rom(romfile4p) == 0)
           break;
-      } 
-      if (trs_rom4p_size > 0) 
+      }
+      if (trs_rom4p_size > 0)
         trs_load_compiled_rom(trs_rom4p_size, trs_rom4p);
       break;
   }
@@ -1239,20 +1239,20 @@ void trs_screen_init(int gui_init)
   }
 
   if (fullscreen) {
-     screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, 
+     screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT | SDL_FULLSCREEN);
      SDL_ShowCursor(SDL_DISABLE);
 	}
   else {
-#ifdef MACOSX	  
+#ifdef MACOSX
      TrsWindowResize(OrigWidth, OrigHeight);
      TrsWindowDisplay();
-#endif	  
-     screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, 
+#endif
+     screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT);
      SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
-  
+
   trs_screen_caption(trs_timer_is_turbo());
 
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
@@ -1268,12 +1268,12 @@ void trs_screen_init(int gui_init)
         MediaManagerStatusWindowShow();
     }
 	TrsMakeKeyWindow();
-#endif  
+#endif
 
   if (image)
     SDL_FreeSurface(image);
   memset(grafyx,0,(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE));
-  image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1, 
+  image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1,
                                    imageSize.bytes_per_line, 1, 1, 1, 0);
   colors[0].r = (background >> 16) & 0xFF;
   colors[0].g = (background >> 8) & 0xFF;
@@ -1282,7 +1282,7 @@ void trs_screen_init(int gui_init)
   colors[1].g = (foreground >> 8) & 0xFF;
   colors[1].b = (foreground) & 0xFF;
   SDL_SetPalette(image,SDL_LOGPAL, colors,0,2);
-  
+
   TrsBlitMap(image->format->palette, screen->format);
 
   bitmap_init(foreground, background);
@@ -1312,137 +1312,137 @@ void addToDrawList(SDL_Rect *rect)
 void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 {
 	int i,y,scale;
-	
+
 	if (copy_x < orig_x) {
 		int swap_x;
-		
+
 		swap_x = copy_x;
 		copy_x = orig_x;
 		orig_x = swap_x;
 	}
 	if (copy_y < orig_y) {
 		int swap_y;
-		
+
 		swap_y = copy_y;
 		copy_y = orig_y;
 		orig_y = swap_y;
 	}
-	
+
 	scale = scale_x	;
-	
+
 	if (screen->format->BitsPerPixel == 8) {
 		register int pitch;
 		register Uint8 *start8;
-		
+
 		SDL_LockSurface(screen);
-		
+
 		pitch = screen->pitch;
-		
+
 		for (y=orig_y;y < orig_y+scale;y++) {
-			start8 = (Uint8 *) screen->pixels + 
+			start8 = (Uint8 *) screen->pixels +
 			(y * pitch) + orig_x;
 			for (i=0;i<(copy_x-orig_x+scale);i++,start8++)
 				*start8 ^= 0xFF;
 		}
 		if (copy_y > orig_y) {
 			for (y=copy_y;y < copy_y+scale;y++) {
-				start8 = (Uint8 *) screen->pixels + 
+				start8 = (Uint8 *) screen->pixels +
 				(y * pitch) + orig_x;
 				for (i=0;i<(copy_x-orig_x+scale);i++,start8++)
 					*start8 ^= 0xFF;
 			}
 		}
 		for (y=orig_y+scale;y < copy_y;y++) {
-			start8 = (Uint8 *) screen->pixels + 
+			start8 = (Uint8 *) screen->pixels +
 			(y * pitch) + orig_x;
 			for (i=0;i<scale;i++)
 				*start8++ ^= 0xFF;
 		}
 		if (copy_x > orig_x) {
 			for (y=orig_y+scale;y < copy_y;y++) {
-				start8 = (Uint8 *) screen->pixels + 
+				start8 = (Uint8 *) screen->pixels +
 				(y * pitch) + copy_x;
 				for (i=0;i<scale;i++)
 					*start8++ ^= 0xFF;
 			}
 		}
-		SDL_UnlockSurface(screen);		
+		SDL_UnlockSurface(screen);
 	}
 	else if (screen->format->BitsPerPixel == 16) {
 		register int pitch2;
 		register Uint16 *start16;
-		
+
 		SDL_LockSurface(screen);
-		
+
 		pitch2 = screen->pitch / 2;
-		
+
 		for (y=orig_y;y < orig_y+scale;y++) {
-			start16 = (Uint16 *) screen->pixels + 
+			start16 = (Uint16 *) screen->pixels +
 			(y * pitch2) + orig_x;
 			for (i=0;i<(copy_x-orig_x+scale);i++,start16++)
 				*start16 ^= 0xFFFF;
 		}
 		if (copy_y > orig_y) {
 			for (y=copy_y;y < copy_y+scale;y++) {
-				start16 = (Uint16 *) screen->pixels + 
+				start16 = (Uint16 *) screen->pixels +
 				(y * pitch2) + orig_x;
 				for (i=0;i<(copy_x-orig_x+scale);i++,start16++)
 					*start16 ^= 0xFFFF;
 			}
 		}
 		for (y=orig_y+scale;y < copy_y;y++) {
-			start16 = (Uint16 *) screen->pixels + 
+			start16 = (Uint16 *) screen->pixels +
 			(y * pitch2) + orig_x;
 			for (i=0;i<scale;i++)
 				*start16++ ^= 0xFFFF;
 		}
 		if (copy_x > orig_x) {
 			for (y=orig_y+scale;y < copy_y;y++) {
-				start16 = (Uint16 *) screen->pixels + 
+				start16 = (Uint16 *) screen->pixels +
 				(y * pitch2) + copy_x;
 				for (i=0;i<scale;i++)
 					*start16++ ^= 0xFFFF;
 			}
 		}
-		SDL_UnlockSurface(screen);		
+		SDL_UnlockSurface(screen);
 	}
 	else if (screen->format->BitsPerPixel == 32) {
 		register int pitch4;
 		register Uint32 *start32;
-		
+
 		SDL_LockSurface(screen);
-		
+
 		pitch4 = screen->pitch / 4;
-		
+
 		for (y=orig_y;y<orig_y+scale;y++) {
-			start32 = (Uint32 *) screen->pixels + 
+			start32 = (Uint32 *) screen->pixels +
 			(y * pitch4) + orig_x;
 			for (i=0;i<(copy_x-orig_x+scale);i++,start32++)
 				*start32 ^= 0xFFFFFFFF;
 		}
 		if (copy_y > orig_y) {
 			for (y=copy_y;y<copy_y+scale;y++) {
-				start32 = (Uint32 *) screen->pixels + 
+				start32 = (Uint32 *) screen->pixels +
 				(y * pitch4) + orig_x;
 				for (i=0;i<(copy_x-orig_x+scale);i++,start32++)
 					*start32 ^= 0xFFFFFFFF;
 			}
 		}
 		for (y=orig_y+scale;y < copy_y;y++) {
-			start32 = (Uint32 *) screen->pixels + 
+			start32 = (Uint32 *) screen->pixels +
 			(y * pitch4) + orig_x;
 			for (i=0;i<scale;i++)
 				*start32++ ^= 0xFFFFFFFF;
 		}
 		if (copy_x > orig_x) {
 			for (y=orig_y+scale;y < copy_y;y++) {
-				start32 = (Uint32 *) screen->pixels + 
+				start32 = (Uint32 *) screen->pixels +
 				(y * pitch4) + copy_x;
 				for (i=0;i<scale;i++)
 					*start32++ ^= 0xFFFFFFFF;
 			}
 		}
-		SDL_UnlockSurface(screen);		
+		SDL_UnlockSurface(screen);
 	}
 }
 
@@ -1455,7 +1455,7 @@ void ProcessCopySelection(int selectAll)
 	static int copy_x = 0;
 	static int copy_y = 0;
 	static Uint8 mouse = 0;
-	
+
 	if (selectAll) {
 		if (copyStatus == COPY_STARTED)
 			return;
@@ -1469,40 +1469,40 @@ void ProcessCopySelection(int selectAll)
 		DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
 		drawnRectCount = MAX_RECTS;
 		copyStatus = COPY_DEFINED;
-		selectionStartX = orig_x - left_margin; 
+		selectionStartX = orig_x - left_margin;
 		selectionStartY = orig_y - top_margin;
 		selectionEndX = copy_x - left_margin;
 		selectionEndY = copy_y - top_margin;
 	} else {
-#ifdef MACOSX		
+#ifdef MACOSX
 		if (TrsIsKeyWindow()) {
-#endif			
+#endif
 			mouse = SDL_GetMouseState(&copy_x, &copy_y);
-#ifdef MACOSX			
+#ifdef MACOSX
 			if ((copyStatus == COPY_IDLE) && !TrsWindowMouseInside())
 				return;
-#endif			
+#endif
 			if ((copyStatus == COPY_IDLE) &&
 				((mouse & SDL_BUTTON(1)) == 0)) {
-				return;		
+				return;
 			}
-#ifdef MACOSX			
+#ifdef MACOSX
 		}
 		else {
 			mouse = 0;
 			copyStatus = COPY_IDLE;
-			return;		
+			return;
 		}
-#endif		
+#endif
 	}
-	
+
 	switch(copyStatus) {
 		case COPY_IDLE:
 			if (selectAll) {
 				copyStatus = COPY_DEFINED;
 				orig_x = 0;
 				orig_y = 0;
-                selectionStartX = orig_x - left_margin; 
+                selectionStartX = orig_x - left_margin;
                 selectionStartY = orig_y - top_margin;
                 selectionEndX = copy_x - left_margin;
                 selectionEndY = copy_y - top_margin;
@@ -1532,7 +1532,7 @@ void ProcessCopySelection(int selectAll)
 				} else {
 					DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
 					copyStatus = COPY_DEFINED;
-                    selectionStartX = orig_x - left_margin; 
+                    selectionStartX = orig_x - left_margin;
                     selectionStartY = orig_y - top_margin;
                     selectionEndX = copy_x - left_margin;
                     selectionEndY = copy_y - top_margin;
@@ -1556,7 +1556,7 @@ void ProcessCopySelection(int selectAll)
 	}
 }
 
-void trs_end_copy() 
+void trs_end_copy()
 {
 	copyStatus = COPY_CLEAR;
 }
@@ -1576,7 +1576,7 @@ void trs_select_all()
  */
 inline void trs_x_flush()
 {
-  if (!trs_emu_mouse) 
+  if (!trs_emu_mouse)
       {
       ProcessCopySelection(requestSelectAll);
       }
@@ -1604,9 +1604,9 @@ char *trs_get_copy_data()
       return(copy_data);
   }
 
-  if (selectionStartX < 0) 
+  if (selectionStartX < 0)
     selectionStartX = 0;
-  if (selectionStartY < 0) 
+  if (selectionStartY < 0)
     selectionStartY = 0;
 
   if (selectionStartX % cur_char_width == 0)
@@ -1629,18 +1629,18 @@ char *trs_get_copy_data()
   else
     end_line = selectionEndY / cur_char_height - 1;
 
-  if (end_col >= row_chars) 
+  if (end_col >= row_chars)
       end_col = row_chars - 1;
-  if (end_line >= col_chars) 
+  if (end_line >= col_chars)
       end_line = col_chars - 1;
 
   for (line = start_line; line <= end_line; line++) {
     screen_ptr = (char*) &trs_screen[line * row_chars + start_col];
     for (col = start_col; col <= end_col; col++, screen_ptr++) {
       data = *screen_ptr;
-      if (data < 0x20) 
+      if (data < 0x20)
         data += 0x40;
-      if (data >= 0x20 && data <= 0x7e) 
+      if (data >= 0x20 && data <= 0x7e)
         *curr_data++ = data;
       else
         *curr_data++ = ' ';
@@ -1707,13 +1707,13 @@ void call_function(int function)
 #endif
 }
 
-/* 
+/*
  * Get and process SDL event(s).
  *   If wait is true, process one event, blocking until one is available.
  *   If wait is false, process as many events as are available, returning
  *     when none are left.
  * Handle interrupt-driven uart input here too.
- */ 
+ */
 void trs_get_event(int wait)
 {
   SDL_Event event;
@@ -1730,7 +1730,7 @@ void trs_get_event(int wait)
   do {
     if (paste_state != PASTE_IDLE) {
 		static unsigned short paste_key_uni;
-		
+
   	    if (SDL_PollEvent(&event)) {
 			if (event.type == SDL_KEYDOWN) {
 				if (paste_state == PASTE_KEYUP) {
@@ -1742,7 +1742,7 @@ void trs_get_event(int wait)
 		}
 
 		if (paste_state == PASTE_GETNEXT) {
-			if (!PasteManagerGetChar(&paste_key_uni)) 
+			if (!PasteManagerGetChar(&paste_key_uni))
 				paste_lastkey = TRUE;
 			else
 				paste_lastkey = FALSE;
@@ -1760,7 +1760,7 @@ void trs_get_event(int wait)
 				paste_state = PASTE_GETNEXT;
 		}
     }
-		  
+
     if (wait) {
       SDL_WaitEvent(&event);
     } else {
@@ -1791,17 +1791,17 @@ void trs_get_event(int wait)
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
-	  else if (keysym.sym != SDLK_c && 
-		  keysym.sym != SDLK_LMETA && 
+	  else if (keysym.sym != SDLK_c &&
+		  keysym.sym != SDLK_LMETA &&
 		  keysym.sym != SDLK_RMETA) {
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
-		  
+
       switch (keysym.sym) {
         /* Trap some function keys here */
       case SDLK_F10:
-        if (keysym.mod & KMOD_SHIFT) 
+        if (keysym.mod & KMOD_SHIFT)
 		  {
           trs_reset(1);
 		  trs_disk_led(-1,0);
@@ -1867,11 +1867,11 @@ void trs_get_event(int wait)
         }
       }
 #endif
-      
+
       /* Trap the menu keys here */
       if (keysym.mod & MENU_MOD) {
         switch (keysym.sym) {
-#ifdef MACOSX        
+#ifdef MACOSX
         case SDLK_q:
           trs_exit(1);
           break;
@@ -1880,12 +1880,12 @@ void trs_get_event(int wait)
           trs_screen_refresh();
           trs_x_flush();
           break;
-#if 0				
+#if 0
         case SDLK_a:
           ControlManagerAboutApp();
           break;
-#endif				
-        case SDLK_h: 
+#endif
+        case SDLK_h:
           ControlManagerHideApp();
           break;
         case SDLK_m:
@@ -1894,12 +1894,12 @@ void trs_get_event(int wait)
         case SDLK_SLASH:
           ControlManagerShowHelp();
           break;
-#endif          
-#ifdef _WIN32        
+#endif
+#ifdef _WIN32
         case SDLK_F4:
           trs_exit(1);
           break;
-#endif          
+#endif
         case SDLK_RETURN:
           trs_flip_fullscreen();
           trs_screen_refresh();
@@ -1961,7 +1961,7 @@ void trs_get_event(int wait)
           {
             SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
             trs_pause_audio(1);
-            trs_gui_save_state();   
+            trs_gui_save_state();
             trs_pause_audio(0);
             SDL_EnableKeyRepeat(0,0);
             trs_screen_refresh();
@@ -1982,7 +1982,7 @@ void trs_get_event(int wait)
           {
             SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
             trs_pause_audio(1);
-            trs_gui_load_state();   
+            trs_gui_load_state();
             trs_pause_audio(0);
             SDL_EnableKeyRepeat(0,0);
             trs_screen_init(1);
@@ -2000,7 +2000,7 @@ void trs_get_event(int wait)
           {
             SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
             trs_pause_audio(1);
-            trs_gui_write_config();   
+            trs_gui_write_config();
             trs_pause_audio(0);
             SDL_EnableKeyRepeat(0,0);
             trs_screen_refresh();
@@ -2016,7 +2016,7 @@ void trs_get_event(int wait)
           {
             SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
             trs_pause_audio(1);
-            ret = trs_gui_read_config();   
+            ret = trs_gui_read_config();
             trs_pause_audio(0);
             SDL_EnableKeyRepeat(0,0);
             if (!ret) {
@@ -2056,7 +2056,7 @@ void trs_get_event(int wait)
           if (!trs_paused)
             trs_screen_refresh();
           break;
-#ifdef MACOSX				
+#ifdef MACOSX
 		case SDLK_v:
 			SDLMainPaste();
 			break;
@@ -2066,7 +2066,7 @@ void trs_get_event(int wait)
 		case SDLK_a:
 			SDLMainSelectAll();
 			break;
-#endif				
+#endif
         case SDLK_0:
 		case SDLK_1:
         case SDLK_2:
@@ -2077,7 +2077,7 @@ void trs_get_event(int wait)
         case SDLK_7:
 #ifdef MACOSX
           if (!fullscreen) {
-            if (keysym.mod & KMOD_SHIFT) 
+            if (keysym.mod & KMOD_SHIFT)
                MediaManagerRemoveDisk(keysym.sym-SDLK_0);
             else
                MediaManagerInsertDisk(keysym.sym-SDLK_0);
@@ -2090,7 +2090,7 @@ void trs_get_event(int wait)
             if (keysym.mod & KMOD_SHIFT) {
               trs_disk_remove(keysym.sym-SDLK_0);
             } else {
-              SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, 
+              SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
                                   SDL_DEFAULT_REPEAT_INTERVAL);
               trs_expand_dir(trs_disk_dir, browse_dir);
               if (trs_gui_file_browse(browse_dir, filename,0,
@@ -2119,7 +2119,7 @@ void trs_get_event(int wait)
       if (keysym.sym == SDLK_RSHIFT && trs_model == 1) {
         keysym.sym = SDLK_LSHIFT;
       }
-     
+
       if (last_key[keysym.scancode] != 0) {
         trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
        }
@@ -2242,7 +2242,7 @@ void trs_get_event(int wait)
 #endif
 
     default:
-#if XDEBUG	    
+#if XDEBUG
 /*      debug("Unhandled event: type %d\n", event.type); */
 #endif
       break;
@@ -2315,7 +2315,7 @@ void trs_screen_640x240(int flag)
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
     top_margin = (TRS_CHAR_HEIGHT4 * scale_y * 24 -
 	  	      cur_char_height * col_chars)/2 + border_width;
-    if (left_margin > border_width || top_margin > border_width) 
+    if (left_margin > border_width || top_margin > border_width)
       SDL_FillRect(screen,NULL,background);
   }
   trs_screen_refresh();
@@ -2359,7 +2359,7 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
   bits[4].y = bits[5].y = (height * 2) / 3;
   bits[2].h = bits[3].h = bits[4].y - bits[2].y;
   bits[4].h = bits[5].h = height - bits[4].y;
-  
+
   fullrect.x = 0;
   fullrect.y = 0;
   fullrect.h = height;
@@ -2369,12 +2369,12 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
     if (trs_box[expanded][graphics_char])
       SDL_FreeSurface(trs_box[expanded][graphics_char]);
     trs_box[expanded][graphics_char] =
-	  SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 
+	  SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
                            0x00ff0000, 0x0000ff00,0x000000ff,0);
 
     /* Clear everything */
     SDL_FillRect(trs_box[expanded][graphics_char], &fullrect, background);
-    
+
     for (bit = 0 ; bit < 6; ++bit) {
       if (graphics_char & (1 << bit)) {
       	SDL_FillRect(trs_box[expanded][graphics_char], &bits[bit], foreground);
@@ -2386,7 +2386,7 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
 SDL_Surface *CreateSurfaceFromDataScale(char *data,
                      unsigned int foreground,
                      unsigned int background,
-                     unsigned int width, 
+                     unsigned int width,
 				     unsigned int height,
 				     unsigned int scale_x,
 				     unsigned int scale_y)
@@ -2395,17 +2395,17 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
   static unsigned char *mypixels, *currpixel;
   int i, j, w;
 
-  /* 
-   * Allocate a bit more room than necessary - There shouldn't be 
-   * any proportional characters, but just in case...             
-   * These arrays never get released, but they are really not     
+  /*
+   * Allocate a bit more room than necessary - There shouldn't be
+   * any proportional characters, but just in case...
+   * These arrays never get released, but they are really not
    * too big, so we should be OK.
    */
   mydata = (unsigned int *)malloc(width * height *
 		     scale_x * scale_y * sizeof(unsigned int));
   mypixels= (unsigned char *)malloc(width * height * 8);
-  
-  /* Read the character data */ 
+
+  /* Read the character data */
   for (j= 0; j< width * height; j += 8)
   {
     for (i= j + 7; i >= j; i--)
@@ -2431,9 +2431,9 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
       }
     }
   }
-  
+
   free(mypixels);
-  
+
   return(SDL_CreateRGBSurfaceFrom(mydata, width*scale_x, height*scale_y, 32, width*scale_x*4,
                                   0x00ff0000, 0x0000ff00,
                                   0x000000ff,0));
@@ -2443,7 +2443,7 @@ void bitmap_init(unsigned long foreground, unsigned long background)
 {
     /* Initialize from built-in font bitmaps. */
     int i;
-	
+
     for (i = 0; i < MAXCHARS; i++) {
       if (trs_char[0][i]) {
          free(trs_char[0][i]->pixels);
@@ -2530,9 +2530,9 @@ void bitmap_init(unsigned long foreground, unsigned long background)
     boxes_init(foreground, background,
 	       cur_char_width, TRS_CHAR_HEIGHT * scale_y, 0);
     boxes_init(foreground, background,
-	       cur_char_width*2, TRS_CHAR_HEIGHT * scale_y, 1);  
+	       cur_char_width*2, TRS_CHAR_HEIGHT * scale_y, 1);
     boxes_init(gui_foreground, gui_background,
-	       cur_char_width, TRS_CHAR_HEIGHT * scale_y, 2);  
+	       cur_char_width, TRS_CHAR_HEIGHT * scale_y, 2);
 }
 
 void trs_screen_refresh()
@@ -2614,7 +2614,7 @@ void trs_disk_led(int drive, int on_off)
     rect.w = 16*scale_x;
     rect.h = 2*scale_y;
     rect.y = OrigHeight - led_width/2;
-  
+
     if (drive == -1) {
       for (i=0;i<8;i++) {
         rect.x = drive0_led_x + 24*scale_x*i;
@@ -2622,7 +2622,7 @@ void trs_disk_led(int drive, int on_off)
         addToDrawList(&rect);
 #ifdef MACOSX
         MediaManagerStatusLed(i,0);
-#endif  
+#endif
       }
     }
     if (on_off) {
@@ -2632,7 +2632,7 @@ void trs_disk_led(int drive, int on_off)
         addToDrawList(&rect);
 #ifdef MACOSX
         MediaManagerStatusLed(drive,1);
-#endif  
+#endif
         }
       countdown[drive] = 2*timer_hz;
       }
@@ -2646,7 +2646,7 @@ void trs_disk_led(int drive, int on_off)
             addToDrawList(&rect);
 #ifdef MACOSX
             MediaManagerStatusLed(i,0);
-#endif  
+#endif
           }
         }
       }
@@ -2665,7 +2665,7 @@ void trs_hard_led(int drive, int on_off)
     rect.w = 16*scale_x;
     rect.h = 2*scale_y;
     rect.y = OrigHeight - led_width/2;
-  
+
     if (drive == -1) {
       for (i=0;i<4;i++) {
         rect.x = drive0_led_x + 24*scale_x*i;
@@ -2673,7 +2673,7 @@ void trs_hard_led(int drive, int on_off)
         addToDrawList(&rect);
 #ifdef MACOSX
         MediaManagerStatusLed(i+8, 0);
-#endif  
+#endif
       }
     }
     if (on_off) {
@@ -2683,7 +2683,7 @@ void trs_hard_led(int drive, int on_off)
         addToDrawList(&rect);
 #ifdef MACOSX
         MediaManagerStatusLed(drive+8, 1);
-#endif  
+#endif
         }
       countdown[drive] = timer_hz/2;
       }
@@ -2697,7 +2697,7 @@ void trs_hard_led(int drive, int on_off)
             addToDrawList(&rect);
 #ifdef MACOSX
             MediaManagerStatusLed(i+8, 0);
-#endif  
+#endif
           }
         }
       }
@@ -2757,7 +2757,7 @@ void trs_screen_write_char(int position, int char_index)
       SDL_BlitSurface(trs_box[1][char_index-0x80], &srcRect, screen, &destRect);
       addToDrawList(&destRect);
       break;
-    } 
+    }
   } else {
     /* Draw character using a builtin bitmap */
     if (trs_model > 1 && char_index >= 0xc0 &&
@@ -2798,7 +2798,7 @@ void trs_screen_write_char(int position, int char_index)
       destRect.y = desty;
       destRect.w = srcRect.w;
       destRect.h = srcRect.h;
-      if (char_index & 0x80) 
+      if (char_index & 0x80)
         SDL_BlitSurface(trs_char[2][char_index & 0x7f], &srcRect, screen, &destRect);
       else
         SDL_BlitSurface(trs_char[0][char_index & 0x7f], &srcRect, screen, &destRect);
@@ -2813,7 +2813,7 @@ void trs_screen_write_char(int position, int char_index)
       destRect.y = desty;
       destRect.w = srcRect.w;
       destRect.h = srcRect.h;
-      if (char_index & 0x80) 
+      if (char_index & 0x80)
         SDL_BlitSurface(trs_char[3][char_index & 0x7f], &srcRect, screen, &destRect);
       else
         SDL_BlitSurface(trs_char[1][char_index & 0x7f], &srcRect, screen, &destRect);
@@ -2826,7 +2826,7 @@ void trs_screen_write_char(int position, int char_index)
     int srcx, srcy, duny;
     srcx = ((col+grafyx_xoffset) % G_XSIZE)*cur_char_width;
     srcy = (row*cur_char_height + grafyx_yoffset*scale_y)
-	   % (G_YSIZE*scale_y); 
+	   % (G_YSIZE*scale_y);
     srcRect.x = srcx;
     srcRect.y = srcy;
     srcRect.w = cur_char_width;
@@ -2861,7 +2861,7 @@ void trs_gui_refresh()
 {
   int i;
 
-  for (i = 0; i < screen_chars; i++) 
+  for (i = 0; i < screen_chars; i++)
       trs_gui_write_char(i, trs_gui_screen[i], trs_gui_screen_invert[i]);
 
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
@@ -2878,7 +2878,7 @@ void trs_gui_write_char(int position, int char_index, int invert)
 
   trs_gui_screen[position] = char_index;
   trs_gui_screen_invert[position] = invert;
-  
+
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
     row = position / 64;
@@ -3001,7 +3001,7 @@ void grafyx_write_byte(int x, int y, char byte)
   int on_screen = screen_x < row_chars &&
     screen_y < col_chars*cur_char_height/scale_y;
   SDL_Rect srcRect, destRect;
-  
+
   if (grafyx_enable && grafyx_overlay && on_screen) {
     srcRect.x = x*cur_char_width;
     srcRect.y = y*scale_y;
@@ -3074,7 +3074,7 @@ void grafyx_redraw(void)
   char exp[MAX_SCALE];
   int x,y;
   char byte;
-  
+
   for (y=0;y<G_YSIZE;y++) {
     for (x=0;x<G_XSIZE;x++) {
       byte = grafyx_unscaled[y][x];
@@ -3173,9 +3173,9 @@ void grafyx_write_mode(int value)
   }
   grafyx_mode = value;
   trs_screen_640x240((grafyx_enable && !grafyx_overlay) || text80x24);
-  if (old_enable != grafyx_enable || 
+  if (old_enable != grafyx_enable ||
       (grafyx_enable && old_overlay != grafyx_overlay)) {
-    
+
     trs_screen_refresh();
   }
 }
@@ -3591,7 +3591,7 @@ void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
 {
   int win_x, win_y;
   Uint8 mask;
-  
+
   mask = SDL_GetMouseState(&win_x, &win_y);
 #if MOUSEDEBUG
   debug("get_mouse %d %d 0x%x ->", win_x, win_y, mask);
@@ -3606,7 +3606,7 @@ void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
     *x = mouse_last_x = (win_x - left_margin)
                         * mouse_x_size
                         / (OrigWidth - 2*left_margin);
-    *y = mouse_last_y = (win_y - top_margin) 
+    *y = mouse_last_y = (win_y - top_margin)
                         * mouse_y_size
                         / (OrigHeight - 2*top_margin);
     mouse_last_buttons = 7;
@@ -3700,7 +3700,7 @@ void trs_main_save(FILE *file)
 void trs_main_load(FILE *file)
 {
   int i;
-                    
+
   trs_load_int(file,&trs_model,1);
   trs_load_uchar(file,trs_screen,2048);
   trs_load_int(file,&screen_chars,1);

@@ -169,7 +169,7 @@ int
 trs_timer_switch_turbo()
 {
     timer_overclock = !timer_overclock;
-#ifdef MACOSX	
+#ifdef MACOSX
 	SetControlManagerTurboMode(timer_overclock);
 #endif
     return(timer_overclock);
@@ -289,7 +289,7 @@ trs_reset_button_interrupt(int state)
 {
   if (trs_model == 1) {
     z80_state.nmi = state;
-  } else {  
+  } else {
     if (state) {
       nmi_latch |= M3_RESET_BIT;
     } else {
@@ -368,7 +368,7 @@ trs_restore_delay()
 }
 
 #define UP_F   1.50
-#define DOWN_F 0.50 
+#define DOWN_F 0.50
 
 void
 trs_timer_event(void)
@@ -402,7 +402,7 @@ void trs_timer_sync_with_host(void)
 	lasttime += deltatime;
 	if ((lasttime + deltatime) < curtime)
 		lasttime = curtime;
-    
+
     trs_disk_led(0,0);
     trs_hard_led(0,0);
     trs_timer_event();
@@ -419,11 +419,11 @@ trs_timer_init()
       z80_state.clockMHz = CLOCK_MHZ_1;
   } else {
       /* initially... */
-      timer_hz = TIMER_HZ_3;  
+      timer_hz = TIMER_HZ_3;
       z80_state.clockMHz = CLOCK_MHZ_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
-  
+
   trs_timer_event();
 
   /* Also initialize the clock in memory - hack */
@@ -497,8 +497,8 @@ static int event_arg;
 /* Schedule an event to occur after "countdown" more t-states have
  *  executed.  0 makes the event happen immediately -- that is, at
  *  the end of the current instruction, but before the emulator checks
- *  for interrupts.  It is legal for an event function to call 
- *  trs_schedule_event.  
+ *  for interrupts.  It is legal for an event function to call
+ *  trs_schedule_event.
  *
  * Only one event can be buffered.  If you try to schedule a second
  *  event while one is still pending, the pending event (along with
@@ -508,7 +508,7 @@ void
 trs_schedule_event(trs_event_func f, int arg, int countdown)
 {
     while (event_func) {
-#if EDEBUG	
+#if EDEBUG
 	error("warning: trying to schedule two events");
 #endif
 	trs_do_event();
@@ -530,7 +530,7 @@ trs_do_event()
     if (f) {
 	event_func = NULL;
 	z80_state.sched = 0;
-	f(event_arg);    
+	f(event_arg);
     }
 }
 
@@ -556,7 +556,7 @@ trs_event_scheduled()
 void trs_interrupt_save(FILE *file)
 {
   int event;
-  
+
   trs_save_uchar(file, &interrupt_latch, 1);
   trs_save_uchar(file, &interrupt_mask, 1);
   trs_save_uchar(file, &nmi_latch, 1);
@@ -599,7 +599,7 @@ void trs_interrupt_save(FILE *file)
 void trs_interrupt_load(FILE *file)
 {
   int event;
-  
+
   trs_load_uchar(file, &interrupt_latch, 1);
   trs_load_uchar(file, &interrupt_mask, 1);
   trs_load_uchar(file, &nmi_latch, 1);
