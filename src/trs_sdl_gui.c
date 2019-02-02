@@ -2621,9 +2621,6 @@ void trs_gui_rom_files(void)
 
 void trs_gui_about_sdltrs(void)
 {
-  int key;
-  int done = 0;
-  
   trs_gui_clear_screen();
   trs_gui_frame(0,0,64,16);
   trs_gui_write_text("About SDLTRS", 2, 0, 0);
@@ -2636,18 +2633,10 @@ void trs_gui_about_sdltrs(void)
   trs_gui_center_text("By Tim Mann",10,0);
   trs_gui_center_text("Which was Based on xtrs 1.0",11,0);
   trs_gui_center_text("Copyright (C) 1992 Clarendon Hill Software",12,0);
-
+  trs_gui_center_text("Press Any Key To Return", 15, 1);
   trs_x_flush();
 
-  do {
-    key = trs_gui_get_key();
-    switch(key) {
-      case SDLK_ESCAPE:
-      case SDLK_RETURN:
-        done = 1;
-        break;
-    }
-  } while (!done);
+  trs_gui_get_key();
 }
 
 void trs_gui_keys_sdltrs(void)
