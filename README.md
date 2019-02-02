@@ -1,5 +1,5 @@
-Modified version of [sdltrs] (with extensions and bug fixes by [EtchedPixels])
-running [FUZIX]:
+This is a modified version of Mark Grebe's [sdltrs] with patches by [EtchedPixels] for
+running [FUZIX] and some bug fixes ...
 
 ![screenshot](fuzix.png)
 ![screenshot](fuzix2.png)
