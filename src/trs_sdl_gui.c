@@ -1744,12 +1744,13 @@ void trs_gui_cassette_management(void)
   MENU_ENTRY cass_menu[] =
   {{"Cass   :",MENU_CASS_BROWSE_TYPE,1},
    {"Cassette Position                                           ",MENU_NORMAL_TYPE,10},
+   {"Cassette Default Sample Rate                                ",MENU_NORMAL_TYPE,2},
    {"Create Blank Cassette",MENU_NORMAL_TYPE,3},
    {"",0,-1}};
-   char posititon_string[FILENAME_MAX];
+   char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
-   int new_position;
+   int value;
    int ret;
 
    while(!done) {
@@ -1762,19 +1763,31 @@ void trs_gui_cassette_management(void)
 
      trs_gui_clear_screen();
      sprintf(&cass_menu[1].title[36],"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());
+     sprintf(&cass_menu[2].title[50],"%10d",cassette_default_sample_rate);
      selection = trs_gui_display_menu("SDLTRS Cassette Menu",cass_menu, selection);
      switch(selection) {
        case 1:
-         sprintf(posititon_string,"%d",trs_get_cassette_position());
+         sprintf(input,"%d",trs_get_cassette_position());
          ret = trs_gui_input_string("Enter Cassette Position in Bytes",
-                                    "",posititon_string, 1);
+                                    input,input, 0);
          if (ret)
            break;
-         new_position = atoi(posititon_string);
-         if (new_position >= 0 && new_position <= trs_get_cassette_length())
-            trs_set_cassette_position(new_position);
+         value = atoi(input);
+         if (value >= 0 && value <= trs_get_cassette_length())
+           trs_set_cassette_position(value);
          break;
        case 2:
+         sprintf(input,"%d",cassette_default_sample_rate);
+         ret = trs_gui_input_string("Enter Cassette Default Sample Rate",
+                                    input,input ,0);
+         if (ret)
+           break;
+         value = atoi(input);
+         if (value < 0 || value > DEFAULT_SAMPLE_RATE)
+           value = DEFAULT_SAMPLE_RATE;
+         cassette_default_sample_rate = value;
+         break;
+       case 3:
          trs_gui_cassette_creation();
          break;
        case -1:
