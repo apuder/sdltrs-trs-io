@@ -191,7 +191,7 @@ void trs_gui_frame(int x, int y, int w, int h)
 
 void trs_gui_clear_rect(int x, int y, int w, int h)
 {
-     char clear[128];
+     char clear[w+1];
      int i;
      
      for (i=0;i<w;i++)
