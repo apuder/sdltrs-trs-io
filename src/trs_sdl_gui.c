@@ -113,7 +113,7 @@ static int trs_gui_filename_cmp(char *name1, char *name2);
 static void trs_gui_quicksort(char **start, char **end, int (*sort_function) ());
 static void trs_gui_delete_filename_list(void);
 static int trs_gui_readdirectory(char *path, int browse_dir);
-static int trs_gui_input_string(char *title, char* input, char* output, int file);
+static int trs_gui_input_string(char *title, char* input, char* output, int limit, int file);
 static int trs_gui_display_popup(char* title, char **entry,
                           int entry_count, int selection);
 static int trs_gui_display_popup_matrix(char* title, char **entry,
@@ -834,7 +834,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
     return(current_first + selection);
 }
 
-int trs_gui_input_string(char *title, char* input, char* output, int file)
+int trs_gui_input_string(char *title, char* input, char* output, int limit, int file)
 {
   char directory_name[FILENAME_MAX];
   char partial_output[FILENAME_MAX];
@@ -847,9 +847,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
   int invert;
 
   strcpy(output, input);
-  input_length = strlen(input);
-  pos = input_length;
-  length = input_length;
+  pos = length = input_length = strlen(input);
   if (pos > (60-1))
     first_disp = pos-60;
   else
@@ -928,8 +926,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
           input_length = strlen(directory_name);
           strcpy(output, directory_name);
           strcat(output, partial_output);
-          length = strlen(output);
-          pos = length;
+          pos = length = strlen(output);
           if (pos > (60-1))
             first_disp = pos-60;
           else
@@ -939,7 +936,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int file)
         }
         break;
       default:
-        if (key >= 0x20 && key <= 0xFF) {
+        if (key >= 0x20 && key <= 0xFF && length < limit)  {
           for (i=length;i>pos;i--)
             output[i] = output[i-1];
           output[pos] = (char) key;
@@ -1195,7 +1192,7 @@ void trs_gui_hard_creation(void)
      switch(selection) {
        case 0:
          sprintf(input,"%6d",cylinder_count);
-         ret = trs_gui_input_string("Enter Cylinder Count",input,input,0);
+         ret = trs_gui_input_string("Enter Cylinder Count",input,input,3,0);
          if (!ret) {
            value = atoi(input);
            if (value >=3 && value <= 256) {
@@ -1210,7 +1207,7 @@ void trs_gui_hard_creation(void)
          break;
        case 1:
          sprintf(input,"%6d",sector_count);
-         ret = trs_gui_input_string("Enter Sector Count",input,input,0);
+         ret = trs_gui_input_string("Enter Sector Count",input,input,3,0);
          if (!ret) {
            value = atoi(input);
            if (value >=4 && value <= 256) {
@@ -1229,7 +1226,7 @@ void trs_gui_hard_creation(void)
          break;
        case 2:
          sprintf(input,"%6d",granularity);
-         ret = trs_gui_input_string("Enter Granularity",input,input,0);
+         ret = trs_gui_input_string("Enter Granularity",input,input,1,0);
          if (!ret) {
            value = atoi(input);
            if (value >= 1 && value <= 8) {
@@ -1241,7 +1238,7 @@ void trs_gui_hard_creation(void)
          break;
        case 3:
          sprintf(input,"%6d",dir_sector);
-         ret = trs_gui_input_string("Enter Directory Sector",input,input,0);
+         ret = trs_gui_input_string("Enter Directory Sector",input,input,3,0);
          if (!ret) {
            value = atoi(input);
            if (value >= 1 && value < cylinder_count) {
@@ -1274,7 +1271,7 @@ void trs_gui_hard_creation(void)
          filename[0] = 0;
          trs_expand_dir(trs_hard_dir, browse_dir);
          ret = trs_gui_input_string("Enter Filename, TAB selects directory",
-                                    browse_dir,filename, 1);
+                                    browse_dir,filename,FILENAME_MAX-1,1);
          if (ret)
            break;
          ret = trs_create_blank_hard(filename, cylinder_count, sector_count,
@@ -1361,7 +1358,7 @@ void trs_gui_disk_creation(void)
          filename[0] = 0;
          trs_expand_dir(trs_disk_dir, browse_dir);
          ret = trs_gui_input_string("Enter Filename, TAB selects directory",
-                                    browse_dir,filename, 1);
+                                    browse_dir,filename,FILENAME_MAX-1,1);
          if (ret)
            break;
          if (image_type == 0)
@@ -1420,7 +1417,7 @@ void trs_gui_cassette_creation(void)
          filename[0] = 0;
          trs_expand_dir(trs_cass_dir, browse_dir);
          ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                                    browse_dir,filename, 1);
+                                    browse_dir,filename,FILENAME_MAX-1,1);
          if (ret)
            break;
 
@@ -1657,7 +1654,7 @@ void trs_gui_disk_management(void)
          filename[0] = 0;
          trs_expand_dir(trs_disk_set_dir, browse_dir);
          ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                                    browse_dir,filename, 1);
+                                    browse_dir,filename,FILENAME_MAX-1,1);
          if (ret)
            break;
          strcat(filename,".set");
@@ -1724,7 +1721,7 @@ void trs_gui_hard_management(void)
          filename[0] = 0;
          trs_expand_dir(trs_disk_set_dir, browse_dir);
          ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                                    browse_dir,filename, 1);
+                                    browse_dir,filename,FILENAME_MAX-1,1);
          if (ret)
            break;
          strcat(filename,".set");
@@ -1777,7 +1774,7 @@ void trs_gui_cassette_management(void)
        case 1:
          sprintf(input,"%d",trs_get_cassette_position());
          ret = trs_gui_input_string("Enter Cassette Position in Bytes",
-                                    input,input, 0);
+                                    input,input, 10, 0);
          if (ret)
            break;
          value = atoi(input);
@@ -1787,7 +1784,7 @@ void trs_gui_cassette_management(void)
        case 2:
          sprintf(input,"%d",cassette_default_sample_rate);
          ret = trs_gui_input_string("Enter Cassette Default Sample Rate",
-                                    input,input ,0);
+                                    input,input, 10, 0);
          if (ret)
            break;
          value = atoi(input);
@@ -1864,25 +1861,25 @@ void trs_gui_display_management(void)
      switch(selection) {
        case 0:
          sprintf(input,"%06X",local_background);
-         ret = trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,0);
+         ret = trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,6,0);
          if (!ret)
            local_background = strtol(input, NULL, 16);
          break;
        case 1:
          sprintf(input,"%06X",local_foreground);
-         ret = trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,0);
+         ret = trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,6,0);
          if (!ret)
            local_foreground = strtol(input, NULL, 16);
          break;
        case 2:
          sprintf(input,"%06X",local_gui_background);
-         ret = trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)",input,input,0);
+         ret = trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)",input,input,6,0);
          if (!ret)
            local_gui_background = strtol(input, NULL, 16);
          break;
        case 3:
          sprintf(input,"%06X",local_gui_foreground);
-         ret = trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,0);
+         ret = trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,6,0);
          if (!ret)
            local_gui_foreground = strtol(input, NULL, 16);
          break;
@@ -1900,7 +1897,7 @@ void trs_gui_display_management(void)
          break;
        case 7:
          sprintf(input,"%d",gui_border_width);
-         ret = trs_gui_input_string("Enter Window border width, in pixels",input,input,0);
+         ret = trs_gui_input_string("Enter Window border width, in pixels",input,input,2,0);
          if (!ret)
            gui_border_width = atol(input);
          break;
@@ -2330,7 +2327,7 @@ void trs_gui_misc_management(void)
 		 break;
 	   case 2:
 		 sprintf(input,"%d", timer_overclock_rate);
-		 ret = trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,0);
+		 ret = trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0);
 		 if (!ret) {
 			 timer_overclock_rate =  atoi(input);
 			 if (timer_overclock_rate <= 0)
@@ -2339,7 +2336,7 @@ void trs_gui_misc_management(void)
 		 break;
 	   case 3:
          sprintf(input,"%d",stretch_amount);
-         ret = trs_gui_input_string("Enter Keystretch in Cycles",input,input,0);
+         ret = trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0);
          if (!ret)
            stretch_amount = atoi(input);
          break;
@@ -2350,7 +2347,7 @@ void trs_gui_misc_management(void)
          break;
        case 5:
          sprintf(input,"%2X",trs_uart_switches);
-         ret = trs_gui_input_string("Enter Serial Switches (Hex, XX)",input,input,0);
+         ret = trs_gui_input_string("Enter Serial Switches (Hex, XX)",input,input,2,0);
          if (!ret) {
            trs_uart_switches = strtol(input,NULL,16);
            trs_uart_init(0);
@@ -2358,7 +2355,7 @@ void trs_gui_misc_management(void)
          break;
        case 6:
          strcpy(input,trs_uart_name);
-         ret = trs_gui_input_string("Enter Serial Port Name",input,input,0);
+         ret = trs_gui_input_string("Enter Serial Port Name",input,input,FILENAME_MAX-1,0);
          if (!ret) {
            strcpy(trs_uart_name,input);
            trs_uart_init(0);
@@ -2414,7 +2411,7 @@ void trs_gui_printer_management(void)
          break;
        case 4:
          strcpy(input,trs_printer_command);
-         ret = trs_gui_input_string("Enter Printer Command",input,input,0);
+         ret = trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0);
          if (!ret) {
            strcpy(trs_printer_command,input);
            }
@@ -2699,7 +2696,7 @@ void trs_gui_write_config(void)
 
   trs_expand_dir(".",browse_dir);
   ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                              browse_dir,filename, 1);
+                              browse_dir,filename,FILENAME_MAX-1,1);
   if (ret)
     return;
   strcat(filename,".t8c");
@@ -2797,7 +2794,7 @@ void trs_gui_save_state(void)
   filename[0] = 0;
   trs_expand_dir(trs_state_dir, browse_dir);
   ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                              browse_dir,filename, 1);
+                              browse_dir,filename,FILENAME_MAX-1,1);
   if (ret)
     return;
   strcat(filename,".t8s");
