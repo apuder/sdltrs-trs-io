@@ -49,7 +49,7 @@
 /*
  * trs_sdl_interface.c
  *
- * SDL interface for TRS-80 simulator
+ * SDL interface for TRS-80 Emulator
  */
 
 #include <stdio.h>
@@ -1168,7 +1168,7 @@ void trs_screen_caption(int turbo)
     char title[80];
 
     if (trs_model == 5) {
-        sprintf(title,"TRS-80 Model 4p %s", turbo ? "Turbo" : "");
+        sprintf(title,"TRS-80 Model 4P %s", turbo ? "Turbo" : "");
     }
     else {
       sprintf(title,"TRS-80 Model %d %s",trs_model, turbo ? "Turbo" : "");
