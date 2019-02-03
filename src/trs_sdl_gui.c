@@ -2667,9 +2667,9 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F4: TRS-80 Model 4/4P CapsLock  Insert: TRS-80 Underscore   ", 2, 2, 0);
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  LeftAlt + +/-: Scale Window ", 2, 4, 0);
-  trs_gui_write_text("F7: Enter SDLTRS Main Menu      LeftAlt + Enter: Fullscreen ", 2, 5, 0);
+  trs_gui_write_text("F7/Alt + m: SDLTRS Main Menu    LeftAlt + Enter: Fullscreen ", 2, 5, 0);
   trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt + a/c/v: All/Copy/Paste ", 2, 6, 0);
-  trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
+  trs_gui_write_text("F9/Alt + z: Enter zbx debugger  Alt + d: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + h: Hard Disk Menu     ", 2, 8, 0);
   trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
   trs_gui_write_text("F12/Shift-F12: Save/Load State  Alt + l/s: Load/Save State  ", 2, 10, 0);
@@ -2712,10 +2712,10 @@ int trs_gui_read_config(void)
   trs_expand_dir(".",browse_dir);
   ret = trs_gui_file_browse(browse_dir, filename, 0," Configuration (.t8c) ");
   if (ret == -1)
-    return(ret);
+    return 0;
   trs_load_config_file(filename);
   trs_gui_new_machine();
-  return(0);
+  return 1;
 }
 
 static int trs_gui_config_management(void)
@@ -2735,7 +2735,6 @@ static int trs_gui_config_management(void)
    {"",0,-1}};
    int selection = 0;
    int done = 0;
-   int ret;
    int read = 0;
 
    while(!done) {
@@ -2748,11 +2747,11 @@ static int trs_gui_config_management(void)
          trs_gui_save_state();
          break;
        case 1:
-         trs_gui_load_state();
-         trs_screen_init(1);
-         grafyx_redraw();
-         done = 1;
-         read = 1;
+         if (trs_gui_load_state()) {
+           trs_screen_init(1);
+           grafyx_redraw();
+           done = read = 1;
+         }
          break;
        case 2:
          trs_model = local_trs_model;
@@ -2771,11 +2770,9 @@ static int trs_gui_config_management(void)
          trs_gui_write_config();
          break;
        case 3:
-         ret = trs_gui_read_config();
-         if (ret==-1)
-           break;
-         done = 1;
-         read = 1;
+         if (trs_gui_read_config()) {
+           done = read = 1;
+         }
          break;
        case -1:
          done = 1;
@@ -2801,7 +2798,7 @@ void trs_gui_save_state(void)
   trs_state_save(filename);
 }
 
-void trs_gui_load_state(void)
+int trs_gui_load_state(void)
 {
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
@@ -2810,8 +2807,9 @@ void trs_gui_load_state(void)
   trs_expand_dir(trs_state_dir,browse_dir);
   ret = trs_gui_file_browse(browse_dir, filename, 0," Saved State (.t8s) ");
   if (ret == -1)
-    return;
+    return 0;
   trs_state_load(filename);
+  return 1;
 }
 
 void trs_gui_save_or_load_single_state(int save)

@@ -405,7 +405,7 @@ static int num_options = sizeof(options)/sizeof(trs_opt);
 void bitmap_init();
 void trs_event_init();
 void trs_event();
-static void call_function(int function);
+static int call_function(int function);
 
 extern char *program_name;
 char *title;
@@ -1656,8 +1656,10 @@ char *trs_get_copy_data()
   return copy_data;
 }
 
-void call_function(int function)
+int call_function(int function)
 {
+  int ret = 0;
+
   if (function == PAUSE) {
     trs_paused = !trs_paused;
     if (!trs_paused)
@@ -1692,6 +1694,27 @@ void call_function(int function)
     case LOAD:
       trs_gui_load_single_state();
       break;
+    case DISK:
+      trs_gui_disk_management();
+      break;
+    case HARD:
+      trs_gui_hard_management();
+      break;
+    case TAPE:
+      trs_gui_cassette_management();
+      break;
+    case SAVE_STATE:
+      trs_gui_save_state();
+      break;
+    case LOAD_STATE:
+      trs_gui_load_state();
+      break;
+    case WRITE:
+      trs_gui_write_config();
+      break;
+    case READ:
+      ret = trs_gui_read_config();
+      break;
     }
     trs_pause_audio(0);
     SDL_EnableKeyRepeat(0,0);
@@ -1705,6 +1728,7 @@ void call_function(int function)
     UpdateMediaManagerInfo();
   }
 #endif
+  return ret;
 }
 
 /*
@@ -1719,7 +1743,6 @@ void trs_get_event(int wait)
   SDL_Event event;
   SDL_keysym keysym;
   Uint32 keyup;
-  int ret;
 
   if (trs_model > 1) {
     (void)trs_uart_check_avail();
@@ -1874,26 +1897,23 @@ void trs_get_event(int wait)
       /* Trap the menu keys here */
       if (keysym.mod & MENU_MOD) {
         switch (keysym.sym) {
-#ifdef MACOSX
         case SDLK_q:
           trs_exit(1);
           break;
+#ifdef MACOSX
         case SDLK_COMMA:
           trs_run_mac_prefs();
           trs_screen_refresh();
           trs_x_flush();
           break;
-#if 0
-        case SDLK_a:
-          ControlManagerAboutApp();
-          break;
-#endif
+/* Disabled for now
         case SDLK_h:
           ControlManagerHideApp();
           break;
         case SDLK_m:
           ControlManagerMiniturize();
           break;
+ */
         case SDLK_SLASH:
           ControlManagerShowHelp();
           break;
@@ -1914,13 +1934,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            trs_gui_disk_management();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
-            trs_screen_refresh();
-            trs_x_flush();
+            call_function(DISK);
           }
           break;
       case SDLK_h:
@@ -1930,13 +1944,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            trs_gui_hard_management();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
-            trs_screen_refresh();
-            trs_x_flush();
+            call_function(HARD);
           }
           break;
         case SDLK_t:
@@ -1946,13 +1954,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            trs_gui_cassette_management();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
-            trs_screen_refresh();
-            trs_x_flush();
+            call_function(TAPE);
           }
           break;
         case SDLK_s:
@@ -1962,13 +1964,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            trs_gui_save_state();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
-            trs_screen_refresh();
-            trs_x_flush();
+            call_function(SAVE_STATE);
           }
           break;
         case SDLK_k:
@@ -1983,11 +1979,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            trs_gui_load_state();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
+            call_function(LOAD_STATE);
             trs_screen_init(1);
             grafyx_redraw();
             trs_screen_refresh();
@@ -2001,13 +1993,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            trs_gui_write_config();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
-            trs_screen_refresh();
-            trs_x_flush();
+            call_function(WRITE);
           }
           break;
         case SDLK_r:
@@ -2017,12 +2003,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-            trs_pause_audio(1);
-            ret = trs_gui_read_config();
-            trs_pause_audio(0);
-            SDL_EnableKeyRepeat(0,0);
-            if (!ret) {
+            if (!call_function(READ)) {
               trs_screen_init(1);
               grafyx_redraw();
             }
@@ -2054,10 +2035,17 @@ void trs_get_event(int wait)
             trs_x_flush();
           }
           break;
+        case SDLK_j:
+          call_function(JOYGUI);
+        case SDLK_m:
+          call_function(GUI);
+          break;
         case SDLK_p:
-          trs_paused = !trs_paused;
-          if (!trs_paused)
-            trs_screen_refresh();
+          call_function(PAUSE);
+          break;
+        case SDLK_z:
+          if (!fullscreen)
+            trs_debug();
           break;
 #ifdef MACOSX
 		case SDLK_v:

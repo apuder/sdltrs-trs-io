@@ -28,14 +28,21 @@
 */
 
 #define N_JOYBUTTONS (20)
-#define GUI          (-10)
-#define KEYBRD       (-20)
-#define SAVE         (-30)
-#define LOAD         (-40)
-#define RESET        (-50)
-#define EXIT         (-60)
-#define PAUSE        (-70)
-#define JOYGUI       (-80)
+#define GUI          (1)
+#define KEYBRD       (2)
+#define SAVE         (3)
+#define LOAD         (4)
+#define RESET        (5)
+#define EXIT         (6)
+#define PAUSE        (7)
+#define JOYGUI       (8)
+#define DISK         (9)
+#define HARD         (10)
+#define TAPE         (11)
+#define SAVE_STATE   (12)
+#define LOAD_STATE   (13)
+#define READ         (14)
+#define WRITE        (15)
 
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;
@@ -47,7 +54,7 @@ void trs_gui_disk_management(void);
 void trs_gui_hard_management(void);
 void trs_gui_cassette_management(void);
 void trs_gui_save_state(void);
-void trs_gui_load_state(void);
+int  trs_gui_load_state(void);
 void trs_gui_write_config(void);
 int  trs_gui_read_config(void);
 void trs_gui_new_machine(void);
