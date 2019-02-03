@@ -4379,6 +4379,8 @@ void trs_z80_save(FILE *file)
   trs_save_uint16(file, &z80_state.de_prime.word, 1);
   trs_save_uint16(file, &z80_state.hl_prime.word, 1);
   trs_save_uchar(file, &z80_state.i, 1);
+  trs_save_uchar(file, &z80_state.iff1, 1);
+  trs_save_uchar(file, &z80_state.iff2, 1);
   trs_save_uchar(file, &z80_state.interrupt_mode, 1);
   trs_save_int(file,&z80_state.irq,1);
   trs_save_int(file,&z80_state.nmi,1);
@@ -4405,6 +4407,8 @@ void trs_z80_load(FILE *file)
   trs_load_uint16(file, &z80_state.de_prime.word, 1);
   trs_load_uint16(file, &z80_state.hl_prime.word, 1);
   trs_load_uchar(file, &z80_state.i, 1);
+  trs_load_uchar(file, &z80_state.iff1, 1);
+  trs_load_uchar(file, &z80_state.iff2, 1);
   trs_load_uchar(file, &z80_state.interrupt_mode, 1);
   trs_load_int(file,&z80_state.irq,1);
   trs_load_int(file,&z80_state.nmi,1);

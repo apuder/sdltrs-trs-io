@@ -89,8 +89,6 @@ Uchar *rom;
 int trs_rom_size;
 Uchar *video;
 int trs_video_size;
-Uchar rom_4[MAX_ROM_SIZE+1];
-Uchar video_4[MAX_VIDEO_SIZE+1];
 
 int memory_map = 0;
 int bank_offset[2];
@@ -900,41 +898,40 @@ Uchar *mem_pointer(int address, int writing)
 void trs_mem_save(FILE *file)
 {
   trs_save_uchar(file, memory, 0x200001);
+  trs_save_uchar(file, rom, MAX_ROM_SIZE+1);
+  trs_save_uchar(file, video, MAX_VIDEO_SIZE+1);
   trs_save_int(file, &trs_rom_size, 1);
   trs_save_int(file, &trs_video_size, 1);
-  trs_save_uchar(file, rom_4, MAX_ROM_SIZE+1);
-  trs_save_uchar(file, video_4, MAX_VIDEO_SIZE+1);
   trs_save_int(file, &memory_map, 1);
   trs_save_int(file, bank_offset, 2);
   trs_save_int(file, &video_offset, 1);
   trs_save_int(file, &romin, 1);
+  trs_save_uint32(file, &bank_base, 1);
+  trs_save_uchar(file, &mem_command, 1);
   trs_save_int(file, &huffman_ram, 1);
   trs_save_int(file, &hypermem, 1);
   trs_save_int(file, &supermem, 1);
   trs_save_int(file, &selector, 1);
+  trs_save_int(file, &selector_reg, 1);
 }
 
 void trs_mem_load(FILE *file)
 {
   trs_load_uchar(file, memory, 0x200001);
+  trs_load_uchar(file, rom, MAX_ROM_SIZE+1);
+  trs_load_uchar(file, video, MAX_VIDEO_SIZE+1);
   trs_load_int(file, &trs_rom_size, 1);
   trs_load_int(file, &trs_video_size, 1);
-  trs_load_uchar(file, rom_4, MAX_ROM_SIZE+1);
-  trs_load_uchar(file, video_4, MAX_VIDEO_SIZE+1);
   trs_load_int(file, &memory_map, 1);
   trs_load_int(file, bank_offset, 2);
   trs_load_int(file, &video_offset, 1);
   trs_load_int(file, &romin, 1);
+  trs_load_uint32(file, &bank_base, 1);
+  trs_load_uchar(file, &mem_command, 1);
   trs_load_int(file, &huffman_ram, 1);
   trs_load_int(file, &hypermem, 1);
   trs_load_int(file, &supermem, 1);
   trs_load_int(file, &selector, 1);
-  if (trs_model <= 3) {
-    rom = &memory[ROM_START];
-    video = &memory[VIDEO_START];
-  } else {
-    rom = rom_4;
-    video = video_4;
-  }
+  trs_load_int(file, &selector_reg, 1);
 }
 
