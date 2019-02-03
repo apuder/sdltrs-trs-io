@@ -86,33 +86,33 @@ static char help_message[] =
 "(zbx) commands:\n\
 \n\
 Running:\n\
-    run\n\
+    r(un)\n\
         Hard reset the Z80 and devices and commence execution.\n\
-    cont\n\
+    c(ont)\n\
         Continue execution.\n\
-    step\n\
+    s(tep)\n\
         Execute one instruction, disallowing all interrupts.\n\
-    stepint\n\
+    s(tep)i(nt)\n\
         Execute one instruction, allowing an interrupt afterwards.\n\
-    next\n\
-    nextint\n\
+    n(ext)\n\
+    n(ext)i(nt)\n\
         Execute one instruction.  If the instruction is a CALL, continue\n\
         until the return.  Interrupts are always allowed inside the call,\n\
         but only the nextint form allows an interrupt afterwards.\n\
-    reset\n\
+    re(set)\n\
         Hard reset the Z80 and devices.\n\
-    softreset\n\
+    s(oft)r(eset)\n\
         Press the system reset button.  On Model I/III, softreset resets the\n\
         devices and posts a nonmaskable interrupt to the CPU; on Model 4/4P,\n\
         softreset is the same as hard reset.\n\
 Printing:\n\
-    dump\n\
+    (dum)p\n\
         Print the values of the Z80 registers.\n\
     in <port>\n\
         Read the value of the given I/O port.\n\
-    list\n\
-    list <addr>\n\
-    list <start addr> , <end addr>\n\
+    l(ist)\n\
+    l(ist) <addr>\n\
+    l(ist) <start addr> , <end addr>\n\
         Disassemble 10 instructions at the current pc, 10 instructions at\n\
         the specified hex address, or the instructions in the range of hex\n\
         addresses.\n\
@@ -120,35 +120,37 @@ Printing:\n\
     <start addr> / <num bytes>\n\
     <addr> =\n\
         Print the memory values in the specified range.  All values are hex.\n\
-    traceon\n\
+    tr(ace)on\n\
         Enable tracing of all instructions.\n\
-    traceoff\n\
+    tr(ace)off\n\
         Disable tracing.\n\
-    diskdump\n\
+    d(isk)d(ump)\n\
         Print the state of the floppy disk controller emulation.\n\
 Traps:\n\
-    status\n\
+    st(atus)\n\
         Show all traps (breakpoints, tracepoints, watchpoints).\n\
-    clear\n\
+    cl(ear)\n\
         Delete the trap at the current address.\n\
-    delete <n>\n\
-    delete *\n\
+    d(elete) <n>\n\
+    d(elete) *\n\
         Delete trap n, or all traps.\n\
     stop at <address>\n\
-    break <address>\n\
+    b(reak) <address>\n\
         Set a breakpoint at the specified hex address.\n\
-    trace <address>\n\
+    t(race) <address>\n\
         Set a trap to trace execution at the specified hex address.\n\
     traceon at <address>\n\
+    tron <address>\n\
         Set a trap to enable tracing at the specified hex address.\n\
     traceoff at <address>\n\
+    troff <address>\n\
         Set a trap to disable tracing at the specified hex address.\n\
-    watch <address>\n\
+    w(atch) <address>\n\
         Set a trap to watch specified hex address for changes.\n\
 Miscellaneous:\n\
-    assign $<reg> = <value>\n\
-    assign I<port> = <value>\n\
-    assign <addr> = <value>\n\
+    a(ssign) $<reg> = <value>\n\
+    a(ssign) I<port> = <value>\n\
+    a(ssign) <addr> = <value>\n\
         Change the value of a register, register pair, I/O or memory byte.\n\
     timeroff\n\
     timeron\n\
@@ -159,12 +161,12 @@ Miscellaneous:\n\
         10=Phys sector sizes, 20=Readadr timing, 40=DMK, 80=ioctl errors.\n\
     iodebug <hexval>\n\
         Set I/O port debug flags to hexval: 1=port input, 2=port output.\n\
-    zbxinfo\n\
+    (zbx)i(nfo)\n\
         Display information about this debugger.\n\
-    help\n\
+    h(elp)\n\
     ?\n\
         Print this message.\n\
-    quit\n\
+    q(uit)\n\
         Exit from xtrs.\n";
 
 static struct
@@ -353,7 +355,7 @@ void debug_init()
 
     for(i = 0; i < MAX_TRAPS; ++i) trap_table[i].valid = 0;
 
-    DebugOutput("Type \"help\" for a list of commands.\n");
+    DebugOutput("Type \"h(elp)\" for a list of commands.\n");
 }
 
 static void print_memory(Ushort address, int num_bytes)
@@ -535,35 +537,37 @@ void debug_shell()
 
 	if(sscanf(input, "%s", command))
 	{
-	    if(!strcmp(command, "help") || !strcmp(command, "?"))
+	    if(!strcmp(command, "help") || !strcmp(command, "?") ||
+	       !strcmp(command, "h"))
 	    {
 		DebugOutput("%s", help_message);
 	    }
-	    else if (!strcmp(command, "zbxinfo"))
+	    else if (!strcmp(command, "zbxinfo") || !strcmp(command, "i"))
 	    {
 		show_zbxinfo();
 	    }
-	    else if(!strcmp(command, "clear"))
+	    else if(!strcmp(command, "clear") || !strcmp(command, "cl"))
 	    {
 		clear_trap_address(REG_PC, 0);
 	    }
-	    else if(!strcmp(command, "cont"))
+	    else if(!strcmp(command, "cont") || !strcmp(command, "c"))
 	    {
 		debug_run();
 	    }
-	    else if(!strcmp(command, "dump"))
+	    else if(!strcmp(command, "dump") || !strcmp(command, "p"))
 	    {
 		debug_print_registers();
 	    }
-	    else if(!strcmp(command, "delete"))
+	    else if(!strcmp(command, "delete") || !strcmp(command, "d"))
 	    {
 		int i;
 
-		if(!strncmp(input, "delete *", 8))
+		if(!strncmp(input, "delete *", 8) || !strncmp(input, "d *", 3))
 		{
 		    clear_all_traps();
 		}
-		else if(sscanf(input, "delete %d", &i) != 1)
+		else if(sscanf(input, "delete %d", &i) != 1 &&
+			sscanf(input, "d %d", &i) != 1)
 		{
 		    DebugOutput("A trap must be specified.\n");
 		}
@@ -572,19 +576,21 @@ void debug_shell()
 		    clear_trap(i);
 		}
 	    }
-	    else if(!strcmp(command, "list"))
+	    else if(!strcmp(command, "list") || !strcmp(command, "l"))
 	    {
 		int x, y;
 		Ushort start, old_start;
 		int bytes = 0;
 		int lines = 0;
 
-		if(sscanf(input, "list %x , %x", &x, &y) == 2)
+		if(sscanf(input, "list %x , %x", &x, &y) == 2 ||
+		   sscanf(input, "l %x , %x", &x, &y) == 2)
 		{
 		    start = x;
 		    bytes = (y - x) & 0xffff;
 		}
-		else if(sscanf(input, "list %x", &x) == 1)
+		else if(sscanf(input, "list %x", &x) == 1 ||
+			sscanf(input, "l %x", &x) == 1)
 		{
 		    start = x;
 		    lines = 10;
@@ -619,7 +625,8 @@ void debug_shell()
 		else
 			printf("A port must be specified.\n");
 	    }
-	    else if(!strcmp(command, "next") || !strcmp(command, "nextint"))
+	    else if(!strcmp(command, "next") || !strcmp(command, "nextint") ||
+		    !strcmp(command, "n") || !strcmp(command, "ni"))
 	    {
 		int is_call = 0, is_rst = 0;
 		switch(mem_read(REG_PC)) {
@@ -670,34 +677,35 @@ void debug_shell()
 		    set_trap((REG_PC + 1) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
 		    debug_run();
 		} else {
-		    z80_run((!strcmp(command, "nextint")) ? 0 : -1);
+		    z80_run((!strcmp(command, "nextint") || !strcmp(command, "ni")) ? 0 : -1);
 		}
 	    }
-	    else if(!strcmp(command, "quit"))
+	    else if(!strcmp(command, "quit") || !strcmp(command, "q"))
 	    {
 		done = 1;
 	    }
-	    else if(!strcmp(command, "reset"))
+	    else if(!strcmp(command, "reset") || !strcmp(command, "re"))
 	    {
 		DebugOutput("Performing hard reset.");
 		trs_reset(1);
 	    }
-	    else if(!strcmp(command, "softreset"))
+	    else if(!strcmp(command, "softreset") || !strcmp(command, "sr"))
 	    {
 		DebugOutput("Pressing reset button.");
 		trs_reset(0);
 	    }
-	    else if(!strcmp(command, "run"))
+	    else if(!strcmp(command, "run") || !strcmp(command, "r"))
 	    {
 		DebugOutput("Performing hard reset and running.\n");
 		trs_reset(1);
 		debug_run();
 	    }
-	    else if(!strcmp(command, "status"))
+	    else if(!strcmp(command, "status") || !strcmp(command, "st"))
 	    {
 		print_traps();
 	    }
-	    else if(!strcmp(command, "set") || !strcmp(command, "assign"))
+	    else if(!strcmp(command, "set") || !strcmp(command, "assign") ||
+		    !strcmp(command, "a"))
 	    {
 		char regname[MAXLINE];
 		int addr, value;
@@ -760,49 +768,53 @@ void debug_shell()
 		}
 		else
 		{
-		    DebugOutput("Syntax error.  (Type \"help\" for commands.)\n");
+		    DebugOutput("Syntax error.  (Type \"h(elp)\" for commands.)\n");
 		}
 	    }
-	    else if(!strcmp(command, "step"))
+	    else if(!strcmp(command, "step") || !strcmp(command, "s"))
 	    {
 		z80_run(-1);
 	    }
-	    else if(!strcmp(command, "stepint"))
+	    else if(!strcmp(command, "stepint") || !strcmp(command, "si"))
 	    {
 		z80_run(0);
 	    }
-	    else if(!strcmp(command, "stop") || !strcmp(command, "break"))
+	    else if(!strcmp(command, "stop") || !strcmp(command, "break") ||
+		    !strcmp(command, "b"))
 	    {
 		int address;
 
 		if(sscanf(input, "stop at %x", &address) != 1 &&
-		   sscanf(input, "break %x", &address) != 1)
+		   sscanf(input, "break %x", &address) != 1 &&
+		   sscanf(input, "b %x", &address) != 1)
 		{
 		    address = REG_PC;
 		}
 		address %= ADDRESS_SPACE;
 		set_trap(address, BREAKPOINT_FLAG);
 	    }
-	    else if(!strcmp(command, "trace"))
+	    else if(!strcmp(command, "trace") || !strcmp(command, "t"))
 	    {
 		int address;
 
-		if(sscanf(input, "trace %x", &address) != 1)
+		if(sscanf(input, "trace %x", &address) != 1 &&
+		   sscanf(input, "t %x", &address) != 1)
 		{
 		    address = REG_PC;
 		}
 		address %= ADDRESS_SPACE;
 		set_trap(address, TRACE_FLAG);
 	    }
-	    else if(!strcmp(command, "untrace"))
+	    else if(!strcmp(command, "untrace") || !strcmp(command, "u"))
 	    {
 		DebugOutput("Untrace not implemented.\n");
 	    }
-	    else if(!strcmp(command, "traceon"))
+	    else if(!strcmp(command, "traceon") || !strcmp(command, "tron"))
 	    {
 		int address;
 
-		if(sscanf(input, "traceon at %x", &address) == 1)
+		if(sscanf(input, "traceon at %x", &address) == 1 ||
+		   sscanf(input, "tron %x", &address) == 1)
 		{
 		    set_trap(address, DISASSEMBLE_ON_FLAG);
 		}
@@ -812,11 +824,12 @@ void debug_shell()
 		    DebugOutput("Tracing enabled.\n");
 		}
 	    }
-	    else if(!strcmp(command, "traceoff"))
+	    else if(!strcmp(command, "traceoff") || !strcmp(command, "troff"))
 	    {
 		int address;
 
-		if(sscanf(input, "traceoff at %x", &address) == 1)
+		if(sscanf(input, "traceoff at %x", &address) == 1 ||
+		   sscanf(input, "troff %x", &address) == 1)
 		{
 		    set_trap(address, DISASSEMBLE_OFF_FLAG);
 		}
@@ -826,11 +839,12 @@ void debug_shell()
 		    DebugOutput("Tracing disabled.\n");
 		}
 	    }
-	    else if(!strcmp(command, "watch"))
+	    else if(!strcmp(command, "watch") || !strcmp(command, "w"))
 	    {
 		int address;
 
-		if(sscanf(input, "watch %x", &address) == 1)
+		if(sscanf(input, "watch %x", &address) == 1 ||
+		   sscanf(input, "w %x", &address) == 1)
 		{
 		    address %= ADDRESS_SPACE;
 		    set_trap(address, WATCHPOINT_FLAG);
@@ -846,7 +860,7 @@ void debug_shell()
 	        /* Turn off emulated real time clock interrupt */
 	        trs_timer_on();
             }
-	    else if(!strcmp(command, "diskdump"))
+	    else if(!strcmp(command, "diskdump") || !strcmp(command, "dd"))
 	    {
 		trs_disk_debug();
 	    }
@@ -878,7 +892,7 @@ void debug_shell()
 		}
 		else
 		{
-		    DebugOutput("Syntax error.  (Type \"help\" for commands.)\n");
+		    DebugOutput("Syntax error.  (Type \"h(elp)\" for commands.)\n");
 		}
 	    }
 	}
