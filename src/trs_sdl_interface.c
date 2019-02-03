@@ -1834,7 +1834,10 @@ void trs_get_event(int wait)
         keysym.sym = 0;
         break;
       case SDLK_F12:
-        call_function(JOYGUI);
+        if (keysym.mod & KMOD_SHIFT)
+          call_function(LOAD);
+        else
+          call_function(SAVE);
         keysym.unicode = 0;
         keysym.sym = 0;
         break;

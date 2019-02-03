@@ -2672,7 +2672,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F9: Enter the debugger (zbx)    Alt + d: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + h: Hard Disk Menu     ", 2, 8, 0);
   trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
-  trs_gui_write_text("F12: Enter Joystick GUI Menu    Alt + l/s: Load/Save State  ", 2, 10, 0);
+  trs_gui_write_text("F12/Shift-F12: Save/Load State  Alt + l/s: Load/Save State  ", 2, 10, 0);
   trs_gui_write_text("ESC: TRS-80 Break Key           Alt + r/w: Read/Write Config", 2, 11, 0);
   trs_gui_write_text("Home/Clear: TRS-80 Clear Key    Alt + p: Pause the Emulator ", 2, 12, 0);
   trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Alt + 0-9: Insert Disk Drive", 2, 13, 0);
