@@ -1874,14 +1874,24 @@ void trs_gui_display_management(void)
        case 2:
          sprintf(input,"%06X",local_gui_background);
          ret = trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)",input,input,6,0);
-         if (!ret)
+         if (!ret) {
            local_gui_background = strtol(input, NULL, 16);
+           if (local_gui_background != gui_background) {
+             gui_background = local_gui_background;
+             trs_screen_init(0);
+           }
+         }
          break;
        case 3:
          sprintf(input,"%06X",local_gui_foreground);
          ret = trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,6,0);
-         if (!ret)
+         if (!ret) {
            local_gui_foreground = strtol(input, NULL, 16);
+           if (local_gui_foreground != gui_foreground) {
+             gui_foreground = local_gui_foreground;
+             trs_screen_init(0);
+           }
+         }
          break;
        case 4:
          charset1_selection = trs_gui_display_popup("Charset Model 1",font1_choices,5,
@@ -2995,8 +3005,6 @@ void trs_gui(void)
            (trs_charset4 != local_trs_charset4) ||
            (foreground != local_foreground) ||
            (background != local_background) ||
-           (gui_foreground != local_gui_foreground) ||
-           (gui_background != local_gui_background) ||
            (gui_show_led != trs_show_led) ||
            (gui_resize3 != resize3) ||
            (gui_resize4 != resize4) ||
@@ -3007,8 +3015,6 @@ void trs_gui(void)
     trs_charset4 = local_trs_charset4;
     foreground = local_foreground;
     background = local_background;
-    gui_foreground = local_gui_foreground;
-    gui_background = local_gui_background;
     trs_show_led = gui_show_led;
     resize3 = gui_resize3;
     resize4 = gui_resize4;
