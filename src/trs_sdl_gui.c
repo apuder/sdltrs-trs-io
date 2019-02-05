@@ -127,11 +127,8 @@ static void trs_gui_disk_sizes(void);
 static void trs_gui_disk_steps(void);
 #endif
 static void trs_gui_disk_options(void);
-static void trs_gui_display_management(void);
 static void trs_gui_joystick_management(void);
-static void trs_gui_misc_management(void);
 static void trs_gui_printer_management(void);
-static void trs_gui_model(void);
 static void trs_gui_default_dirs(void);
 static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
@@ -140,6 +137,7 @@ static char *trs_gui_get_key_name(int key);
 static int trs_gui_virtual_keyboard(void);
 static int trs_gui_display_question(char *text);
 void trs_gui_keys_sdltrs(void);
+void trs_gui_model(void);
 int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text_len(char *text, int len, int x, int y, int invert)
@@ -1835,13 +1833,24 @@ void trs_gui_display_management(void)
                                "       international",
                                "                bold"};
 
+   local_trs_charset1 = trs_charset1;
+   local_trs_charset3 = trs_charset3;
+   local_trs_charset4 = trs_charset4;
+   local_foreground = foreground;
+   local_background = background;
+   local_gui_foreground = gui_foreground;
+   local_gui_background = gui_background;
+   gui_show_led = trs_show_led;
+   gui_resize3 = resize3;
+   gui_resize4 = resize4;
+   gui_border_width = window_border_width;
+
    if (local_trs_charset1 == 10)
      charset1_selection = 4;
    else
      charset1_selection = local_trs_charset1;
    charset3_selection = local_trs_charset3 - 4;
    charset4_selection = local_trs_charset4 - 7;
-
 
    while(!done) {
      trs_gui_clear_screen();
@@ -1928,12 +1937,37 @@ void trs_gui_display_management(void)
          break;
      }
   }
+
   if (charset1_selection == 4)
     local_trs_charset1 = 10;
   else
     local_trs_charset1 = charset1_selection;
   local_trs_charset3 = charset3_selection+4;
   local_trs_charset4 = charset4_selection+7;
+
+  if ((trs_charset1 != local_trs_charset1) ||
+      (trs_charset3 != local_trs_charset3) ||
+      (trs_charset4 != local_trs_charset4) ||
+      (foreground != local_foreground) ||
+      (background != local_background) ||
+      (gui_show_led != trs_show_led) ||
+      (gui_resize3 != resize3) ||
+      (gui_resize4 != resize4) ||
+      (gui_border_width != window_border_width))
+  {
+    trs_charset1 = local_trs_charset1;
+    trs_charset3 = local_trs_charset3;
+    trs_charset4 = local_trs_charset4;
+    foreground = local_foreground;
+    background = local_background;
+    trs_show_led = gui_show_led;
+    resize3 = gui_resize3;
+    resize4 = gui_resize4;
+    window_border_width = gui_border_width;
+    trs_screen_init(0);
+    grafyx_redraw();
+    trs_gui_refresh();
+  }
 }
 
 int trs_gui_joystick_get_button(void)
@@ -2455,6 +2489,8 @@ void trs_gui_model(void)
    int done = 0;
    int state;
 
+   local_trs_model = trs_model;
+
    while(!done) {
      trs_gui_clear_screen();
      switch(local_trs_model) {
@@ -2478,7 +2514,7 @@ void trs_gui_model(void)
      strcpy(&model_menu[6].title[45],on_off_choices[supermem]);
      strcpy(&model_menu[7].title[45],on_off_choices[selector]);
 
-     selection = trs_gui_display_menu("SDLTRS Model/Graphic/Memory Selection Menu",model_menu, selection);
+     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu",model_menu, selection);
      switch(selection) {
        case -1:
          done = 1;
@@ -2539,6 +2575,10 @@ void trs_gui_model(void)
           supermem = 0;
          break;
      }
+  }
+  if (trs_model != local_trs_model) {
+    trs_model = local_trs_model;
+    trs_gui_new_machine();
   }
 }
 
@@ -2757,39 +2797,22 @@ static int trs_gui_config_management(void)
          trs_gui_save_state();
          break;
        case 1:
-         if (trs_gui_load_state()) {
-           trs_screen_init(1);
-           grafyx_redraw();
+         if (trs_gui_load_state())
            done = read = 1;
-         }
          break;
        case 2:
-         trs_model = local_trs_model;
-         trs_charset1 = local_trs_charset1;
-         trs_charset3 = local_trs_charset3;
-         trs_charset4 = local_trs_charset4;
-         foreground = local_foreground;
-         background = local_background;
-         gui_foreground = local_gui_foreground;
-         gui_background = local_gui_background;
-         trs_show_led = gui_show_led;
-         resize3 = gui_resize3;
-         resize4 = gui_resize4;
-         window_border_width = gui_border_width;
-         trs_joystick_num = gui_joystick_num;
          trs_gui_write_config();
          break;
        case 3:
-         if (trs_gui_read_config()) {
+         if (trs_gui_read_config())
            done = read = 1;
-         }
          break;
        case -1:
          done = 1;
          break;
      }
-  }
-  return(read);
+   }
+   return(read);
 }
 
 void trs_gui_save_state(void)
@@ -2886,19 +2909,28 @@ void trs_gui(void)
    {"Floppy Disk Management (CMD-D)",MENU_NORMAL_TYPE,1},
    {"Hard Disk Management   (CMD-H)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (CMD-T)",MENU_NORMAL_TYPE,3},
+   {"Emulator Settings      (CMD-E)",MENU_NORMAL_TYPE,4},
 #else
    {"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE,1},
    {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE,2},
    {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE,3},
+   {"Emulator Settings      (ALT-E)",MENU_NORMAL_TYPE,4},
 #endif
-   {"TRS-80 Model/Graphics/Memory Selection",MENU_NORMAL_TYPE,4},
    {"Configuration/State File Management",MENU_NORMAL_TYPE,5},
    {"Printer Management",MENU_NORMAL_TYPE,6},
    {"Select Default Directories",MENU_NORMAL_TYPE,7},
    {"ROM File Selection",MENU_NORMAL_TYPE,8},
-   {"Display Settings",MENU_NORMAL_TYPE,9},
+#ifdef MACOSX
+   {"Display Settings       (CMD-I)",MENU_NORMAL_TYPE,9},
+#else
+   {"Display Settings       (ALT-I)",MENU_NORMAL_TYPE,9},
+#endif
    {"Joystick Settings",MENU_NORMAL_TYPE,10},
-   {"Miscellaneous Settings",MENU_NORMAL_TYPE,11},
+#ifdef MACOSX
+   {"Miscellaneous Settings (CMD-O)",MENU_NORMAL_TYPE,11},
+#else
+   {"Miscellaneous Settings (ALT-O)",MENU_NORMAL_TYPE,11},
+#endif
    {"About SDLTRS",MENU_NORMAL_TYPE,12},
 #ifdef MACOSX
    {"Keys in SDLTRS         (CMD-K)",MENU_NORMAL_TYPE,13},
@@ -2909,18 +2941,6 @@ void trs_gui(void)
    int selection = 0;
    int done = 0;
 
-   local_trs_model = trs_model;
-   local_trs_charset1 = trs_charset1;
-   local_trs_charset3 = trs_charset3;
-   local_trs_charset4 = trs_charset4;
-   local_foreground = foreground;
-   local_background = background;
-   local_gui_foreground = gui_foreground;
-   local_gui_background = gui_background;
-   gui_show_led = trs_show_led;
-   gui_resize3 = resize3;
-   gui_resize4 = resize4;
-   gui_border_width = window_border_width;
    gui_keypad_joystick = trs_keypad_joystick;
    gui_joystick_num = trs_joystick_num;
 
@@ -2983,44 +3003,6 @@ void trs_gui(void)
   if (trs_joystick_num != gui_joystick_num) {
     trs_joystick_num = gui_joystick_num;
     trs_open_joystick();
-  }
-
-  if (trs_model != local_trs_model) {
-    trs_model = local_trs_model;
-    trs_charset1 = local_trs_charset1;
-    trs_charset3 = local_trs_charset3;
-    trs_charset4 = local_trs_charset4;
-    foreground = local_foreground;
-    background = local_background;
-    gui_foreground = local_gui_foreground;
-    gui_background = local_gui_background;
-    trs_show_led = gui_show_led;
-    resize3 = gui_resize3;
-    resize4 = gui_resize4;
-    window_border_width = gui_border_width;
-    trs_gui_new_machine();
-  }
-  else if ((trs_charset1 != local_trs_charset1) ||
-           (trs_charset3 != local_trs_charset3) ||
-           (trs_charset4 != local_trs_charset4) ||
-           (foreground != local_foreground) ||
-           (background != local_background) ||
-           (gui_show_led != trs_show_led) ||
-           (gui_resize3 != resize3) ||
-           (gui_resize4 != resize4) ||
-           (gui_border_width != window_border_width))
-  {
-    trs_charset1 = local_trs_charset1;
-    trs_charset3 = local_trs_charset3;
-    trs_charset4 = local_trs_charset4;
-    foreground = local_foreground;
-    background = local_background;
-    trs_show_led = gui_show_led;
-    resize3 = gui_resize3;
-    resize4 = gui_resize4;
-    window_border_width = gui_border_width;
-    trs_screen_init(1);
-    grafyx_redraw();
   }
 }
 

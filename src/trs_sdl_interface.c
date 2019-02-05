@@ -80,7 +80,8 @@ extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 
 extern void trs_gui_load_single_state(void);
 extern void trs_gui_save_single_state(void);
-
+extern void trs_gui_keys_sdltrs(void);
+extern void trs_gui_model(void);
 extern int trs_timer_is_turbo(void);
 extern int trs_timer_switch_turbo(void);
 
@@ -186,8 +187,6 @@ static int selectionStartY = 0;
 static int selectionEndX = 0;
 static int selectionEndY = 0;
 int requestSelectAll = FALSE;
-
-extern void trs_gui_keys_sdltrs(void);
 
 /* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
 
@@ -1715,6 +1714,15 @@ int call_function(int function)
     case READ:
       ret = trs_gui_read_config();
       break;
+    case EMULATOR:
+      trs_gui_model();
+      break;
+    case INTERFACE:
+      trs_gui_display_management();
+      break;
+    case OTHER:
+      trs_gui_misc_management();
+      break;
     }
     trs_pause_audio(0);
     SDL_EnableKeyRepeat(0,0);
@@ -2003,7 +2011,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            if (!call_function(READ)) {
+            if (call_function(READ)) {
               trs_screen_init(1);
               grafyx_redraw();
             }
@@ -2035,10 +2043,20 @@ void trs_get_event(int wait)
             trs_x_flush();
           }
           break;
+        case SDLK_e:
+          call_function(EMULATOR);
+          break;
+        case SDLK_i:
+          call_function(INTERFACE);
+          break;
         case SDLK_j:
           call_function(JOYGUI);
+          break;
         case SDLK_m:
           call_function(GUI);
+          break;
+        case SDLK_o:
+          call_function(OTHER);
           break;
         case SDLK_p:
           call_function(PAUSE);
