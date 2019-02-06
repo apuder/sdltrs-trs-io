@@ -1,9 +1,21 @@
-This is a modified version of Mark Grebe's [sdltrs] with patches by [EtchedPixels] for
-running [FUZIX] and some bug fixes ...
+Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
+[EtchedPixels] for running [FUZIX]
 
 ![screenshot](fuzix.png)
 ![screenshot](fuzix2.png)
 
+## Changes
+
+  * Included all patches by Alan Cox: support for banked memory, Lowe LE18 ...
+  * Fixed various SegFaults: ROM Selection Menu, Scaling in Fullscreen ...
+  * Reworked the Interface: new shortcut keys and key bindings, help screen ...
+  * Ctrl-A, Ctrl-C & Ctrl-V can now be used in the Emulator (CP/M & WordStar)
+  * Tried to fix reported bugs to the original version ...
+
+## Todo
+
+  * The MacOSX port (GUI) is not yet updated and tested ...
+
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
 [FUZIX]: https://www.github.com/EtchedPixels/FUZIX
-[sdltrs]: http://sdltrs.sourceforge.net/
+[SDLTRS]: http://sdltrs.sourceforge.net
