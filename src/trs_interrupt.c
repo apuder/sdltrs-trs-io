@@ -341,13 +341,21 @@ trs_nmi_mask_write(unsigned char value)
   if (!z80_state.nmi) z80_state.nmi_seen = 0;
 }
 
+#if SUSPEND_DELAY
 static int saved_delay;
 
 /* Temporarily reduce the delay, until trs_restore_delay is called.
    Useful if we know we're about to do something that's emulated more
    slowly than most instructions, such as video or real-time sound.
    In case the boost is too big or too small, we allow the normal
-   autodelay algorithm to continue to run and adjust the new delay. */
+   autodelay algorithm to continue to run and adjust the new delay.
+
+   XXX This heuristic seems to have been doing more harm than good, at
+   least on modern fast systems.  Disabled for now.  Would be nice to
+   find a better way to do something like this.  Note: despite the
+   above comment, the code is called only from sound start/stop, not
+   anything to do with video.
+ */
 void
 trs_suspend_delay()
 {
@@ -366,6 +374,10 @@ trs_restore_delay()
     saved_delay = 0;
   }
 }
+#else
+void trs_suspend_delay() { }
+void trs_restore_delay() { }
+#endif
 
 #define UP_F   1.50
 #define DOWN_F 0.50
@@ -563,7 +575,9 @@ void trs_interrupt_save(FILE *file)
   trs_save_int(file, &timer_hz, 1);
   trs_save_uint32(file, &cycles_per_timer, 1);
   trs_save_int(file, &timer_on, 1);
+#if SUSPEND_DELAY
   trs_save_int(file, &saved_delay, 1);
+#endif
   if (event_func == (trs_event_func) assert_state)
     event = 1;
   else if (event_func == transition_out)
@@ -606,7 +620,9 @@ void trs_interrupt_load(FILE *file)
   trs_load_int(file, &timer_hz, 1);
   trs_load_uint32(file, &cycles_per_timer, 1);
   trs_load_int(file, &timer_on, 1);
+#if SUSPEND_DELAY
   trs_load_int(file, &saved_delay, 1);
+#endif
   trs_load_int(file, &event, 1);
   switch(event) {
   case 1:

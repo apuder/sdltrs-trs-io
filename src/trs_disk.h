@@ -74,7 +74,6 @@ extern int trs_disk_truedam;
 #define JV3 3 /* compatible with Vavasour Model III/4 emulator */
 #define DMK 4 /* compatible with Keil Model III/4 emulator */
 #define REAL 100 /* real floppy drive, PC controller */
-#define CATW 101 /* real floppy drive, Catweasel controller (future) */
 #define NONE 0
 
 /* Values for trs_disk_doubler flag word */

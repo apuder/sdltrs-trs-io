@@ -915,7 +915,7 @@ trs_disk_insert(int drive, char *diskname)
 
     /* Read first block of ids */
     fseek(d->file, JV3_IDSTART, 0);
-    fread((void*)&d->u.jv3.id[0], 3, JV3_SECSPERBLK, d->file);
+    n = fread((void*)&d->u.jv3.id[0], 3, JV3_SECSPERBLK, d->file);
 
     /* Scan to find their offsets */
     ofst = JV3_SECSTART;
@@ -955,8 +955,8 @@ trs_disk_insert(int drive, char *diskname)
   } else if (d->emutype == DMK) {
     fseek(d->file, DMK_NTRACKS, 0);
     d->u.dmk.ntracks = (unsigned char) getc(d->file);
-    d->u.dmk.tracklen = (unsigned char) getc(d->file) +
-      (((unsigned char) getc(d->file)) << 8);
+    d->u.dmk.tracklen = (unsigned char) getc(d->file);
+    d->u.dmk.tracklen += ((unsigned char) getc(d->file)) << 8;
     c = getc(d->file);
     d->u.dmk.nsides = (c & DMK_SSIDE_OPT) ? 1 : 2;
     d->u.dmk.sden = (c & DMK_SDEN_OPT) != 0;
@@ -2416,9 +2416,9 @@ trs_disk_command_write(unsigned char cmd)
 
   case TRSDISK_READ:
     if (trs_disk_debug_flags & DISKDEBUG_FDCCMD) {
-      debug("read 0x%02x drv %d ptk %d tk %d sec %d %sden\n", cmd,
-	    state.curdrive, d->phytrack, state.track, state.sector,
-	    state.density ? "d" : "s");
+      debug("read 0x%02x drv %d sid %d ptk %d tk %d sec %d %sden\n", cmd,
+	    state.curdrive, state.curside, d->phytrack,
+	    state.track, state.sector, state.density ? "d" : "s");
     }
     state.last_readadr = -1;
     state.status = 0;
@@ -2619,9 +2619,9 @@ trs_disk_command_write(unsigned char cmd)
 
   case TRSDISK_WRITE:
     if (trs_disk_debug_flags & DISKDEBUG_FDCCMD) {
-      debug("write 0x%02x drv %d ptk %d tk %d sec %d %sden\n",
-	    cmd, state.curdrive, d->phytrack, state.track, state.sector,
-	    state.density ? "d" : "s");
+      debug("write 0x%02x drv %d sid %d ptk %d tk %d sec %d %sden\n",
+	    cmd, state.curdrive, state.curside, d->phytrack,
+	    state.track, state.sector, state.density ? "d" : "s");
     }
     state.last_readadr = -1;
     state.status = 0;
@@ -2846,8 +2846,8 @@ trs_disk_command_write(unsigned char cmd)
 
   case TRSDISK_READADR:
     if (trs_disk_debug_flags & DISKDEBUG_FDCCMD) {
-      debug("readadr 0x%02x drv %d ptk %d tk %d last %d %sden\n",
-	    cmd, state.curdrive, d->phytrack, state.track,
+      debug("readadr 0x%02x drv %d sid %d ptk %d tk %d last %d %sden\n",
+	    cmd, state.curdrive, state.curside, d->phytrack, state.track,
 	    state.last_readadr, state.density ? "d" : "s");
     }
     state.data = 0; /* workaround for apparent SU1 bug */
@@ -3015,8 +3015,8 @@ trs_disk_command_write(unsigned char cmd)
 
   case TRSDISK_READTRK:
     if (trs_disk_debug_flags & DISKDEBUG_FDCCMD) {
-      debug("readtrk 0x%02x drv %d ptk %d tk %d %sden\n",
-	    cmd, state.curdrive, d->phytrack, state.track,
+      debug("readtrk 0x%02x drv %d sid %d ptk %d tk %d %sden\n",
+	    cmd, state.curdrive, state.curside, d->phytrack, state.track,
 	    state.density ? "d" : "s");
     }
     state.last_readadr = -1;
@@ -3060,8 +3060,8 @@ trs_disk_command_write(unsigned char cmd)
       }
     } else {
       if (trs_disk_debug_flags & DISKDEBUG_FDCCMD) {
-	debug("writetrk 0x%02x drv %d ptk %d tk %d %sden\n",
-	      cmd, state.curdrive, d->phytrack, state.track,
+	debug("writetrk 0x%02x drv %d sid %d ptk %d tk %d %sden\n",
+	      cmd, state.curdrive, state.curside, d->phytrack, state.track,
 	      state.density ? "d" : "s");
       }
       /* Yes; a real write track */
