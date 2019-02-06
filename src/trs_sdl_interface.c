@@ -1181,10 +1181,14 @@ void trs_screen_init(int gui_init)
   int i;
 
   copyStatus = COPY_IDLE;
-  if (trs_model == 1)
+  if (trs_model == 1) {
     trs_charset = trs_charset1;
-  else if (trs_model == 3)
+    currentmode = NORMAL;
+  }
+  else if (trs_model == 3) {
     trs_charset = trs_charset3;
+    currentmode = NORMAL;
+  }
   else
     trs_charset = trs_charset4;
 
