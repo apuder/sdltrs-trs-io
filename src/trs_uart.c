@@ -95,15 +95,13 @@ static struct {
 #endif
 } uart;
 
+#ifndef _WIN32
 static int trs_uart_wordbits[] = TRS_UART_WORDBITS_TABLE;
 static float trs_uart_baud[] = TRS_UART_BAUD_TABLE;
 
 static int
 xlate_baud(int trs_baud)
 {
-#ifdef _WIN32
-  return 0;
-#else
   switch (trs_baud) {
   case TRS_UART_50:
     return B50;
@@ -152,13 +150,15 @@ xlate_baud(int trs_baud)
     return B19200;
   }
   return B0;  /* not reached */
-#endif
 }
+#endif
 
 void
 trs_uart_init(int reset_button)
 {
+#ifndef _WIN32
   int err;
+#endif
 #if UARTDEBUG
   debug("trs_uart_init\n");
 #endif
@@ -255,8 +255,10 @@ trs_uart_switches_in()
 void
 trs_uart_baud_out(int value)
 {
+#ifndef _WIN32
   int err;
   int bits;
+#endif
 #if UARTDEBUG
   debug("trs_uart_baud_out 0x%02x\n", value);
 #endif

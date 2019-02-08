@@ -1,9 +1,10 @@
 #include "windows.h"
 
 extern int trs_paste_started();
+extern void trs_end_copy();
 
 static int charCount = 0;
-static unsigned char *pasteString;
+static char *pasteString;
 static int pasteStringLength = 0;
 static HANDLE hClipboardData;
 
@@ -30,7 +31,7 @@ int PasteManagerStartPaste(void)
     if (IsClipboardFormatAvailable(CF_TEXT)) {
         if (OpenClipboard(NULL)) {
             hClipboardData = GetClipboardData(CF_TEXT);
-            pasteString = (unsigned char *)GlobalLock(hClipboardData);
+            pasteString = (char *)GlobalLock(hClipboardData);
             charCount = pasteStringLength = strlen(pasteString);
             trs_paste_started();
             return TRUE;
