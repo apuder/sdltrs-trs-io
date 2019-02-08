@@ -3693,7 +3693,10 @@ void trs_main_save(FILE *file)
   trs_save_int(file,&currentmode,1);
   trs_save_int(file,&text80x24,1);
   trs_save_int(file,&screen640x240,1);
- trs_save_int(file,&trs_charset,1);
+  trs_save_int(file,&trs_charset,1);
+  trs_save_int(file,&trs_charset1,1);
+  trs_save_int(file,&trs_charset3,1);
+  trs_save_int(file,&trs_charset4,1);
   for (i=0;i<G_YSIZE;i++)
     trs_save_uchar(file,grafyx_unscaled[i],G_XSIZE);
   trs_save_uchar(file,&grafyx_x,1);
@@ -3723,6 +3726,9 @@ void trs_main_load(FILE *file)
   trs_load_int(file,&text80x24,1);
   trs_load_int(file,&screen640x240,1);
   trs_load_int(file,&trs_charset,1);
+  trs_load_int(file,&trs_charset1,1);
+  trs_load_int(file,&trs_charset3,1);
+  trs_load_int(file,&trs_charset4,1);
   for (i=0;i<G_YSIZE;i++)
     trs_load_uchar(file,grafyx_unscaled[i],G_XSIZE);
   trs_load_uchar(file,&grafyx_x,1);
