@@ -2106,7 +2106,7 @@ void trs_get_event(int wait)
               SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
                                   SDL_DEFAULT_REPEAT_INTERVAL);
               trs_expand_dir(trs_disk_dir, browse_dir);
-              if (trs_gui_file_browse(browse_dir, filename,0,
+              if (trs_gui_file_browse(browse_dir, filename, NULL,0,
                                       " Floppy Disk Image ") != -1)
                 trs_disk_insert(keysym.sym-SDLK_0, filename);
               SDL_EnableKeyRepeat(0,0);

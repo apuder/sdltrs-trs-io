@@ -112,7 +112,7 @@ static void trs_gui_add_to_filename_list(char * filename);
 static int trs_gui_filename_cmp(char *name1, char *name2);
 static void trs_gui_quicksort(char **start, char **end, int (*sort_function) ());
 static void trs_gui_delete_filename_list(void);
-static int trs_gui_readdirectory(char *path, int browse_dir);
+static int trs_gui_readdirectory(char *path, char *mask, int browse_dir);
 static int trs_gui_input_string(char *title, char* input, char* output, int limit, int file);
 static int trs_gui_display_popup(char* title, char **entry,
                           int entry_count, int selection);
@@ -538,7 +538,7 @@ void trs_gui_delete_filename_list(void)
   filenamecount = 0;
 }
 
-int trs_gui_readdirectory(char *path, int browse_dir)
+int trs_gui_readdirectory(char *path, char *mask, int browse_dir)
 {
   DIR *directory = NULL;
   char pathname[FILENAME_MAX];
@@ -574,6 +574,8 @@ int trs_gui_readdirectory(char *path, int browse_dir)
       }	else if (browse_dir){
         continue;
       }else {
+        if (mask != NULL && strstr(dir_entry->d_name, mask) == NULL)
+          continue;
         filename = (char *) strdup(dir_entry->d_name);
       }
       if (!filename)
@@ -602,7 +604,7 @@ int trs_gui_readdirectory(char *path, int browse_dir)
   return(0);
 }
 
-int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
+int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, char* type)
 {
   int i,key;
   int selection = 0;
@@ -635,7 +637,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
   trs_gui_write_text(title, 2, 0, 0);
   trs_gui_limit_string(current_dir, limited_dir, 62);
   trs_gui_center_text(limited_dir,1,0);
-  trs_gui_readdirectory(current_dir, browse_dir);
+  trs_gui_readdirectory(current_dir, mask, browse_dir);
 
   if (filenamecount < 13)
     drawcount = filenamecount;
@@ -746,7 +748,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
             trs_gui_center_text(limited_dir,1,0);
 
             trs_gui_delete_filename_list();
-            trs_gui_readdirectory(current_dir, browse_dir);
+            trs_gui_readdirectory(current_dir, mask, browse_dir);
 
             if (filenamecount < 13)
               drawcount = filenamecount;
@@ -771,7 +773,7 @@ int trs_gui_file_browse(char* path, char* filename, int browse_dir, char* type)
             trs_gui_center_text(limited_dir,1,0);
 
             trs_gui_delete_filename_list();
-            trs_gui_readdirectory(current_dir, browse_dir);
+            trs_gui_readdirectory(current_dir, mask, browse_dir);
 
             if (filenamecount < 13)
               drawcount = filenamecount;
@@ -920,7 +922,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int limit, int 
       case SDLK_UP:
         if (file) {
           strcpy(partial_output, output + input_length);
-          trs_gui_file_browse(input, directory_name, 1, " ");
+          trs_gui_file_browse(input, directory_name, NULL, 1, " ");
           input_length = strlen(directory_name);
           strcpy(output, directory_name);
           strcat(output, partial_output);
@@ -1100,7 +1102,7 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
             trs_expand_dir(trs_disk_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename,0,
+            if (trs_gui_file_browse(browse_dir, filename, NULL ,0,
                                     " Floppy Disk Image ") == -1)
               {
               done = 1;
@@ -1109,7 +1111,7 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
             trs_disk_insert(selection, filename);
           } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
             trs_expand_dir(trs_hard_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename,0,
+            if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
                                     " Hard Disk Image ") == -1)
               {
               done = 1;
@@ -1118,7 +1120,7 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
             trs_hard_attach(selection, filename);
           } else {
             trs_expand_dir(trs_cass_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename,0,
+            if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
                                     " Cassette Image ") == -1)
               {
               done = 1;
@@ -1660,7 +1662,7 @@ void trs_gui_disk_management(void)
          break;
        case 9:
          trs_expand_dir(trs_disk_set_dir,browse_dir);
-         ret = trs_gui_file_browse(browse_dir, filename, 0," Disk Set ");
+         ret = trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ");
          if (ret == -1)
            break;
          trs_diskset_load(filename);
@@ -1727,7 +1729,7 @@ void trs_gui_hard_management(void)
          break;
        case 5:
          trs_expand_dir(trs_disk_set_dir,browse_dir);
-         ret = trs_gui_file_browse(browse_dir, filename, 0," Disk Set ");
+         ret = trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ");
          if (ret == -1)
            break;
          trs_diskset_load(filename);
@@ -2618,27 +2620,27 @@ void trs_gui_default_dirs(void)
          break;
        case 1:
          trs_expand_dir(trs_disk_dir, browse_dir);
-         trs_gui_file_browse(browse_dir, trs_disk_dir, 1," Floppy Disk ");
+         trs_gui_file_browse(browse_dir, trs_disk_dir, NULL, 1," Floppy Disk ");
          break;
        case 3:
          trs_expand_dir(trs_hard_dir, browse_dir);
-         trs_gui_file_browse(browse_dir, trs_hard_dir, 1," Hard Disk ");
+         trs_gui_file_browse(browse_dir, trs_hard_dir, NULL, 1," Hard Disk ");
          break;
        case 5:
          trs_expand_dir(trs_cass_dir, browse_dir);
-         trs_gui_file_browse(browse_dir, trs_cass_dir, 1," Cassette ");
+         trs_gui_file_browse(browse_dir, trs_cass_dir, NULL, 1," Cassette ");
          break;
        case 7:
          trs_expand_dir(trs_disk_set_dir, browse_dir);
-         trs_gui_file_browse(browse_dir, trs_disk_set_dir, 1," Disk Set ");
+         trs_gui_file_browse(browse_dir, trs_disk_set_dir, NULL, 1," Disk Set ");
          break;
        case 9:
          trs_expand_dir(trs_state_dir, browse_dir);
-         trs_gui_file_browse(browse_dir, trs_state_dir, 1," Saved State ");
+         trs_gui_file_browse(browse_dir, trs_state_dir, NULL, 1," Saved State ");
          break;
        case 11:
          trs_expand_dir(trs_printer_dir, browse_dir);
-         trs_gui_file_browse(browse_dir, trs_printer_dir, 1," Printer Output ");
+         trs_gui_file_browse(browse_dir, trs_printer_dir, NULL, 1," Printer Output ");
          break;
      }
   }
@@ -2671,17 +2673,17 @@ void trs_gui_rom_files(void)
        case 1:
          if (romfile[0]==0 || !trs_remove_dir(romfile, browse_dir))
            trs_expand_dir(".",browse_dir);
-         trs_gui_file_browse(browse_dir, romfile, 0," Model 1 ROM ");
+         trs_gui_file_browse(browse_dir, romfile, NULL, 0," Model 1 ROM ");
          break;
        case 3:
          if (romfile3[0]==0 || !trs_remove_dir(romfile3, browse_dir))
            trs_expand_dir(".",browse_dir);
-         trs_gui_file_browse(browse_dir, romfile3, 0," Model 3 ROM ");
+         trs_gui_file_browse(browse_dir, romfile3, NULL, 0," Model 3 ROM ");
          break;
        case 5:
          if (romfile4p[0]==0 || !trs_remove_dir(romfile4p, browse_dir))
            trs_expand_dir(".",browse_dir);
-         trs_gui_file_browse(browse_dir, romfile4p, 0," Model 4P ROM ");
+         trs_gui_file_browse(browse_dir, romfile4p, NULL, 0," Model 4P ROM ");
          break;
      }
   }
@@ -2760,7 +2762,7 @@ int trs_gui_read_config(void)
   int ret;
 
   trs_expand_dir(".",browse_dir);
-  ret = trs_gui_file_browse(browse_dir, filename, 0," Configuration (.t8c) ");
+  ret = trs_gui_file_browse(browse_dir, filename, ".t8c", 0," Configuration (.t8c) ");
   if (ret == -1)
     return 0;
   trs_load_config_file(filename);
@@ -2838,7 +2840,7 @@ int trs_gui_load_state(void)
   int ret;
 
   trs_expand_dir(trs_state_dir,browse_dir);
-  ret = trs_gui_file_browse(browse_dir, filename, 0," Saved State (.t8s) ");
+  ret = trs_gui_file_browse(browse_dir, filename, ".t8s", 0," Saved State (.t8s) ");
   if (ret == -1)
     return 0;
   trs_state_load(filename);
