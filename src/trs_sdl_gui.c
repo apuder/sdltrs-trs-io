@@ -846,8 +846,8 @@ int trs_gui_input_string(char *title, char* input, char* output, int limit, int 
 
   strcpy(output, input);
   pos = length = input_length = strlen(input);
-  if (pos > (60-1))
-    first_disp = pos-60;
+  if (pos > 60)
+    first_disp = pos - 59;
   else
     first_disp = 0;
 
@@ -876,7 +876,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int limit, int 
         break;
       case SDLK_RIGHT:
         if (pos<length) {
-          if (pos == first_disp + (60 - 1))
+          if (pos == first_disp + 59)
             first_disp++;
           pos++;
           }
@@ -887,7 +887,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int limit, int 
       case SDLK_END:
         pos = length;
         if (pos > 60)
-          first_disp = pos-(60-1);
+          first_disp = pos - 59;
         else
           first_disp = 0;
         break;
@@ -925,8 +925,8 @@ int trs_gui_input_string(char *title, char* input, char* output, int limit, int 
           strcpy(output, directory_name);
           strcat(output, partial_output);
           pos = length = strlen(output);
-          if (pos > (60-1))
-            first_disp = pos-60;
+          if (pos > 60)
+            first_disp = pos - 59;
           else
             first_disp = 0;
           trs_gui_frame(1,6,62,3);
@@ -938,7 +938,7 @@ int trs_gui_input_string(char *title, char* input, char* output, int limit, int 
           for (i=length;i>pos;i--)
             output[i] = output[i-1];
           output[pos] = (char) key;
-          if (pos == first_disp + (60 - 1))
+          if (pos == first_disp + 59)
             first_disp ++;
           pos++;
           length++;
