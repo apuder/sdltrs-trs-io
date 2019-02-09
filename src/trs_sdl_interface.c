@@ -1940,6 +1940,7 @@ void trs_get_event(int wait)
           trs_screen_refresh();
           break;
         case SDLK_d:
+        case SDLK_f:
 #ifdef MACOSX
           if (!fullscreen) {
             MediaManagerRunDiskManagement();

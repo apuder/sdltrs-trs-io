@@ -1300,7 +1300,7 @@ void trs_gui_disk_creation(void)
    {"Physical Size                                               ",MENU_NORMAL_TYPE,4},
    {"Ignore Density Flag                                         ",MENU_NORMAL_TYPE,5},
    {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE,6},
-   {"Create Floppy Image with Above Parameters",MENU_NORMAL_TYPE,7},
+   {"Create Disk Image with Above Parameters",MENU_NORMAL_TYPE,7},
    {"",0,-1}};
    char *image_type_choices[3] = {"     JV1","     JV3","     DMK"};
    char *num_sides_choices[2] =  {"       1","       2"};
@@ -1329,7 +1329,7 @@ void trs_gui_disk_creation(void)
      strcpy(&disk_creation_menu[4].title[52],ignore_choices[ignore_density]);
      strcpy(&disk_creation_menu[5].title[52],drive_choices[drive_insert]);
      trs_gui_clear_screen();
-     selection = trs_gui_display_menu("SDLTRS Floppy Creation Menu",
+     selection = trs_gui_display_menu("SDLTRS Floppy Disk Creation Menu",
                                       disk_creation_menu, selection);
      switch(selection) {
        case 0:
@@ -1498,10 +1498,10 @@ void trs_gui_disk_sizes(void)
        else
           choice = 1;
        sprintf(disk_sizes_menu[i].title,
-               "Floppy Drive Number %d Size                    %s",
+               "Disk Drive Number %d Size                      %s",
                 i,size_choices[choice]);
      }
-     selection = trs_gui_display_menu("SDLTRS Floppy Size Menu",
+     selection = trs_gui_display_menu("SDLTRS Floppy Disk Size Menu",
                                       disk_sizes_menu, selection);
      if (selection == -1)
        done = 1;
@@ -1548,10 +1548,10 @@ void trs_gui_disk_steps(void)
        else
           choice = 1;
        sprintf(disk_steps_menu[i].title,
-               "Floppy Drive Number %d Step                    %s",
+               "Disk Drive Number %d Step                      %s",
                 i,step_choices[choice]);
      }
-     selection = trs_gui_display_menu("SDLTRS Floppy Size Menu",
+     selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",
                                       disk_steps_menu, selection);
      if (selection == -1)
        done = 1;
@@ -1587,7 +1587,7 @@ void trs_gui_disk_options(void)
      sprintf(&disk_menu[0].title[50],"%s",doubler_choices[trs_disk_doubler]);
      sprintf(&disk_menu[1].title[50],"%s",on_off_choices[trs_disk_truedam]);
      trs_gui_clear_screen();
-     selection = trs_gui_display_menu("SDLTRS Floppy Options Menu",disk_menu, selection);
+     selection = trs_gui_display_menu("SDLTRS Floppy Disk Options Menu",disk_menu, selection);
      switch(selection) {
        case 0:
          trs_disk_doubler = trs_gui_display_popup("Doubler",doubler_choices,4,
@@ -1625,7 +1625,7 @@ void trs_gui_disk_management(void)
    {" Disk 7:",MENU_FLOPPY_BROWSE_TYPE,8},
    {"Save Disk Set",MENU_NORMAL_TYPE,9},
    {"Load Disk Set",MENU_NORMAL_TYPE,10},
-   {"Create Blank Floppy",MENU_NORMAL_TYPE,11},
+   {"Create Blank Floppy Disk",MENU_NORMAL_TYPE,11},
    {"Disk Drive Options",MENU_NORMAL_TYPE,12},
    {"",0,-1}};
    char filename[FILENAME_MAX];
@@ -1650,7 +1650,7 @@ void trs_gui_disk_management(void)
          disk_menu[i].title[0]=' ';
      }
      trs_gui_clear_screen();
-     selection = trs_gui_display_menu("SDLTRS Floppy Menu",disk_menu, selection);
+     selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",disk_menu, selection);
      switch(selection) {
        case 8:
          filename[0] = 0;
@@ -2723,7 +2723,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  LeftAlt + +/-: Scale Window ", 2, 4, 0);
   trs_gui_write_text("F7/Alt + m: SDLTRS Main Menu    LeftAlt + Enter: Fullscreen ", 2, 5, 0);
   trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt + a/c/v: All/Copy/Paste ", 2, 6, 0);
-  trs_gui_write_text("F9/Alt + z: Enter zbx debugger  Alt + d: Floppy Disk Menu   ", 2, 7, 0);
+  trs_gui_write_text("F9/Alt + z: Enter zbx debugger  Alt + d/f: Floppy Disk Menu ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt + h: Hard Disk Menu     ", 2, 8, 0);
   trs_gui_write_text("F11: Turbo Mode On/Off          Alt + t: Cassette/Tape Menu ", 2, 9, 0);
   trs_gui_write_text("F12/Shift-F12: Save/Load State  Alt + l/s: Load/Save State  ", 2, 10, 0);
