@@ -2024,6 +2024,7 @@ void trs_get_event(int wait)
           }
           break;
         case SDLK_PLUS:
+        case SDLK_PAGEUP:
           if (!fullscreen) {
             scale_x++;
             if (scale_x > MAX_SCALE)
@@ -2036,6 +2037,7 @@ void trs_get_event(int wait)
           }
           break;
         case SDLK_MINUS:
+        case SDLK_PAGEDOWN:
           if (!fullscreen) {
             scale_x--;
             if (scale_x < 1)
