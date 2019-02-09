@@ -62,13 +62,10 @@
 
 #if __linux
 char trs_uart_name[FILENAME_MAX] = "/dev/ttyS0";
-#endif
-#ifdef _WIN32
+#else
 char trs_uart_name[FILENAME_MAX] = "";
 #endif
-#ifdef MACOSX
-char trs_uart_name[FILENAME_MAX] = "";
-#endif
+
 int trs_uart_switches =
   0x7 | TRS_UART_NOPAR | TRS_UART_WORD8; /* Default: 9600 8N1 */
 
