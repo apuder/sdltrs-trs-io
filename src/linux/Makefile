@@ -7,9 +7,9 @@ INCS   = $(shell sdl-config --cflags) -DREADLINE
 BIN    = sdltrs
 CFLAGS = $(INCS) -g -Wall -O2
 
-.PHONY: all all-before all-after clean
+.PHONY: all clean
 
-all: all-before sdltrs all-after
+all: sdltrs
 
 
 clean:

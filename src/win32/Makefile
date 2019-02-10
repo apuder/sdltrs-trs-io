@@ -8,9 +8,9 @@ INCS   = -I$(MINGW)\include
 BIN    = sdltrs.exe
 CFLAGS = $(INCS) -g -Wall -O2 -DWIN32
 
-.PHONY: all all-before all-after clean
+.PHONY: all clean
 
-all: all-before sdltrs.exe all-after
+all: sdltrs.exe
 
 
 clean:
