@@ -2223,7 +2223,7 @@ void trs_get_event(int wait)
       break;
 
     case SDL_JOYBUTTONUP:
-      if (event.jbutton.button >= 0 && event.jbutton.button < N_JOYBUTTONS) {
+      if (event.jbutton.button < N_JOYBUTTONS) {
         int key = jbutton_map[event.jbutton.button];
         if (key >= 0)
           trs_xlate_keysym(0x10000 | key);
@@ -2235,7 +2235,7 @@ void trs_get_event(int wait)
       break;
 
     case SDL_JOYBUTTONDOWN:
-      if (event.jbutton.button >= 0 && event.jbutton.button < N_JOYBUTTONS) {
+      if (event.jbutton.button < N_JOYBUTTONS) {
         int key = jbutton_map[event.jbutton.button];
         if (key >= 0)
           trs_xlate_keysym(key);
@@ -2347,7 +2347,7 @@ void trs_screen_80x24(int flag)
 
 void screen_init()
 {
-  int i;
+  unsigned int i;
 
   /* initially, screen is blank (i.e. full of spaces) */
   for (i = 0; i < sizeof(trs_screen); i++)
@@ -2409,7 +2409,8 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
 {
   static unsigned int *mydata, *currdata;
   static unsigned char *mypixels, *currpixel;
-  int i, j, w;
+  unsigned int w;
+  int i, j;
 
   /*
    * Allocate a bit more room than necessary - There shouldn't be
@@ -2422,7 +2423,7 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
   mypixels= (unsigned char *)malloc(width * height * 8);
 
   /* Read the character data */
-  for (j= 0; j< width * height; j += 8)
+  for (j= 0; (unsigned)j< width * height; j += 8)
   {
     for (i= j + 7; i >= j; i--)
     {
@@ -2432,17 +2433,17 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
 
   currdata = mydata;
   /* And prepare our rescaled character. */
-  for (j= 0; j< height * scale_y; j++)
+  for (j= 0; (unsigned)j< height * scale_y; j++)
   {
     currpixel = mypixels + ((j/scale_y) * width);
     for (w= 0; w< width ; w++)
     {
     if (*currpixel++ == 0) {
-      for (i=0;i<scale_x;i++)
+      for (i=0;(unsigned)i<scale_x;i++)
  	    *currdata++ = background;
       }
     else {
-      for (i=0;i<scale_x;i++)
+      for (i=0;(unsigned)i<scale_x;i++)
  	    *currdata++ = foreground;
       }
     }

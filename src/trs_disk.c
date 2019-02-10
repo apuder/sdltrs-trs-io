@@ -103,8 +103,8 @@ typedef struct {
   int format_gap[5];
   unsigned short crc;
   unsigned curdrive;
-  unsigned curside;
-  unsigned density;		/* sden=0, dden=1 */
+  int curside;
+  int density;			/* sden=0, dden=1 */
   unsigned char controller;	/* TRSDISK_P1771 or TRSDISK_P1791 */
   int last_readadr;             /* id index found by last readadr */
   tstate_t motor_timeout;       /* 0 if stopped, else time when it stops */
@@ -250,7 +250,7 @@ typedef struct {
   int size_code;                  /* most recent sector size; REAL only */
   int empty;                      /* 1=emulate empty drive */
   time_t empty_timeout;           /* real_empty valid until this time */
-  int fmt_nbytes;                 /* number of PC format command bytes */
+  unsigned int fmt_nbytes;        /* number of PC format command bytes */
   int fmt_fill;                   /* fill byte for data sectors */
   unsigned char buf[MAXSECSIZE];
 } RealState;
@@ -3154,8 +3154,8 @@ static void trs_fdc_save(FILE *file, FDCState *state)
   trs_save_int(file,state->format_gap,5);
   trs_save_uint16(file,&state->crc,1);
   trs_save_uint32(file,&state->curdrive,1);
-  trs_save_uint32(file,&state->curside,1);
-  trs_save_uint32(file,&state->density,1);
+  trs_save_int(file,&state->curside,1);
+  trs_save_int(file,&state->density,1);
   trs_save_uchar(file,&state->controller,1);
   trs_save_int(file,&state->last_readadr,1);
   trs_save_uint64(file,(unsigned long long *) &state->motor_timeout,1);
@@ -3177,8 +3177,8 @@ static void trs_fdc_load(FILE *file, FDCState *state)
   trs_load_int(file,state->format_gap,5);
   trs_load_uint16(file,&state->crc,1);
   trs_load_uint32(file,&state->curdrive,1);
-  trs_load_uint32(file,&state->curside,1);
-  trs_load_uint32(file,&state->density,1);
+  trs_load_int(file,&state->curside,1);
+  trs_load_int(file,&state->density,1);
   trs_load_uchar(file,&state->controller,1);
   trs_load_int(file,&state->last_readadr,1);
   trs_load_uint64(file,(unsigned long long *) &state->motor_timeout,1);
@@ -3264,7 +3264,7 @@ static void trs_save_realstate(FILE *file, RealState *state)
   trs_save_int(file,&state->size_code,1);
   trs_save_int(file,&state->empty,1);
   trs_save_int(file,(int *)&state->empty_timeout,1);
-  trs_save_int(file,&state->fmt_nbytes,1);
+  trs_save_uint32(file,&state->fmt_nbytes,1);
   trs_save_int(file,&state->fmt_fill,1);
   trs_save_uchar(file,state->buf,MAXSECSIZE);
 }
@@ -3275,7 +3275,7 @@ static void trs_load_realstate(FILE *file, RealState *state)
   trs_load_int(file,&state->size_code,1);
   trs_load_int(file,&state->empty,1);
   trs_load_int(file,(int *)&state->empty_timeout,1);
-  trs_load_int(file,&state->fmt_nbytes,1);
+  trs_load_uint32(file,&state->fmt_nbytes,1);
   trs_load_int(file,&state->fmt_fill,1);
   trs_load_uchar(file,state->buf,MAXSECSIZE);
 }
@@ -3800,7 +3800,8 @@ real_writetrk()
 #if __linux
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, i, gap3;
+  int res, gap3;
+  unsigned i;
   sigset_t set, oldset;
   state.status = 0;
 

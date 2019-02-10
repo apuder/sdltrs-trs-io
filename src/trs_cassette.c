@@ -90,7 +90,7 @@ static char *format_name[] = {
 
 static char cassette_filename[FILENAME_MAX] = {0};
 static int cassette_position = 0;
-static int cassette_format = DEFAULT_FORMAT;
+static unsigned int cassette_format = DEFAULT_FORMAT;
 static int cassette_state = CLOSE;
 static int cassette_motor = 0;
 static FILE *cassette_file;
@@ -461,7 +461,7 @@ static void trs_sdl_sound_update(void *userdata, Uint8 * stream, int len)
   } else {
 	int num_to_read;
 
-	if (sound_ring_count > len)
+	if (sound_ring_count > (unsigned int)len)
 	   num_to_read = len;
 	else
 	   num_to_read = sound_ring_count;
@@ -1327,7 +1327,7 @@ trs_cassette_save(FILE *file)
 {
   trs_save_filename(file, cassette_filename);
   trs_save_int(file, &cassette_position, 1);
-  trs_save_int(file, &cassette_format, 1);
+  trs_save_uint32(file, &cassette_format, 1);
   trs_save_int(file, &cassette_state, 1);
   trs_save_int(file, &cassette_motor, 1);
   trs_save_float(file,&cassette_avg, 1);
@@ -1364,7 +1364,7 @@ trs_cassette_load(FILE *file)
 
   trs_load_filename(file, cassette_filename);
   trs_load_int(file, &cassette_position, 1);
-  trs_load_int(file, &cassette_format, 1);
+  trs_load_uint32(file, &cassette_format, 1);
   trs_load_int(file, &cassette_state, 1);
   trs_load_int(file, &cassette_motor, 1);
   trs_load_float(file,&cassette_avg, 1);

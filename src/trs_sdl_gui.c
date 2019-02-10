@@ -83,10 +83,10 @@ static int local_trs_model;
 static int local_trs_charset1;
 static int local_trs_charset3;
 static int local_trs_charset4;
-static int local_foreground;
-static int local_background;
-static int local_gui_foreground;
-static int local_gui_background;
+static unsigned int local_foreground;
+static unsigned int local_background;
+static unsigned int local_gui_foreground;
+static unsigned int local_gui_background;
 static int gui_show_led;
 static int gui_resize3;
 static int gui_resize4;
@@ -102,7 +102,7 @@ static void trs_gui_write_text_char(char text, int x, int y, int invert);
 static void trs_gui_center_text(char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
-static void trs_gui_limit_string(char *orig, char *limited, int limit);
+static void trs_gui_limit_string(char *orig, char *limited, unsigned int limit);
 static int trs_remove_dir(char *file, char *dir);
 static void trs_add_extension(char *filename, char *ext);
 static int trs_gui_get_key(void);
@@ -113,7 +113,8 @@ static int trs_gui_filename_cmp(char *name1, char *name2);
 static void trs_gui_quicksort(char **start, char **end, int (*sort_function) ());
 static void trs_gui_delete_filename_list(void);
 static int trs_gui_readdirectory(char *path, char *mask, int browse_dir);
-static int trs_gui_input_string(char *title, char* input, char* output, int limit, int file);
+static int trs_gui_input_string(char *title, char* input, char* output,
+                                unsigned int limit, int file);
 static int trs_gui_display_popup(char* title, char **entry,
                           int entry_count, int selection);
 static int trs_gui_display_popup_matrix(char* title, char **entry,
@@ -163,8 +164,8 @@ void trs_gui_write_text_char(char text, int x, int y, int invert)
 
 void trs_gui_center_text(char *text, int y, int invert)
 {
-  int position = (64-strlen(text))/2 + y * 64;
-  int i;
+  unsigned int position = (64-strlen(text))/2 + y * 64;
+  unsigned int i;
 
   for (i=0;i<strlen(text);i++)
     trs_gui_write_char(position+i,text[i],invert);
@@ -199,7 +200,7 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
         trs_gui_write_text(clear, x, y+i, 0);
 }
 
-void trs_gui_limit_string(char *orig, char *limited, int limit)
+void trs_gui_limit_string(char *orig, char *limited, unsigned int limit)
 {
   int len_first_part;
   int pos_second_part;
@@ -373,7 +374,7 @@ int trs_gui_get_key(void)
            return(event.key.keysym.sym);
          break;
        case SDL_JOYBUTTONDOWN:
-         if (event.jbutton.button >= 0 && event.jbutton.button < N_JOYBUTTONS) {
+         if (event.jbutton.button < N_JOYBUTTONS) {
            int key = jbutton_map[event.jbutton.button];
            if (key >= 0)
              return key;
@@ -836,16 +837,16 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
     return(current_first + selection);
 }
 
-int trs_gui_input_string(char *title, char* input, char* output, int limit, int file)
+int trs_gui_input_string(char *title, char* input, char* output, unsigned int limit, int file)
 {
   char directory_name[FILENAME_MAX];
   char partial_output[FILENAME_MAX];
-  int key,i,ret_code=0;
+  int key,ret_code=0;
   int done = 0;
-  int pos;
-  int input_length;
-  int length;
-  int first_disp;
+  unsigned int i, pos;
+  unsigned int input_length;
+  unsigned int length;
+  unsigned int first_disp;
   int invert;
 
   strcpy(output, input);
@@ -960,9 +961,9 @@ int trs_gui_display_popup(char* title, char **entry,
 {
   int num = 0,key;
   int done = 0;
-  int max_len = 0;
   int first_x, first_y;
   int saved_selection = selection;
+  unsigned int max_len = 0;
 
   for (num=0;num<entry_count;num++) {
     if (strlen(entry[num]) > max_len)
@@ -1991,7 +1992,7 @@ int trs_gui_joystick_get_button(void)
           return -1;
         break;
       case SDL_JOYBUTTONDOWN:
-        if (event.jbutton.button < 0 || event.jbutton.button >= N_JOYBUTTONS) {
+        if (event.jbutton.button >= N_JOYBUTTONS) {
           trs_gui_display_message("Error", "Unsupported Joystick Button");
           return -1;
         }
@@ -2248,13 +2249,13 @@ void trs_gui_joystick_map_joystick(void)
             checking = 0;
           break;
         case SDL_JOYBUTTONDOWN:
-          if (event.jbutton.button >= 0 && event.jbutton.button < N_JOYBUTTONS) {
+          if (event.jbutton.button < N_JOYBUTTONS) {
             counter = CHECK_TIMEOUT;
             jbutton_active[event.jbutton.button] = 1;
           }
           break;
         case SDL_JOYBUTTONUP:
-          if (event.jbutton.button >= 0 && event.jbutton.button < N_JOYBUTTONS)
+          if (event.jbutton.button < N_JOYBUTTONS)
             jbutton_active[event.jbutton.button] = 0;
           break;
         }
@@ -3015,9 +3016,10 @@ int trs_gui_display_popup_matrix(char* title, char **entry,
 {
   int row, column;
   int entry_count = rows*columns;
-  int num, i, j, max_len = 0, invert, key;
+  int num, i, j, invert, key;
   int width, first_x, first_y;
   int done = 0;
+  unsigned int max_len = 0;
 
   if (selection < 0)
     selection = 0;
