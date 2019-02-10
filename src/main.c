@@ -45,8 +45,8 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <SDL/SDL.h>
 #include <sys/stat.h>
+#include <SDL.h>
 
 #include "z80.h"
 #include "trs.h"

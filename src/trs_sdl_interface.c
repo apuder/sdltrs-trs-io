@@ -62,6 +62,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <SDL.h>
 
 #include "trs_iodefs.h"
 #include "trs.h"
@@ -73,7 +74,6 @@
 #include "trs_cassette.h"
 #include "trs_sdl_keyboard.h"
 
-#include "SDL/SDL.h"
 #include "blit.h"
 
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];

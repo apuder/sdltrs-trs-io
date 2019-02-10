@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "SDL/SDL_video.h"
-#include "SDL/SDL_endian.h"
+#include <SDL_video.h>
+#include <SDL_endian.h>
 #include "blit.h"
 
 static Uint8 *blitMap = NULL;

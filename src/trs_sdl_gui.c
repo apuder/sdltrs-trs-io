@@ -27,12 +27,12 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
-#include <SDL/SDL.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <SDL.h>
 #include "trs.h"
 #include "trs_cassette.h"
 #include "trs_disk.h"

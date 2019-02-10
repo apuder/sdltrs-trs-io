@@ -66,7 +66,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #define CLOSE		0
 #define READ		1

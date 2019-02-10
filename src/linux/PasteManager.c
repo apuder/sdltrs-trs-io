@@ -6,8 +6,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#include "SDL/SDL.h"
-#include "SDL/SDL_syswm.h"
+#include <SDL.h>
+#include <SDL_syswm.h>
 
 /* forward declarations */
 static int init_scrap(void);
