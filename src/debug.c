@@ -566,8 +566,7 @@ void debug_shell()
 		{
 		    clear_all_traps();
 		}
-		else if(sscanf(input, "delete %d", &i) != 1 &&
-			sscanf(input, "d %d", &i) != 1)
+		else if(sscanf(input, "%*s %d", &i) != 1)
 		{
 		    DebugOutput("A trap must be specified.\n");
 		}
@@ -583,14 +582,12 @@ void debug_shell()
 		int bytes = 0;
 		int lines = 0;
 
-		if(sscanf(input, "list %x , %x", &x, &y) == 2 ||
-		   sscanf(input, "l %x , %x", &x, &y) == 2)
+		if(sscanf(input, "%*s %x , %x", &x, &y) == 2)
 		{
 		    start = x;
 		    bytes = (y - x) & 0xffff;
 		}
-		else if(sscanf(input, "list %x", &x) == 1 ||
-			sscanf(input, "l %x", &x) == 1)
+		else if(sscanf(input, "%*s %x", &x) == 1)
 		{
 		    start = x;
 		    lines = 10;
@@ -785,8 +782,7 @@ void debug_shell()
 		int address;
 
 		if(sscanf(input, "stop at %x", &address) != 1 &&
-		   sscanf(input, "break %x", &address) != 1 &&
-		   sscanf(input, "b %x", &address) != 1)
+		   sscanf(input, "%*s %x", &address) != 1)
 		{
 		    address = REG_PC;
 		}
@@ -797,8 +793,7 @@ void debug_shell()
 	    {
 		int address;
 
-		if(sscanf(input, "trace %x", &address) != 1 &&
-		   sscanf(input, "t %x", &address) != 1)
+		if(sscanf(input, "%*s %x", &address) != 1)
 		{
 		    address = REG_PC;
 		}
@@ -843,8 +838,7 @@ void debug_shell()
 	    {
 		int address;
 
-		if(sscanf(input, "watch %x", &address) == 1 ||
-		   sscanf(input, "w %x", &address) == 1)
+		if(sscanf(input, "%*s %x", &address) == 1)
 		{
 		    address %= ADDRESS_SPACE;
 		    set_trap(address, WATCHPOINT_FLAG);
