@@ -220,6 +220,9 @@ void trs_expand_dir(char *dir, char *expanded_dir)
 {
   int i;
 
+  if (opendir(dir) == NULL)
+    strcpy(dir, ".");
+
 #ifdef _WIN32
   if (dir[0] == '\\' || dir[1] == ':') {
 #else
@@ -229,7 +232,8 @@ void trs_expand_dir(char *dir, char *expanded_dir)
     return;
   }
 
-  getcwd(expanded_dir,FILENAME_MAX);
+  if (getcwd(expanded_dir,FILENAME_MAX) == NULL)
+    error("getcwd trs_expand_dir");
 #ifdef _WIN32
   if (strncmp(dir,"..\\",3) == 0) {
 #else
@@ -1177,7 +1181,7 @@ void trs_gui_hard_creation(void)
    static int granularity = 8;
    static int dir_sector = 1;
    static int drive_insert = 0;
-   int done = 0, ret;
+   int done = 0;
    int value;
    char filename[FILENAME_MAX];
    char input[FILENAME_MAX];
@@ -1195,8 +1199,7 @@ void trs_gui_hard_creation(void)
      switch(selection) {
        case 0:
          sprintf(input,"%6d",cylinder_count);
-         ret = trs_gui_input_string("Enter Cylinder Count",input,input,3,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Cylinder Count",input,input,3,0) == 0) {
            value = atoi(input);
            if (value >=3 && value <= 256) {
              cylinder_count = value;
@@ -1210,8 +1213,7 @@ void trs_gui_hard_creation(void)
          break;
        case 1:
          sprintf(input,"%6d",sector_count);
-         ret = trs_gui_input_string("Enter Sector Count",input,input,3,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Sector Count",input,input,3,0) == 0) {
            value = atoi(input);
            if (value >=4 && value <= 256) {
              sector_count = value;
@@ -1229,8 +1231,7 @@ void trs_gui_hard_creation(void)
          break;
        case 2:
          sprintf(input,"%6d",granularity);
-         ret = trs_gui_input_string("Enter Granularity",input,input,1,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Granularity",input,input,1,0) == 0) {
            value = atoi(input);
            if (value >= 1 && value <= 8) {
                  granularity = value;
@@ -1241,8 +1242,7 @@ void trs_gui_hard_creation(void)
          break;
        case 3:
          sprintf(input,"%6d",dir_sector);
-         ret = trs_gui_input_string("Enter Directory Sector",input,input,3,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Directory Sector",input,input,3,0) == 0) {
            value = atoi(input);
            if (value >= 1 && value < cylinder_count) {
                  dir_sector = value;
@@ -1273,13 +1273,11 @@ void trs_gui_hard_creation(void)
          }
          filename[0] = 0;
          trs_expand_dir(trs_hard_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename, TAB selects directory",
-                                    browse_dir,filename,FILENAME_MAX-1,1);
-         if (ret)
+         if (trs_gui_input_string("Enter Filename, TAB selects directory",
+                                   browse_dir,filename,FILENAME_MAX-1,1) == -1)
            break;
-         ret = trs_create_blank_hard(filename, cylinder_count, sector_count,
-                                     granularity, dir_sector);
-         if (ret)
+         if (trs_create_blank_hard(filename, cylinder_count, sector_count,
+                                   granularity, dir_sector))
            trs_gui_display_message("Error","Error creating Hard Disk Image");
          else if (drive_insert)
            trs_hard_attach(drive_insert-1, filename);
@@ -1360,9 +1358,8 @@ void trs_gui_disk_creation(void)
        case 6:
          filename[0] = 0;
          trs_expand_dir(trs_disk_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename, TAB selects directory",
-                                    browse_dir,filename,FILENAME_MAX-1,1);
-         if (ret)
+         if (trs_gui_input_string("Enter Filename, TAB selects directory",
+                                  browse_dir,filename,FILENAME_MAX-1,1) == -1)
            break;
          if (image_type == 0)
            ret = trs_create_blank_jv1(filename);
@@ -1419,9 +1416,8 @@ void trs_gui_cassette_creation(void)
        case 2:
          filename[0] = 0;
          trs_expand_dir(trs_cass_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                                    browse_dir,filename,FILENAME_MAX-1,1);
-         if (ret)
+         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+                                  browse_dir,filename,FILENAME_MAX-1,1) == -1)
            break;
 
          if (image_type == 0) {
@@ -1631,7 +1627,6 @@ void trs_gui_disk_management(void)
    {"",0,-1}};
    char filename[FILENAME_MAX];
    char browse_dir[FILENAME_MAX];
-   int ret;
    int selection = 0;
    int done = 0;
    int i;
@@ -1645,10 +1640,7 @@ void trs_gui_disk_management(void)
          strcpy(&disk_menu[i].title[8], "Empty");
        else
          trs_gui_limit_string(trs_disk_getfilename(i),&disk_menu[i].title[8],52);
-       if (trs_disk_getwriteprotect(i))
-         disk_menu[i].title[0]='*';
-       else
-         disk_menu[i].title[0]=' ';
+       disk_menu[i].title[0] = trs_disk_getwriteprotect(i) ? '*' : ' ';
      }
      trs_gui_clear_screen();
      selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",disk_menu, selection);
@@ -1656,19 +1648,18 @@ void trs_gui_disk_management(void)
        case 8:
          filename[0] = 0;
          trs_expand_dir(trs_disk_set_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                                    browse_dir,filename,FILENAME_MAX-1,1);
-         if (ret)
+         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+                                  browse_dir,filename,FILENAME_MAX-1,1) == -1)
            break;
          strcat(filename,".set");
          trs_diskset_save(filename);
          break;
        case 9:
          trs_expand_dir(trs_disk_set_dir,browse_dir);
-         ret = trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ");
-         if (ret == -1)
+         if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
            break;
-         trs_diskset_load(filename);
+         if (trs_diskset_load(filename) == -1)
+           trs_gui_display_message("Error", "Failed to load Floppy Disk Set");
          break;
        case 10:
          trs_gui_disk_creation();
@@ -1696,7 +1687,6 @@ void trs_gui_hard_management(void)
    {"",0,-1}};
    char filename[FILENAME_MAX];
    char browse_dir[FILENAME_MAX];
-   int ret;
    int selection = 0;
    int done = 0;
    int i;
@@ -1710,10 +1700,7 @@ void trs_gui_hard_management(void)
            strcpy(&hard_menu[i].title[8],"Empty");
          else
            trs_gui_limit_string(diskname,&hard_menu[i].title[8],52);
-         if (trs_hard_getwriteprotect(i))
-           hard_menu[i].title[0]='*';
-         else
-           hard_menu[i].title[0]=' ';
+         hard_menu[i].title[0] = trs_hard_getwriteprotect(i) ? '*' : ' ';
      }
 
      trs_gui_clear_screen();
@@ -1723,19 +1710,18 @@ void trs_gui_hard_management(void)
        case 4:
          filename[0] = 0;
          trs_expand_dir(trs_disk_set_dir, browse_dir);
-         ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                                    browse_dir,filename,FILENAME_MAX-1,1);
-         if (ret)
+         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+                                  browse_dir,filename,FILENAME_MAX-1,1) == -1)
            break;
          strcat(filename,".set");
          trs_diskset_save(filename);
          break;
        case 5:
          trs_expand_dir(trs_disk_set_dir,browse_dir);
-         ret = trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ");
-         if (ret == -1)
+         if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
            break;
-         trs_diskset_load(filename);
+         if (trs_diskset_load(filename) == -1)
+           trs_gui_display_message("Error", "Failed to load Hard Disk Set");
          break;
        case 6:
          trs_gui_hard_creation();
@@ -1759,7 +1745,6 @@ void trs_gui_cassette_management(void)
    int selection = 0;
    int done = 0;
    int value;
-   int ret;
 
    while(!done) {
      char *cass_name = trs_cassette_getfilename();
@@ -1776,9 +1761,8 @@ void trs_gui_cassette_management(void)
      switch(selection) {
        case 1:
          sprintf(input,"%d",trs_get_cassette_position());
-         ret = trs_gui_input_string("Enter Cassette Position in Bytes",
-                                    input,input, 10, 0);
-         if (ret)
+         if (trs_gui_input_string("Enter Cassette Position in Bytes",
+                                  input,input, 10, 0) == -1)
            break;
          value = atoi(input);
          if (value >= 0 && value <= trs_get_cassette_length())
@@ -1786,9 +1770,8 @@ void trs_gui_cassette_management(void)
          break;
        case 2:
          sprintf(input,"%d",cassette_default_sample_rate);
-         ret = trs_gui_input_string("Enter Cassette Default Sample Rate",
-                                    input,input, 10, 0);
-         if (ret)
+         if (trs_gui_input_string("Enter Cassette Default Sample Rate",
+                                  input,input, 10, 0) == -1)
            break;
          value = atoi(input);
          if (value < 0 || value > DEFAULT_SAMPLE_RATE)
@@ -1826,7 +1809,6 @@ void trs_gui_display_management(void)
    int charset3_selection;
    int charset4_selection;
    int done = 0;
-   int ret;
    char *resize_choices[2] = {"        No","       Yes"};
    char *disk_led_choices[2] = {"      Hide","      Show"};
    char *font1_choices[8] =  {"             early",
@@ -1875,20 +1857,17 @@ void trs_gui_display_management(void)
      switch(selection) {
        case 0:
          sprintf(input,"%06X",local_background);
-         ret = trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,6,0);
-         if (!ret)
+         if (trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,6,0) == 0)
            local_background = strtol(input, NULL, 16);
          break;
        case 1:
          sprintf(input,"%06X",local_foreground);
-         ret = trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,6,0);
-         if (!ret)
+         if (trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,6,0) == 0)
            local_foreground = strtol(input, NULL, 16);
          break;
        case 2:
          sprintf(input,"%06X",local_gui_background);
-         ret = trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)",input,input,6,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)",input,input,6,0) == 0) {
            local_gui_background = strtol(input, NULL, 16);
            if (local_gui_background != gui_background) {
              gui_background = local_gui_background;
@@ -1898,8 +1877,7 @@ void trs_gui_display_management(void)
          break;
        case 3:
          sprintf(input,"%06X",local_gui_foreground);
-         ret = trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,6,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,6,0) == 0) {
            local_gui_foreground = strtol(input, NULL, 16);
            if (local_gui_foreground != gui_foreground) {
              gui_foreground = local_gui_foreground;
@@ -1921,8 +1899,7 @@ void trs_gui_display_management(void)
          break;
        case 7:
          sprintf(input,"%d",gui_border_width);
-         ret = trs_gui_input_string("Enter Window border width, in pixels",input,input,2,0);
-         if (!ret)
+         if (trs_gui_input_string("Enter Window border width, in pixels",input,input,2,0) == 0)
            gui_border_width = atol(input);
          break;
        case 8:
@@ -2349,7 +2326,7 @@ void trs_gui_misc_management(void)
    char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
-   int ret, state;
+   int state;
 
    while(!done) {
      trs_gui_clear_screen();
@@ -2376,8 +2353,7 @@ void trs_gui_misc_management(void)
 		 break;
 	   case 2:
 		 sprintf(input,"%d", timer_overclock_rate);
-		 ret = trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0);
-		 if (!ret) {
+		 if (trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0) == 0) {
 			 timer_overclock_rate =  atoi(input);
 			 if (timer_overclock_rate <= 0)
 				 timer_overclock_rate = 1;
@@ -2385,8 +2361,7 @@ void trs_gui_misc_management(void)
 		 break;
 	   case 3:
          sprintf(input,"%d",stretch_amount);
-         ret = trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0);
-         if (!ret)
+         if (trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0) == 0)
            stretch_amount = atoi(input);
          break;
        case 4:
@@ -2396,16 +2371,14 @@ void trs_gui_misc_management(void)
          break;
        case 5:
          sprintf(input,"%2X",trs_uart_switches);
-         ret = trs_gui_input_string("Enter Serial Switches (Hex, XX)",input,input,2,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Serial Switches (Hex, XX)",input,input,2,0) == 0) {
            trs_uart_switches = strtol(input,NULL,16);
            trs_uart_init(0);
            }
          break;
        case 6:
          strcpy(input,trs_uart_name);
-         ret = trs_gui_input_string("Enter Serial Port Name",input,input,FILENAME_MAX-1,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Serial Port Name",input,input,FILENAME_MAX-1,0) == 0) {
            strcpy(trs_uart_name,input);
            trs_uart_init(0);
            }
@@ -2433,7 +2406,6 @@ void trs_gui_printer_management(void)
    char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
-   int ret;
 
    while(!done) {
      trs_gui_clear_screen();
@@ -2460,8 +2432,7 @@ void trs_gui_printer_management(void)
          break;
        case 4:
          strcpy(input,trs_printer_command);
-         ret = trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0);
-         if (!ret) {
+         if (trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0) == 0) {
            strcpy(trs_printer_command,input);
            }
          break;
@@ -2747,12 +2718,10 @@ void trs_gui_write_config(void)
 {
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
-  int ret;
 
   trs_expand_dir(".",browse_dir);
-  ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                              browse_dir,filename,FILENAME_MAX-1,1);
-  if (ret)
+  if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+                            browse_dir,filename,FILENAME_MAX-1,1) == -1)
     return;
   strcat(filename,".t8c");
   trs_write_config_file(filename);
@@ -2762,15 +2731,13 @@ int trs_gui_read_config(void)
 {
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
-  int ret;
 
   trs_expand_dir(".",browse_dir);
-  ret = trs_gui_file_browse(browse_dir, filename, ".t8c", 0," Configuration (.t8c) ");
-  if (ret == -1)
-    return 0;
+  if (trs_gui_file_browse(browse_dir, filename, ".t8c", 0," Configuration (.t8c) ") == -1)
+    return -1;
   trs_load_config_file(filename);
   trs_gui_new_machine();
-  return 1;
+  return 0;
 }
 
 static int trs_gui_config_management(void)
@@ -2802,14 +2769,14 @@ static int trs_gui_config_management(void)
          trs_gui_save_state();
          break;
        case 1:
-         if (trs_gui_load_state())
+         if (trs_gui_load_state() == 0)
            done = read = 1;
          break;
        case 2:
          trs_gui_write_config();
          break;
        case 3:
-         if (trs_gui_read_config())
+         if (trs_gui_read_config() == 0)
            done = read = 1;
          break;
        case -1:
@@ -2824,13 +2791,11 @@ void trs_gui_save_state(void)
 {
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
-  int ret;
 
   filename[0] = 0;
   trs_expand_dir(trs_state_dir, browse_dir);
-  ret = trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                              browse_dir,filename,FILENAME_MAX-1,1);
-  if (ret)
+  if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+                            browse_dir,filename,FILENAME_MAX-1,1) == -1)
     return;
   strcat(filename,".t8s");
   trs_state_save(filename);
@@ -2840,14 +2805,12 @@ int trs_gui_load_state(void)
 {
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
-  int ret;
 
   trs_expand_dir(trs_state_dir,browse_dir);
-  ret = trs_gui_file_browse(browse_dir, filename, ".t8s", 0," Saved State (.t8s) ");
-  if (ret == -1)
-    return 0;
+  if (trs_gui_file_browse(browse_dir, filename, ".t8s", 0," Saved State (.t8s) ") == -1)
+    return -1;
   trs_state_load(filename);
-  return 1;
+  return 0;
 }
 
 void trs_gui_save_or_load_single_state(int save)

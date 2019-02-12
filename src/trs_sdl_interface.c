@@ -2016,7 +2016,7 @@ void trs_get_event(int wait)
           } else
 #endif
           {
-            if (call_function(READ)) {
+            if (call_function(READ) == 0) {
               trs_screen_init(1);
               grafyx_redraw();
             }

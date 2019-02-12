@@ -64,7 +64,8 @@ int trs_printer_reset(void)
     fclose(printer);
     printer_open = FALSE;
     sprintf(command, trs_printer_command, printer_filename);
-    system(command);
+    if (system(command) == -1)
+      return(-1);
     return(0);
   } else
     return(-1);

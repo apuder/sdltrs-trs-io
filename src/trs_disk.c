@@ -768,7 +768,8 @@ int trs_diskset_save(char *filename)
     FILE *f;
     int i;
 
-    getcwd(dirname, FILENAME_MAX);
+    if (getcwd(dirname, FILENAME_MAX) == NULL)
+      return(-1);
 
     f = fopen(filename, "w");
     if (f) {
@@ -803,7 +804,8 @@ int trs_diskset_load(char *filename)
 
   if (f) {
     for (i=0;i<8;i++) {
-      fgets(diskname,FILENAME_MAX,f);
+      if (fgets(diskname,FILENAME_MAX,f) == NULL)
+        return(-1);
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
@@ -812,7 +814,8 @@ int trs_diskset_load(char *filename)
       }
     }
     for (i=0;i<4;i++) {
-      fgets(diskname,FILENAME_MAX,f);
+      if (fgets(diskname,FILENAME_MAX,f) == NULL)
+        return(-1);
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
