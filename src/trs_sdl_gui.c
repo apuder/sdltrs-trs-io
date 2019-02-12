@@ -318,11 +318,9 @@ int trs_gui_get_key(void)
          if (event.key.keysym.mod & MENU_MOD)
            {
            switch (event.key.keysym.sym) {
-#ifdef MACOSX
            case SDLK_q:
              trs_exit(2);
              break;
-#endif
 #ifdef _WIN32
            case SDLK_F4:
              trs_exit(2);
