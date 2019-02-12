@@ -10,6 +10,13 @@ From the "src/linux" directory, execute:
   make
 
 
+To build for FreeBSD/NetBSD/OpenBSD:
+------------------------------------
+Same requirements as for Linux, but please use the GNU make (gmake) in
+the "src/linux" directory. For curses (not ncurses) on NetBSD/OpenBSD,
+also add "-lcurses" to LIBS in the Makefile.
+
+
 To build for Win32:
 -------------------
 SDLTRS is designed to be build with MinGW <http://www.mingw.org/>. The
