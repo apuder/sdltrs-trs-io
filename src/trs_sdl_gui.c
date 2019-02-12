@@ -2374,7 +2374,7 @@ void trs_gui_misc_management(void)
            trs_uart_init(0);
            }
          break;
-       case 6:
+       case 7:
          strcpy(input,trs_uart_name);
          if (trs_gui_input_string("Enter Serial Port Name",input,input,FILENAME_MAX-1,0) == 0) {
            strcpy(trs_uart_name,input);
