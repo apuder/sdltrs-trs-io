@@ -681,7 +681,7 @@ static void trs_opt_model2(char *arg, int intarg, char *stringarg)
 }
 static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
 {
-  if (isdigit(*arg)) {
+  if (isdigit((int)*arg)) {
     trs_charset1 = atoi(arg);
     if (trs_charset1 < 0 || (trs_charset1 > 3 && trs_charset1 != 10))
       trs_charset1 = 3;
@@ -701,7 +701,7 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
 }
 static void trs_opt_charset3(char *arg, int intarg, char *stringarg)
 {
-  if (isdigit(*arg)) {
+  if (isdigit((int)*arg)) {
     trs_charset3 = atoi(arg);
     if (trs_charset3 < 4 || trs_charset3 > 6)
       trs_charset3 = 4;
@@ -717,7 +717,7 @@ static void trs_opt_charset3(char *arg, int intarg, char *stringarg)
 }
 static void trs_opt_charset4(char *arg, int intarg, char *stringarg)
 {
-  if (isdigit(*arg)) {
+  if (isdigit((int)*arg)) {
     trs_charset4 = atoi(arg);
     if (trs_charset4 < 7 || trs_charset4 > 9)
       trs_charset4 = 8;

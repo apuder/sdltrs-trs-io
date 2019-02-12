@@ -662,7 +662,7 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
     trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,0);
     if (key >= '0' && key <= 'z') {
       for (i=0;i<filenamecount-1;i++) {
-        if (tolower(*filenamelist[i]) >= key)
+        if (tolower((int)*filenamelist[i]) >= key)
           break;
       }
       if (filenamecount <= 13) {
@@ -1047,7 +1047,7 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
     trs_gui_write_text(entry[selection].title, 2, selection+2,0);
     if (key >= '0' && key <= 'z') {
       for (i=0;i<num+1;i++) {
-        if (tolower(*entry[i].title) == key && selection != i) {
+        if (tolower((int)*entry[i].title) == key && selection != i) {
           selection = i;
           while(entry[selection].type == MENU_TITLE_TYPE) {
             if (selection < num)
