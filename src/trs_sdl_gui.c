@@ -2452,7 +2452,7 @@ void trs_gui_model(void)
   {{"Model                                                       ",MENU_NORMAL_TYPE,1},
    {"Lowercase Modification for Model I                          ",MENU_NORMAL_TYPE,2},
    {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE,3},
-   {"Micro Labs Grafyx Graphics Emulation                        ",MENU_NORMAL_TYPE,4},
+   {"Micro Labs Grafyx or HRG1B Graphics Emulation               ",MENU_NORMAL_TYPE,4},
    {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE,5},
    {"Alpha Technologies HyperMem Memory Expansion                ",MENU_NORMAL_TYPE,6},
    {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,7},
@@ -2520,8 +2520,8 @@ void trs_gui_model(void)
                                                        lowe_le18);
          break;
        case 3:
-         state = trs_gui_display_popup("Grafyx",on_off_choices,2,
-                                                grafyx_get_microlabs());
+         state = trs_gui_display_popup("Grafyx/HRG1B",on_off_choices,2,
+                                                      grafyx_get_microlabs());
          grafyx_set_microlabs(state);
          break;
        case 4:
