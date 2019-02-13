@@ -2427,7 +2427,7 @@ void trs_gui_printer_management(void)
          else
            trs_gui_display_message("Warning","No Printer Output in File");
          break;
-       case 4:
+       case 3:
          strcpy(input,trs_printer_command);
          if (trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0) == 0) {
            strcpy(trs_printer_command,input);
