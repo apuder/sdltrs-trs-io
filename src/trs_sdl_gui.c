@@ -72,7 +72,6 @@
 typedef struct menu_entry_type {
   char title[80];
   int type;
-  int value;
 } MENU_ENTRY;
 
 int jbutton_map[N_JOYBUTTONS]    = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
@@ -1033,7 +1032,7 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
   trs_gui_frame(0,0,64,16);
   trs_gui_write_text(title, 2, 0, 0);
 
-  while(entry[num].value != -1)
+  while(entry[num].type != 0)
   {
     trs_gui_write_text(entry[num].title, 2, num+2,0);
     num++;
@@ -1164,13 +1163,13 @@ int trs_gui_display_menu(char* title, MENU_ENTRY *entry, int selection)
 void trs_gui_hard_creation(void)
 {
   MENU_ENTRY disk_creation_menu[] =
-  {{"Cylinder Count                                              ",MENU_NORMAL_TYPE,1},
-   {"Sector Count                                                ",MENU_NORMAL_TYPE,2},
-   {"Granularity                                                 ",MENU_NORMAL_TYPE,3},
-   {"Directory Sector                                            ",MENU_NORMAL_TYPE,4},
-   {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE,5},
-   {"Create Hard Disk Image with Above Parameters",MENU_NORMAL_TYPE,6},
-   {"",0,-1}};
+  {{"Cylinder Count                                              ",MENU_NORMAL_TYPE},
+   {"Sector Count                                                ",MENU_NORMAL_TYPE},
+   {"Granularity                                                 ",MENU_NORMAL_TYPE},
+   {"Directory Sector                                            ",MENU_NORMAL_TYPE},
+   {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
+   {"Create Hard Disk Image with Above Parameters",MENU_NORMAL_TYPE},
+   {"",0}};
    char *drive_choices[5] =      {"    None"," Drive 0"," Drive 1"," Drive 2",
                                   " Drive 3"};
    int selection = 5;
@@ -1291,14 +1290,14 @@ void trs_gui_hard_creation(void)
 void trs_gui_disk_creation(void)
 {
   MENU_ENTRY disk_creation_menu[] =
-  {{"Image Type                                                  ",MENU_NORMAL_TYPE,1},
-   {"Number of Sides                                             ",MENU_NORMAL_TYPE,2},
-   {"Density                                                     ",MENU_NORMAL_TYPE,3},
-   {"Physical Size                                               ",MENU_NORMAL_TYPE,4},
-   {"Ignore Density Flag                                         ",MENU_NORMAL_TYPE,5},
-   {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE,6},
-   {"Create Disk Image with Above Parameters",MENU_NORMAL_TYPE,7},
-   {"",0,-1}};
+  {{"Image Type                                                  ",MENU_NORMAL_TYPE},
+   {"Number of Sides                                             ",MENU_NORMAL_TYPE},
+   {"Density                                                     ",MENU_NORMAL_TYPE},
+   {"Physical Size                                               ",MENU_NORMAL_TYPE},
+   {"Ignore Density Flag                                         ",MENU_NORMAL_TYPE},
+   {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
+   {"Create Disk Image with Above Parameters",MENU_NORMAL_TYPE},
+   {"",0}};
    char *image_type_choices[3] = {"     JV1","     JV3","     DMK"};
    char *num_sides_choices[2] =  {"       1","       2"};
    char *density_choices[2] =    {"  Single","  Double"};
@@ -1381,10 +1380,10 @@ void trs_gui_disk_creation(void)
 void trs_gui_cassette_creation(void)
 {
   MENU_ENTRY cassette_creation_menu[] =
-  {{"Image Type                                                  ",MENU_NORMAL_TYPE,1},
-   {"Insert Created Disk Into Drive                              ",MENU_NORMAL_TYPE,6},
-   {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE,2},
-   {"",0,-1}};
+  {{"Image Type                                                  ",MENU_NORMAL_TYPE},
+   {"Insert Created Disk Into Drive                              ",MENU_NORMAL_TYPE},
+   {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE},
+   {"",0}};
    char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
    char *drive_choices[2] =     {"      No","     Yes"};
 
@@ -1466,15 +1465,15 @@ void trs_gui_cassette_creation(void)
 void trs_gui_disk_sizes(void)
 {
   MENU_ENTRY disk_sizes_menu[] =
-  {{"",MENU_NORMAL_TYPE,1},
-   {"",MENU_NORMAL_TYPE,2},
-   {"",MENU_NORMAL_TYPE,3},
-   {"",MENU_NORMAL_TYPE,4},
-   {"",MENU_NORMAL_TYPE,5},
-   {"",MENU_NORMAL_TYPE,6},
-   {"",MENU_NORMAL_TYPE,7},
-   {"",MENU_NORMAL_TYPE,8},
-   {"",0,-1}};
+  {{"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",0,}};
    int selection = 0;
    int done = 0;
    int gui_disk_sizes[8];
@@ -1516,15 +1515,15 @@ void trs_gui_disk_sizes(void)
 void trs_gui_disk_steps(void)
 {
   MENU_ENTRY disk_steps_menu[] =
-  {{"",MENU_NORMAL_TYPE,1},
-   {"",MENU_NORMAL_TYPE,2},
-   {"",MENU_NORMAL_TYPE,3},
-   {"",MENU_NORMAL_TYPE,4},
-   {"",MENU_NORMAL_TYPE,5},
-   {"",MENU_NORMAL_TYPE,6},
-   {"",MENU_NORMAL_TYPE,7},
-   {"",MENU_NORMAL_TYPE,8},
-   {"",0,-1}};
+  {{"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",MENU_NORMAL_TYPE},
+   {"",0}};
    int selection = 0;
    int done = 0;
    int gui_disk_steps[8];
@@ -1566,13 +1565,13 @@ void trs_gui_disk_steps(void)
 void trs_gui_disk_options(void)
 {
   MENU_ENTRY disk_menu[] =
-  {{"Doubler Type                                                ",MENU_NORMAL_TYPE,1},
-   {"True DAM Emulation                                          ",MENU_NORMAL_TYPE,2},
-   {"Set Drive Sizes",MENU_NORMAL_TYPE,3},
+  {{"Doubler Type                                                ",MENU_NORMAL_TYPE},
+   {"True DAM Emulation                                          ",MENU_NORMAL_TYPE},
+   {"Set Drive Sizes",MENU_NORMAL_TYPE},
 #ifdef __linux
-   {"Set Drive Steps",MENU_NORMAL_TYPE,4},
+   {"Set Drive Steps",MENU_NORMAL_TYPE},
 #endif
-   {"",0,-1}};
+   {"",0,}};
    char *on_off_choices[2] =     {"       Off","        On"};
    char *doubler_choices[4] =     {"      None","    Percom","     Tandy","      Both"};
    int selection = 0;
@@ -1610,19 +1609,19 @@ void trs_gui_disk_options(void)
 void trs_gui_disk_management(void)
 {
   MENU_ENTRY disk_menu[] =
-  {{" Disk 0:",MENU_FLOPPY_BROWSE_TYPE,1},
-   {" Disk 1:",MENU_FLOPPY_BROWSE_TYPE,2},
-   {" Disk 2:",MENU_FLOPPY_BROWSE_TYPE,3},
-   {" Disk 3:",MENU_FLOPPY_BROWSE_TYPE,4},
-   {" Disk 4:",MENU_FLOPPY_BROWSE_TYPE,5},
-   {" Disk 5:",MENU_FLOPPY_BROWSE_TYPE,6},
-   {" Disk 6:",MENU_FLOPPY_BROWSE_TYPE,7},
-   {" Disk 7:",MENU_FLOPPY_BROWSE_TYPE,8},
-   {"Save Disk Set",MENU_NORMAL_TYPE,9},
-   {"Load Disk Set",MENU_NORMAL_TYPE,10},
-   {"Create Blank Floppy Disk",MENU_NORMAL_TYPE,11},
-   {"Disk Drive Options",MENU_NORMAL_TYPE,12},
-   {"",0,-1}};
+  {{" Disk 0:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 1:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 2:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 3:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 4:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 5:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 6:",MENU_FLOPPY_BROWSE_TYPE},
+   {" Disk 7:",MENU_FLOPPY_BROWSE_TYPE},
+   {"Save Disk Set",MENU_NORMAL_TYPE},
+   {"Load Disk Set",MENU_NORMAL_TYPE},
+   {"Create Blank Floppy Disk",MENU_NORMAL_TYPE},
+   {"Disk Drive Options",MENU_NORMAL_TYPE},
+   {"",0}};
    char filename[FILENAME_MAX];
    char browse_dir[FILENAME_MAX];
    int selection = 0;
@@ -1675,14 +1674,14 @@ void trs_gui_disk_management(void)
 void trs_gui_hard_management(void)
 {
   MENU_ENTRY hard_menu[] =
-  {{" Hard 0:",MENU_HARD_BROWSE_TYPE,1},
-   {" Hard 1:",MENU_HARD_BROWSE_TYPE,2},
-   {" Hard 2:",MENU_HARD_BROWSE_TYPE,3},
-   {" Hard 3:",MENU_HARD_BROWSE_TYPE,4},
-   {"Save Disk Set",MENU_NORMAL_TYPE,5},
-   {"Load Disk Set",MENU_NORMAL_TYPE,6},
-   {"Create Blank Hard Disk",MENU_NORMAL_TYPE,7},
-   {"",0,-1}};
+  {{" Hard 0:",MENU_HARD_BROWSE_TYPE},
+   {" Hard 1:",MENU_HARD_BROWSE_TYPE},
+   {" Hard 2:",MENU_HARD_BROWSE_TYPE},
+   {" Hard 3:",MENU_HARD_BROWSE_TYPE},
+   {"Save Disk Set",MENU_NORMAL_TYPE},
+   {"Load Disk Set",MENU_NORMAL_TYPE},
+   {"Create Blank Hard Disk",MENU_NORMAL_TYPE},
+   {"",0}};
    char filename[FILENAME_MAX];
    char browse_dir[FILENAME_MAX];
    int selection = 0;
@@ -1734,11 +1733,11 @@ void trs_gui_hard_management(void)
 void trs_gui_cassette_management(void)
 {
   MENU_ENTRY cass_menu[] =
-  {{"Cass   :",MENU_CASS_BROWSE_TYPE,1},
-   {"Cassette Position                                           ",MENU_NORMAL_TYPE,10},
-   {"Cassette Default Sample Rate                                ",MENU_NORMAL_TYPE,2},
-   {"Create Blank Cassette",MENU_NORMAL_TYPE,3},
-   {"",0,-1}};
+  {{"Cass   :",MENU_CASS_BROWSE_TYPE},
+   {"Cassette Position                                           ",MENU_NORMAL_TYPE},
+   {"Cassette Default Sample Rate                                ",MENU_NORMAL_TYPE},
+   {"Create Blank Cassette",MENU_NORMAL_TYPE},
+   {"",0}};
    char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
@@ -1789,18 +1788,18 @@ void trs_gui_cassette_management(void)
 void trs_gui_display_management(void)
 {
   MENU_ENTRY display_menu[] =
-  {{"Emulator Background Color                                   ",MENU_NORMAL_TYPE,1},
-   {"Emulator Foreground Color                                   ",MENU_NORMAL_TYPE,2},
-   {"GUI Background Color                                        ",MENU_NORMAL_TYPE,3},
-   {"GUI Foreground Color                                        ",MENU_NORMAL_TYPE,4},
-   {"Model 1 Character Set                                       ",MENU_NORMAL_TYPE,2},
-   {"Model 3 Character Set                                       ",MENU_NORMAL_TYPE,2},
-   {"Model 4/4P Character Set                                    ",MENU_NORMAL_TYPE,2},
-   {"Border Width                                                ",MENU_NORMAL_TYPE,5},
-   {"Resize Window on Mode Change for Model 3                    ",MENU_NORMAL_TYPE,6},
-   {"Resize Window on Mode Change for Model 4                    ",MENU_NORMAL_TYPE,7},
-   {"Disk LED Display                                            ",MENU_NORMAL_TYPE,8},
-   {"",0,-1}};
+  {{"Emulator Background Color                                   ",MENU_NORMAL_TYPE},
+   {"Emulator Foreground Color                                   ",MENU_NORMAL_TYPE},
+   {"GUI Background Color                                        ",MENU_NORMAL_TYPE},
+   {"GUI Foreground Color                                        ",MENU_NORMAL_TYPE},
+   {"Model 1 Character Set                                       ",MENU_NORMAL_TYPE},
+   {"Model 3 Character Set                                       ",MENU_NORMAL_TYPE},
+   {"Model 4/4P Character Set                                    ",MENU_NORMAL_TYPE},
+   {"Border Width                                                ",MENU_NORMAL_TYPE},
+   {"Resize Window on Mode Change for Model 3                    ",MENU_NORMAL_TYPE},
+   {"Resize Window on Mode Change for Model 4                    ",MENU_NORMAL_TYPE},
+   {"Disk LED Display                                            ",MENU_NORMAL_TYPE},
+   {"",0,}};
    char input[FILENAME_MAX];
    int selection = 0;
    int charset1_selection;
@@ -2157,14 +2156,14 @@ void trs_gui_joystick_save_mapping(void)
 void trs_gui_joystick_map_joystick(void)
 {
   MENU_ENTRY display_menu[] = {
-    {"Map Button to Key                                           ", MENU_NORMAL_TYPE, 1},
-    {"Map Button to Function                                      ", MENU_NORMAL_TYPE, 2},
-    {"Unmap Button                                                ", MENU_NORMAL_TYPE, 3},
-    {"Unmap All Buttons                                           ", MENU_NORMAL_TYPE, 4},
-    {"Check Button Mapping                                        ", MENU_NORMAL_TYPE, 5},
-    {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE, 6},
-    {"Save Mapping to Configuration File                          ", MENU_NORMAL_TYPE, 7},
-    {"", 0, -1}
+    {"Map Button to Key                                           ", MENU_NORMAL_TYPE},
+    {"Map Button to Function                                      ", MENU_NORMAL_TYPE},
+    {"Unmap Button                                                ", MENU_NORMAL_TYPE},
+    {"Unmap All Buttons                                           ", MENU_NORMAL_TYPE},
+    {"Check Button Mapping                                        ", MENU_NORMAL_TYPE},
+    {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE},
+    {"Save Mapping to Configuration File                          ", MENU_NORMAL_TYPE},
+    {"",0}
   };
   char *on_off_choices[2] = {"   Off","    On"};
   int selection = 0, done = 0, checking = 0, counter;
@@ -2249,10 +2248,10 @@ void trs_gui_joystick_map_joystick(void)
 void trs_gui_joystick_management(void)
 {
   MENU_ENTRY display_menu[] =
-  {{"Use Keypad for Joystick                                     ",MENU_NORMAL_TYPE,1},
-   {"USB Joystick/Gamepad                                        ",MENU_NORMAL_TYPE,2},
-   {"Map Joystick to Keys/Functions                              ",MENU_NORMAL_TYPE,5},
-   {"",0,-1}};
+  {{"Use Keypad for Joystick                                     ",MENU_NORMAL_TYPE},
+   {"USB Joystick/Gamepad                                        ",MENU_NORMAL_TYPE},
+   {"Map Joystick to Keys/Functions                              ",MENU_NORMAL_TYPE},
+   {"",0}};
    int selection = 0;
    int done = 0;
    int i, num_joysticks, joy_index;
@@ -2311,15 +2310,15 @@ void trs_gui_joystick_management(void)
 void trs_gui_misc_management(void)
 {
   MENU_ENTRY misc_menu[] =
-  {{"Shift Bracket Emulation                                     ",MENU_NORMAL_TYPE,1},
-   {"Turbo Mode                                                  ",MENU_NORMAL_TYPE,2},
-   {"Turbo Speed                                                 ",MENU_NORMAL_TYPE,3},
-   {"Keystretch Value                                            ",MENU_NORMAL_TYPE,4},
-   {"Emtsafe                                                     ",MENU_NORMAL_TYPE,5},
-   {"Serial Switches                                             ",MENU_NORMAL_TYPE,6},
-   {"Serial Port Name:                                           ",MENU_TITLE_TYPE,7},
-   {"                                                            ",MENU_NORMAL_TYPE,8},
-   {"",0,-1}};
+  {{"Shift Bracket Emulation                                     ",MENU_NORMAL_TYPE},
+   {"Turbo Mode                                                  ",MENU_NORMAL_TYPE},
+   {"Turbo Speed                                                 ",MENU_NORMAL_TYPE},
+   {"Keystretch Value                                            ",MENU_NORMAL_TYPE},
+   {"Emtsafe                                                     ",MENU_NORMAL_TYPE},
+   {"Serial Switches                                             ",MENU_NORMAL_TYPE},
+   {"Serial Port Name:                                           ",MENU_TITLE_TYPE},
+   {"                                                            ",MENU_NORMAL_TYPE},
+   {"",0}};
    char *on_off_choices[2] =     {"       Off","        On"};
    char input[FILENAME_MAX];
    int selection = 0;
@@ -2391,11 +2390,11 @@ void trs_gui_misc_management(void)
 void trs_gui_printer_management(void)
 {
   MENU_ENTRY printer_menu[] =
-  {{"Printer Type                                                ",MENU_NORMAL_TYPE,1},
-   {"Close and Reopen Printer Output File",MENU_NORMAL_TYPE,2},
-   {"Printer Command:",MENU_TITLE_TYPE,3},
-   {"   ",MENU_NORMAL_TYPE,3},
-   {"",0,-1}};
+  {{"Printer Type                                                ",MENU_NORMAL_TYPE},
+   {"Close and Reopen Printer Output File",MENU_NORMAL_TYPE},
+   {"Printer Command:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"",0}};
 #ifdef MACOSX
    char *printer_choices[4] =     {"      None","      Text","     Epson","   CGP-115"};
 #else
@@ -2449,15 +2448,15 @@ void trs_gui_model(void)
                             " TRS-80 Model 4P"};
   char *on_off_choices[2] = {"            Off","             On"};
   MENU_ENTRY model_menu[] =
-  {{"Model                                                       ",MENU_NORMAL_TYPE,1},
-   {"Lowercase Modification for Model I                          ",MENU_NORMAL_TYPE,2},
-   {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE,3},
-   {"Micro Labs Grafyx or HRG1B Graphics Emulation               ",MENU_NORMAL_TYPE,4},
-   {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE,5},
-   {"Alpha Technologies HyperMem Memory Expansion                ",MENU_NORMAL_TYPE,6},
-   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE,7},
-   {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE,8},
-   {"",0,-1}};
+  {{"Model                                                       ",MENU_NORMAL_TYPE},
+   {"Lowercase Modification for Model I                          ",MENU_NORMAL_TYPE},
+   {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE},
+   {"Micro Labs Grafyx or HRG1B Graphics Emulation               ",MENU_NORMAL_TYPE},
+   {"Dave Huffman (and other) Memory Expansion                   ",MENU_NORMAL_TYPE},
+   {"Alpha Technologies HyperMem Memory Expansion                ",MENU_NORMAL_TYPE},
+   {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE},
+   {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE},
+   {"",0}};
    int selection = 0;
    int model_selection = 0;
    int done = 0;
@@ -2559,19 +2558,19 @@ void trs_gui_model(void)
 void trs_gui_default_dirs(void)
 {
   MENU_ENTRY default_menu[] =
-  {{"Default Floppy Disk Directory:",MENU_TITLE_TYPE,1},
-   {"   ",MENU_NORMAL_TYPE,2},
-   {"Default Hard Disk Directory:",MENU_TITLE_TYPE,3},
-   {"   ",MENU_NORMAL_TYPE,4},
-   {"Default Cassette Directory:",MENU_TITLE_TYPE,5},
-   {"   ",MENU_NORMAL_TYPE,6},
-   {"Default Disk Set Directory:",MENU_TITLE_TYPE,7},
-   {"   ",MENU_NORMAL_TYPE,8},
-   {"Default State Directory:",MENU_TITLE_TYPE,9},
-   {"   ",MENU_NORMAL_TYPE,10},
-   {"Default Printer Output Directory:",MENU_TITLE_TYPE,11},
-   {"   ",MENU_NORMAL_TYPE,12},
-   {"",0,-1}};
+  {{"Default Floppy Disk Directory:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Default Hard Disk Directory:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Default Cassette Directory:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Default Disk Set Directory:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Default State Directory:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Default Printer Output Directory:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"",0}};
    char browse_dir[FILENAME_MAX];
    int selection = 1;
    int done = 0;
@@ -2621,13 +2620,13 @@ void trs_gui_default_dirs(void)
 void trs_gui_rom_files(void)
 {
   MENU_ENTRY romfile_menu[] =
-  {{"Model 1 ROM File:",MENU_TITLE_TYPE,1},
-   {"   ",MENU_NORMAL_TYPE,2},
-   {"Model 3 ROM File:",MENU_TITLE_TYPE,3},
-   {"   ",MENU_NORMAL_TYPE,4},
-   {"Model 4P ROM File:",MENU_TITLE_TYPE,5},
-   {"   ",MENU_NORMAL_TYPE,6},
-   {"",0,-1}};
+  {{"Model 1 ROM File:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Model 3 ROM File:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"Model 4P ROM File:",MENU_TITLE_TYPE},
+   {"   ",MENU_NORMAL_TYPE},
+   {"",0}};
    char browse_dir[FILENAME_MAX];
    int selection = 1;
    int done = 0;
@@ -2742,17 +2741,17 @@ static int trs_gui_config_management(void)
 {
   MENU_ENTRY misc_menu[] =
 #ifdef MACOSX
-  {{"Save Emulator State      (CMD-S)",MENU_NORMAL_TYPE,1},
-   {"Load Emulator State      (CMD-L)",MENU_NORMAL_TYPE,2},
-   {"Write Configuration File (CMD-W)",MENU_NORMAL_TYPE,3},
-   {"Read Configuration File  (CMD-R)",MENU_NORMAL_TYPE,4},
+  {{"Save Emulator State      (CMD-S)",MENU_NORMAL_TYPE},
+   {"Load Emulator State      (CMD-L)",MENU_NORMAL_TYPE},
+   {"Write Configuration File (CMD-W)",MENU_NORMAL_TYPE},
+   {"Read Configuration File  (CMD-R)",MENU_NORMAL_TYPE},
 #else
-  {{"Save Emulator State      (ALT-S)",MENU_NORMAL_TYPE,1},
-   {"Load Emulator State      (ALT-L)",MENU_NORMAL_TYPE,2},
-   {"Write Configuration File (ALT-W)",MENU_NORMAL_TYPE,3},
-   {"Read Configuration File  (ALT-R)",MENU_NORMAL_TYPE,4},
+  {{"Save Emulator State      (ALT-S)",MENU_NORMAL_TYPE},
+   {"Load Emulator State      (ALT-L)",MENU_NORMAL_TYPE},
+   {"Write Configuration File (ALT-W)",MENU_NORMAL_TYPE},
+   {"Read Configuration File  (ALT-R)",MENU_NORMAL_TYPE},
 #endif
-   {"",0,-1}};
+   {"",0}};
    int selection = 0;
    int done = 0;
    int read = 0;
@@ -2872,38 +2871,38 @@ void trs_gui(void)
   MENU_ENTRY main_menu[] =
   {
 #ifdef MACOSX
-   {"Floppy Disk Management (CMD-D)",MENU_NORMAL_TYPE,1},
-   {"Hard Disk Management   (CMD-H)",MENU_NORMAL_TYPE,2},
-   {"Cassette Management    (CMD-T)",MENU_NORMAL_TYPE,3},
-   {"Emulator Settings      (CMD-E)",MENU_NORMAL_TYPE,4},
+   {"Floppy Disk Management (CMD-D)",MENU_NORMAL_TYPE},
+   {"Hard Disk Management   (CMD-H)",MENU_NORMAL_TYPE},
+   {"Cassette Management    (CMD-T)",MENU_NORMAL_TYPE},
+   {"Emulator Settings      (CMD-E)",MENU_NORMAL_TYPE},
 #else
-   {"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE,1},
-   {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE,2},
-   {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE,3},
-   {"Emulator Settings      (ALT-E)",MENU_NORMAL_TYPE,4},
+   {"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE},
+   {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE},
+   {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE},
+   {"Emulator Settings      (ALT-E)",MENU_NORMAL_TYPE},
 #endif
-   {"Configuration/State File Management",MENU_NORMAL_TYPE,5},
-   {"Printer Management",MENU_NORMAL_TYPE,6},
-   {"Select Default Directories",MENU_NORMAL_TYPE,7},
-   {"ROM File Selection",MENU_NORMAL_TYPE,8},
+   {"Configuration/State File Management",MENU_NORMAL_TYPE},
+   {"Printer Management",MENU_NORMAL_TYPE},
+   {"Select Default Directories",MENU_NORMAL_TYPE},
+   {"ROM File Selection",MENU_NORMAL_TYPE},
 #ifdef MACOSX
-   {"Display Settings       (CMD-I)",MENU_NORMAL_TYPE,9},
+   {"Display Settings       (CMD-I)",MENU_NORMAL_TYPE},
 #else
-   {"Display Settings       (ALT-I)",MENU_NORMAL_TYPE,9},
+   {"Display Settings       (ALT-I)",MENU_NORMAL_TYPE},
 #endif
-   {"Joystick Settings",MENU_NORMAL_TYPE,10},
+   {"Joystick Settings",MENU_NORMAL_TYPE},
 #ifdef MACOSX
-   {"Miscellaneous Settings (CMD-O)",MENU_NORMAL_TYPE,11},
+   {"Miscellaneous Settings (CMD-O)",MENU_NORMAL_TYPE},
 #else
-   {"Miscellaneous Settings (ALT-O)",MENU_NORMAL_TYPE,11},
+   {"Miscellaneous Settings (ALT-O)",MENU_NORMAL_TYPE},
 #endif
-   {"About SDLTRS",MENU_NORMAL_TYPE,12},
+   {"About SDLTRS",MENU_NORMAL_TYPE},
 #ifdef MACOSX
-   {"Keys in SDLTRS         (CMD-K)",MENU_NORMAL_TYPE,13},
+   {"Keys in SDLTRS         (CMD-K)",MENU_NORMAL_TYPE},
 #else
-   {"Keys in SDLTRS         (ALT-K)",MENU_NORMAL_TYPE,13},
+   {"Keys in SDLTRS         (ALT-K)",MENU_NORMAL_TYPE},
 #endif
-   {"",0,-1}};
+   {"",0}};
    int selection = 0;
    int done = 0;
 
