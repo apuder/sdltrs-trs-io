@@ -567,7 +567,7 @@ int trs_gui_readdirectory(char *path, char *mask, int browse_dir)
 
       strcpy(filename_pos, dir_entry->d_name);
       stat(pathname, &st);
-      if (st.st_mode & S_IFDIR) {
+      if ((st.st_mode & S_IFMT) == S_IFDIR) {
         int dirname_len;
         dirname_len = strlen(dir_entry->d_name);
         if ( (filename = (char *) malloc(dirname_len + 3)) ) {
