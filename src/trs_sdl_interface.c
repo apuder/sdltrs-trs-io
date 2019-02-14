@@ -1876,6 +1876,11 @@ void trs_get_event(int wait)
         keysym.unicode = 0;
         keysym.sym = 0;
         break;
+      case SDLK_PAUSE:
+        call_function(PAUSE);
+        keysym.unicode = 0;
+        keysym.sym = 0;
+        break;
       default:
         break;
       }
