@@ -218,8 +218,9 @@ void trs_gui_limit_string(char *orig, char *limited, unsigned int limit)
 void trs_expand_dir(char *dir, char *expanded_dir)
 {
   int i;
+  struct stat st;
 
-  if (opendir(dir) == NULL)
+  if (stat(dir, &st) < 0)
     strcpy(dir, ".");
 
 #ifdef _WIN32
