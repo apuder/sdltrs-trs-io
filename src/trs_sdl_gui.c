@@ -729,7 +729,7 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
             current_first = 0;
 
             if (new_dir[1] == '.' && new_dir[2] == '.') {
-              for (i=strlen(current_dir)-2;i>0;i--) {
+              for (i=strlen(current_dir)-2;i>=0;i--) {
 #ifdef _WIN32
                 if (current_dir[i] == '\\') {
 #else
