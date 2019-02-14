@@ -3424,7 +3424,6 @@ real_check_empty(DiskState *d)
   int reset_now = 0;
   struct floppy_raw_cmd raw_cmd;
   int res, i = 0;
-  sigset_t set, oldset;
 
   if (time(NULL) <= d->u.real.empty_timeout) return d->u.real.empty;
 
@@ -3445,12 +3444,7 @@ real_check_empty(DiskState *d)
   raw_cmd.cmd_count = i;
   raw_cmd.data = NULL;
   raw_cmd.length = 0;
-  sigemptyset(&set);
-  sigaddset(&set, SIGALRM);
-  sigprocmask(SIG_BLOCK, &set, &oldset);
-  trs_paused = 1;
   res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  sigprocmask(SIG_SETMASK, &oldset, NULL);
   if (res < 0) {
     real_error(d, raw_cmd.flags, "check_empty");
   } else {
@@ -3476,18 +3470,12 @@ real_restore(int curdrive)
   DiskState *d = &disk[curdrive];
   struct floppy_raw_cmd raw_cmd;
   int res, i = 0;
-  sigset_t set, oldset;
 
   raw_cmd.flags = FD_RAW_INTR;
   raw_cmd.cmd[i++] = FD_RECALIBRATE;
   raw_cmd.cmd[i++] = 0;
   raw_cmd.cmd_count = i;
-  sigemptyset(&set);
-  sigaddset(&set, SIGALRM);
-  sigprocmask(SIG_BLOCK, &set, &oldset);
-  trs_paused = 1;
   res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  sigprocmask(SIG_SETMASK, &oldset, NULL);
   if (res < 0) {
     real_error(d, raw_cmd.flags, "restore");
     state.status |= TRSDISK_SEEKERR;
@@ -3505,7 +3493,6 @@ real_seek()
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
   int res, i = 0;
-  sigset_t set, oldset;
 
   /* Always use a recal if going to track 0.  This should help us
      recover from confusion about what track the disk is really on.
@@ -3525,12 +3512,7 @@ real_seek()
   raw_cmd.cmd[i++] = 0;
   raw_cmd.cmd[i++] = d->phytrack * d->real_step;
   raw_cmd.cmd_count = i;
-  sigemptyset(&set);
-  sigaddset(&set, SIGALRM);
-  sigprocmask(SIG_BLOCK, &set, &oldset);
-  trs_paused = 1;
   res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  sigprocmask(SIG_SETMASK, &oldset, NULL);
   if (res < 0) {
     real_error(d, raw_cmd.flags, "seek");
     state.status |= TRSDISK_SEEKERR;
@@ -3548,7 +3530,6 @@ real_read()
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
   int res, i, retry, new_status;
-  sigset_t set, oldset;
 
   /* Try once at each supported sector size */
   retry = 0;
@@ -3571,12 +3552,7 @@ real_read()
     raw_cmd.cmd_count = i;
     raw_cmd.data = (void*) d->u.real.buf;
     raw_cmd.length = 128 << d->u.real.size_code;
-    sigemptyset(&set);
-    sigaddset(&set, SIGALRM);
-    sigprocmask(SIG_BLOCK, &set, &oldset);
-    trs_paused = 1;
     res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-    sigprocmask(SIG_SETMASK, &oldset, NULL);
     if (res < 0) {
       real_error(d, raw_cmd.flags, "read");
       new_status |= TRSDISK_NOTFOUND;
@@ -3642,7 +3618,6 @@ real_write()
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
   int res, i = 0;
-  sigset_t set, oldset;
 
   state.status = 0;
   memset(&raw_cmd, 0, sizeof(raw_cmd));
@@ -3676,12 +3651,7 @@ real_write()
   raw_cmd.cmd_count = i;
   raw_cmd.data = (void*) d->u.real.buf;
   raw_cmd.length = 128 << d->u.real.size_code;
-  sigemptyset(&set);
-  sigaddset(&set, SIGALRM);
-  sigprocmask(SIG_BLOCK, &set, &oldset);
-  trs_paused = 1;
   res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  sigprocmask(SIG_SETMASK, &oldset, NULL);
   if (res < 0) {
     real_error(d, raw_cmd.flags, "write");
     state.status |= TRSDISK_NOTFOUND;
@@ -3735,7 +3705,6 @@ real_readadr()
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
   int res, i, new_status;
-  sigset_t set, oldset;
 
   state.status = 0;
   new_status = 0;
@@ -3748,12 +3717,7 @@ real_readadr()
   raw_cmd.cmd_count = i;
   raw_cmd.data = NULL;
   raw_cmd.length = 0;
-  sigemptyset(&set);
-  sigaddset(&set, SIGALRM);
-  sigprocmask(SIG_BLOCK, &set, &oldset);
-  trs_paused = 1;
   res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  sigprocmask(SIG_SETMASK, &oldset, NULL);
   state.bytecount = 0;
   if (res < 0) {
     real_error(d, raw_cmd.flags, "readadr");
@@ -3805,7 +3769,6 @@ real_writetrk()
   struct floppy_raw_cmd raw_cmd;
   int res, gap3;
   unsigned i;
-  sigset_t set, oldset;
   state.status = 0;
 
   /* Compute a usable gap3 */
@@ -3869,12 +3832,7 @@ real_writetrk()
     debug("\n");
   }
 
-  sigemptyset(&set);
-  sigaddset(&set, SIGALRM);
-  sigprocmask(SIG_BLOCK, &set, &oldset);
-  trs_paused = 1;
   res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  sigprocmask(SIG_SETMASK, &oldset, NULL);
   if (res < 0) {
     real_error(d, raw_cmd.flags, "writetrk");
     state.status |= TRSDISK_WRITEFLT;
