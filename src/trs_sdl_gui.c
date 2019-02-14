@@ -605,8 +605,9 @@ int trs_gui_readdirectory(char *path, char *mask, int browse_dir)
 
     trs_gui_quicksort(filenamelist, filenamelist+filenamecount,
                       trs_gui_filename_cmp);
+    return(0);
   }
-  return(0);
+  return(-1);
 }
 
 int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, char* type)
@@ -642,7 +643,8 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
   trs_gui_write_text(title, 2, 0, 0);
   trs_gui_limit_string(current_dir, limited_dir, 62);
   trs_gui_center_text(limited_dir,1,0);
-  trs_gui_readdirectory(current_dir, mask, browse_dir);
+  if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+    return(-1);
 
   if (filenamecount < 13)
     drawcount = filenamecount;
@@ -753,7 +755,8 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
             trs_gui_center_text(limited_dir,1,0);
 
             trs_gui_delete_filename_list();
-            trs_gui_readdirectory(current_dir, mask, browse_dir);
+            if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+              return(-1);
 
             if (filenamecount < 13)
               drawcount = filenamecount;
@@ -778,7 +781,8 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
             trs_gui_center_text(limited_dir,1,0);
 
             trs_gui_delete_filename_list();
-            trs_gui_readdirectory(current_dir, mask, browse_dir);
+            if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+              return(-1);
 
             if (filenamecount < 13)
               drawcount = filenamecount;
