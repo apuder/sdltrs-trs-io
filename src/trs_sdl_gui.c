@@ -1949,8 +1949,9 @@ void trs_gui_display_management(void)
     resize4 = gui_resize4;
     window_border_width = gui_border_width;
     trs_screen_init(0);
+    trs_gui_clear_screen();
+    trs_screen_refresh();
     grafyx_redraw();
-    trs_gui_refresh();
   }
 }
 
