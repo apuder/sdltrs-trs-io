@@ -78,23 +78,7 @@ int jbutton_map[N_JOYBUTTONS]    = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 int jbutton_active[N_JOYBUTTONS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int jaxis_mapped = 0;
 
-static int local_trs_model;
-static int local_trs_charset1;
-static int local_trs_charset3;
-static int local_trs_charset4;
-static unsigned int local_foreground;
-static unsigned int local_background;
-static unsigned int local_gui_foreground;
-static unsigned int local_gui_background;
-static int gui_show_led;
-static int gui_resize3;
-static int gui_resize4;
-static int gui_border_width;
-static int gui_joystick_num;
-static int gui_keypad_joystick;
-
 extern void trs_gui_write_char(int position, int char_index, int invert);
-
 static void trs_gui_write_text_len(char *text, int len, int x, int y, int invert);
 static void trs_gui_write_text(char *text, int x, int y, int invert);
 static void trs_gui_write_text_char(char text, int x, int y, int invert);
@@ -1822,17 +1806,17 @@ void trs_gui_display_management(void)
                                "       international",
                                "                bold"};
 
-   local_trs_charset1 = trs_charset1;
-   local_trs_charset3 = trs_charset3;
-   local_trs_charset4 = trs_charset4;
-   local_foreground = foreground;
-   local_background = background;
-   local_gui_foreground = gui_foreground;
-   local_gui_background = gui_background;
-   gui_show_led = trs_show_led;
-   gui_resize3 = resize3;
-   gui_resize4 = resize4;
-   gui_border_width = window_border_width;
+   int local_trs_charset1 = trs_charset1;
+   int local_trs_charset3 = trs_charset3;
+   int local_trs_charset4 = trs_charset4;
+   int local_foreground = foreground;
+   int local_background = background;
+   unsigned int local_gui_foreground = gui_foreground;
+   unsigned int local_gui_background = gui_background;
+   int gui_show_led = trs_show_led;
+   int gui_resize3 = resize3;
+   int gui_resize4 = resize4;
+   int gui_border_width = window_border_width;
 
    if (local_trs_charset1 == 10)
      charset1_selection = 4;
@@ -2261,6 +2245,8 @@ void trs_gui_joystick_management(void)
    int selection = 0;
    int done = 0;
    int i, num_joysticks, joy_index;
+   int gui_keypad_joystick = trs_keypad_joystick;
+   int gui_joystick_num = trs_joystick_num;
    char *keypad_choices[2] =     {"      No","     Yes"};
    char *joystick_choices[MAX_JOYSTICKS+1];
    char joystick_strings[MAX_JOYSTICKS+1][64];
@@ -2310,6 +2296,16 @@ void trs_gui_joystick_management(void)
          done = 1;
          break;
      }
+  }
+
+  if (trs_keypad_joystick != gui_keypad_joystick) {
+    trs_keypad_joystick = gui_keypad_joystick;
+    trs_set_keypad_joystick();
+  }
+
+  if (trs_joystick_num != gui_joystick_num) {
+    trs_joystick_num = gui_joystick_num;
+    trs_open_joystick();
   }
 }
 
@@ -2467,8 +2463,7 @@ void trs_gui_model(void)
    int model_selection = 0;
    int done = 0;
    int state;
-
-   local_trs_model = trs_model;
+   int local_trs_model = trs_model;
 
    while(!done) {
      trs_gui_clear_screen();
@@ -2912,9 +2907,6 @@ void trs_gui(void)
    int selection = 0;
    int done = 0;
 
-   gui_keypad_joystick = trs_keypad_joystick;
-   gui_joystick_num = trs_joystick_num;
-
    while(!done) {
      trs_gui_clear_screen();
      selection = trs_gui_display_menu("SDLTRS Main Menu",main_menu, selection);
@@ -2964,16 +2956,6 @@ void trs_gui(void)
          trs_gui_keys_sdltrs();
          break;
      }
-  }
-
-  if (trs_keypad_joystick != gui_keypad_joystick) {
-    trs_keypad_joystick = gui_keypad_joystick;
-    trs_set_keypad_joystick();
-  }
-
-  if (trs_joystick_num != gui_joystick_num) {
-    trs_joystick_num = gui_joystick_num;
-    trs_open_joystick();
   }
 }
 
