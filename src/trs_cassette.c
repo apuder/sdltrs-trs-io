@@ -103,6 +103,8 @@ static int cassette_stereo = 0;
 static Uint32 cassette_silence;
 static int soundDeviceOpen = FALSE;
 
+int trs_sound = 1;
+
 /* Windows won't work with a sound fragment size smaller than 2048,
    or you get gaps in sound */
 #ifdef _WIN32
@@ -1140,7 +1142,7 @@ void trs_cassette_out(int value)
   }
 
   /* Do sound emulation by sending samples to /dev/dsp */
-  if (cassette_motor == 0 ) {
+  if (trs_sound && cassette_motor == 0 ) {
     if (cassette_state != SOUND && value == 0) return;
     if (assert_state(SOUND) < 0) return;
     trs_suspend_delay();
@@ -1153,7 +1155,7 @@ void trs_cassette_out(int value)
 void
 trs_sound_out(int value)
 {
-  if (cassette_motor == 0) {
+  if (trs_sound && cassette_motor == 0) {
     if (assert_state(SOUND) < 0) return;
     trs_suspend_delay();
     transition_out(value ? 1 : 2);

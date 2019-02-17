@@ -117,6 +117,7 @@ extern void trs_screen_inverse(int flag);
 extern void trs_screen_scroll(void);
 extern void trs_screen_refresh(void);
 extern void trs_screen_var_reset(void);
+extern void trs_screen_caption(int turbo, int sound);
 
 extern void trs_disk_led(int drive, int on_off);
 extern void trs_hard_led(int drive, int on_off);
@@ -154,6 +155,7 @@ extern int trs_charset3;
 extern int trs_charset4;
 extern int trs_paused;
 extern int trs_printer;
+extern int trs_sound;
 
 extern void trs_get_event(int wait);
 extern void trs_x_flush(void);

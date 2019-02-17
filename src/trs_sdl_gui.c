@@ -2313,6 +2313,7 @@ void trs_gui_misc_management(void)
 {
   MENU_ENTRY misc_menu[] =
   {{"Shift Bracket Emulation                                     ",MENU_NORMAL_TYPE},
+   {"Sound Output                                                ",MENU_NORMAL_TYPE},
    {"Turbo Mode                                                  ",MENU_NORMAL_TYPE},
    {"Turbo Speed                                                 ",MENU_NORMAL_TYPE},
    {"Keystretch Value                                            ",MENU_NORMAL_TYPE},
@@ -2325,57 +2326,58 @@ void trs_gui_misc_management(void)
    char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
-   int state;
 
    while(!done) {
      trs_gui_clear_screen();
      sprintf(&misc_menu[0].title[50],"%s",on_off_choices[trs_kb_bracket_state]);
-     sprintf(&misc_menu[1].title[50],"%s",on_off_choices[timer_overclock]);
-     sprintf(&misc_menu[2].title[50],"%10d", timer_overclock_rate);
-     sprintf(&misc_menu[3].title[50],"%10d",stretch_amount);
-     sprintf(&misc_menu[4].title[50],"%s",on_off_choices[trs_emtsafe]);
-     sprintf(&misc_menu[5].title[56],"0x%02X",trs_uart_switches);
-     trs_gui_limit_string(trs_uart_name,&misc_menu[7].title[2],60);
+     sprintf(&misc_menu[1].title[50],"%s",on_off_choices[trs_sound]);
+     sprintf(&misc_menu[2].title[50],"%s",on_off_choices[timer_overclock]);
+     sprintf(&misc_menu[3].title[50],"%10d", timer_overclock_rate);
+     sprintf(&misc_menu[4].title[50],"%10d",stretch_amount);
+     sprintf(&misc_menu[5].title[50],"%s",on_off_choices[trs_emtsafe]);
+     sprintf(&misc_menu[6].title[56],"0x%02X",trs_uart_switches);
+     trs_gui_limit_string(trs_uart_name,&misc_menu[8].title[2],60);
      selection = trs_gui_display_menu("SDLTRS Misc Settings Menu",
                                       misc_menu, selection);
 
      switch(selection) {
        case 0:
-         state = trs_gui_display_popup("Bracket",on_off_choices,2,
-                                                   trs_kb_bracket_state);
-         trs_kb_bracket(state);
+         trs_kb_bracket_state = trs_gui_display_popup("Bracket",on_off_choices,2,
+                                                                trs_kb_bracket_state);
          break;
-	   case 1:
-		 state = trs_gui_display_popup("Turbo",on_off_choices,2,
-										   timer_overclock);
-		 timer_overclock = state;
-		 break;
-	   case 2:
-		 sprintf(input,"%d", timer_overclock_rate);
-		 if (trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0) == 0) {
-			 timer_overclock_rate =  atoi(input);
-			 if (timer_overclock_rate <= 0)
-				 timer_overclock_rate = 1;
-		 }
-		 break;
-	   case 3:
+       case 1:
+         trs_sound = trs_gui_display_popup("Sound",on_off_choices,2,
+                                                   trs_sound);
+         break;
+       case 2:
+         timer_overclock = trs_gui_display_popup("Turbo",on_off_choices,2,
+                                                         timer_overclock);
+         break;
+       case 3:
+         sprintf(input,"%d", timer_overclock_rate);
+         if (trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0) == 0) {
+           timer_overclock_rate =  atoi(input);
+           if (timer_overclock_rate <= 0)
+             timer_overclock_rate = 1;
+           }
+         break;
+       case 4:
          sprintf(input,"%d",stretch_amount);
          if (trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0) == 0)
            stretch_amount = atoi(input);
          break;
-       case 4:
-         state = trs_gui_display_popup("Emtsafe",on_off_choices,2,
-                                                   trs_emtsafe);
-         trs_emtsafe=state;
-         break;
        case 5:
+         trs_emtsafe = trs_gui_display_popup("Emtsafe",on_off_choices,2,
+                                                       trs_emtsafe);
+         break;
+       case 6:
          sprintf(input,"%2X",trs_uart_switches);
          if (trs_gui_input_string("Enter Serial Switches (Hex, XX)",input,input,2,0) == 0) {
            trs_uart_switches = strtol(input,NULL,16);
            trs_uart_init(0);
            }
          break;
-       case 7:
+       case 8:
          strcpy(input,trs_uart_name);
          if (trs_gui_input_string("Enter Serial Port Name",input,input,FILENAME_MAX-1,0) == 0) {
            strcpy(trs_uart_name,input);
@@ -2387,6 +2389,8 @@ void trs_gui_misc_management(void)
          break;
      }
   }
+  trs_kb_bracket(trs_kb_bracket_state);
+  trs_screen_caption(timer_overclock, trs_sound);
 }
 
 void trs_gui_printer_management(void)

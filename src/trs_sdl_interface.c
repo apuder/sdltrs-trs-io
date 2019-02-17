@@ -305,6 +305,7 @@ static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_selector(char *arg, int intarg, char *stringarg);
 static void trs_opt_le18(char *arg, int intarg, char *stringarg);
 static void trs_opt_lower(char *arg, int intarg, char *stringarg);
+static void trs_opt_sound(char *arg, int intarg, char *stringarg);
 
 trs_opt options[] = {
 {"scale",trs_opt_scale,1,0,NULL},
@@ -396,6 +397,8 @@ trs_opt options[] = {
 {"nole18",trs_opt_le18,0,0,NULL},
 {"lower",trs_opt_lower,0,1,NULL},
 {"nolower",trs_opt_lower,0,0,NULL},
+{"sound",trs_opt_sound,0,1,NULL},
+{"nosound",trs_opt_sound,0,0,NULL},
 };
 
 static int num_options = sizeof(options)/sizeof(trs_opt);
@@ -557,6 +560,7 @@ int trs_write_config_file(char *filename)
 
   fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
   fprintf(config_file, "%slower\n", lowercase ? "" : "no");
+  fprintf(config_file, "%sound\n", trs_sound ? "" : "no");
 
   fclose(config_file);
   return 0;
@@ -917,6 +921,11 @@ static void trs_opt_lower(char *arg, int intarg, char *stringarg)
   lowercase = intarg;
 }
 
+static void trs_opt_sound(char *arg, int intarg, char *stringarg)
+{
+  trs_sound = intarg;
+}
+
 int trs_load_config_file(char *alternate_file)
 {
   char line[FILENAME_MAX + 512];
@@ -1162,15 +1171,15 @@ void trs_screen_var_reset()
   col_chars = 16;
 }
 
-void trs_screen_caption(int turbo)
+void trs_screen_caption(int turbo, int sound)
 {
     char title[80];
 
     if (trs_model == 5) {
-        sprintf(title,"TRS-80 Model 4P %s", turbo ? "Turbo" : "");
+        sprintf(title,"TRS-80 Model 4P %s%s", turbo ? "Turbo " : "", sound ? "" : "(Mute)");
     }
     else {
-      sprintf(title,"TRS-80 Model %d %s",trs_model, turbo ? "Turbo" : "");
+      sprintf(title,"TRS-80 Model %d %s%s",trs_model, turbo ? "Turbo " : "", sound ? "" : "(Mute)");
     }
     SDL_WM_SetCaption(title,NULL);
 }
@@ -1256,7 +1265,7 @@ void trs_screen_init(int gui_init)
      SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
 
-  trs_screen_caption(trs_timer_is_turbo());
+  trs_screen_caption(trs_timer_is_turbo(), trs_sound);
 
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
   bright_red = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
@@ -1848,7 +1857,7 @@ void trs_get_event(int wait)
         keysym.sym = 0;
 	    break;
       case SDLK_F11:
-        trs_screen_caption(trs_timer_switch_turbo());
+        trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
         keysym.unicode = 0;
         keysym.sym = 0;
         break;
@@ -2072,6 +2081,10 @@ void trs_get_event(int wait)
           break;
         case SDLK_p:
           call_function(PAUSE);
+          break;
+        case SDLK_u:
+          trs_sound = !trs_sound;
+          trs_screen_caption(trs_timer_is_turbo(), trs_sound);
           break;
         case SDLK_z:
           if (!fullscreen)
