@@ -34,11 +34,11 @@ SDLTRS is designed to be build with MinGW <http://www.mingw.org/>. The
 libSDL 1.2 programming package for Windows is also required, it can be
 downloaded from <https://www.libsdl.org/download-1.2.php>
 
-The runtime library (SDL.dll) should be copied to "\WINDOWS\SYSTEM32\"
-directory. The header files (*.h) of the development library should be
-in "\MinGW\include\SDL\" and libraries in the "\MinGW\lib\" directory.
-(Or edit the macros LIBS and INCS in Makefile to point to the location
-of the SDL installation)
+The runtime library (SDL.dll) should be copied to the directory of the
+SDLTRS.EXE binary file, the header files of the development library to
+"\MinGW\include\SDL\" and libraries to the "\MinGW\lib\" directory, or
+edit the macros LIBS and INCS in the Makefile to point to the location
+of the SDL installation.
 
 From the "src/win32" directory, execute:
 
