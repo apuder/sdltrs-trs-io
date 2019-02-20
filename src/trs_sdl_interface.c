@@ -166,6 +166,7 @@ static SDL_Rect drawnRects[MAX_RECTS];
 static Uint32 light_red;
 static Uint32 bright_red;
 
+#if !defined(NOX)
 #define PASTE_IDLE    0
 #define PASTE_GETNEXT 1
 #define PASTE_KEYDOWN 2
@@ -187,6 +188,7 @@ static int selectionStartY = 0;
 static int selectionEndX = 0;
 static int selectionEndY = 0;
 int requestSelectAll = FALSE;
+#endif
 
 /* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
 
@@ -1081,7 +1083,9 @@ void trs_flip_fullscreen(void)
   static int window_scale_x = 1;
   static int window_scale_y = 2;
 
+#if !defined(NOX)
   copyStatus = COPY_IDLE;
+#endif
   fullscreen = !fullscreen;
   if (fullscreen) {
 #ifdef MACOSX
@@ -1189,7 +1193,9 @@ void trs_screen_init(int gui_init)
   SDL_Color colors[2];
   int i;
 
+#if !defined(NOX)
   copyStatus = COPY_IDLE;
+#endif
   if (trs_model == 1) {
     trs_charset = trs_charset1;
     currentmode = NORMAL;
@@ -1458,6 +1464,7 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 	}
 }
 
+#if !defined(NOX)
 void ProcessCopySelection(int selectAll)
 {
 	static int orig_x = 0;
@@ -1582,17 +1589,20 @@ void trs_select_all()
 {
 	requestSelectAll = TRUE;
 }
+#endif
 
 /*
  * Flush output to X server
  */
 inline void trs_x_flush()
 {
+#if !defined(NOX)
   if (!trs_emu_mouse)
       {
       ProcessCopySelection(requestSelectAll);
       }
   requestSelectAll = FALSE;
+#endif
   if (drawnRectCount == 0)
     return;
   if (drawnRectCount == MAX_RECTS)
@@ -1602,6 +1612,7 @@ inline void trs_x_flush()
   drawnRectCount = 0;
 }
 
+#if !defined(NOX)
 char *trs_get_copy_data()
 {
   static char copy_data[2500];
@@ -1667,6 +1678,7 @@ char *trs_get_copy_data()
   *curr_data = 0;
   return copy_data;
 }
+#endif
 
 int call_function(int function)
 {
@@ -1772,6 +1784,7 @@ void trs_get_event(int wait)
   trs_x_flush();
 
   do {
+#if !defined(NOX)
     if (paste_state != PASTE_IDLE) {
 		static unsigned short paste_key_uni;
 
@@ -1804,6 +1817,7 @@ void trs_get_event(int wait)
 				paste_state = PASTE_GETNEXT;
 		}
     }
+#endif
 
     if (wait) {
       SDL_WaitEvent(&event);
@@ -1831,6 +1845,7 @@ void trs_get_event(int wait)
         debug("KeyDown: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
 	        keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
+#if !defined(NOX)
 	  if ((keysym.mod & MENU_MOD) == 0) {
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
@@ -1841,6 +1856,7 @@ void trs_get_event(int wait)
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
+#endif
 
       switch (keysym.sym) {
         /* Trap some function keys here */
@@ -1893,7 +1909,7 @@ void trs_get_event(int wait)
       default:
         break;
       }
-#if !defined(MACOSX)
+#if !defined(MACOSX) && !defined(NOX)
       if (keysym.mod & MENU_MOD) {
         char *string;
 

@@ -17,6 +17,17 @@ the "src/linux" directory. For curses (not ncurses) on NetBSD/OpenBSD,
 also add "-lcurses" to LIBS in the Makefile.
 
 
+To build with SDL only (no X11):
+--------------------------------
+From the "src/nox" directory, execute:
+
+  make
+
+SDLTRS will be build without the "PasteManager" ("Copy & Paste" to and
+from the Emulator screen), but works on plattforms with no X11-server,
+like Haiku/BeOS.
+
+
 To build for Win32:
 -------------------
 SDLTRS is designed to be build with MinGW <http://www.mingw.org/>. The
