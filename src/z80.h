@@ -62,7 +62,7 @@ typedef unsigned char Uchar;    /* 1 byte */
 
 typedef unsigned long long tstate_t;
 #define TSTATE_T_MID (((unsigned long long) -1LL)/2ULL)
-#define TSTATE_T_LEN "Lu"
+#define TSTATE_T_LEN "llu"
 
 struct twobyte
 {
