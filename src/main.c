@@ -162,8 +162,10 @@ int SDLmain(int argc, char *argv[])
   	    exit(1);
     }
 
+#ifndef SDL2
     /* Enable Unicode key translations */
     SDL_EnableUNICODE(TRUE);
+#endif
 
     argc = trs_parse_command_line(argc, argv, &debug);
     if (argc > 1) {

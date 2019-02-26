@@ -28,6 +28,17 @@ from the Emulator screen), but works on plattforms with no X11-server,
 like Haiku/BeOS.
 
 
+To build with SDL2:
+-------------------
+The SDL2 port should be considered as "experimental": it works on most
+systems without flaws, but switching fullscreen mode may "clutter" the
+emulator window at some time.
+
+From the "src/sdl2" directory, execute:
+
+  make
+
+
 To build for Win32:
 -------------------
 SDLTRS is designed to be build with MinGW <http://www.mingw.org/>. The

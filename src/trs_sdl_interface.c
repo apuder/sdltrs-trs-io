@@ -85,6 +85,10 @@ extern void trs_gui_model(void);
 extern int trs_timer_is_turbo(void);
 extern int trs_timer_switch_turbo(void);
 
+#ifdef SDL2
+int trs_sdl_sym2upper(int);
+#endif
+
 #define MAX_RECTS 2048
 #define WHITE 0xffffff
 #define BLACK 0
@@ -163,6 +167,9 @@ static SDL_Surface *trs_box[3][64];
 static SDL_Surface *image;
 static SDL_Surface *screen;
 static SDL_Rect drawnRects[MAX_RECTS];
+#ifdef SDL2
+static SDL_Window *window = NULL;
+#endif
 static Uint32 light_red;
 static Uint32 bright_red;
 
@@ -1086,6 +1093,10 @@ void trs_flip_fullscreen(void)
 #if !defined(NOX)
   copyStatus = COPY_IDLE;
 #endif
+#ifdef SDL2
+  SDL_DestroyWindow(window);
+  window = NULL;
+#endif
   fullscreen = !fullscreen;
   if (fullscreen) {
 #ifdef MACOSX
@@ -1101,8 +1112,12 @@ void trs_flip_fullscreen(void)
       trs_screen_refresh();
     }
     else {
+#ifdef SDL2
+      trs_screen_init(0);
+#else
       screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                 SDL_ANYFORMAT | SDL_FULLSCREEN);
+#endif
       SDL_ShowCursor(SDL_DISABLE);
       }
     }
@@ -1121,8 +1136,12 @@ void trs_flip_fullscreen(void)
       trs_screen_refresh();
     }
     else {
+#ifdef SDL2
+      trs_screen_init(0);
+#else
       screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                 SDL_ANYFORMAT);
+#endif
       SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 	 }
 #ifdef MACOSX
@@ -1185,7 +1204,11 @@ void trs_screen_caption(int turbo, int sound)
     else {
       sprintf(title,"TRS-80 Model %d %s%s",trs_model, turbo ? "Turbo " : "", sound ? "" : "(Mute)");
     }
+#ifdef SDL2
+    SDL_SetWindowTitle(window, title);
+#else
     SDL_WM_SetCaption(title,NULL);
+#endif
 }
 
 void trs_screen_init(int gui_init)
@@ -1255,10 +1278,23 @@ void trs_screen_init(int gui_init)
     OrigHeight = cur_char_height * col_chars + 2 * border_width + led_width;
     top_margin = border_width;
   }
+#ifdef SDL2
+  if (window == NULL) {
+    window = SDL_CreateWindow(title,
+                              SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED,
+                              OrigWidth, OrigHeight,
+                              0);
+  }
+#endif
 
   if (fullscreen) {
+#ifdef SDL2
+     SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+#else
      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT | SDL_FULLSCREEN);
+#endif
      SDL_ShowCursor(SDL_DISABLE);
 	}
   else {
@@ -1266,11 +1302,19 @@ void trs_screen_init(int gui_init)
      TrsWindowResize(OrigWidth, OrigHeight);
      TrsWindowDisplay();
 #endif
+#ifdef SDL2
+     SDL_SetWindowFullscreen(window, 0);
+#else
      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT);
+#endif
      SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
 
+#ifdef SDL2
+  SDL_SetWindowSize(window, OrigWidth, OrigHeight);
+  screen = SDL_GetWindowSurface(window);
+#endif
   trs_screen_caption(trs_timer_is_turbo(), trs_sound);
 
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
@@ -1299,7 +1343,11 @@ void trs_screen_init(int gui_init)
   colors[1].r = (foreground >> 16) & 0xFF;
   colors[1].g = (foreground >> 8) & 0xFF;
   colors[1].b = (foreground) & 0xFF;
+#ifdef SDL2
+  SDL_SetPaletteColors(image->format->palette, colors,0,2);
+#else
   SDL_SetPalette(image,SDL_LOGPAL, colors,0,2);
+#endif
 
   TrsBlitMap(image->format->palette, screen->format);
 
@@ -1606,9 +1654,17 @@ inline void trs_x_flush()
   if (drawnRectCount == 0)
     return;
   if (drawnRectCount == MAX_RECTS)
+#ifdef SDL2
+	SDL_UpdateWindowSurface(window);
+#else
 	SDL_UpdateRect(screen,0,0,0,0);
+#endif
   else
+#ifdef SDL2
+    SDL_UpdateWindowSurfaceRects(window,drawnRects,drawnRectCount);
+#else
     SDL_UpdateRects(screen,drawnRectCount,drawnRects);
+#endif
   drawnRectCount = 0;
 }
 
@@ -1697,7 +1753,9 @@ int call_function(int function)
   else if (function == EXIT)
     trs_exit(0);
   else {
+#ifndef SDL2
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+#endif
     trs_pause_audio(1);
     switch (function) {
     case GUI:
@@ -1750,7 +1808,9 @@ int call_function(int function)
       break;
     }
     trs_pause_audio(0);
+#ifndef SDL2
     SDL_EnableKeyRepeat(0,0);
+#endif
     trs_screen_refresh();
     trs_x_flush();
   }
@@ -1774,7 +1834,11 @@ int call_function(int function)
 void trs_get_event(int wait)
 {
   SDL_Event event;
+#ifdef SDL2
+  SDL_Keysym keysym;
+#else
   SDL_keysym keysym;
+#endif
   Uint32 keyup;
 
   if (trs_model > 1) {
@@ -1828,15 +1892,23 @@ void trs_get_event(int wait)
     case SDL_QUIT:
      trs_exit(0);
      break;
+#ifdef SDL2
+    case SDL_WINDOWEVENT:
+     if (event.window.event == SDL_WINDOWEVENT_ENTER ||
+        event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+#else
     case SDL_ACTIVEEVENT:
       if (event.active.state & SDL_APPACTIVE) {
         if (event.active.gain) {
+#endif
 #if XDEBUG
           debug("Active\n");
 #endif
           trs_screen_refresh();
           }
+#ifndef SDL2
       }
+#endif
       break;
 
     case SDL_KEYDOWN:
@@ -1850,9 +1922,14 @@ void trs_get_event(int wait)
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
+
 	  else if (keysym.sym != SDLK_c &&
+#ifdef SDL2
+		  keysym.sym != MENU_MOD) {
+#else
 		  keysym.sym != SDLK_LMETA &&
 		  keysym.sym != SDLK_RMETA) {
+#endif
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
 	  }
@@ -1869,28 +1946,38 @@ void trs_get_event(int wait)
 		  }
         else
           trs_reset(0);
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
 	    break;
       case SDLK_F11:
         trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
         break;
       case SDLK_F9:
         if (!fullscreen)
           trs_debug();
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
         break;
       case SDLK_F8:
         trs_exit(!(keysym.mod & KMOD_SHIFT));
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
         break;
       case SDLK_F7:
         call_function(GUI);
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
         break;
       case SDLK_F12:
@@ -1898,12 +1985,16 @@ void trs_get_event(int wait)
           call_function(LOAD);
         else
           call_function(SAVE);
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
         break;
       case SDLK_PAUSE:
         call_function(PAUSE);
+#ifndef SDL2
         keysym.unicode = 0;
+#endif
         keysym.sym = 0;
         break;
       default:
@@ -1914,17 +2005,23 @@ void trs_get_event(int wait)
         switch (keysym.sym) {
         case SDLK_c:
           PasteManagerStartCopy(trs_get_copy_data());
+#ifndef SDL2
           keysym.unicode = 0;
+#endif
           keysym.sym = 0;
           break;
         case SDLK_v:
           PasteManagerStartPaste();
+#ifndef SDL2
           keysym.unicode = 0;
+#endif
           keysym.sym = 0;
           break;
         case SDLK_a:
           requestSelectAll = TRUE;
+#ifndef SDL2
           keysym.unicode = 0;
+#endif
           keysym.sym = 0;
           break;
         default:
@@ -2137,13 +2234,17 @@ void trs_get_event(int wait)
             if (keysym.mod & KMOD_SHIFT) {
               trs_disk_remove(keysym.sym-SDLK_0);
             } else {
+#ifndef SDL2
               SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
                                   SDL_DEFAULT_REPEAT_INTERVAL);
+#endif
               trs_expand_dir(trs_disk_dir, browse_dir);
               if (trs_gui_file_browse(browse_dir, filename, NULL,0,
                                       " Floppy Disk Image ") != -1)
                 trs_disk_insert(keysym.sym-SDLK_0, filename);
+#ifndef SDL2
               SDL_EnableKeyRepeat(0,0);
+#endif
               trs_screen_refresh();
               trs_x_flush();
             }
@@ -2159,21 +2260,41 @@ void trs_get_event(int wait)
 	    	== (KMOD_CAPS|KMOD_LSHIFT) ||
            ((keysym.mod & (KMOD_CAPS|KMOD_RSHIFT))
 	    	== (KMOD_CAPS|KMOD_RSHIFT)))
+#ifdef SDL2
+	       && keysym.sym >= 'A' && keysym.sym <= 'Z')  {
+#else
 	       && keysym.unicode >= 'A' && keysym.unicode <= 'Z')  {
+#endif
 	  /* Make Shift + CapsLock give lower case */
+#ifdef SDL2
+         keysym.sym = (int) keysym.sym + 0x20;
+#else
          keysym.unicode = (int) keysym.unicode + 0x20;
+#endif
       }
       if (keysym.sym == SDLK_RSHIFT && trs_model == 1) {
         keysym.sym = SDLK_LSHIFT;
       }
 
+#ifdef SDL2
+      if (keysym.mod & KMOD_SHIFT)
+        keysym.sym = trs_sdl_sym2upper(keysym.sym);
+#endif
+
       if (last_key[keysym.scancode] != 0) {
         trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
        }
+#ifdef SDL2
+      if (keysym.sym >= 0x20 && keysym.sym <= 0xFF) {
+	 last_key[keysym.scancode] = keysym.sym;
+	 trs_xlate_keysym(keysym.sym);
+      }
+#else
       if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
          last_key[keysym.scancode] = keysym.unicode;
          trs_xlate_keysym(keysym.unicode);
          }
+#endif
       else if (keysym.sym != 0) {
         last_key[keysym.scancode] = keysym.sym;
         trs_xlate_keysym(keysym.sym);
@@ -2274,7 +2395,9 @@ void trs_get_event(int wait)
           trs_joy_button_down();
         else {
           call_function(key);
+#ifndef SDL2
           keysym.unicode = 0;
+#endif
           keysym.sym = 0;
         }
       }
@@ -3688,7 +3811,11 @@ void trs_set_mouse_pos(int x, int y)
 #if MOUSEDEBUG
   debug("set_mouse %d %d -> %d %d\n", x, y, dest_x, dest_y);
 #endif
+#ifdef SDL2
+  SDL_WarpMouseInWindow(window, dest_x, dest_y);
+#else
   SDL_WarpMouse(dest_x, dest_y);
+#endif
 }
 
 void trs_get_mouse_max(int *x, int *y, unsigned int *sens)
@@ -3796,3 +3923,24 @@ void trs_sdl_cleanup(void)
 
     SDL_Quit(); /* Will free screen */
 }
+
+#ifdef SDL2
+/* XXX At the moment this is really "ugly": width SDL 2 there is no
+ * "unicode" field in "SDL_Keysym", so we have to convert to upper-
+ * case manually or figure out how to deal with SDL_TEXTINPUT... */
+int trs_sdl_sym2upper(int sym)
+{
+  if (sym == '7') return '/';
+  else if (sym >= '1' && sym <= '9') return (sym - 0x10);
+  else if (sym == 0xDF) return '?';
+  else if (sym >= 'A' && sym <= 0xFF) return (sym - 0x20);
+  else if (sym == '#') return '\'';
+  else if (sym == '+') return '*';
+  else if (sym == ',') return ';';
+  else if (sym == '.') return ':';
+  else if (sym == '-') return '_';
+  else if (sym == '0') return '=';
+  else if (sym == '<') return '>';
+  return 0;
+}
+#endif

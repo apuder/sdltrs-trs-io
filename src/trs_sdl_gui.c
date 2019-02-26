@@ -79,6 +79,9 @@ int jbutton_active[N_JOYBUTTONS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 int jaxis_mapped = 0;
 
 extern void trs_gui_write_char(int position, int char_index, int invert);
+#ifdef SDL2
+extern int trs_sdl_sym2upper(int sym);
+#endif
 static void trs_gui_write_text_len(char *text, int len, int x, int y, int invert);
 static void trs_gui_write_text(char *text, int x, int y, int invert);
 static void trs_gui_write_text_char(char text, int x, int y, int invert);
@@ -296,7 +299,11 @@ int trs_gui_get_key(void)
        case SDL_QUIT:
          trs_exit(0);
          break;
+#ifdef SDL2
+       case SDL_WINDOWEVENT:
+#else
        case SDL_ACTIVEEVENT:
+#endif
          break;
        case SDL_KEYDOWN:
          if (event.key.keysym.mod & MENU_MOD)
@@ -352,10 +359,15 @@ int trs_gui_get_key(void)
          }
          else if (event.key.keysym.sym == SDLK_F8)
             trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
+#ifdef SDL2
+         else if (event.key.keysym.mod & KMOD_SHIFT)
+             return trs_sdl_sym2upper(event.key.keysym.sym);
+#else
          else if (event.key.keysym.sym < 0x100 &&
                event.key.keysym.unicode >= 0x20 &&
                event.key.keysym.unicode <= 0x7E)
              return(event.key.keysym.unicode);
+#endif
          else
            return(event.key.keysym.sym);
          break;
@@ -2275,7 +2287,11 @@ void trs_gui_joystick_management(void)
          sprintf(joystick_choices[0],"%60s","None");
          for (i=0;i<num_joysticks;i++) {
            sprintf(joystick_choices[i+1],"Joystick %1d - %47s",i,
+#ifdef SDL2
+                   SDL_JoystickName(SDL_JoystickOpen(i)));
+#else
                    SDL_JoystickName(i));
+#endif
                    }
          if ((gui_joystick_num == -1) || (gui_joystick_num >= num_joysticks))
            joy_index = 0;
@@ -3110,7 +3126,9 @@ void trs_gui_get_virtual_key(void)
     event.key.keysym.sym = key;
     event.key.keysym.mod = 0;
     event.key.keysym.scancode = 0;
+#ifndef SDL2
     event.key.keysym.unicode = 0;
+#endif
     SDL_PushEvent(&event);
     event.type = SDL_KEYUP;
     SDL_PushEvent(&event);
