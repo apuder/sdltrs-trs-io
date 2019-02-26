@@ -1911,12 +1911,9 @@ void trs_get_event(int wait)
       }
 #if !defined(MACOSX) && !defined(NOX)
       if (keysym.mod & MENU_MOD) {
-        char *string;
-
         switch (keysym.sym) {
         case SDLK_c:
-          string = trs_get_copy_data();
-          PasteManagerStartCopy(string);
+          PasteManagerStartCopy(trs_get_copy_data());
           keysym.unicode = 0;
           keysym.sym = 0;
           break;
