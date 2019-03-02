@@ -2,8 +2,10 @@
 
 CC     = gcc
 OBJ    = blit.o debug.o dis.o error.o load_cmd.o load_hex.o main.o trs_mkdisk.o trs_cassette.o trs_chars.o trs_disk.o trs_hard.o trs_imp_exp.o trs_interrupt.o trs_io.o trs_memory.o trs_printer.o trs_rom1.o trs_rom3.o trs_rom4p.o trs_sdl_gui.o trs_sdl_interface.o trs_sdl_keyboard.o trs_state_save.o trs_uart.o z80.o sdltrs_main.o PasteManager.o
-LIBS   = $(shell sdl-config --libs) -lX11 -lreadline
-INCS   = $(shell sdl-config --cflags) -DREADLINE
+LIBS  != sdl-config --libs
+LIBS  += -L/usr/X11R7/lib -lX11 -lcurses -lreadline -Wl,-R/usr/X11R7/lib
+INCS  != sdl-config --cflags
+INCS  += -I/usr/X11R7/include -DREADLINE
 BIN    = sdltrs
 CFLAGS = $(INCS) -g -Wall -O2
 
