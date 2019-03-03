@@ -46,7 +46,6 @@
 #ifndef _Z80_H
 #define _Z80_H
 
-#include "config.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/time.h>

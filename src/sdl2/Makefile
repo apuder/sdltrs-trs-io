@@ -2,8 +2,9 @@
 
 CC     = gcc
 OBJ    = blit.o debug.o dis.o error.o load_cmd.o load_hex.o main.o trs_mkdisk.o trs_cassette.o trs_chars.o trs_disk.o trs_hard.o trs_imp_exp.o trs_interrupt.o trs_io.o trs_memory.o trs_printer.o trs_rom1.o trs_rom3.o trs_rom4p.o trs_sdl_gui.o trs_sdl_interface.o trs_sdl_keyboard.o trs_state_save.o trs_uart.o z80.o sdltrs_main.o PasteManager.o
+ENDIAN = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 LIBS   = $(shell sdl2-config --libs) -lreadline
-INCS   = $(shell sdl2-config --cflags) -DSDL2 -DREADLINE
+INCS   = $(shell sdl2-config --cflags) ${ENDIAN} -DSDL2 -DREADLINE
 BIN    = sdltrs
 CFLAGS = $(INCS) -g -Wall -O2
 

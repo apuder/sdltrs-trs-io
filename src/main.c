@@ -72,7 +72,8 @@ static void check_endian()
     x.byte.high = 0;
     if(x.word != 1)
     {
-	printf("Program compiled with wrong ENDIAN value -- adjust the Makefile.local, type \"rm *.o\", recompile, and try again.");
+	fprintf(stderr, "Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.\n");
+	exit(1);
     }
 }
 
