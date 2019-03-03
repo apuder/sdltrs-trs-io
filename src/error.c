@@ -64,7 +64,7 @@ void debug(const char *fmt, ...)
   strcat(xfmt, fmt);
   /*strcat(xfmt, "\n");*/
   va_start(args, fmt);
-  vfprintf(stdout, xfmt, args);
+  vfprintf(stderr, xfmt, args);
   va_end(args);
 }
 
@@ -85,7 +85,7 @@ void error(const char *fmt, ...)
   vsprintf(string, xfmt, args);
   MessagePrint(string);
 #else
-  vfprintf(stdout, xfmt, args);
+  vfprintf(stderr, xfmt, args);
 #endif
   va_end(args);
 }
