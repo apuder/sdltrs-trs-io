@@ -1,0 +1,42 @@
+PROG   = sdltrs
+
+SRCS  += blit.c
+SRCS  += debug.c
+SRCS  += dis.c
+SRCS  += error.c
+SRCS  += load_cmd.c
+SRCS  += load_hex.c
+SRCS  += main.c
+SRCS  += trs_mkdisk.c
+SRCS  += trs_cassette.c
+SRCS  += trs_chars.c
+SRCS  += trs_disk.c
+SRCS  += trs_hard.c
+SRCS  += trs_imp_exp.c
+SRCS  += trs_interrupt.c
+SRCS  += trs_io.c
+SRCS  += trs_memory.c
+SRCS  += trs_printer.c
+SRCS  += trs_rom1.c
+SRCS  += trs_rom3.c
+SRCS  += trs_rom4p.c
+SRCS  += trs_sdl_gui.c
+SRCS  += trs_sdl_interface.c
+SRCS  += trs_sdl_keyboard.c
+SRCS  += trs_state_save.c
+SRCS  += trs_uart.c
+SRCS  += z80.c
+SRCS  += sdltrs_main.c
+SRCS  += PasteManager.c
+
+OBJS   = ${SRCS:.c=.o}
+DEPS   = ${SRCS:.c=.d}
+
+ENDIAN = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
+LIBS   = $(shell sdl-config --libs) -lX11 -lreadline
+INCS   = $(shell sdl-config --cflags)
+MACROS = -DREADLINE
+CFLAGS = -g -Wall -O2 ${INCS} ${ENDIAN} ${MACROS}
+
+${PROG}: ${OBJS}
+	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
