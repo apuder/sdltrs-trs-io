@@ -53,13 +53,6 @@
 
 #include "z80.h"
 
-#ifdef MACOSX
-#define DebuggerOutput DebuggerPrintf
-extern void DebuggerPrintf(const char *format,...);
-#else
-#define DebuggerOutput printf
-#endif
-
 /* Argument printing */
 #define A_0       0  /* No arguments */
 #define A_8       1  /* 8-bit number */
@@ -2134,34 +2127,34 @@ int disassemble(unsigned short pc)
     {
 	code = &major[i];
     }
-    DebuggerOutput ("%04x  ", addr);
+    printf ("%04x  ", addr);
     for (i = 0; i < ((pc + arglen(code->args) - addr) & 0xffff); i++)
-	DebuggerOutput("%02x ", mem_read(addr + i));
+	printf("%02x ", mem_read(addr + i));
     for (; i < 4; i++)
-	DebuggerOutput("   ");
-    DebuggerOutput(" ");
+	printf("   ");
+    printf(" ");
     switch (code->args) {
       case A_16: /* 16-bit number */
-	DebuggerOutput (code->name, mem_read(pc + 1), mem_read(pc));
+	printf (code->name, mem_read(pc + 1), mem_read(pc));
 	break;
       case A_8X2: /* Two 8-bit numbers */
-	DebuggerOutput (code->name, mem_read(pc), mem_read(pc + 1));
+	printf (code->name, mem_read(pc), mem_read(pc + 1));
 	break;
       case A_8:  /* One 8-bit number */
-	DebuggerOutput (code->name, mem_read(pc));
+	printf (code->name, mem_read(pc));
 	break;
       case A_8P: /* One 8-bit number before last opcode byte */
-	DebuggerOutput (code->name, mem_read(pc - 2));
+	printf (code->name, mem_read(pc - 2));
 	break;
       case A_0:  /* No args */
       case A_0B: /* No args, backskip over last opcode byte */
-	DebuggerOutput ("%s", code->name);
+	printf ("%s", code->name);
 	break;
       case A_8R: /* One 8-bit relative address */
-	DebuggerOutput (code->name, (pc + 1 + (signed char) mem_read(pc)) & 0xffff);
+	printf (code->name, (pc + 1 + (signed char) mem_read(pc)) & 0xffff);
 	break;
     }
-    DebuggerOutput ("\n");
+    printf ("\n");
     pc += arglen(code->args);
     return pc;  /* return the location of the next instruction */
 }

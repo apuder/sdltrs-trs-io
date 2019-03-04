@@ -49,9 +49,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef MACOSX
-extern void MessagePrint(char *string);
-#endif
 
 extern char *program_name;
 
@@ -72,21 +69,13 @@ void error(const char *fmt, ...)
 {
   va_list args;
   char xfmt[2048];
-#ifdef MACOSX
-  char string[2048];
-#endif
 
   strcpy(xfmt, program_name);
   strcat(xfmt, " error: ");
   strcat(xfmt, fmt);
   strcat(xfmt, "\n");
   va_start(args, fmt);
-#ifdef MACOSX
-  vsprintf(string, xfmt, args);
-  MessagePrint(string);
-#else
   vfprintf(stderr, xfmt, args);
-#endif
   va_end(args);
 }
 

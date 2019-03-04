@@ -56,8 +56,6 @@ From the "src" directory, execute:
   mingw32-make win32
 
 
-To build for Mac OS X:
-----------------------
-The SDL Framework needs to be placed in the "src/macosx" directory, so
-that it is included in the final application. Open sdltrs.xcodeproj in
-"src/macosx" directory with Xcode and build from Xcode.
+To build for macOS X:
+---------------------
+Install libSDL2 via "MacPorts" or "Homebrew" and build the SDL2 port.

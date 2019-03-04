@@ -54,14 +54,6 @@
 #include <readline/history.h>
 #endif
 
-#ifdef MACOSX
-#define DebugOutput DebuggerPrintf
-extern void DebuggerPrintf(const char *format,...);
-extern char *DebuggerInput();
-#else
-#define DebugOutput printf
-#endif
-
 /*SUPPRESS 112*/
 
 #define MAXLINE		(256)
@@ -200,16 +192,16 @@ static char *trap_name(int flag)
 
 static void show_zbxinfo()
 {
-    DebugOutput("zbx: Z80 debugger by David Gingold, Alex Wolman, and Timothy"
+    printf("zbx: Z80 debugger by David Gingold, Alex Wolman, and Timothy"
            " Mann\n");
-    DebugOutput("\n");
-    DebugOutput("Traps set: %d (maximum %d)\n", num_traps, MAX_TRAPS);
-    DebugOutput("Size of address space: 0x%x\n", ADDRESS_SPACE);
-    DebugOutput("Maximum length of command line: %d\n", MAXLINE);
+    printf("\n");
+    printf("Traps set: %d (maximum %d)\n", num_traps, MAX_TRAPS);
+    printf("Size of address space: 0x%x\n", ADDRESS_SPACE);
+    printf("Maximum length of command line: %d\n", MAXLINE);
 #ifdef READLINE
-    DebugOutput("GNU Readline library support enabled.\n");
+    printf("GNU Readline library support enabled.\n");
 #else
-    DebugOutput("GNU Readline library support disabled.\n");
+    printf("GNU Readline library support disabled.\n");
 #endif
 }
 
@@ -238,14 +230,14 @@ static void print_traps()
 	{
 	    if(trap_table[i].valid)
 	    {
-		DebugOutput("[%d] %.4x (%s)\n", i, trap_table[i].address,
+		printf("[%d] %.4x (%s)\n", i, trap_table[i].address,
 		       trap_name(trap_table[i].flag));
 	    }
 	}
     }
     else
     {
-	DebugOutput("No traps are set.\n");
+	printf("No traps are set.\n");
     }
 }
 
@@ -255,7 +247,7 @@ static void set_trap(int address, int flag)
 
     if(num_traps == MAX_TRAPS)
     {
-	DebugOutput("Cannot set another trap.\n");
+	printf("Cannot set another trap.\n");
     }
     else
     {
@@ -274,7 +266,7 @@ static void set_trap(int address, int flag)
 	traps[address] |= flag;
 	num_traps++;
 
-	DebugOutput("Set %s [%d] at %.4x\n", trap_name(flag), i, address);
+	printf("Set %s [%d] at %.4x\n", trap_name(flag), i, address);
     }
 }
 
@@ -282,7 +274,7 @@ static void clear_trap(int i)
 {
     if((i < 0) || (i > MAX_TRAPS) || !trap_table[i].valid)
     {
-	DebugOutput("[%d] is not a valid trap.\n", i);
+	printf("[%d] is not a valid trap.\n", i);
     }
     else
     {
@@ -293,7 +285,7 @@ static void clear_trap(int i)
 	    num_watchpoints--;
 	}
 	num_traps--;
-	DebugOutput("Cleared %s [%d] at %.4x\n",
+	printf("Cleared %s [%d] at %.4x\n",
 	       trap_name(trap_table[i].flag), i, trap_table[i].address);
     }
 }
@@ -313,8 +305,8 @@ static void clear_trap_address(int address, int flag)
 
 void debug_print_registers()
 {
-    DebugOutput("\n       S Z - H - PV N C   IFF1 IFF2 IM\n");
-    DebugOutput("Flags: %d %d %d %d %d  %d %d %d     %d    %d   %d\n\n",
+    printf("\n       S Z - H - PV N C   IFF1 IFF2 IM\n");
+    printf("Flags: %d %d %d %d %d  %d %d %d     %d    %d   %d\n\n",
 	   (SIGN_FLAG != 0),
 	   (ZERO_FLAG != 0),
 	   (REG_F & UNDOC5_MASK) != 0,
@@ -325,17 +317,17 @@ void debug_print_registers()
 	   (CARRY_FLAG != 0),
 	   z80_state.iff1, z80_state.iff2, z80_state.interrupt_mode);
 
-    DebugOutput("A F: %.2x %.2x    IX: %.4x    AF': %.4x\n",
+    printf("A F: %.2x %.2x    IX: %.4x    AF': %.4x\n",
 	   REG_A, REG_F, REG_IX, REG_AF_PRIME);
-    DebugOutput("B C: %.2x %.2x    IY: %.4x    BC': %.4x\n",
+    printf("B C: %.2x %.2x    IY: %.4x    BC': %.4x\n",
 	   REG_B, REG_C, REG_IY, REG_BC_PRIME);
-    DebugOutput("D E: %.2x %.2x    PC: %.4x    DE': %.4x\n",
+    printf("D E: %.2x %.2x    PC: %.4x    DE': %.4x\n",
 	   REG_D, REG_E, REG_PC, REG_DE_PRIME);
-    DebugOutput("H L: %.2x %.2x    SP: %.4x    HL': %.4x\n",
+    printf("H L: %.2x %.2x    SP: %.4x    HL': %.4x\n",
 	   REG_H, REG_L, REG_SP, REG_HL_PRIME);
 
-    DebugOutput("\nT-state counter: %" TSTATE_T_LEN "    ", z80_state.t_count);
-    DebugOutput("Delay setting: %d (%s)\n",
+    printf("\nT-state counter: %" TSTATE_T_LEN "    ", z80_state.t_count);
+    printf("Delay setting: %d (%s)\n",
 	   z80_state.delay, trs_autodelay ? "auto" : "fixed");
 }
 
@@ -355,7 +347,7 @@ void debug_init()
 
     for(i = 0; i < MAX_TRAPS; ++i) trap_table[i].valid = 0;
 
-    DebugOutput("Type \"h(elp)\" for a list of commands.\n");
+    printf("Type \"h(elp)\" for a list of commands.\n");
 }
 
 static void print_memory(Ushort address, int num_bytes)
@@ -368,29 +360,29 @@ static void print_memory(Ushort address, int num_bytes)
 	bytes_to_print = 16;
 	if(bytes_to_print > num_bytes) bytes_to_print = num_bytes;
 
-	DebugOutput("%.4x:\t", address);
+	printf("%.4x:\t", address);
 	for(i = 0; i < bytes_to_print; ++i)
 	{
-	    DebugOutput("%.2x ", mem_read((address + i) & 0xffff));
+	    printf("%.2x ", mem_read((address + i) & 0xffff));
 	}
 	for(i = bytes_to_print; i < 16; ++i)
 	{
-	    DebugOutput("   ");
+	    printf("   ");
 	}
-	DebugOutput("    ");
+	printf("    ");
 	for(i = 0; i < bytes_to_print; ++i)
 	{
 	    byte = mem_read((address + i) & 0xffff);
 	    if(isprint(byte))
 	    {
-		DebugOutput("%c", byte);
+		printf("%c", byte);
 	    }
 	    else
 	    {
-		DebugOutput(".");
+		printf(".");
 	    }
 	}
-	DebugOutput("\n");
+	printf("\n");
 	num_bytes -= bytes_to_print;
 	address += bytes_to_print;
     }
@@ -413,7 +405,7 @@ static void debug_run()
 	{
 	    if(t & TRACE_FLAG)
 	    {
-		DebugOutput("Trace: ");
+		printf("Trace: ");
 		disassemble(REG_PC);
 	    }
 	    if(t & DISASSEMBLE_ON_FLAG)
@@ -430,7 +422,7 @@ static void debug_run()
 
 	continuous = (!print_instructions && num_traps == 0);
 	if (z80_run(continuous)) {
-	  DebugOutput("emt_debug instruction executed.\n");
+	  printf("emt_debug instruction executed.\n");
 	  stop_signaled = 1;
 	}
 
@@ -466,7 +458,7 @@ static void debug_run()
 			 * watch_triggered flag so that we stop after all
 			 * watchpoints have been processed.
 			 */
-			DebugOutput("Memory location 0x%.4x changed value from "
+			printf("Memory location 0x%.4x changed value from "
 			       "0x%.2x to 0x%.2x.\n", trap_table[i].address,
 			       trap_table[i].byte, byte);
 			trap_table[i].byte = byte;
@@ -481,7 +473,7 @@ static void debug_run()
 	}
 
     }
-    DebugOutput("Stopped at %.4x\n", REG_PC);
+    printf("Stopped at %.4x\n", REG_PC);
 }
 
 void debug_shell()
@@ -501,7 +493,7 @@ void debug_shell()
 
     while(!done)
     {
-	DebugOutput("\n");
+	printf("\n");
 	disassemble(REG_PC);
 
 #ifdef READLINE
@@ -527,12 +519,8 @@ void debug_shell()
 	    }
 	}
 #else
-	DebugOutput("(zbx) ");  fflush(stdout);
-#ifdef MACOSX
-    strcpy(input, DebuggerInput());
-#else
+	printf("(zbx) ");  fflush(stdout);
 	if (fgets(input, MAXLINE, stdin) == NULL) break;
-#endif
 #endif
 
 	if(sscanf(input, "%s", command))
@@ -540,7 +528,7 @@ void debug_shell()
 	    if(!strcmp(command, "help") || !strcmp(command, "?") ||
 	       !strcmp(command, "h"))
 	    {
-		DebugOutput("%s", help_message);
+		printf("%s", help_message);
 	    }
 	    else if (!strcmp(command, "zbxinfo") || !strcmp(command, "i"))
 	    {
@@ -568,7 +556,7 @@ void debug_shell()
 		}
 		else if(sscanf(input, "%*s %d", &i) != 1)
 		{
-		    DebugOutput("A trap must be specified.\n");
+		    printf("A trap must be specified.\n");
 		}
 		else
 		{
@@ -683,17 +671,17 @@ void debug_shell()
 	    }
 	    else if(!strcmp(command, "reset") || !strcmp(command, "re"))
 	    {
-		DebugOutput("Performing hard reset.");
+		printf("Performing hard reset.");
 		trs_reset(1);
 	    }
 	    else if(!strcmp(command, "softreset") || !strcmp(command, "sr"))
 	    {
-		DebugOutput("Pressing reset button.");
+		printf("Pressing reset button.");
 		trs_reset(0);
 	    }
 	    else if(!strcmp(command, "run") || !strcmp(command, "r"))
 	    {
-		DebugOutput("Performing hard reset and running.\n");
+		printf("Performing hard reset and running.\n");
 		trs_reset(1);
 		debug_run();
 	    }
@@ -752,7 +740,7 @@ void debug_shell()
 		    } else if(!strcasecmp(regname, "i")) {
 			REG_I = value;
 		    } else {
-			DebugOutput("Unrecognized register name %s.\n", regname);
+			printf("Unrecognized register name %s.\n", regname);
 		    }
 		}
 		else if(sscanf(input, "%*s I%x = %x", &addr, &value) == 2)
@@ -765,7 +753,7 @@ void debug_shell()
 		}
 		else
 		{
-		    DebugOutput("Syntax error.  (Type \"h(elp)\" for commands.)\n");
+		    printf("Syntax error.  (Type \"h(elp)\" for commands.)\n");
 		}
 	    }
 	    else if(!strcmp(command, "step") || !strcmp(command, "s"))
@@ -802,7 +790,7 @@ void debug_shell()
 	    }
 	    else if(!strcmp(command, "untrace") || !strcmp(command, "u"))
 	    {
-		DebugOutput("Untrace not implemented.\n");
+		printf("Untrace not implemented.\n");
 	    }
 	    else if(!strcmp(command, "traceon") || !strcmp(command, "tron"))
 	    {
@@ -816,7 +804,7 @@ void debug_shell()
 		else
 		{
 		    print_instructions = 1;
-		    DebugOutput("Tracing enabled.\n");
+		    printf("Tracing enabled.\n");
 		}
 	    }
 	    else if(!strcmp(command, "traceoff") || !strcmp(command, "troff"))
@@ -831,7 +819,7 @@ void debug_shell()
 		else
 		{
 		    print_instructions = 0;
-		    DebugOutput("Tracing disabled.\n");
+		    printf("Tracing disabled.\n");
 		}
 	    }
 	    else if(!strcmp(command, "watch") || !strcmp(command, "w"))
@@ -886,7 +874,7 @@ void debug_shell()
 		}
 		else
 		{
-		    DebugOutput("Syntax error.  (Type \"h(elp)\" for commands.)\n");
+		    printf("Syntax error.  (Type \"h(elp)\" for commands.)\n");
 		}
 	    }
 	}
@@ -939,7 +927,7 @@ test_add(int a, int b)
     do_add_flags(a, b, result);
     if(REG_F != flags)
     {
-	DebugOutput("error: %d + %d = %d, expected %.2x, got %.2x\n",
+	printf("error: %d + %d = %d, expected %.2x, got %.2x\n",
 	       a, b, result, flags, REG_F);
     }
 }
@@ -969,7 +957,7 @@ test_sub(int a, int b)
 
     if(REG_F != flags)
     {
-	DebugOutput("error: %d - %d = %d, expected %.2x, got %.2x\n",
+	printf("error: %d - %d = %d, expected %.2x, got %.2x\n",
 	       a, b, result, flags, REG_F);
     }
 }

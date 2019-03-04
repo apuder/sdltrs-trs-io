@@ -94,13 +94,7 @@ int trs_sdl_sym2upper(int);
 #define BLACK 0
 #define GREEN 0x008010
 
-#ifdef MACOSX
-#include "macosx/trs_mac_interface.h"
-#define MENU_MOD KMOD_LMETA
-void restoreAppWindowPrefs();
-#else
 #define MENU_MOD KMOD_LALT
-#endif
 
 
 /* Public data */
@@ -158,9 +152,6 @@ static int OrigHeight,OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
 static int cur_char_height = TRS_CHAR_HEIGHT * 2;
 static int disksizes[8] = {5,5,5,5,8,8,8,8};
-#ifdef MACOSX
-static int disksizesLoaded;
-#endif
 static int disksteps[8] = {1,1,1,1,2,2,2,2};
 static SDL_Surface *trs_char[6][MAXCHARS];
 static SDL_Surface *trs_box[3][64];
@@ -641,9 +632,6 @@ void trs_set_to_defaults(void)
 #ifdef _WIN32
   strcpy(trs_printer_command,"notepad %s");
 #endif
-#ifdef MACOSX
-  strcpy(trs_printer_command,"open %s");
-#endif
   trs_emtsafe = 1;
 }
 
@@ -805,9 +793,6 @@ static void trs_opt_sizemap(char *arg, int intarg, char *stringarg)
   sscanf(arg, "%d,%d,%d,%d,%d,%d,%d,%d",
          &disksizes[0], &disksizes[1], &disksizes[2], &disksizes[3],
          &disksizes[4], &disksizes[5], &disksizes[6], &disksizes[7]);
-#ifdef MACOSX
-  disksizesLoaded = TRUE;
-#endif
 }
 #ifdef __linux
 static void trs_opt_stepmap(char *arg, int intarg, char *stringarg)
@@ -942,12 +927,6 @@ int trs_load_config_file(char *alternate_file)
   FILE *config_file;
   int i;
 
-#ifdef MACOSX
-  if (alternate_file == NULL) {
-	return(0);
-	}
-#endif
-
   if (alternate_file)
     strcpy(trs_config_file,alternate_file);
   else
@@ -1026,11 +1005,6 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 	}
   }
 
-#ifdef MACOSX
-  trs_get_mac_prefs();
-  disksizesLoaded = FALSE;
-#endif
-
   if (alt_config_file[0] == 0)
     trs_load_config_file(NULL);
   else
@@ -1054,9 +1028,6 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 	}
   }
 
-#ifdef MACOSX
-  if (disksizesLoaded)
-#endif
   trs_disk_setsizes();
   trs_disk_setsteps();
 
@@ -1099,9 +1070,6 @@ void trs_flip_fullscreen(void)
 #endif
   fullscreen = !fullscreen;
   if (fullscreen) {
-#ifdef MACOSX
-    TrsOriginSave();
-#endif
     window_scale_x = scale_x;
     window_scale_y = scale_y;
     if (scale_x != 1) {
@@ -1122,13 +1090,7 @@ void trs_flip_fullscreen(void)
       }
     }
   else {
-#ifdef MACOSX
-	TrsWindowCreate(OrigWidth, OrigHeight);
-    TrsOriginRestore();
-	if (1) {
-#else
     if (window_scale_x != 1) {
-#endif
       scale_x = window_scale_x;
       scale_y = window_scale_y;
       trs_screen_init(0);
@@ -1144,9 +1106,6 @@ void trs_flip_fullscreen(void)
 #endif
       SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 	 }
-#ifdef MACOSX
-	 TrsOriginRestore();
-#endif
   }
   if (trs_show_led) {
     trs_disk_led(-1,0);
@@ -1298,10 +1257,6 @@ void trs_screen_init(int gui_init)
      SDL_ShowCursor(SDL_DISABLE);
 	}
   else {
-#ifdef MACOSX
-     TrsWindowResize(OrigWidth, OrigHeight);
-     TrsWindowDisplay();
-#endif
 #ifdef SDL2
      SDL_SetWindowFullscreen(window, 0);
 #else
@@ -1319,18 +1274,6 @@ void trs_screen_init(int gui_init)
 
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
   bright_red = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
-
-#ifdef MACOSX
-  if (!fullscreen) {
-    centerAppWindow();
-    SetControlManagerModel(trs_model, grafyx_get_microlabs());
-    SetControlManagerTurboMode(trs_timer_is_turbo());
-    UpdateMediaManagerInfo();
-    if (mediaStatusWindowOpen)
-        MediaManagerStatusWindowShow();
-    }
-	TrsMakeKeyWindow();
-#endif
 
   if (image)
     SDL_FreeSurface(image);
@@ -1541,26 +1484,11 @@ void ProcessCopySelection(int selectAll)
 		selectionEndX = copy_x - left_margin;
 		selectionEndY = copy_y - top_margin;
 	} else {
-#ifdef MACOSX
-		if (TrsIsKeyWindow()) {
-#endif
 			mouse = SDL_GetMouseState(&copy_x, &copy_y);
-#ifdef MACOSX
-			if ((copyStatus == COPY_IDLE) && !TrsWindowMouseInside())
-				return;
-#endif
 			if ((copyStatus == COPY_IDLE) &&
 				((mouse & SDL_BUTTON(1)) == 0)) {
 				return;
 			}
-#ifdef MACOSX
-		}
-		else {
-			mouse = 0;
-			copyStatus = COPY_IDLE;
-			return;
-		}
-#endif
 	}
 
 	switch(copyStatus) {
@@ -1759,10 +1687,7 @@ int call_function(int function)
     trs_pause_audio(1);
     switch (function) {
     case GUI:
-#ifdef MACOSX
-      if (fullscreen)
-#endif
-        trs_gui();
+      trs_gui();
       break;
     case JOYGUI:
       trs_gui_joy_gui();
@@ -1814,13 +1739,6 @@ int call_function(int function)
     trs_screen_refresh();
     trs_x_flush();
   }
-#ifdef MACOSX
-  if (function == GUI && fullscreen) {
-    SetControlManagerModel(trs_model, grafyx_get_microlabs());
-    SetControlManagerTurboMode(trs_timer_is_turbo());
-    UpdateMediaManagerInfo();
-  }
-#endif
   return ret;
 }
 
@@ -2000,7 +1918,7 @@ void trs_get_event(int wait)
       default:
         break;
       }
-#if !defined(MACOSX) && !defined(NOX)
+#if !defined(NOX)
       if (keysym.mod & MENU_MOD) {
         switch (keysym.sym) {
         case SDLK_c:
@@ -2036,24 +1954,6 @@ void trs_get_event(int wait)
         case SDLK_q:
           trs_exit(1);
           break;
-#ifdef MACOSX
-        case SDLK_COMMA:
-          trs_run_mac_prefs();
-          trs_screen_refresh();
-          trs_x_flush();
-          break;
-/* Disabled for now
-        case SDLK_h:
-          ControlManagerHideApp();
-          break;
-        case SDLK_m:
-          ControlManagerMiniturize();
-          break;
- */
-        case SDLK_SLASH:
-          ControlManagerShowHelp();
-          break;
-#endif
 #ifdef _WIN32
         case SDLK_F4:
           trs_exit(1);
@@ -2065,44 +1965,16 @@ void trs_get_event(int wait)
           break;
         case SDLK_d:
         case SDLK_f:
-#ifdef MACOSX
-          if (!fullscreen) {
-            MediaManagerRunDiskManagement();
-          } else
-#endif
-          {
-            call_function(DISK);
-          }
+          call_function(DISK);
           break;
       case SDLK_h:
-#ifdef MACOSX
-          if (!fullscreen) {
-            MediaManagerRunHardManagement();
-          } else
-#endif
-          {
-            call_function(HARD);
-          }
+          call_function(HARD);
           break;
         case SDLK_t:
-#ifdef MACOSX
-          if (!fullscreen) {
-            MediaManagerRunCassManagement();
-          } else
-#endif
-          {
-            call_function(TAPE);
-          }
+          call_function(TAPE);
           break;
         case SDLK_s:
-#ifdef MACOSX
-          if (!fullscreen) {
-            ControlManagerSaveState();
-          } else
-#endif
-          {
-            call_function(SAVE_STATE);
-          }
+          call_function(SAVE_STATE);
           break;
         case SDLK_k:
           trs_gui_keys_sdltrs();
@@ -2110,43 +1982,22 @@ void trs_get_event(int wait)
           trs_x_flush();
           break;
         case SDLK_l:
-#ifdef MACOSX
-          if (!fullscreen) {
-            ControlManagerLoadState();
-          } else
-#endif
-          {
-            call_function(LOAD_STATE);
-            trs_screen_init(1);
-            grafyx_redraw();
-            trs_screen_refresh();
-            trs_x_flush();
-          }
+          call_function(LOAD_STATE);
+          trs_screen_init(1);
+          grafyx_redraw();
+          trs_screen_refresh();
+          trs_x_flush();
           break;
         case SDLK_w:
-#ifdef MACOSX
-          if (!fullscreen) {
-            ControlManagerWriteConfig();
-          } else
-#endif
-          {
-            call_function(WRITE);
-          }
+          call_function(WRITE);
           break;
         case SDLK_r:
-#ifdef MACOSX
-          if (!fullscreen) {
-            ControlManagerReadConfig();
-          } else
-#endif
-          {
-            if (call_function(READ) == 0) {
-              trs_screen_init(1);
-              grafyx_redraw();
-            }
-            trs_screen_refresh();
-            trs_x_flush();
+          if (call_function(READ) == 0) {
+            trs_screen_init(1);
+            grafyx_redraw();
           }
+          trs_screen_refresh();
+          trs_x_flush();
           break;
         case SDLK_PLUS:
         case SDLK_PAGEDOWN:
@@ -2200,33 +2051,14 @@ void trs_get_event(int wait)
           if (!fullscreen)
             trs_debug();
           break;
-#ifdef MACOSX
-		case SDLK_v:
-			SDLMainPaste();
-			break;
-		case SDLK_c:
-			SDLMainCopy();
-			break;
-		case SDLK_a:
-			SDLMainSelectAll();
-			break;
-#endif
         case SDLK_0:
-		case SDLK_1:
+        case SDLK_1:
         case SDLK_2:
         case SDLK_3:
         case SDLK_4:
         case SDLK_5:
         case SDLK_6:
         case SDLK_7:
-#ifdef MACOSX
-          if (!fullscreen) {
-            if (keysym.mod & KMOD_SHIFT)
-               MediaManagerRemoveDisk(keysym.sym-SDLK_0);
-            else
-               MediaManagerInsertDisk(keysym.sym-SDLK_0);
-          } else
-#endif
           {
             char filename[FILENAME_MAX];
             char browse_dir[FILENAME_MAX];
@@ -2405,12 +2237,6 @@ void trs_get_event(int wait)
         trs_joy_button_down();
       break;
 
-#ifdef MACOSX
-    case SDL_USEREVENT:
-      trs_handle_mac_events(&event);
-      break;
-#endif
-
     default:
 #if XDEBUG
 /*      debug("Unhandled event: type %d\n", event.type); */
@@ -2419,13 +2245,6 @@ void trs_get_event(int wait)
     }
     if (trs_paused)
       trs_gui_display_pause();
-#ifdef MACOSX
-    if (!fullscreen) {
-      SetControlManagerModel(trs_model, grafyx_get_microlabs());
-      SetControlManagerTurboMode(trs_timer_is_turbo());
-      UpdateMediaManagerInfo();
-    }
-#endif
   } while (!wait);
 }
 
@@ -2791,9 +2610,6 @@ void trs_disk_led(int drive, int on_off)
         rect.x = drive0_led_x + 24*scale_x*i;
         SDL_FillRect(screen, &rect, light_red);
         addToDrawList(&rect);
-#ifdef MACOSX
-        MediaManagerStatusLed(i,0);
-#endif
       }
     }
     if (on_off) {
@@ -2801,9 +2617,6 @@ void trs_disk_led(int drive, int on_off)
         rect.x = drive0_led_x + 24*scale_x*drive;
         SDL_FillRect(screen, &rect, bright_red);
         addToDrawList(&rect);
-#ifdef MACOSX
-        MediaManagerStatusLed(drive,1);
-#endif
         }
       countdown[drive] = 2*timer_hz;
       }
@@ -2815,9 +2628,6 @@ void trs_disk_led(int drive, int on_off)
             rect.x = drive0_led_x + 24*scale_x*i;
             SDL_FillRect(screen, &rect, light_red);
             addToDrawList(&rect);
-#ifdef MACOSX
-            MediaManagerStatusLed(i,0);
-#endif
           }
         }
       }
@@ -2842,9 +2652,6 @@ void trs_hard_led(int drive, int on_off)
         rect.x = drive0_led_x + 24*scale_x*i;
         SDL_FillRect(screen, &rect, light_red);
         addToDrawList(&rect);
-#ifdef MACOSX
-        MediaManagerStatusLed(i+8, 0);
-#endif
       }
     }
     if (on_off) {
@@ -2852,9 +2659,6 @@ void trs_hard_led(int drive, int on_off)
         rect.x = drive0_led_x + 24*scale_x*drive;
         SDL_FillRect(screen, &rect, bright_red);
         addToDrawList(&rect);
-#ifdef MACOSX
-        MediaManagerStatusLed(drive+8, 1);
-#endif
         }
       countdown[drive] = timer_hz/2;
       }
@@ -2866,9 +2670,6 @@ void trs_hard_led(int drive, int on_off)
             rect.x = drive0_led_x + 24*scale_x*i;
             SDL_FillRect(screen, &rect, light_red);
             addToDrawList(&rect);
-#ifdef MACOSX
-            MediaManagerStatusLed(i+8, 0);
-#endif
           }
         }
       }

@@ -58,9 +58,6 @@
 #include "trs_hard.h"
 #include "trs_state_save.h"
 #include "trs_imp_exp.h"
-#ifdef MACOSX
-#include "trs_mac_interface.h"
-#endif
 
 #define MAX_ROM_SIZE	(0x3800)
 #define MAX_VIDEO_SIZE	(0x0800)
@@ -260,9 +257,6 @@ static int recursion = 0;
         return;
       }
     }
-#ifdef MACOSX
-    trs_mac_save_defaults();
-#endif
     trs_sdl_cleanup();
     exit(0);
 }

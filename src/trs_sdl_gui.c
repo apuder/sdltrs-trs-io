@@ -63,11 +63,7 @@
 #define MENU_HARD_BROWSE_TYPE     4
 #define MENU_CASS_BROWSE_TYPE     5
 
-#ifdef MACOSX
-#define MENU_MOD KMOD_META
-#else
 #define MENU_MOD KMOD_ALT
-#endif
 
 typedef struct menu_entry_type {
   char title[80];
@@ -2417,11 +2413,7 @@ void trs_gui_printer_management(void)
    {"Printer Command:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
-#ifdef MACOSX
-   char *printer_choices[4] =     {"      None","      Text","     Epson","   CGP-115"};
-#else
    char *printer_choices[2] =     {"      None","      Text"};
-#endif
    char input[FILENAME_MAX];
    int selection = 0;
    int done = 0;
@@ -2435,13 +2427,8 @@ void trs_gui_printer_management(void)
 
      switch(selection) {
        case 0:
-#ifdef MACOSX
-         trs_printer = trs_gui_display_popup("Printer",printer_choices,4,
-                                                   trs_printer);
-#else
          trs_printer = trs_gui_display_popup("Printer",printer_choices,2,
                                                    trs_printer);
-#endif
          break;
        case 1:
          if (trs_printer_reset() != -1)
@@ -2761,17 +2748,10 @@ int trs_gui_read_config(void)
 static int trs_gui_config_management(void)
 {
   MENU_ENTRY misc_menu[] =
-#ifdef MACOSX
-  {{"Save Emulator State      (CMD-S)",MENU_NORMAL_TYPE},
-   {"Load Emulator State      (CMD-L)",MENU_NORMAL_TYPE},
-   {"Write Configuration File (CMD-W)",MENU_NORMAL_TYPE},
-   {"Read Configuration File  (CMD-R)",MENU_NORMAL_TYPE},
-#else
   {{"Save Emulator State      (ALT-S)",MENU_NORMAL_TYPE},
    {"Load Emulator State      (ALT-L)",MENU_NORMAL_TYPE},
    {"Write Configuration File (ALT-W)",MENU_NORMAL_TYPE},
    {"Read Configuration File  (ALT-R)",MENU_NORMAL_TYPE},
-#endif
    {"",0}};
    int selection = 0;
    int done = 0;
@@ -2891,38 +2871,19 @@ void trs_gui(void)
 {
   MENU_ENTRY main_menu[] =
   {
-#ifdef MACOSX
-   {"Floppy Disk Management (CMD-D)",MENU_NORMAL_TYPE},
-   {"Hard Disk Management   (CMD-H)",MENU_NORMAL_TYPE},
-   {"Cassette Management    (CMD-T)",MENU_NORMAL_TYPE},
-   {"Emulator Settings      (CMD-E)",MENU_NORMAL_TYPE},
-#else
    {"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE},
    {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE},
    {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE},
    {"Emulator Settings      (ALT-E)",MENU_NORMAL_TYPE},
-#endif
    {"Configuration/State File Management",MENU_NORMAL_TYPE},
    {"Printer Management",MENU_NORMAL_TYPE},
    {"Select Default Directories",MENU_NORMAL_TYPE},
    {"ROM File Selection",MENU_NORMAL_TYPE},
-#ifdef MACOSX
-   {"Display Settings       (CMD-I)",MENU_NORMAL_TYPE},
-#else
    {"Display Settings       (ALT-I)",MENU_NORMAL_TYPE},
-#endif
    {"Joystick Settings",MENU_NORMAL_TYPE},
-#ifdef MACOSX
-   {"Miscellaneous Settings (CMD-O)",MENU_NORMAL_TYPE},
-#else
    {"Miscellaneous Settings (ALT-O)",MENU_NORMAL_TYPE},
-#endif
    {"About SDLTRS",MENU_NORMAL_TYPE},
-#ifdef MACOSX
-   {"Keys in SDLTRS         (CMD-K)",MENU_NORMAL_TYPE},
-#else
    {"Keys in SDLTRS         (ALT-K)",MENU_NORMAL_TYPE},
-#endif
    {"",0}};
    int selection = 0;
    int done = 0;

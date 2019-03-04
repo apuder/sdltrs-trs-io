@@ -47,10 +47,6 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#ifdef MACOSX
-extern void PrintOutputControllerPrintChar(unsigned char byte);
-#endif
-
 static FILE *printer = NULL;
 static char printer_filename[FILENAME_MAX];
 static int printer_open = FALSE;
@@ -100,11 +96,6 @@ void trs_printer_write(int value)
       }
     }
   }
-#ifdef MACOSX
-  else if (trs_printer == EPSON_PRINTER || trs_printer == CGP_115_PRINTER) {
-    PrintOutputControllerPrintChar(value);
-  }
-#endif
 }
 
 int trs_printer_read()

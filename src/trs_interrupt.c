@@ -169,9 +169,6 @@ int
 trs_timer_switch_turbo()
 {
     timer_overclock = !timer_overclock;
-#ifdef MACOSX
-	SetControlManagerTurboMode(timer_overclock);
-#endif
     return(timer_overclock);
 }
 

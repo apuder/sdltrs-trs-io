@@ -55,10 +55,6 @@
 #include "trs_sdl_keyboard.h"
 #include "trs_state_save.h"
 
-#ifdef MACOSX
-#include "macosx/trs_mac_interface.h"
-#endif
-
 extern int fullscreen;
 
 int trs_model = 1;
@@ -154,9 +150,6 @@ int SDLmain(int argc, char *argv[])
 
     check_endian();
 
-#ifndef MACOSX
-    putenv("SDL_VIDEO_CENTERED=1");
-#endif
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
         fprintf(stderr, "Failed to initialize SDL library");
@@ -209,9 +202,6 @@ int SDLmain(int argc, char *argv[])
       trs_screen_init(1);
       trs_screen_refresh();
       }
-#ifdef MACOSX
-	TrsOriginSet();
-#endif
 
     if (!debug || fullscreen) {
       /* Run continuously until exit or request to enter debugger */
@@ -221,9 +211,6 @@ int SDLmain(int argc, char *argv[])
     debug_init();
     debug_shell();
     printf("Quitting.\n");
-#ifdef MACOSX
-    trs_mac_save_defaults();
-#endif
     exit(0);
 }
 

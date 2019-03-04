@@ -58,10 +58,6 @@
 
 #define NO_PRINTER   0
 #define TEXT_PRINTER 1
-#ifdef MACOSX
-#define EPSON_PRINTER 2
-#define CGP_115_PRINTER 3
-#endif
 
 
 #define MAX_SCALE 4

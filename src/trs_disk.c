@@ -323,69 +323,62 @@ void real_readtrk();
 void real_writetrk();
 int real_check_empty(DiskState *d);
 
-#ifdef MACOSX
-#define DebuggerOutput DebuggerPrintf
-extern void DebuggerPrintf(const char *format,...);
-#else
-#define DebuggerOutput printf
-#endif
-
 /* Entry point for the zbx debugger */
 void
 trs_disk_debug()
 {
   int i;
-  DebuggerOutput("Floppy disk controller state:\n");
-  DebuggerOutput("  status 0x%02x, track %d (0x%02x), sector %d (0x%02x), "
+  printf("Floppy disk controller state:\n");
+  printf("  status 0x%02x, track %d (0x%02x), sector %d (0x%02x), "
 	 "data 0x%02x\n", state.status, state.track, state.track,
 	 state.sector, state.sector, state.data);
-  DebuggerOutput("  currcommand 0x%02x, bytecount left %d, last step direction %d\n",
+  printf("  currcommand 0x%02x, bytecount left %d, last step direction %d\n",
 	 state.currcommand, state.bytecount, state.lastdirection);
-  DebuggerOutput("  curdrive %d, curside %d, density %d, controller %s\n",
+  printf("  curdrive %d, curside %d, density %d, controller %s\n",
 	 state.curdrive, state.curside, state.density,
 	 state.controller == TRSDISK_P1771 ? "WD1771" : "WD1791/93");
-  DebuggerOutput("  crc state 0x%04x, last_readadr %d, motor timeout %ld\n",
+  printf("  crc state 0x%04x, last_readadr %d, motor timeout %ld\n",
 	 state.crc, state.last_readadr,
 	 (long) (state.motor_timeout - z80_state.t_count));
-  DebuggerOutput("  last (non-DMK) format gaps %d %d %d %d %d\n",
+  printf("  last (non-DMK) format gaps %d %d %d %d %d\n",
 	 state.format_gap[0], state.format_gap[1], state.format_gap[2],
 	 state.format_gap[3], state.format_gap[4]);
-  DebuggerOutput("  debug flags: %#x\n", trs_disk_debug_flags);
+  printf("  debug flags: %#x\n", trs_disk_debug_flags);
   for (i=0; i<NDRIVES; i++) {
     DiskState *d = &disk[i];
-    DebuggerOutput("Drive %d state: "
+    printf("Drive %d state: "
 	   "writeprot %d, phytrack %d (0x%02x), inches %d, step %d, type ",
 	   i, d->writeprot, d->phytrack, d->phytrack, d->inches, d->real_step);
     if (d->file == NULL) {
-      DebuggerOutput("EMPTY\n");
+      printf("EMPTY\n");
     } else {
       switch (d->emutype) {
       case JV1:
-	DebuggerOutput("JV1\n");
+	printf("JV1\n");
 	break;
       case JV3:
-	DebuggerOutput("JV3\n");
-	DebuggerOutput("  last used id %d, id blocks %d\n",
+	printf("JV3\n");
+	printf("  last used id %d, id blocks %d\n",
 	       d->u.jv3.last_used_id, d->u.jv3.nblocks);
 	break;
       case DMK:
-	DebuggerOutput("DMK\n");
-	DebuggerOutput("  ntracks %d (0x%02x), tracklen 0x%04x, nsides %d, sden %d, "
+	printf("DMK\n");
+	printf("  ntracks %d (0x%02x), tracklen 0x%04x, nsides %d, sden %d, "
 	       "ignden %d\n", d->u.dmk.ntracks, d->u.dmk.ntracks,
 	       d->u.dmk.tracklen, d->u.dmk.nsides, d->u.dmk.sden,
 	       d->u.dmk.ignden);
-	DebuggerOutput("  buffered track %d, side %d, curbyte %d, nextidam %d\n",
+	printf("  buffered track %d, side %d, curbyte %d, nextidam %d\n",
 	       d->u.dmk.curtrack, d->u.dmk.curside, d->u.dmk.curbyte,
 	       d->u.dmk.nextidam);
 	break;
       case REAL:
-	DebuggerOutput("REAL\n");
-	DebuggerOutput("  rpm %d, empty %d, last size code %d, last fmt fill 0x%02x\n",
+	printf("REAL\n");
+	printf("  rpm %d, empty %d, last size code %d, last fmt fill 0x%02x\n",
 	       d->u.real.rps * 60, d->u.real.empty, d->u.real.size_code,
 	       d->u.real.fmt_fill);
 	break;
       default:
-	DebuggerOutput("UNKNOWN\n");
+	printf("UNKNOWN\n");
 	break;
       }
     }
