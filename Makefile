@@ -4,7 +4,7 @@ all:
 	@echo "make (clean | bsd | linux | nox | sdl2 | win32 | win32-clean)"
 
 clean:
-	rm -rf src/*.d src/*.o src/sdltrs src/sdl2trs
+	rm -rf src/*.o src/sdltrs src/sdl2trs
 
 bsd:
 	${MAKE} -C src -f Makefile.bsd
@@ -22,4 +22,4 @@ win32:
 	${MAKE} -C src -f Makefile.win32
 
 win32-clean:
-	del src\*.d src\*.o src\sdltrs.exe
+	del src\*.o src\sdltrs.exe

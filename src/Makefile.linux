@@ -30,7 +30,6 @@ SRCS  += sdltrs_main.c
 SRCS  += PasteManager.c
 
 OBJS   = ${SRCS:.c=.o}
-DEPS   = ${SRCS:.c=.d}
 
 ENDIAN = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 LIBS   = $(shell sdl-config --libs) -lX11 -lreadline
@@ -40,3 +39,7 @@ CFLAGS = -g -Wall -O2 ${INCS} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
+
+depend:
+	makedepend -Y -f Makefile.linux -- $(CFLAGS) -- $(SRCS) | \
+		(egrep -v 'cannot find|not in' || true)

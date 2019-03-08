@@ -30,7 +30,6 @@ SRCS  += sdltrs_main.c
 SRCS  += PasteManager_win32.c
 
 OBJS   = ${SRCS:.c=.o}
-DEPS   = ${SRCS:.c=.d}
 
 MINGW  = C:\MinGW
 LIBS   = -L$(MINGW)\lib -lmingw32 -lSDLmain -lSDL
