@@ -5,21 +5,21 @@ for the zbx debugger. On Debian or Ubuntu these can be installed with:
 
   sudo apt install libsdl1.2-dev libreadline-dev
 
-From the main directory, execute:
+From the "src" directory, execute:
 
   make linux
 
 
 To build for FreeBSD/NetBSD/OpenBSD:
 ------------------------------------
-From the main directory, execute:
+From the "src" directory, execute:
 
   make bsd
 
 
 To build with SDL only (no X11):
 --------------------------------
-From the main directory, execute:
+From the "src" directory, execute:
 
   make nox
 
@@ -34,7 +34,7 @@ The SDL2 port should be considered as "experimental": it works on most
 systems without flaws, but switching fullscreen mode may "clutter" the
 emulator window at some time.
 
-From the main directory, execute:
+From the "src" directory, execute:
 
   make sdl2
 
@@ -51,7 +51,7 @@ SDLTRS.EXE binary file, the header files of the development library to
 edit the macros LIBS and INCS in the Makefile to point to the location
 of the SDL installation.
 
-From the main directory, execute:
+From the "src" directory, execute:
 
   mingw32-make win32
 
