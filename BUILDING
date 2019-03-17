@@ -1,3 +1,27 @@
+To build with autotools:
+------------------------
+From the main directory, execute:
+
+  ./autogen.sh
+
+which will generate the "configure" script. Installation of "aclocal",
+"autoconf" and "automake" is needed for this.
+
+To enable "readline" support for the zbx debugger, execute:
+
+  ./configure --enable-readline
+
+To build the experimental SDL2 version (see below) of SDLTRS, execute:
+
+  ./configure --enable-sdl2
+
+To build with SDL only (no X11 and no "PasteManager"), execute:
+
+  ./configure --without-x
+
+Start build of the program by executing "make" in the main directory.
+
+
 To build for Linux:
 -------------------
 SDLTRS needs the development files of libSDL 1.2, X11 and GNU readline
