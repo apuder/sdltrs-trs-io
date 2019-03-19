@@ -326,7 +326,7 @@ int trs_gui_get_key(void)
              trs_x_flush();
              break;
           case SDLK_PLUS:
-          case SDLK_PAGEUP:
+          case SDLK_PAGEDOWN:
             if (!fullscreen) {
               scale_x++;
               if (scale_x > MAX_SCALE)
@@ -338,7 +338,7 @@ int trs_gui_get_key(void)
             }
             break;
           case SDLK_MINUS:
-          case SDLK_PAGEDOWN:
+          case SDLK_PAGEUP:
             if (!fullscreen) {
               scale_x--;
               if (scale_x < 1)
