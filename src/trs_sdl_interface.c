@@ -560,7 +560,7 @@ int trs_write_config_file(char *filename)
 
   fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
   fprintf(config_file, "%slower\n", lowercase ? "" : "no");
-  fprintf(config_file, "%sound\n", trs_sound ? "" : "no");
+  fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
 
   fclose(config_file);
   return 0;
