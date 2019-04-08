@@ -37,7 +37,7 @@ AC_ARG_ENABLE([sdl2],
 CFLAGS="$CFLAGS $( $SDL_CONF --cflags )"
 LDFLAGS="$LDFLAGS $( $SDL_CONF --libs )"
 
-AC_CHECK_LIB([$SDL_VERS],[SDL_Init], [":"],
+AC_CHECK_LIB([$SDL_VERS],[SDL_Init], [:],
   AC_MSG_ERROR([Unable to find SDL_Init function in $SDL_VERS]))
 
 AC_CONFIG_FILES([Makefile])
