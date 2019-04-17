@@ -1817,8 +1817,8 @@ void trs_gui_display_management(void)
    int local_trs_charset1 = trs_charset1;
    int local_trs_charset3 = trs_charset3;
    int local_trs_charset4 = trs_charset4;
-   int local_foreground = foreground;
-   int local_background = background;
+   unsigned int local_foreground = foreground;
+   unsigned int local_background = background;
    unsigned int local_gui_foreground = gui_foreground;
    unsigned int local_gui_background = gui_background;
    int gui_show_led = trs_show_led;
