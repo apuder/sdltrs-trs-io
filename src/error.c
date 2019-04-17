@@ -79,3 +79,16 @@ void error(const char *fmt, ...)
   va_end(args);
 }
 
+void warn(const char *fmt, ...)
+{
+  va_list args;
+  char xfmt[2048];
+
+  strcpy(xfmt, program_name);
+  strcat(xfmt, " warning: ");
+  strcat(xfmt, fmt);
+  strcat(xfmt, "\n");
+  va_start(args, fmt);
+  vfprintf(stderr, xfmt, args);
+  va_end(args);
+}

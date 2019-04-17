@@ -518,7 +518,7 @@ trs_schedule_event(trs_event_func f, int arg, int countdown)
 {
     while (event_func) {
 #if EDEBUG
-	error("warning: trying to schedule two events");
+	warn("trying to schedule two events");
 #endif
 	trs_do_event();
     }
