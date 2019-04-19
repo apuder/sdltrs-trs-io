@@ -51,6 +51,7 @@
 
 #include <time.h>
 
+#include "error.h"
 #include "z80.h"
 #include "trs.h"
 #include "trs_imp_exp.h"

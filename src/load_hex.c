@@ -43,7 +43,7 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
-#include "z80.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 #define BUFFER_SIZE 256

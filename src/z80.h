@@ -252,9 +252,6 @@ extern int mem_read_word(int address);
 extern void mem_write_word(int address, int value);
 Uchar *mem_pointer(int address, int writing);
 extern int load_hex(); /* returns highest address loaded + 1 */
-extern void debug(const char *fmt, ...);
-extern void error(const char *fmt, ...);
-extern void warn(const char *fmt, ...);
 extern void z80_out(int port, int value);
 extern int z80_in(int port);
 extern int disassemble(unsigned short pc);

@@ -48,6 +48,7 @@
 #include <sys/stat.h>
 #include <SDL.h>
 
+#include "error.h"
 #include "z80.h"
 #include "trs.h"
 #include "trs_disk.h"

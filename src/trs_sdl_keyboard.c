@@ -50,7 +50,7 @@
 /*#define SHIFT_F1_IS_F11 1*/ /* use if X reports Shift+F1..F10 as F11..F20 */
 
 #include <SDL.h>
-#include "z80.h"
+#include "error.h"
 #include "trs.h"
 #include "trs_sdl_keyboard.h"
 

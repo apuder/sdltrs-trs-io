@@ -50,7 +50,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include "trs_imp_exp.h"
-#include "z80.h"
+#include "error.h"
 #include "trs.h"
 #include "trs_disk.h"
 #include "trs_hard.h"

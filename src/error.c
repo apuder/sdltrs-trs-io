@@ -45,9 +45,9 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
-#include "z80.h"
+#include "error.h"
 #include <stdarg.h>
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 extern char *program_name;

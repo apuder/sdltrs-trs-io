@@ -57,8 +57,8 @@
 #define CASSDEBUG3 0
 #define CASSDEBUG4 0
 
+#include "error.h"
 #include "trs.h"
-#include "z80.h"
 #include "trs_state_save.h"
 #include <string.h>
 #include <errno.h>

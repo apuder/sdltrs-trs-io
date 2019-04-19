@@ -53,7 +53,7 @@
 #define SIZERETRY 1       /* Retry in different sizes on real_read */
 #define DMK_MARK_IAM 0    /* Mark IAMs in track header; poor idea */
 
-#include "z80.h"
+#include "error.h"
 #include "trs.h"
 #include "trs_disk.h"
 #include "trs_hard.h"

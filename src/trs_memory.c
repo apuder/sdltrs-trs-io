@@ -51,6 +51,7 @@
  * as the screen and keyboard.
  */
 
+#include "error.h"
 #include "z80.h"
 #include "trs.h"
 #include <stdlib.h>

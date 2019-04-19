@@ -47,6 +47,7 @@
 #include <sys/file.h>
 #include <fcntl.h>
 #include <string.h>
+#include "error.h"
 #include "trs.h"
 #include "trs_uart.h"
 #include "trs_state_save.h"

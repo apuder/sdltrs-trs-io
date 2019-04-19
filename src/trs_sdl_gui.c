@@ -33,6 +33,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <SDL.h>
+#include "error.h"
 #include "trs.h"
 #include "trs_cassette.h"
 #include "trs_disk.h"
@@ -42,7 +43,6 @@
 #include "trs_mkdisk.h"
 #include "trs_sdl_gui.h"
 #include "trs_sdl_keyboard.h"
-#include "z80.h"
 
 #ifdef _WIN32
 #include <windows.h>

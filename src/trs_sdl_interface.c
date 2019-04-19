@@ -64,9 +64,9 @@
 #include <errno.h>
 #include <SDL.h>
 
+#include "error.h"
 #include "trs_iodefs.h"
 #include "trs.h"
-#include "z80.h"
 #include "trs_disk.h"
 #include "trs_uart.h"
 #include "trs_state_save.h"
