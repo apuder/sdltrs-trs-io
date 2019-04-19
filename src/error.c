@@ -55,40 +55,31 @@ extern char *program_name;
 void debug(const char *fmt, ...)
 {
   va_list args;
-  char xfmt[2048];
 
-  strcpy(xfmt, "debug: ");
-  strcat(xfmt, fmt);
-  /*strcat(xfmt, "\n");*/
+  fprintf(stderr, "%s debug: ", program_name);
   va_start(args, fmt);
-  vfprintf(stderr, xfmt, args);
+  vfprintf(stderr, fmt, args);
   va_end(args);
 }
 
 void error(const char *fmt, ...)
 {
   va_list args;
-  char xfmt[2048];
 
-  strcpy(xfmt, program_name);
-  strcat(xfmt, " error: ");
-  strcat(xfmt, fmt);
-  strcat(xfmt, "\n");
+  fprintf(stderr, "%s error: ", program_name);
   va_start(args, fmt);
-  vfprintf(stderr, xfmt, args);
+  vfprintf(stderr, fmt, args);
   va_end(args);
+  fputc('\n', stderr);
 }
 
 void warn(const char *fmt, ...)
 {
   va_list args;
-  char xfmt[2048];
 
-  strcpy(xfmt, program_name);
-  strcat(xfmt, " warning: ");
-  strcat(xfmt, fmt);
-  strcat(xfmt, "\n");
+  fprintf(stderr, "%s warning: ", program_name);
   va_start(args, fmt);
-  vfprintf(stderr, xfmt, args);
+  vfprintf(stderr, fmt, args);
   va_end(args);
+  fputc('\n', stderr);
 }
