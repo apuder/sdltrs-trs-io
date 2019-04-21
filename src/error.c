@@ -73,6 +73,18 @@ void error(const char *fmt, ...)
   fputc('\n', stderr);
 }
 
+void fatal(const char *fmt, ...)
+{
+  va_list args;
+
+  fprintf(stderr, "%s fatal error: ", program_name);
+  va_start(args, fmt);
+  vfprintf(stderr, fmt, args);
+  va_end(args);
+  fputc('\n', stderr);
+  exit(1);
+}
+
 void warn(const char *fmt, ...)
 {
   va_list args;

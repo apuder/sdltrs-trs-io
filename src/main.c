@@ -68,10 +68,7 @@ static void check_endian()
     x.byte.low = 1;
     x.byte.high = 0;
     if(x.word != 1)
-    {
-	fprintf(stderr, "Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.\n");
-	exit(1);
-    }
+      fatal("Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.");
 }
 
 int trs_load_rom(char *filename)
@@ -151,11 +148,8 @@ int SDLmain(int argc, char *argv[])
 
     check_endian();
 
-
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
-        fprintf(stderr, "Failed to initialize SDL library");
-  	    exit(1);
-    }
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
+      fatal("Failed to initialize SDL library");
 
 #ifndef SDL2
     /* Enable Unicode key translations */
@@ -163,10 +157,8 @@ int SDLmain(int argc, char *argv[])
 #endif
 
     argc = trs_parse_command_line(argc, argv, &debug);
-    if (argc > 1) {
-      fprintf(stderr, "%s: erroneous argument %s\n", program_name, argv[1]);
-      exit(1);
-    }
+    if (argc > 1)
+      fatal("erroneous argument %s", argv[1]);
 
     trs_set_keypad_joystick();
     trs_open_joystick();
@@ -202,7 +194,7 @@ int SDLmain(int argc, char *argv[])
       trs_state_load(init_state_file);
       trs_screen_init(1);
       trs_screen_refresh();
-      }
+    }
 
     if (!debug || fullscreen) {
       /* Run continuously until exit or request to enter debugger */
