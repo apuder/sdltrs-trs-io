@@ -164,7 +164,7 @@ static SDL_Window *window = NULL;
 static Uint32 light_red;
 static Uint32 bright_red;
 
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
 #define PASTE_IDLE    0
 #define PASTE_GETNEXT 1
 #define PASTE_KEYDOWN 2
@@ -1061,7 +1061,7 @@ void trs_flip_fullscreen(void)
   static int window_scale_x = 1;
   static int window_scale_y = 2;
 
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
   copyStatus = COPY_IDLE;
 #endif
 #ifdef SDL2
@@ -1175,7 +1175,7 @@ void trs_screen_init(int gui_init)
   SDL_Color colors[2];
   int i;
 
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
   copyStatus = COPY_IDLE;
 #endif
   if (trs_model == 1) {
@@ -1455,7 +1455,7 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 	}
 }
 
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
 void ProcessCopySelection(int selectAll)
 {
 	static int orig_x = 0;
@@ -1572,7 +1572,7 @@ void trs_select_all()
  */
 inline void trs_x_flush()
 {
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
   if (!trs_emu_mouse)
       {
       ProcessCopySelection(requestSelectAll);
@@ -1596,7 +1596,7 @@ inline void trs_x_flush()
   drawnRectCount = 0;
 }
 
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
 char *trs_get_copy_data()
 {
   static char copy_data[2500];
@@ -1766,7 +1766,7 @@ void trs_get_event(int wait)
   trs_x_flush();
 
   do {
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
     if (paste_state != PASTE_IDLE) {
 		static unsigned short paste_key_uni;
 
@@ -1835,7 +1835,7 @@ void trs_get_event(int wait)
         debug("KeyDown: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
 	        keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
 	  if ((keysym.mod & MENU_MOD) == 0) {
 	    if (copyStatus != COPY_IDLE)
 		  copyStatus = COPY_CLEAR;
@@ -1918,7 +1918,7 @@ void trs_get_event(int wait)
       default:
         break;
       }
-#if !defined(NOX)
+#if defined(SDL2) || !defined(NOX)
       if (keysym.mod & MENU_MOD) {
         switch (keysym.sym) {
         case SDLK_c:
