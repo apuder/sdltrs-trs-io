@@ -2455,7 +2455,7 @@ void trs_gui_model(void)
                             "TRS-80 Model III",
                             "  TRS-80 Model 4",
                             " TRS-80 Model 4P"};
-  char *on_off_choices[2] = {"            Off","             On"};
+  char *on_off_choices[2] = {"        Off","         On"};
   MENU_ENTRY model_menu[] =
   {{"Model                                                       ",MENU_NORMAL_TYPE},
    {"Lowercase Modification for Model I                          ",MENU_NORMAL_TYPE},
@@ -2487,13 +2487,13 @@ void trs_gui_model(void)
          break;
      }
      strcpy(&model_menu[0].title[44],model_choices[model_selection]);
-     strcpy(&model_menu[1].title[45],on_off_choices[lowercase]);
-     strcpy(&model_menu[2].title[45],on_off_choices[lowe_le18]);
-     strcpy(&model_menu[3].title[45],on_off_choices[grafyx_get_microlabs()]);
-     strcpy(&model_menu[4].title[45],on_off_choices[huffman_ram]);
-     strcpy(&model_menu[5].title[45],on_off_choices[hypermem]);
-     strcpy(&model_menu[6].title[45],on_off_choices[supermem]);
-     strcpy(&model_menu[7].title[45],on_off_choices[selector]);
+     strcpy(&model_menu[1].title[49],on_off_choices[lowercase]);
+     strcpy(&model_menu[2].title[49],on_off_choices[lowe_le18]);
+     strcpy(&model_menu[3].title[49],on_off_choices[grafyx_get_microlabs()]);
+     strcpy(&model_menu[4].title[49],on_off_choices[huffman_ram]);
+     strcpy(&model_menu[5].title[49],on_off_choices[hypermem]);
+     strcpy(&model_menu[6].title[49],on_off_choices[supermem]);
+     strcpy(&model_menu[7].title[49],on_off_choices[selector]);
 
      selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu",model_menu, selection);
      switch(selection) {
