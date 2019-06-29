@@ -199,7 +199,8 @@ and that state will be restored upon startup of the emulator.</p>
         Model 4 mode, or the romfile specified by <code>filename4p</code> in
         Model 4P mode, A romfile can be either a raw binary dump, Intel hex
         format, or TRS-80 cmd format (for example, a MODELA/III file). If you
-        do not set this option, a default established at compile time is used.</td>
+        do not set this option, a default established at compile time is used.
+    </td>
   </tr>
   <tr>
     <td><code>-model m</code></td>
@@ -310,7 +311,7 @@ and that state will be restored upon startup of the emulator.</p>
         </code> or <code>-nodoublestep</code>.</td>
   </tr>
   <tr>
-    <td><code>-sizesize z0,z1,z2,z3,z4,z5,z6,z7</code></td>
+    <td><code>-sizemap z0,z1,z2,z3,z4,z5,z6,z7</code></td>
     <td>Selectively set whether drives are emulated as 5-inch or 8-inch.
         If <code>zU</code> is 5, the drive will appear to Z80 software as
         5-inch; if 8, as 8-inch. The default setting (as reflected in the
@@ -333,7 +334,8 @@ and that state will be restored upon startup of the emulator.</p>
         reading. This option is probably not useful unless you need to deal
         with Model I disks that use the distinction as part of a copy-
         protection scheme. See also "Common File Formats for Emulated TRS-80
-        Floppy Disks", available at http://www.tim-mann.org/trs80/dskspec.html.</td>
+        Floppy Disks", available at http://www.tim-mann.org/trs80/dskspec.html.
+    </td>
   </tr>
   <tr>
     <td><code>-notruedam</code></td>
@@ -384,6 +386,25 @@ and that state will be restored upon startup of the emulator.</p>
     <td><code>-noemtsafe</code></td>
     <td>Turn on ability for emts (Emulation traps) to write to unexpected
         places in the host filesystem.</td>
+  </tr>
+  <tr>
+    <td><code>-turbo</code></td>
+    <td>Switch "Turbo" mode on. The emulator will run faster than a normal
+        TRS-80 by the factor specified with <code>-turborate</code> below.
+        Turbo Mode can be toggled with <B>F11</B> key in the emulator.</td>
+  </tr>
+  <tr>
+    <td><code>-noturbo</code></td>
+    <td>Switch "Turbo" mode off. The emulator will run at the original speed
+        of the selected TRS-80 Model. This is the default but can be toggled
+        with the <B>F11</B> key in the emulator.</td>
+  </tr>
+  <tr>
+    <td><code>-turborate factor</code></td>
+    <td>Set the number of times normal TRS-80 speed that the emulator runs when
+        in Turbo mode. The default setting is 5. Above around factor 8 you may
+        experience problems with runaway keyboard repeat on the emulator, so
+        use higher values with caution.</td>
   </tr>
   <tr>
     <td><code>-sound</code></td>
@@ -444,7 +465,6 @@ and that state will be restored upon startup of the emulator.</p>
     <td><code>-noselector</code></td>
     <td>Disable emulation of the above memory expansion. This is the default.</td>
   </tr>
-
 </table>
 
 </body>
