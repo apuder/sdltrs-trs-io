@@ -271,6 +271,7 @@ static void trs_opt_string(char *arg, int intarg, char *stringarg);
 static void trs_opt_disk(char *arg, int intarg, char *stringarg);
 static void trs_opt_hard(char *arg, int intarg, char *stringarg);
 static void trs_opt_cass(char *arg, int intarg, char *stringarg);
+static void trs_opt_diskset(char *arg, int intarg, char *stringarg);
 static void trs_opt_keystretch(char *arg, int intarg, char *stringarg);
 static void trs_opt_borderwidth(char *arg, int intarg, char *stringarg);
 static void trs_opt_microlabs(char *arg, int intarg, char *stringarg);
@@ -340,6 +341,7 @@ trs_opt options[] = {
 {"hard2",trs_opt_hard,1,2,NULL},
 {"hard3",trs_opt_hard,1,3,NULL},
 {"cassette",trs_opt_cass,1,0,NULL},
+{"diskset",trs_opt_diskset,1,0,NULL},
 {"diskdir",trs_opt_string,1,0,trs_disk_dir},
 {"harddir",trs_opt_string,1,0,trs_hard_dir},
 {"cassdir",trs_opt_string,1,0,trs_cass_dir},
@@ -754,6 +756,12 @@ static void trs_opt_hard(char *arg, int intarg, char *stringarg)
 static void trs_opt_cass(char *arg, int intarg, char *stringarg)
 {
   trs_cassette_insert(arg);
+}
+
+static void trs_opt_diskset(char *arg, int intarg, char *stringarg)
+{
+  if (trs_diskset_load(arg) == -1)
+    warn("could not load diskset: %s", arg);
 }
 
 static void trs_opt_keystretch(char *arg, int intarg, char *stringarg)
