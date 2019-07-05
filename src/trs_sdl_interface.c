@@ -2147,6 +2147,16 @@ void trs_get_event(int wait)
 #ifdef SDL2
             if (keysym.mod & KMOD_SHIFT)
               keysym.sym = trs_sdl_sym2upper(keysym.sym);
+            /* Convert arrow/control/function keys */
+            else if (keysym.sym == SDLK_UP)    keysym.sym = 0x111;
+            else if (keysym.sym == SDLK_DOWN)  keysym.sym = 0x112;
+            else if (keysym.sym == SDLK_RIGHT) keysym.sym = 0x113;
+            else if (keysym.sym == SDLK_LEFT)  keysym.sym = 0x114;
+            else if (keysym.sym == SDLK_F1)    keysym.sym = 0x11a;
+            else if (keysym.sym == SDLK_F2)    keysym.sym = 0x11b;
+            else if (keysym.sym == SDLK_F3)    keysym.sym = 0x11c;
+            else if (keysym.sym == SDLK_F4)    keysym.sym = 0x11d;
+            else if (keysym.sym == SDLK_LCTRL) keysym.sym = 0x132;
 #endif
 
             if (last_key[keysym.scancode] != 0) {
