@@ -346,6 +346,8 @@ int trs_gui_get_key(void)
 #else
        case SDL_ACTIVEEVENT:
 #endif
+         trs_gui_refresh();
+         trs_x_flush();
          break;
        case SDL_KEYDOWN:
          if (event.key.keysym.mod & MENU_MOD)

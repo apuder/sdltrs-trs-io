@@ -2884,7 +2884,7 @@ void trs_gui_refresh()
 {
   unsigned int i;
 
-  for (i = 0; i < screen_chars; i++)
+  for (i = 0; i < 1024; i++)
     trs_gui_write_char(i, trs_gui_screen[i], trs_gui_screen_invert[i]);
 
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
