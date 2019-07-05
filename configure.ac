@@ -27,7 +27,7 @@ AC_ARG_ENABLE([readline],
    AC_MSG_ERROR([Unable to find readline function]))])
 
 AC_ARG_ENABLE([sdl2],
-  [AS_HELP_STRING([--enable-sdl2], [Experimental SDL2 version])],
+  [AS_HELP_STRING([--enable-sdl2], [SDL2 version])],
   [AC_DEFINE([SDL2])
    SDL_VERS=SDL2
    SDL_CONF=sdl2-config],

@@ -1116,7 +1116,6 @@ void trs_flip_fullscreen(void)
       scale_x = 1;
       scale_y = 2;
       trs_screen_init(0);
-      grafyx_redraw();
       trs_screen_refresh();
     }
     else {
@@ -1134,7 +1133,6 @@ void trs_flip_fullscreen(void)
       scale_x = window_scale_x;
       scale_y = window_scale_y;
       trs_screen_init(0);
-      grafyx_redraw();
       trs_screen_refresh();
     }
     else {
@@ -1282,7 +1280,7 @@ void trs_screen_init(int gui_init)
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
                               OrigWidth, OrigHeight,
-                              0);
+                              SDL_WINDOW_SHOWN);
   }
 #endif
 
@@ -1346,6 +1344,9 @@ void trs_screen_init(int gui_init)
       trs_gui_screen_invert_copy[i] = 0;
     }
   }
+
+  grafyx_redraw();
+  drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
 Uint32 last_key[256];
@@ -2001,6 +2002,7 @@ void trs_get_event(int wait)
               case SDLK_RETURN:
                 trs_flip_fullscreen();
                 trs_screen_refresh();
+                trs_x_flush();
                 break;
               case SDLK_d:
               case SDLK_f:
@@ -2023,7 +2025,6 @@ void trs_get_event(int wait)
               case SDLK_l:
                 call_function(LOAD_STATE);
                 trs_screen_init(1);
-                grafyx_redraw();
                 trs_screen_refresh();
                 trs_x_flush();
                 break;
@@ -2033,7 +2034,6 @@ void trs_get_event(int wait)
               case SDLK_r:
                 if (call_function(READ) == 0) {
                   trs_screen_init(1);
-                  grafyx_redraw();
                 }
                 trs_screen_refresh();
                 trs_x_flush();
@@ -2046,7 +2046,6 @@ void trs_get_event(int wait)
                     scale_x = 1;
                   scale_y = scale_x * 2;
                   trs_screen_init(1);
-                  grafyx_redraw();
                   trs_screen_refresh();
                   trs_x_flush();
                 }
@@ -2059,7 +2058,6 @@ void trs_get_event(int wait)
                     scale_x = MAX_SCALE;
                   scale_y = scale_x * 2;
                   trs_screen_init(1);
-                  grafyx_redraw();
                   trs_screen_refresh();
                   trs_x_flush();
                 }

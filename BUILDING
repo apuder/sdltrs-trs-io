@@ -11,7 +11,7 @@ To enable "readline" support for the zbx debugger, execute:
 
   ./configure --enable-readline
 
-To build the experimental SDL2 version (see below) of SDLTRS, execute:
+To build the SDL2 version (see below) of SDLTRS, execute:
 
   ./configure --enable-sdl2
 
@@ -48,15 +48,16 @@ From the "src" directory, execute:
   make nox
 
 SDLTRS will be build without the "PasteManager" ("Copy & Paste" to and
-from the Emulator screen), but works on plattforms with no X11-server,
-like Haiku/BeOS.
+from the Emulator screen), but works on operating systems with no X11-
+server like Haiku/BeOS.
 
 
 To build with SDL2:
 -------------------
-The SDL2 port should be considered as "experimental": it works on most
-systems without flaws, but switching fullscreen mode may "clutter" the
-emulator window at some time.
+SDL2TRS needs the development files of libSDL 2.0. On Debian or Ubuntu
+these can be installed with:
+
+  sudo apt install libsdl2-dev
 
 From the "src" directory, execute:
 
@@ -82,4 +83,4 @@ From the "src" directory, execute:
 
 To build for macOS X:
 ---------------------
-Install libSDL2 via "MacPorts" or "Homebrew" and build the SDL2 port.
+Install libSDL2 via "MacPorts" or "Homebrew" and build SDL2 port above.
