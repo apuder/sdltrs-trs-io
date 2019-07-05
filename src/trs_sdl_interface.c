@@ -2145,18 +2145,17 @@ void trs_get_event(int wait)
             }
 
 #ifdef SDL2
-            if (keysym.mod & KMOD_SHIFT)
-              keysym.sym = trs_sdl_sym2upper(keysym.sym);
-            /* Convert arrow/control/function keys */
-            else if (keysym.sym == SDLK_UP)    keysym.sym = 0x111;
-            else if (keysym.sym == SDLK_DOWN)  keysym.sym = 0x112;
-            else if (keysym.sym == SDLK_RIGHT) keysym.sym = 0x113;
-            else if (keysym.sym == SDLK_LEFT)  keysym.sym = 0x114;
-            else if (keysym.sym == SDLK_F1)    keysym.sym = 0x11a;
-            else if (keysym.sym == SDLK_F2)    keysym.sym = 0x11b;
-            else if (keysym.sym == SDLK_F3)    keysym.sym = 0x11c;
-            else if (keysym.sym == SDLK_F4)    keysym.sym = 0x11d;
-            else if (keysym.sym == SDLK_LCTRL) keysym.sym = 0x132;
+            /* Convert arrow/control/function/shift keys */
+                 if (keysym.sym == SDLK_UP)     keysym.sym = 0x111;
+            else if (keysym.sym == SDLK_DOWN)   keysym.sym = 0x112;
+            else if (keysym.sym == SDLK_RIGHT)  keysym.sym = 0x113;
+            else if (keysym.sym == SDLK_LEFT)   keysym.sym = 0x114;
+            else if (keysym.sym == SDLK_F1)     keysym.sym = 0x11a;
+            else if (keysym.sym == SDLK_F2)     keysym.sym = 0x11b;
+            else if (keysym.sym == SDLK_F3)     keysym.sym = 0x11c;
+            else if (keysym.sym == SDLK_F4)     keysym.sym = 0x11d;
+            else if (keysym.sym == SDLK_LSHIFT) keysym.sym = 0x130;
+            else if (keysym.sym == SDLK_LCTRL)  keysym.sym = 0x132;
 #endif
 
             if (last_key[keysym.scancode] != 0) {
@@ -2164,19 +2163,21 @@ void trs_get_event(int wait)
             }
 #ifdef SDL2
             if (keysym.sym >= 0x20 && keysym.sym <= 0xFF) {
-              last_key[keysym.scancode] = keysym.sym;
-              trs_xlate_keysym(keysym.sym);
+              if (keysym.mod & KMOD_SHIFT)
+                keysym.sym = trs_sdl_sym2upper(keysym.sym);
             }
+            last_key[keysym.scancode] = keysym.sym;
+            trs_xlate_keysym(keysym.sym);
 #else
             if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
               last_key[keysym.scancode] = keysym.unicode;
               trs_xlate_keysym(keysym.unicode);
             }
-#endif
             else if (keysym.sym != 0) {
               last_key[keysym.scancode] = keysym.sym;
               trs_xlate_keysym(keysym.sym);
             }
+#endif
             break;
 
             case SDL_KEYUP:
@@ -3806,6 +3807,6 @@ int trs_sdl_sym2upper(int sym)
   else if (sym == '-') return '_';
   else if (sym == '0') return '=';
   else if (sym == '<') return '>';
-  return 0;
+  return sym;
 }
 #endif
