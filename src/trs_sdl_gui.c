@@ -1221,17 +1221,17 @@ void trs_gui_hard_creation(void)
   char browse_dir[FILENAME_MAX];
 
   while(!done) {
-    sprintf(&disk_creation_menu[0].title[52],"%8d",cylinder_count);
-    sprintf(&disk_creation_menu[1].title[52],"%8d",sector_count);
-    sprintf(&disk_creation_menu[2].title[52],"%8d",granularity);
-    sprintf(&disk_creation_menu[3].title[52],"%8d",dir_sector);
-    strcpy(&disk_creation_menu[4].title[52],drive_choices[drive_insert]);
+    snprintf(&disk_creation_menu[0].title[52],9,"%8d",cylinder_count);
+    snprintf(&disk_creation_menu[1].title[52],9,"%8d",sector_count);
+    snprintf(&disk_creation_menu[2].title[52],9,"%8d",granularity);
+    snprintf(&disk_creation_menu[3].title[52],9,"%8d",dir_sector);
+    snprintf(&disk_creation_menu[4].title[52],9,"%8s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Hard Disk Creation Menu",
         disk_creation_menu, selection);
     switch(selection) {
       case 0:
-        sprintf(input,"%6d",cylinder_count);
+        snprintf(input,4,"%d",cylinder_count);
         if (trs_gui_input_string("Enter Cylinder Count",input,input,3,0) == 0) {
           value = atoi(input);
           if (value >=3 && value <= 256) {
@@ -1245,7 +1245,7 @@ void trs_gui_hard_creation(void)
         }
         break;
       case 1:
-        sprintf(input,"%6d",sector_count);
+        snprintf(input,4,"%d",sector_count);
         if (trs_gui_input_string("Enter Sector Count",input,input,3,0) == 0) {
           value = atoi(input);
           if (value >=4 && value <= 256) {
@@ -1263,7 +1263,7 @@ void trs_gui_hard_creation(void)
         }
         break;
       case 2:
-        sprintf(input,"%6d",granularity);
+        snprintf(input,2,"%d",granularity);
         if (trs_gui_input_string("Enter Granularity",input,input,1,0) == 0) {
           value = atoi(input);
           if (value >= 1 && value <= 8) {
@@ -1274,7 +1274,7 @@ void trs_gui_hard_creation(void)
         }
         break;
       case 3:
-        sprintf(input,"%6d",dir_sector);
+        snprintf(input,4,"%d",dir_sector);
         if (trs_gui_input_string("Enter Directory Sector",input,input,3,0) == 0) {
           value = atoi(input);
           if (value >= 1 && value < cylinder_count) {
@@ -1354,12 +1354,12 @@ void trs_gui_disk_creation(void)
   static int drive_insert = 0;
 
   while(!done) {
-    strcpy(&disk_creation_menu[0].title[52],image_type_choices[image_type]);
-    strcpy(&disk_creation_menu[1].title[52],num_sides_choices[num_sides-1]);
-    strcpy(&disk_creation_menu[2].title[52],density_choices[density-1]);
-    strcpy(&disk_creation_menu[3].title[52],size_choices[eight]);
-    strcpy(&disk_creation_menu[4].title[52],ignore_choices[ignore_density]);
-    strcpy(&disk_creation_menu[5].title[52],drive_choices[drive_insert]);
+    snprintf(&disk_creation_menu[0].title[52],9,"%s",image_type_choices[image_type]);
+    snprintf(&disk_creation_menu[1].title[52],9,"%s",num_sides_choices[num_sides-1]);
+    snprintf(&disk_creation_menu[2].title[52],9,"%s",density_choices[density-1]);
+    snprintf(&disk_creation_menu[3].title[52],9,"%s",size_choices[eight]);
+    snprintf(&disk_creation_menu[4].title[52],9,"%s",ignore_choices[ignore_density]);
+    snprintf(&disk_creation_menu[5].title[52],9,"%s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Creation Menu",
         disk_creation_menu, selection);
@@ -1431,8 +1431,8 @@ void trs_gui_cassette_creation(void)
   FILE *cassette_file;
 
   while(!done) {
-    strcpy(&cassette_creation_menu[0].title[54],image_type_choices[image_type]);
-    strcpy(&cassette_creation_menu[1].title[52],drive_choices[drive_insert]);
+    snprintf(&cassette_creation_menu[0].title[54],9,"%s",image_type_choices[image_type]);
+    snprintf(&cassette_creation_menu[1].title[52],9,"%s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Cassette Creation Menu",
         cassette_creation_menu, selection);
@@ -1613,8 +1613,8 @@ void trs_gui_disk_options(void)
   int done = 0;
 
   while(!done) {
-    sprintf(&disk_menu[0].title[50],"%s",doubler_choices[trs_disk_doubler]);
-    sprintf(&disk_menu[1].title[50],"%s",on_off_choices[trs_disk_truedam]);
+    snprintf(&disk_menu[0].title[50],11,"%s",doubler_choices[trs_disk_doubler]);
+    snprintf(&disk_menu[1].title[50],11,"%s",on_off_choices[trs_disk_truedam]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Options Menu",disk_menu, selection);
     switch(selection) {
@@ -1668,7 +1668,7 @@ void trs_gui_disk_management(void)
       char *diskname = trs_disk_getfilename(i);
 
       if (diskname[0] == 0)
-        strcpy(&disk_menu[i].title[8], "Empty");
+        snprintf(&disk_menu[i].title[8],6,"%s","Empty");
       else
         trs_gui_limit_string(trs_disk_getfilename(i),&disk_menu[i].title[8],52);
       disk_menu[i].title[0] = trs_disk_getwriteprotect(i) ? '*' : ' ';
@@ -1680,7 +1680,7 @@ void trs_gui_disk_management(void)
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+              browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         strcat(filename,".set");
         trs_diskset_save(filename);
@@ -1690,7 +1690,7 @@ void trs_gui_disk_management(void)
         if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
-          trs_gui_display_message("Error", "Failed to load Floppy Disk Set");
+          trs_gui_display_message("Error", "Failed to load Disk Set");
         break;
       case 10:
         trs_gui_disk_creation();
@@ -1727,7 +1727,7 @@ void trs_gui_hard_management(void)
       char *diskname = trs_hard_getfilename(i);
 
       if (diskname[0] == 0)
-        strcpy(&hard_menu[i].title[8],"Empty");
+        snprintf(&hard_menu[i].title[8],6,"%s","Empty");
       else
         trs_gui_limit_string(diskname,&hard_menu[i].title[8],52);
       hard_menu[i].title[0] = trs_hard_getwriteprotect(i) ? '*' : ' ';
@@ -1741,7 +1741,7 @@ void trs_gui_hard_management(void)
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+              browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         strcat(filename,".set");
         trs_diskset_save(filename);
@@ -1751,7 +1751,7 @@ void trs_gui_hard_management(void)
         if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
-          trs_gui_display_message("Error", "Failed to load Hard Disk Set");
+          trs_gui_display_message("Error", "Failed to load Disk Set");
         break;
       case 6:
         trs_gui_hard_creation();
@@ -1780,17 +1780,17 @@ void trs_gui_cassette_management(void)
     char *cass_name = trs_cassette_getfilename();
 
     if (cass_name[0] == 0)
-      strcpy(&cass_menu[0].title[8],"Empty");
+      snprintf(&cass_menu[0].title[8],6,"%s","Empty");
     else
       trs_gui_limit_string(cass_name,&cass_menu[0].title[8],52);
 
     trs_gui_clear_screen();
-    sprintf(&cass_menu[1].title[36],"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());
-    sprintf(&cass_menu[2].title[50],"%10d",cassette_default_sample_rate);
+    snprintf(&cass_menu[1].title[36],25,"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());
+    snprintf(&cass_menu[2].title[50],11,"%10d",cassette_default_sample_rate);
     selection = trs_gui_display_menu("SDLTRS Cassette Menu",cass_menu, selection);
     switch(selection) {
       case 1:
-        sprintf(input,"%d",trs_get_cassette_position());
+        snprintf(input,11,"%d",trs_get_cassette_position());
         if (trs_gui_input_string("Enter Cassette Position in Bytes",
               input,input, 10, 0) == -1)
           break;
@@ -1799,7 +1799,7 @@ void trs_gui_cassette_management(void)
           trs_set_cassette_position(value);
         break;
       case 2:
-        sprintf(input,"%d",cassette_default_sample_rate);
+        snprintf(input,11,"%d",cassette_default_sample_rate);
         if (trs_gui_input_string("Enter Cassette Default Sample Rate",
               input,input, 10, 0) == -1)
           break;
@@ -1872,32 +1872,32 @@ void trs_gui_display_management(void)
 
   while(!done) {
     trs_gui_clear_screen();
-    sprintf(&display_menu[0].title[52],"0x%06X",local_background);
-    sprintf(&display_menu[1].title[52],"0x%06X",local_foreground);
-    sprintf(&display_menu[2].title[52],"0x%06X",local_gui_background);
-    sprintf(&display_menu[3].title[52],"0x%06X",local_gui_foreground);
-    strcpy(&display_menu[4].title[42],font1_choices[charset1_selection]);
-    strcpy(&display_menu[5].title[40],font34_choices[charset3_selection]);
-    strcpy(&display_menu[6].title[40],font34_choices[charset4_selection]);
-    sprintf(&display_menu[7].title[52],"%8d",gui_border_width);
-    sprintf(&display_menu[8].title[50],"%s",resize_choices[gui_resize3]);
-    sprintf(&display_menu[9].title[50],"%s",resize_choices[gui_resize4]);
-    sprintf(&display_menu[10].title[50],"%s",disk_led_choices[gui_show_led]);
+    snprintf(&display_menu[0].title[52],9,"0x%06X",local_background);
+    snprintf(&display_menu[1].title[52],9,"0x%06X",local_foreground);
+    snprintf(&display_menu[2].title[52],9,"0x%06X",local_gui_background);
+    snprintf(&display_menu[3].title[52],9,"0x%06X",local_gui_foreground);
+    snprintf(&display_menu[4].title[42],19,"%s",font1_choices[charset1_selection]);
+    snprintf(&display_menu[5].title[40],21,"%s",font34_choices[charset3_selection]);
+    snprintf(&display_menu[6].title[40],21,"%s",font34_choices[charset4_selection]);
+    snprintf(&display_menu[7].title[52],9,"%8d",gui_border_width);
+    snprintf(&display_menu[8].title[50],11,"%s",resize_choices[gui_resize3]);
+    snprintf(&display_menu[9].title[50],11,"%s",resize_choices[gui_resize4]);
+    snprintf(&display_menu[10].title[50],11,"%s",disk_led_choices[gui_show_led]);
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu",
         display_menu, selection);
     switch(selection) {
       case 0:
-        sprintf(input,"%06X",local_background);
+        snprintf(input,7,"%06X",local_background);
         if (trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,6,0) == 0)
           local_background = strtol(input, NULL, 16);
         break;
       case 1:
-        sprintf(input,"%06X",local_foreground);
+        snprintf(input,7,"%06X",local_foreground);
         if (trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,6,0) == 0)
           local_foreground = strtol(input, NULL, 16);
         break;
       case 2:
-        sprintf(input,"%06X",local_gui_background);
+        snprintf(input,7,"%06X",local_gui_background);
         if (trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)",input,input,6,0) == 0) {
           local_gui_background = strtol(input, NULL, 16);
           if (local_gui_background != gui_background) {
@@ -1907,7 +1907,7 @@ void trs_gui_display_management(void)
         }
         break;
       case 3:
-        sprintf(input,"%06X",local_gui_foreground);
+        snprintf(input,7,"%06X",local_gui_foreground);
         if (trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)",input,input,6,0) == 0) {
           local_gui_foreground = strtol(input, NULL, 16);
           if (local_gui_foreground != gui_foreground) {
@@ -1929,7 +1929,7 @@ void trs_gui_display_management(void)
             charset4_selection);
         break;
       case 7:
-        sprintf(input,"%d",gui_border_width);
+        snprintf(input,3,"%d",gui_border_width);
         if (trs_gui_input_string("Enter Window border width in pixels",input,input,2,0) == 0)
           gui_border_width = atol(input);
         break;
@@ -2084,7 +2084,7 @@ void trs_gui_joystick_display_map(int show_active)
   for (column = 0; column < columns; column++) {
     for (row = 0; row < rows; row++) {
       i = column*rows + row;
-      sprintf(text, "%2d:", i);
+      snprintf(text, 4,"%2d:", i);
       trs_gui_write_text(text, first_x + column*column_width, first_y + row + 1, 0);
       switch (jbutton_map[i]) {
         case -1:     sprintf(text, "---");      break;
@@ -2195,7 +2195,7 @@ void trs_gui_joystick_map_joystick(void)
   while (!done) {
     trs_gui_clear_screen();
     trs_gui_joystick_display_map(0);
-    sprintf(&display_menu[5].title[54], "%s", on_off_choices[jaxis_mapped]);
+    snprintf(&display_menu[5].title[54],7,"%s", on_off_choices[jaxis_mapped]);
     selection = trs_gui_display_menu("SDLTRS Map Joystick to Keys/Functions Menu", display_menu, selection);
     switch(selection) {
       case 0:
@@ -2290,9 +2290,9 @@ void trs_gui_joystick_management(void)
 
   while(!done) {
     trs_gui_clear_screen();
-    sprintf(&display_menu[0].title[52],"%s",keypad_choices[gui_keypad_joystick]);
+    snprintf(&display_menu[0].title[52],9,"%s",keypad_choices[gui_keypad_joystick]);
     if (gui_joystick_num == -1)
-      sprintf(&display_menu[1].title[48],"        None");
+      snprintf(&display_menu[1].title[48],13,"        None");
     else
       sprintf(&display_menu[1].title[48],"Joystick %1d",gui_joystick_num);
     selection = trs_gui_display_menu("SDLTRS Joystick Setting Menu",
@@ -2367,13 +2367,13 @@ void trs_gui_misc_management(void)
 
   while(!done) {
     trs_gui_clear_screen();
-    sprintf(&misc_menu[0].title[50],"%s",on_off_choices[trs_kb_bracket_state]);
-    sprintf(&misc_menu[1].title[50],"%s",on_off_choices[trs_sound]);
-    sprintf(&misc_menu[2].title[50],"%s",on_off_choices[timer_overclock]);
-    sprintf(&misc_menu[3].title[50],"%10d", timer_overclock_rate);
-    sprintf(&misc_menu[4].title[50],"%10d",stretch_amount);
-    sprintf(&misc_menu[5].title[50],"%s",on_off_choices[trs_emtsafe]);
-    sprintf(&misc_menu[6].title[56],"0x%02X",trs_uart_switches);
+    snprintf(&misc_menu[0].title[50],11,"%s",on_off_choices[trs_kb_bracket_state]);
+    snprintf(&misc_menu[1].title[50],11,"%s",on_off_choices[trs_sound]);
+    snprintf(&misc_menu[2].title[50],11,"%s",on_off_choices[timer_overclock]);
+    snprintf(&misc_menu[3].title[50],11,"%10d", timer_overclock_rate);
+    snprintf(&misc_menu[4].title[50],11,"%10d",stretch_amount);
+    snprintf(&misc_menu[5].title[50],11,"%s",on_off_choices[trs_emtsafe]);
+    snprintf(&misc_menu[6].title[56],5,"0x%02X",trs_uart_switches);
     trs_gui_limit_string(trs_uart_name,&misc_menu[8].title[2],60);
     selection = trs_gui_display_menu("SDLTRS Misc Settings Menu",
         misc_menu, selection);
@@ -2392,7 +2392,7 @@ void trs_gui_misc_management(void)
             timer_overclock);
         break;
       case 3:
-        sprintf(input,"%d", timer_overclock_rate);
+        snprintf(input,11,"%d",timer_overclock_rate);
         if (trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0) == 0) {
           timer_overclock_rate =  atoi(input);
           if (timer_overclock_rate <= 0)
@@ -2400,7 +2400,7 @@ void trs_gui_misc_management(void)
         }
         break;
       case 4:
-        sprintf(input,"%d",stretch_amount);
+        snprintf(input,11,"%d",stretch_amount);
         if (trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0) == 0)
           stretch_amount = atoi(input);
         break;
@@ -2409,7 +2409,7 @@ void trs_gui_misc_management(void)
             trs_emtsafe);
         break;
       case 6:
-        sprintf(input,"%2X",trs_uart_switches);
+        snprintf(input,3,"%2X",trs_uart_switches);
         if (trs_gui_input_string("Enter Serial Switches (Hex, XX)",input,input,2,0) == 0) {
           trs_uart_switches = strtol(input,NULL,16);
           trs_uart_init(0);
@@ -2446,7 +2446,7 @@ void trs_gui_printer_management(void)
 
   while(!done) {
     trs_gui_clear_screen();
-    sprintf(&printer_menu[0].title[50],"%s",printer_choices[trs_printer]);
+    snprintf(&printer_menu[0].title[50],11,"%s",printer_choices[trs_printer]);
     trs_gui_limit_string(trs_printer_command,&printer_menu[3].title[2],60);
     selection = trs_gui_display_menu("SDLTRS Printer Management Menu",
         printer_menu, selection);
@@ -2512,14 +2512,14 @@ void trs_gui_model(void)
         model_selection = 3;
         break;
     }
-    strcpy(&model_menu[0].title[44],model_choices[model_selection]);
-    strcpy(&model_menu[1].title[49],on_off_choices[lowercase]);
-    strcpy(&model_menu[2].title[49],on_off_choices[lowe_le18]);
-    strcpy(&model_menu[3].title[49],on_off_choices[grafyx_get_microlabs()]);
-    strcpy(&model_menu[4].title[49],on_off_choices[huffman_ram]);
-    strcpy(&model_menu[5].title[49],on_off_choices[hypermem]);
-    strcpy(&model_menu[6].title[49],on_off_choices[supermem]);
-    strcpy(&model_menu[7].title[49],on_off_choices[selector]);
+    snprintf(&model_menu[0].title[44],17,"%s",model_choices[model_selection]);
+    snprintf(&model_menu[1].title[49],12,"%s",on_off_choices[lowercase]);
+    snprintf(&model_menu[2].title[49],12,"%s",on_off_choices[lowe_le18]);
+    snprintf(&model_menu[3].title[49],12,"%s",on_off_choices[grafyx_get_microlabs()]);
+    snprintf(&model_menu[4].title[49],12,"%s",on_off_choices[huffman_ram]);
+    snprintf(&model_menu[5].title[49],12,"%s",on_off_choices[hypermem]);
+    snprintf(&model_menu[6].title[49],12,"%s",on_off_choices[supermem]);
+    snprintf(&model_menu[7].title[49],12,"%s",on_off_choices[selector]);
 
     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu",model_menu, selection);
     switch(selection) {
@@ -2752,7 +2752,7 @@ void trs_gui_write_config(void)
 
   trs_expand_dir(".",browse_dir);
   if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                            browse_dir,filename,FILENAME_MAX-1,1) == -1)
+                            browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   strcat(filename,".t8c");
   trs_write_config_file(filename);
@@ -2819,7 +2819,7 @@ void trs_gui_save_state(void)
   filename[0] = 0;
   trs_expand_dir(trs_state_dir, browse_dir);
   if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-                            browse_dir,filename,FILENAME_MAX-1,1) == -1)
+                            browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   strcat(filename,".t8s");
   trs_state_save(filename);
