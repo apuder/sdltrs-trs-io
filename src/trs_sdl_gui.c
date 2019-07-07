@@ -883,17 +883,15 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
 int trs_gui_input_string(const char *title, char* input, char* output, unsigned int limit, int file)
 {
   char directory_name[FILENAME_MAX];
-  char partial_output[FILENAME_MAX];
   int key,ret_code=0;
   int done = 0;
   int invert;
   unsigned int i, pos;
-  unsigned int input_length;
   unsigned int length;
   unsigned int first_disp;
 
   strcpy(output, input);
-  pos = length = input_length = strlen(input);
+  pos = length = strlen(input);
   if (pos > 60)
     first_disp = pos - 59;
   else
@@ -967,16 +965,14 @@ int trs_gui_input_string(const char *title, char* input, char* output, unsigned 
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
-          strcpy(partial_output, output + input_length);
-          trs_gui_file_browse(input, directory_name, NULL, 1, " ");
-          input_length = strlen(directory_name);
-          strcpy(output, directory_name);
-          strcat(output, partial_output);
-          pos = length = strlen(output);
-          if (pos > 60)
-            first_disp = pos - 59;
-          else
-            first_disp = 0;
+          if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") != -1) {
+            strcpy(output, directory_name);
+            pos = length = strlen(output);
+            if (pos > 60)
+              first_disp = pos - 59;
+            else
+              first_disp = 0;
+          }
           trs_gui_frame(1,6,62,3);
           trs_gui_write_text(title, 3, 6, 0);
         }
