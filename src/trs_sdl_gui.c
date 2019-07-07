@@ -363,6 +363,7 @@ int trs_gui_get_key(void)
 #endif
            case SDLK_RETURN:
              trs_flip_fullscreen();
+             trs_screen_refresh();
              trs_gui_refresh();
              trs_x_flush();
              break;
@@ -370,6 +371,7 @@ int trs_gui_get_key(void)
              scale_x = 1;
              scale_y = 2;
              trs_screen_init(0);
+             trs_screen_refresh();
              trs_gui_refresh();
              trs_x_flush();
              break;
@@ -381,6 +383,7 @@ int trs_gui_get_key(void)
                 scale_x = 1;
               scale_y = scale_x * 2;
               trs_screen_init(0);
+              trs_screen_refresh();
               trs_gui_refresh();
               trs_x_flush();
             }
@@ -393,6 +396,7 @@ int trs_gui_get_key(void)
                 scale_x = MAX_SCALE;
               scale_y = scale_x * 2;
               trs_screen_init(0);
+              trs_screen_refresh();
               trs_gui_refresh();
               trs_x_flush();
             }
