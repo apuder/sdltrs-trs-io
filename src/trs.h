@@ -117,6 +117,7 @@ extern void trs_screen_caption(int turbo, int sound);
 
 extern void trs_disk_led(int drive, int on_off);
 extern void trs_hard_led(int drive, int on_off);
+extern void trs_turbo_led(int turbo);
 
 extern void trs_reset(int poweron);
 extern void trs_exit(int confirm);

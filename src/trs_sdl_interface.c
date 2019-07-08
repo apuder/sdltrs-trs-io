@@ -160,6 +160,8 @@ static SDL_Window *window = NULL;
 #endif
 static Uint32 light_red;
 static Uint32 bright_red;
+static Uint32 light_orange;
+static Uint32 bright_orange;
 
 #if defined(SDL2) || !defined(NOX)
 #define PASTE_IDLE    0
@@ -1148,6 +1150,7 @@ void trs_flip_fullscreen(void)
   if (trs_show_led) {
     trs_disk_led(-1,0);
     trs_hard_led(-1,0);
+    trs_turbo_led(trs_timer_is_turbo());
   }
 }
 
@@ -1206,6 +1209,7 @@ void trs_screen_caption(int turbo, int sound)
 #else
   SDL_WM_SetCaption(title,NULL);
 #endif
+  trs_turbo_led(turbo);
 }
 
 void trs_screen_init(int gui_init)
@@ -1311,6 +1315,8 @@ void trs_screen_init(int gui_init)
 
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
   bright_red = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
+  light_orange = SDL_MapRGB(screen->format, 0x40,0x28,0x00);
+  bright_orange = SDL_MapRGB(screen->format, 0xff,0xa0,0x00);
 
   if (image)
     SDL_FreeSurface(image);
@@ -2730,6 +2736,24 @@ void trs_hard_led(int drive, int on_off)
         }
       }
     }
+  }
+}
+
+void trs_turbo_led(int turbo)
+{
+  if (trs_show_led) {
+    SDL_Rect rect;
+
+    rect.w = 16*scale_x;
+    rect.h = 2*scale_y;
+    rect.x = (OrigWidth - border_width) / 2 - 8 * scale_x;
+    rect.y = OrigHeight - led_width / 2;
+
+    if (turbo)
+      SDL_FillRect(screen, &rect, bright_orange);
+    else
+      SDL_FillRect(screen, &rect, light_orange);
+    addToDrawList(&rect);
   }
 }
 
