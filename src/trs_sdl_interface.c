@@ -137,10 +137,10 @@ int trs_emu_mouse = FALSE;
 
 /* Private data */
 static unsigned char trs_screen[2048];
-static unsigned char trs_gui_screen[2048];
-static unsigned char trs_gui_screen_invert[2048];
-static unsigned char trs_gui_screen_copy[2048];
-static unsigned char trs_gui_screen_invert_copy[2048];
+static unsigned char trs_gui_screen[1024];
+static unsigned char trs_gui_screen_invert[1024];
+static unsigned char trs_gui_screen_copy[1024];
+static unsigned char trs_gui_screen_invert_copy[1024];
 static int top_margin = 0;
 static int left_margin = 0;
 static int led_width = 0;
@@ -1343,7 +1343,7 @@ void trs_screen_init(int gui_init)
   trs_hard_led(-1,0);
 
   if (gui_init) {
-    for (i = 0; i < 2048; i++) {
+    for (i = 0; i < 1024; i++) {
       trs_gui_screen[i] = ' ';
       trs_gui_screen_invert[i] = 0;
       trs_gui_screen_copy[i] = ' ';
