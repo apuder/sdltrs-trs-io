@@ -1656,6 +1656,7 @@ void trs_gui_disk_management(void)
    {" Disk 5:",MENU_FLOPPY_BROWSE_TYPE},
    {" Disk 6:",MENU_FLOPPY_BROWSE_TYPE},
    {" Disk 7:",MENU_FLOPPY_BROWSE_TYPE},
+   {"",MENU_TITLE_TYPE},
    {"Save Disk Set",MENU_NORMAL_TYPE},
    {"Load Disk Set",MENU_NORMAL_TYPE},
    {"Create Blank Floppy Disk",MENU_NORMAL_TYPE},
@@ -1680,7 +1681,7 @@ void trs_gui_disk_management(void)
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",disk_menu, selection);
     switch(selection) {
-      case 8:
+      case 9:
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
@@ -1689,17 +1690,17 @@ void trs_gui_disk_management(void)
         strcat(filename,".set");
         trs_diskset_save(filename);
         break;
-      case 9:
+      case 10:
         trs_expand_dir(trs_disk_set_dir,browse_dir);
         if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
           trs_gui_display_message("Error", "Failed to load Disk Set");
         break;
-      case 10:
+      case 11:
         trs_gui_disk_creation();
         break;
-      case 11:
+      case 12:
         trs_gui_disk_options();
         break;
       case -1:
@@ -1716,6 +1717,7 @@ void trs_gui_hard_management(void)
    {" Hard 1:",MENU_HARD_BROWSE_TYPE},
    {" Hard 2:",MENU_HARD_BROWSE_TYPE},
    {" Hard 3:",MENU_HARD_BROWSE_TYPE},
+   {"",MENU_TITLE_TYPE},
    {"Save Disk Set",MENU_NORMAL_TYPE},
    {"Load Disk Set",MENU_NORMAL_TYPE},
    {"Create Blank Hard Disk",MENU_NORMAL_TYPE},
@@ -1741,7 +1743,7 @@ void trs_gui_hard_management(void)
     selection = trs_gui_display_menu("SDLTRS Hard Disk Menu",
         hard_menu, selection);
     switch(selection) {
-      case 4:
+      case 5:
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
@@ -1750,14 +1752,14 @@ void trs_gui_hard_management(void)
         strcat(filename,".set");
         trs_diskset_save(filename);
         break;
-      case 5:
+      case 6:
         trs_expand_dir(trs_disk_set_dir,browse_dir);
         if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
           trs_gui_display_message("Error", "Failed to load Disk Set");
         break;
-      case 6:
+      case 7:
         trs_gui_hard_creation();
         break;
       case -1:
@@ -2660,8 +2662,10 @@ void trs_gui_rom_files(void)
   MENU_ENTRY romfile_menu[] =
   {{"Model 1 ROM File:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
+   {"",MENU_TITLE_TYPE},
    {"Model 3 ROM File:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
+   {"",MENU_TITLE_TYPE},
    {"Model 4P ROM File:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
@@ -2672,8 +2676,8 @@ void trs_gui_rom_files(void)
   while(!done) {
     trs_gui_clear_screen();
     trs_gui_limit_string(romfile,&romfile_menu[1].title[2],60);
-    trs_gui_limit_string(romfile3,&romfile_menu[3].title[2],60);
-    trs_gui_limit_string(romfile4p,&romfile_menu[5].title[2],60);
+    trs_gui_limit_string(romfile3,&romfile_menu[4].title[2],60);
+    trs_gui_limit_string(romfile4p,&romfile_menu[7].title[2],60);
     selection = trs_gui_display_menu("SDLTRS ROM File Selection Menu",romfile_menu, selection);
     switch(selection) {
       case -1:
@@ -2684,12 +2688,12 @@ void trs_gui_rom_files(void)
           trs_expand_dir(".",browse_dir);
         trs_gui_file_browse(browse_dir, romfile, NULL, 0," Model 1 ROM ");
         break;
-      case 3:
+      case 4:
         if (romfile3[0]==0 || !trs_remove_dir(romfile3, browse_dir))
           trs_expand_dir(".",browse_dir);
         trs_gui_file_browse(browse_dir, romfile3, NULL, 0," Model 3 ROM ");
         break;
-      case 5:
+      case 7:
         if (romfile4p[0]==0 || !trs_remove_dir(romfile4p, browse_dir))
           trs_expand_dir(".",browse_dir);
         trs_gui_file_browse(browse_dir, romfile4p, NULL, 0," Model 4P ROM ");
