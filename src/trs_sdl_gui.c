@@ -1837,11 +1837,11 @@ void trs_gui_display_management(void)
    {"Border Width                                                ",MENU_NORMAL_TYPE},
    {"Resize Window on Mode Change for Model 3                    ",MENU_NORMAL_TYPE},
    {"Resize Window on Mode Change for Model 4                    ",MENU_NORMAL_TYPE},
-   {"Disk LED Display                                            ",MENU_NORMAL_TYPE},
+   {"LED Display for Disks and Turbo Mode                        ",MENU_NORMAL_TYPE},
    {"",0,}};
   char input[FILENAME_MAX];
   char *resize_choices[2] =   {"        No","       Yes"};
-  char *disk_led_choices[2] = {"      Hide","      Show"};
+  char *disk_led_choices[2] = {" Hide"," Show"};
   char *font1_choices[8] =    {"             early",
                                "             stock",
                                "             lcmod",
@@ -1888,7 +1888,7 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[7].title[52],9,"%8d",gui_border_width);
     snprintf(&display_menu[8].title[50],11,"%s",resize_choices[gui_resize3]);
     snprintf(&display_menu[9].title[50],11,"%s",resize_choices[gui_resize4]);
-    snprintf(&display_menu[10].title[50],11,"%s",disk_led_choices[gui_show_led]);
+    snprintf(&display_menu[10].title[55],6,"%s",disk_led_choices[gui_show_led]);
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu",
         display_menu, selection);
     switch(selection) {
@@ -1948,7 +1948,7 @@ void trs_gui_display_management(void)
             gui_resize4);
         break;
       case 10:
-        gui_show_led = trs_gui_display_popup("Disk LED",disk_led_choices,2,
+        gui_show_led = trs_gui_display_popup("LED",disk_led_choices,2,
             gui_show_led);
         break;
       case -1:
