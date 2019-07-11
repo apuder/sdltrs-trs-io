@@ -1143,6 +1143,7 @@ void trs_flip_fullscreen(void)
 #else
       screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
             SDL_ANYFORMAT);
+      SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
 #endif
       SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
@@ -1300,9 +1301,11 @@ void trs_screen_init(int gui_init)
   else {
 #ifdef SDL2
      SDL_SetWindowFullscreen(window, 0);
+     SDL_RaiseWindow(window);
 #else
      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT);
+     SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
 #endif
      SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
