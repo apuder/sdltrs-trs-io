@@ -91,7 +91,7 @@ int trs_sdl_sym2upper(int);
 #define MAX_RECTS 2048
 #define WHITE 0xe0e0e0
 #define BLACK 0
-#define DGRAY 0x404040
+#define GREEN 0x344843
 
 #define MENU_MOD KMOD_LALT
 
@@ -104,7 +104,7 @@ int window_border_width = 2;
 unsigned int foreground = WHITE;
 unsigned int background = 0;
 unsigned int gui_foreground = WHITE;
-unsigned int gui_background = DGRAY;
+unsigned int gui_background = GREEN;
 int trs_show_led = 1;
 int text80x24 = 0, screen640x240 = 0;
 int scale_x = 1;
@@ -623,7 +623,7 @@ void trs_set_to_defaults(void)
   foreground = WHITE;
   background = BLACK;
   gui_foreground = WHITE;
-  gui_background = DGRAY;
+  gui_background = GREEN;
 #ifdef __linux
   strcpy(trs_printer_command,"lpr %s");
 #endif
