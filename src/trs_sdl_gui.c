@@ -682,7 +682,7 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
   else
     sprintf(title,"Select%sFile To Load",type);
   trs_gui_write_text(title, 2, 0, 0);
-  trs_gui_limit_string(current_dir, limited_dir, 62);
+  trs_gui_limit_string(current_dir, limited_dir, 58);
   trs_gui_center_text(limited_dir,1,0);
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return(-1);
@@ -792,7 +792,7 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
               }
 
               trs_gui_clear_rect(1,1,62,14);
-              trs_gui_limit_string(current_dir, limited_dir, 62);
+              trs_gui_limit_string(current_dir, limited_dir, 58);
               trs_gui_center_text(limited_dir,1,0);
 
               trs_gui_delete_filename_list();
@@ -818,7 +818,7 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
               current_dir[3] = 0;
 
               trs_gui_clear_rect(1,1,62,14);
-              trs_gui_limit_string(current_dir, limited_dir, 62);
+              trs_gui_limit_string(current_dir, limited_dir, 58);
               trs_gui_center_text(limited_dir,1,0);
 
               trs_gui_delete_filename_list();
