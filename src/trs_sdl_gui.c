@@ -175,7 +175,7 @@ void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert)
   unsigned int position = x + y * 64;
   unsigned int i;
 
-  for (i=0;i<len;i++)
+  for (i=0;i<len && i<60;i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
 
