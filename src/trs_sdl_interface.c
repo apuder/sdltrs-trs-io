@@ -1344,6 +1344,7 @@ void trs_screen_init(int gui_init)
 
   trs_disk_led(-1,0);
   trs_hard_led(-1,0);
+  trs_turbo_led(trs_timer_is_turbo());
 
   if (gui_init) {
     for (i = 0; i < 1024; i++) {
@@ -1726,6 +1727,7 @@ int call_function(int function)
     trs_reset(1);
     trs_disk_led(-1, 0);
     trs_hard_led(-1, 0);
+    trs_turbo_led(trs_timer_is_turbo());
   }
   else if (function == EXIT)
     trs_exit(0);
@@ -1909,6 +1911,7 @@ void trs_get_event(int wait)
                 trs_reset(1);
                 trs_disk_led(-1,0);
                 trs_hard_led(-1,0);
+                trs_turbo_led(trs_timer_is_turbo());
               }
               else
                 trs_reset(0);
