@@ -1909,6 +1909,7 @@ void trs_gui_display_management(void)
           if (local_gui_background != gui_background) {
             gui_background = local_gui_background;
             trs_screen_init(0);
+            trs_screen_refresh();
           }
         }
         break;
@@ -1919,6 +1920,7 @@ void trs_gui_display_management(void)
           if (local_gui_foreground != gui_foreground) {
             gui_foreground = local_gui_foreground;
             trs_screen_init(0);
+            trs_screen_refresh();
           }
         }
         break;
