@@ -2375,6 +2375,9 @@ void trs_screen_640x240(int flag)
     if (left_margin > border_width || top_margin > border_width)
       SDL_FillRect(screen,NULL,background);
   }
+#if defined(SDL2)
+  trs_screen_init(0);
+#endif
   trs_screen_refresh();
 }
 
