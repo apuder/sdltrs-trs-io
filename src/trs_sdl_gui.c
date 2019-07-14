@@ -1894,13 +1894,25 @@ void trs_gui_display_management(void)
     switch(selection) {
       case 0:
         snprintf(input,7,"%06X",local_background);
-        if (trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,6,0) == 0)
+        if (trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)",input,input,6,0) == 0) {
           local_background = strtol(input, NULL, 16);
+          if (local_background != background) {
+            background = local_background;
+            trs_screen_init(0);
+            trs_screen_refresh();
+          }
+        }
         break;
       case 1:
         snprintf(input,7,"%06X",local_foreground);
-        if (trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,6,0) == 0)
+        if (trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)",input,input,6,0) == 0) {
           local_foreground = strtol(input, NULL, 16);
+          if (local_foreground != foreground) {
+            foreground = local_foreground;
+            trs_screen_init(0);
+            trs_screen_refresh();
+          }
+        }
         break;
       case 2:
         snprintf(input,7,"%06X",local_gui_background);
@@ -1970,8 +1982,6 @@ void trs_gui_display_management(void)
   if ((trs_charset1 != local_trs_charset1) ||
       (trs_charset3 != local_trs_charset3) ||
       (trs_charset4 != local_trs_charset4) ||
-      (foreground != local_foreground) ||
-      (background != local_background) ||
       (gui_show_led != trs_show_led) ||
       (gui_resize3 != resize3) ||
       (gui_resize4 != resize4) ||
@@ -1980,8 +1990,6 @@ void trs_gui_display_management(void)
     trs_charset1 = local_trs_charset1;
     trs_charset3 = local_trs_charset3;
     trs_charset4 = local_trs_charset4;
-    foreground = local_foreground;
-    background = local_background;
     trs_show_led = gui_show_led;
     resize3 = gui_resize3;
     resize4 = gui_resize4;
@@ -1989,7 +1997,6 @@ void trs_gui_display_management(void)
     trs_screen_init(0);
     trs_gui_clear_screen();
     trs_screen_refresh();
-    grafyx_redraw();
   }
 }
 
