@@ -15,7 +15,8 @@ case $host_os in
     AS_IF([test "x$with_x" != "xno"],
     [AC_PATH_XTRA
      CFLAGS="$CFLAGS $X_CFLAGS"
-     LDFLAGS="$LDFLAGS $X_LIBS -lX11"],
+     LDFLAGS="$LDFLAGS $X_LIBS"
+     AC_CHECK_LIB([X11], [XOpenDisplay], [], AC_DEFINE([NOX]))],
     [AC_DEFINE([NOX])])
     ;;
 esac
