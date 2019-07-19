@@ -1012,6 +1012,8 @@ int trs_load_config_file(char *alternate_file)
     }
   }
 
+  fclose(config_file);
+
   trs_disk_setsizes();
   trs_disk_setsteps();
   return 1;

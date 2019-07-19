@@ -2160,6 +2160,7 @@ void trs_gui_joystick_save_mapping(void)
   }
   new_config_string = (char *)malloc(st.st_size + 1);
   if (new_config_string == NULL) {
+    fclose(config_file);
     trs_gui_display_message("Error", "Cannot Allocate Memory");
     return;
   }
