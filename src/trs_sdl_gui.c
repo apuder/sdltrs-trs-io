@@ -2137,7 +2137,7 @@ void trs_gui_joystick_save_mapping(void)
 {
   FILE *config_file;
   struct stat st;
-  char *ptr, string[256], *new_config_string;
+  char *ptr, string[FILENAME_MAX + 14], *new_config_string;
   int i, index = 0;
 
 #ifdef _WIN32
@@ -2145,9 +2145,8 @@ void trs_gui_joystick_save_mapping(void)
 #else
   ptr = strrchr(trs_config_file, '/');
 #endif
-  sprintf(string, "Overwrite %s?", ptr != NULL ? ptr + 1 : trs_config_file);
-  i = trs_gui_display_question(string);
-  if (i == 0)
+  snprintf(string, FILENAME_MAX + 14, "Overwrite %s?", ptr != NULL ? ptr + 1 : trs_config_file);
+  if (trs_gui_display_question(string) == 0)
     return;
   if (stat(trs_config_file, &st) < 0) {
     trs_gui_display_message("Error", "Cannot Get Configuration File Info");
