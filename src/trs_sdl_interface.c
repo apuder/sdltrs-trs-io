@@ -1108,10 +1108,6 @@ void trs_flip_fullscreen(void)
 #if defined(SDL2) || !defined(NOX)
   copyStatus = COPY_IDLE;
 #endif
-#ifdef SDL2
-  SDL_DestroyWindow(window);
-  window = NULL;
-#endif
   fullscreen = !fullscreen;
   if (fullscreen) {
     window_scale_x = scale_x;
@@ -1119,12 +1115,15 @@ void trs_flip_fullscreen(void)
     if (scale_x != 1) {
       scale_x = 1;
       scale_y = 2;
+#ifdef SDL2
+      SDL_DestroyWindow(window);
+      window = NULL;
+#endif
       trs_screen_init(0);
-      trs_screen_refresh();
     }
     else {
 #ifdef SDL2
-      trs_screen_init(0);
+      SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 #else
       screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                 SDL_ANYFORMAT | SDL_FULLSCREEN);
@@ -1136,12 +1135,15 @@ void trs_flip_fullscreen(void)
     if (window_scale_x != 1) {
       scale_x = window_scale_x;
       scale_y = window_scale_y;
+#ifdef SDL2
+      SDL_DestroyWindow(window);
+      window = NULL;
+#endif
       trs_screen_init(0);
-      trs_screen_refresh();
     }
     else {
 #ifdef SDL2
-      trs_screen_init(0);
+      SDL_SetWindowFullscreen(window, 0);
 #else
       screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
             SDL_ANYFORMAT);
@@ -1149,11 +1151,6 @@ void trs_flip_fullscreen(void)
 #endif
       SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
-  }
-  if (trs_show_led) {
-    trs_disk_led(-1,0);
-    trs_hard_led(-1,0);
-    trs_turbo_led(trs_timer_is_turbo());
   }
 }
 
@@ -2377,9 +2374,6 @@ void trs_screen_640x240(int flag)
     if (left_margin > border_width || top_margin > border_width)
       SDL_FillRect(screen,NULL,background);
   }
-#if defined(SDL2)
-  trs_screen_init(0);
-#endif
   trs_screen_refresh();
 }
 
@@ -2663,6 +2657,16 @@ void trs_screen_refresh()
       trs_screen_write_char(i, trs_screen[i]);
     }
   }
+
+  if (trs_show_led) {
+    trs_disk_led(-1,0);
+    trs_hard_led(-1,0);
+    trs_turbo_led(trs_timer_is_turbo());
+  }
+
+#if defined(SDL2)
+  screen = SDL_GetWindowSurface(window);
+#endif
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
@@ -2928,6 +2932,9 @@ void trs_gui_refresh()
   for (i = 0; i < 1024; i++)
     trs_gui_write_char(i, trs_gui_screen[i], trs_gui_screen_invert[i]);
 
+#if defined(SDL2)
+  screen = SDL_GetWindowSurface(window);
+#endif
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
