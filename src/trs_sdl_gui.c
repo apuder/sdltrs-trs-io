@@ -351,70 +351,30 @@ int trs_gui_get_key(void)
          break;
        case SDL_KEYDOWN:
          if (event.key.keysym.mod & MENU_MOD)
-           {
+         {
            switch (event.key.keysym.sym) {
-           case SDLK_q:
-             trs_exit(2);
-             break;
+             case SDLK_q:
+               trs_exit(2);
+               break;
 #ifdef _WIN32
-           case SDLK_F4:
-             trs_exit(2);
-             break;
+             case SDLK_F4:
+               trs_exit(2);
+               break;
 #endif
-           case SDLK_RETURN:
-             trs_flip_fullscreen();
-             trs_screen_refresh();
-             trs_gui_refresh();
-             trs_x_flush();
-             break;
-           case SDLK_1:
-             scale_x = 1;
-             scale_y = 2;
-             trs_screen_init(0);
-             trs_screen_refresh();
-             trs_gui_refresh();
-             trs_x_flush();
-             break;
-          case SDLK_PLUS:
-          case SDLK_PAGEDOWN:
-            if (!fullscreen) {
-              scale_x++;
-              if (scale_x > MAX_SCALE)
-                scale_x = 1;
-              scale_y = scale_x * 2;
-              trs_screen_init(0);
-              trs_screen_refresh();
-              trs_gui_refresh();
-              trs_x_flush();
-            }
-            break;
-          case SDLK_MINUS:
-          case SDLK_PAGEUP:
-            if (!fullscreen) {
-              scale_x--;
-              if (scale_x < 1)
-                scale_x = MAX_SCALE;
-              scale_y = scale_x * 2;
-              trs_screen_init(0);
-              trs_screen_refresh();
-              trs_gui_refresh();
-              trs_x_flush();
-            }
-            break;
-          default:
-             break;
+             default:
+               break;
            }
          }
          else if (event.key.keysym.sym == SDLK_F8)
-            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
+           trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
 #ifdef SDL2
          else if (event.key.keysym.mod & KMOD_SHIFT)
-             return trs_sdl_sym2upper(event.key.keysym.sym);
+           return trs_sdl_sym2upper(event.key.keysym.sym);
 #else
          else if (event.key.keysym.sym < 0x100 &&
-               event.key.keysym.unicode >= 0x20 &&
-               event.key.keysym.unicode <= 0x7E)
-             return(event.key.keysym.unicode);
+             event.key.keysym.unicode >= 0x20 &&
+             event.key.keysym.unicode <= 0x7E)
+           return(event.key.keysym.unicode);
 #endif
          else
            return(event.key.keysym.sym);
@@ -422,6 +382,7 @@ int trs_gui_get_key(void)
        case SDL_JOYBUTTONDOWN:
          if (event.jbutton.button < N_JOYBUTTONS) {
            int key = jbutton_map[event.jbutton.button];
+
            if (key >= 0)
              return key;
            else if (key == KEYBRD || key == JOYGUI)
