@@ -964,7 +964,7 @@ static void trs_opt_sound(char *arg, int intarg, char *stringarg)
 
 int trs_load_config_file(char *alternate_file)
 {
-  char line[FILENAME_MAX + 512];
+  char line[FILENAME_MAX];
   char *arg;
   FILE *config_file;
   unsigned int i;
@@ -975,11 +975,11 @@ int trs_load_config_file(char *alternate_file)
 #ifdef __linux
     {
       char *home = getenv("HOME");
-      strcpy(trs_config_file,home);
-      strcat(trs_config_file,"/sdltrs.t8c");
+
+      snprintf(trs_config_file, FILENAME_MAX-1, "%s/sdltrs.t8c", home);
     }
 #else
-    strcpy(trs_config_file,"./sdltrs.t8c");
+    snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
 #endif
 
   trs_set_to_defaults();
