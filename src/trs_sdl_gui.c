@@ -61,7 +61,8 @@
 #define MENU_TITLE_TYPE           2
 #define MENU_FLOPPY_BROWSE_TYPE   3
 #define MENU_HARD_BROWSE_TYPE     4
-#define MENU_CASS_BROWSE_TYPE     5
+#define MENU_WAFER_BROWSE_TYPE    5
+#define MENU_CASS_BROWSE_TYPE     6
 
 #define MENU_MOD KMOD_ALT
 
@@ -1091,11 +1092,14 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
       case SDLK_BACKSPACE:
         if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
             (entry[selection].type == MENU_HARD_BROWSE_TYPE) ||
+            (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
             trs_disk_remove(selection);
           } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
             trs_hard_remove(selection);
+          } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
+            stringy_remove(selection);
           } else {
             trs_cassette_remove();
           }
@@ -1107,6 +1111,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
       case SDLK_RETURN:
         if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
             (entry[selection].type == MENU_HARD_BROWSE_TYPE) ||
+            (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
             trs_expand_dir(trs_disk_dir, browse_dir);
@@ -1126,6 +1131,15 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
               break;
             }
             trs_hard_attach(selection, filename);
+          } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE)  {
+            trs_expand_dir(trs_cass_dir, browse_dir);
+            if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
+                  " Wafer Image ") == -1)
+            {
+              done = 1;
+              break;
+            }
+            stringy_insert(selection, filename);
           } else {
             trs_expand_dir(trs_cass_dir, browse_dir);
             if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
@@ -1724,6 +1738,84 @@ void trs_gui_hard_management(void)
         break;
       case 7:
         trs_gui_hard_creation();
+        break;
+      case -1:
+        done = 1;
+        break;
+    }
+  }
+}
+
+void trs_gui_stringy_management(void)
+{
+  MENU_ENTRY stringy_menu[] =
+  {{" Wafer 0:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 1:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 2:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 3:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 4:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 5:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 6:",MENU_WAFER_BROWSE_TYPE},
+   {"",MENU_TITLE_TYPE},
+   {"Save Disk Set",MENU_NORMAL_TYPE},
+   {"Load Disk Set",MENU_NORMAL_TYPE},
+   {"",MENU_TITLE_TYPE},
+   {"Insert Created Image Into This Wafer                       ",MENU_NORMAL_TYPE},
+   {"Create Blank Floppy Wafer",MENU_NORMAL_TYPE},
+   {"",0}};
+  char *wafer_choices[8] = {"   None","Wafer 0","Wafer 1","Wafer 2","Wafer 3",
+                            "Wafer 4","Wafer 5","Wafer 6"};
+  char filename[FILENAME_MAX];
+  char browse_dir[FILENAME_MAX];
+  int selection = 0;
+  int done = 0;
+  int i;
+  static int wafer_insert = 0;
+
+  while(!done) {
+    for (i=0;i<7;i++) {
+      const char *wafername = stringy_get_name(i);
+
+      if (wafername[0] == 0)
+        snprintf(&stringy_menu[i].title[9],6,"%s","Empty");
+      else
+        trs_gui_limit_string(wafername,&stringy_menu[i].title[9],52);
+    }
+    snprintf(&stringy_menu[11].title[52],10,"%8s",wafer_choices[wafer_insert]);
+    trs_gui_clear_screen();
+    selection = trs_gui_display_menu("SDLTRS Stringy Wafer Menu",stringy_menu,selection);
+    switch(selection) {
+      case 8:
+        filename[0] = 0;
+        trs_expand_dir(trs_disk_set_dir, browse_dir);
+        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+              browse_dir,filename,FILENAME_MAX-5,1) == -1)
+          break;
+        strcat(filename,".set");
+        trs_diskset_save(filename);
+        break;
+      case 9:
+        trs_expand_dir(trs_disk_set_dir,browse_dir);
+        if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
+          break;
+        if (trs_diskset_load(filename) == -1)
+          trs_gui_display_message("Error", "Failed to load Disk Set");
+        break;
+      case 11:
+        wafer_insert = trs_gui_display_popup("Wafer",wafer_choices,8,
+            wafer_insert);
+        break;
+      case 12:
+        filename[0] = 0;
+        trs_expand_dir(trs_cass_dir, browse_dir);
+        if (trs_gui_input_string("Enter Filename, TAB selects directory",
+              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+          break;
+        if (stringy_create(filename))
+          trs_gui_display_message("Error","Error creating Stringy Wafer Image");
+        else if (wafer_insert)
+          stringy_insert(wafer_insert-1, filename);
+        done = 1;
         break;
       case -1:
         done = 1;
@@ -2460,6 +2552,8 @@ void trs_gui_model(void)
    {"",MENU_TITLE_TYPE},
    {"Lowercase Modification for Model I                          ",MENU_NORMAL_TYPE},
    {"",MENU_TITLE_TYPE},
+   {"Exatron Stringy Floppy Emulation for Model I                ",MENU_NORMAL_TYPE},
+   {"",MENU_TITLE_TYPE},
    {"Lowe Electronics LE18 Graphics Emulation                    ",MENU_NORMAL_TYPE},
    {"Micro Labs Grafyx Solution Graphics Emulation               ",MENU_NORMAL_TYPE},
    {"",MENU_TITLE_TYPE},
@@ -2495,12 +2589,13 @@ void trs_gui_model(void)
     }
     snprintf(&model_menu[0].title[44],17,"%s",model_choices[model_selection]);
     snprintf(&model_menu[2].title[49],12,"%s",on_off_choices[lowercase]);
-    snprintf(&model_menu[4].title[49],12,"%s",on_off_choices[lowe_le18]);
-    snprintf(&model_menu[5].title[49],12,"%s",on_off_choices[grafyx_get_microlabs()]);
-    snprintf(&model_menu[7].title[49],12,"%s",on_off_choices[huffman_ram]);
-    snprintf(&model_menu[8].title[49],12,"%s",on_off_choices[hypermem]);
-    snprintf(&model_menu[9].title[49],12,"%s",on_off_choices[supermem]);
-    snprintf(&model_menu[10].title[49],12,"%s",on_off_choices[selector]);
+    snprintf(&model_menu[4].title[49],12,"%s",on_off_choices[stringy]);
+    snprintf(&model_menu[6].title[49],12,"%s",on_off_choices[lowe_le18]);
+    snprintf(&model_menu[7].title[49],12,"%s",on_off_choices[grafyx_get_microlabs()]);
+    snprintf(&model_menu[9].title[49],12,"%s",on_off_choices[huffman_ram]);
+    snprintf(&model_menu[10].title[49],12,"%s",on_off_choices[hypermem]);
+    snprintf(&model_menu[11].title[49],12,"%s",on_off_choices[supermem]);
+    snprintf(&model_menu[12].title[49],12,"%s",on_off_choices[selector]);
 
     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu",model_menu, selection);
     switch(selection) {
@@ -2530,33 +2625,37 @@ void trs_gui_model(void)
             lowercase);
         break;
       case 4:
+        stringy = trs_gui_display_popup("Stringy",on_off_choices,2,
+            stringy);
+        break;
+      case 6:
         lowe_le18 = trs_gui_display_popup("Lowe LE18",on_off_choices,2,
             lowe_le18);
         break;
-      case 5:
+      case 7:
         state = trs_gui_display_popup("Grafyx",on_off_choices,2,
             grafyx_get_microlabs());
         grafyx_set_microlabs(state);
         break;
-      case 7:
+      case 9:
         huffman_ram = trs_gui_display_popup("Huffman",on_off_choices,2,
             huffman_ram);
         if (huffman_ram)
           hypermem = 0;
         break;
-      case 8:
+      case 10:
         hypermem = trs_gui_display_popup("HyperMem",on_off_choices,2,
             hypermem);
         if (hypermem)
           huffman_ram = 0;
         break;
-      case 9:
+      case 11:
         supermem = trs_gui_display_popup("SuperMem",on_off_choices,2,
             supermem);
         if (supermem)
           selector = 0;
         break;
-      case 10:
+      case 12:
         selector = trs_gui_display_popup("Selector",on_off_choices,2,
             selector);
         if (selector)
@@ -2879,19 +2978,19 @@ void trs_gui_new_machine(void)
 void trs_gui(void)
 {
   MENU_ENTRY main_menu[] =
-  {{"Floppy Disk Management (ALT-D)",MENU_NORMAL_TYPE},
-   {"Hard Disk Management   (ALT-H)",MENU_NORMAL_TYPE},
-   {"Cassette Management    (ALT-T)",MENU_NORMAL_TYPE},
-   {"Emulator Settings      (ALT-E)",MENU_NORMAL_TYPE},
+  {{"Floppy Disk Management   (ALT-D)",MENU_NORMAL_TYPE},
+   {"Hard Disk Management     (ALT-H)",MENU_NORMAL_TYPE},
+   {"Cassette Management      (ALT-T)",MENU_NORMAL_TYPE},
+   {"Stringy Wafer Management (ALT-Y)",MENU_NORMAL_TYPE},
+   {"Emulator Settings        (ALT-E)",MENU_NORMAL_TYPE},
    {"Configuration/State File Management",MENU_NORMAL_TYPE},
    {"Printer Management",MENU_NORMAL_TYPE},
    {"Select Default Directories",MENU_NORMAL_TYPE},
    {"ROM File Selection",MENU_NORMAL_TYPE},
-   {"Display Settings       (ALT-I)",MENU_NORMAL_TYPE},
+   {"Display Settings         (ALT-I)",MENU_NORMAL_TYPE},
    {"Joystick Settings",MENU_NORMAL_TYPE},
-   {"Miscellaneous Settings (ALT-O)",MENU_NORMAL_TYPE},
+   {"Miscellaneous Settings   (ALT-O)",MENU_NORMAL_TYPE},
    {"About SDLTRS",MENU_NORMAL_TYPE},
-   {"Keys in SDLTRS         (ALT-K)",MENU_NORMAL_TYPE},
    {"",0}};
   int selection = 0;
   int done = 0;
@@ -2913,36 +3012,36 @@ void trs_gui(void)
         trs_gui_cassette_management();
         break;
       case 3:
-        trs_gui_model();
+        trs_gui_stringy_management();
         break;
       case 4:
+        trs_gui_model();
+        break;
+      case 5:
         if (trs_gui_config_management())
           return;
         break;
-      case 5:
+      case 6:
         trs_gui_printer_management();
         break;
-      case 6:
+      case 7:
         trs_gui_default_dirs();
         break;
-      case 7:
+      case 8:
         trs_gui_rom_files();
         trs_rom_init();
         break;
-      case 8:
+      case 9:
         trs_gui_display_management();
         break;
-      case 9:
+      case 10:
         trs_gui_joystick_management();
         break;
-      case 10:
+      case 11:
         trs_gui_misc_management();
         break;
-      case 11:
-        trs_gui_about_sdltrs();
-        break;
       case 12:
-        trs_gui_keys_sdltrs();
+        trs_gui_about_sdltrs();
         break;
     }
   }

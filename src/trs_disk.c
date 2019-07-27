@@ -756,7 +756,7 @@ trs_disk_emutype(DiskState *d)
 
 int trs_diskset_save(char *filename)
 {
-    char *diskfilename;
+    const char *diskfilename;
     char dirname[FILENAME_MAX];
     FILE *f;
     int i;
@@ -775,6 +775,13 @@ int trs_diskset_save(char *filename)
         }
       for (i=0;i<4;i++) {
         diskfilename = trs_hard_getfilename(i);
+        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
+          diskfilename = &diskfilename[strlen(dirname)+1];
+        fputs(diskfilename,f);
+        fprintf(f,"\n");
+        }
+      for (i=0;i<7;i++) {
+        diskfilename = stringy_get_name(i);
         if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
           diskfilename = &diskfilename[strlen(dirname)+1];
         fputs(diskfilename,f);
@@ -816,9 +823,19 @@ int trs_diskset_load(char *filename)
         trs_hard_attach(i,diskname);
       }
     }
+    for (i=0;i<7;i++) {
+      if (fgets(diskname,FILENAME_MAX,f) == NULL)
+        return(-1);
+      if (strlen(diskname) != 0)
+        diskname[strlen(diskname)-1] = 0;
+      if (strlen(diskname) != 0) {
+        stringy_remove(i);
+        stringy_insert(i,diskname);
+      }
+    }
     fclose(f);
     return(0);
-    }
+  }
   else
     return(-1);
 }

@@ -23,10 +23,12 @@ sdltrs_SOURCES=	src/blit.c \
 		src/trs_rom1.c \
 		src/trs_rom3.c \
 		src/trs_rom4p.c \
+		src/trs_romesf.c \
 		src/trs_sdl_gui.c \
 		src/trs_sdl_interface.c \
 		src/trs_sdl_keyboard.c \
 		src/trs_state_save.c \
+		src/trs_stringy.c \
 		src/trs_uart.c \
 		src/z80.c \
 		src/sdltrs_main.c \

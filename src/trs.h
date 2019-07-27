@@ -172,9 +172,11 @@ extern int trs_rom_size;
 extern int trs_rom1_size;
 extern int trs_rom3_size;
 extern int trs_rom4p_size;
+extern int trs_romesf_size;
 extern unsigned char trs_rom1[];
 extern unsigned char trs_rom3[];
 extern unsigned char trs_rom4p[];
+extern unsigned char trs_romesf[];
 
 extern void trs_load_compiled_rom(int size, unsigned char rom[]);
 extern int trs_load_rom(char *filename);
@@ -274,6 +276,17 @@ void trs_set_mouse_pos(int x, int y);
 void trs_get_mouse_max(int *x, int *y, unsigned int *sens);
 void trs_set_mouse_max(int x, int y, unsigned int sens);
 int trs_get_mouse_type(void);
+
+int stringy;
+void stringy_init(void);
+const char *stringy_get_name(int unit);
+int stringy_insert(int unit, const char *name);
+void stringy_remove(int unit);
+int stringy_create(const char *name);
+int stringy_in(int unit);
+void stringy_out(int unit, int value);
+void stringy_reset(void);
+void stringy_change_all(void);
 
 extern int timer_hz;
 extern int timer_overclock_rate;

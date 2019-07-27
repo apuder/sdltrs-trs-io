@@ -184,6 +184,7 @@ int SDLmain(int argc, char *argv[])
 
   mem_init();
   trs_disk_init(0);
+  stringy_init();
   trs_rom_init();
   trs_screen_init(1);
   screen_init();

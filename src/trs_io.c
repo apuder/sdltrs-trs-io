@@ -154,7 +154,7 @@ void z80_out(int port, int value)
     case 0xF5:
     case 0xF6:
     case 0xF7:
-      /* stringy_out(port & 7, value); */
+      stringy_out(port & 7, value);
       break;
     case 0xFD:
       /* GENIE location of printer port */
@@ -463,7 +463,7 @@ int z80_in(int port)
     case 0xF5:
     case 0xF6:
     case 0xF7:
-      /* value = stringy_in(port & 7); */
+      value = stringy_in(port & 7);
       goto done;
     case 0xFD:
       /* GENIE location of printer port */

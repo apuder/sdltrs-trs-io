@@ -272,6 +272,8 @@ static void trs_opt_charset4(char *arg, int intarg, char *stringarg);
 static void trs_opt_string(char *arg, int intarg, char *stringarg);
 static void trs_opt_disk(char *arg, int intarg, char *stringarg);
 static void trs_opt_hard(char *arg, int intarg, char *stringarg);
+static void trs_opt_stringy(char *arg, int intarg, char *stringarg);
+static void trs_opt_wafer(char *arg, int intarg, char *stringarg);
 static void trs_opt_cass(char *arg, int intarg, char *stringarg);
 static void trs_opt_diskset(char *arg, int intarg, char *stringarg);
 static void trs_opt_keystretch(char *arg, int intarg, char *stringarg);
@@ -342,6 +344,15 @@ trs_opt options[] = {
 {"hard1",trs_opt_hard,1,1,NULL},
 {"hard2",trs_opt_hard,1,2,NULL},
 {"hard3",trs_opt_hard,1,3,NULL},
+{"stringy",trs_opt_stringy,0,1,NULL},
+{"nostringy",trs_opt_stringy,0,0,NULL},
+{"stringy0",trs_opt_wafer,1,0,NULL},
+{"stringy1",trs_opt_wafer,1,1,NULL},
+{"stringy2",trs_opt_wafer,1,2,NULL},
+{"stringy3",trs_opt_wafer,1,3,NULL},
+{"stringy4",trs_opt_wafer,1,4,NULL},
+{"stringy5",trs_opt_wafer,1,5,NULL},
+{"stringy6",trs_opt_wafer,1,6,NULL},
 {"cassette",trs_opt_cass,1,0,NULL},
 {"diskset",trs_opt_diskset,1,0,NULL},
 {"diskdir",trs_opt_string,1,0,trs_disk_dir},
@@ -537,7 +548,12 @@ int trs_write_config_file(char *filename)
     if (diskname[0] != 0)
       fprintf(config_file,"hard%d=%s\n",i,diskname);
   }
+  for (i=0;i<7;i++) {
+    const char *diskname = stringy_get_name(i);
 
+    if (diskname[0] != 0)
+      fprintf(config_file,"stringy%d=%s\n",i,diskname);
+  }
   {
     char *cassname = trs_cassette_getfilename();
 
@@ -559,6 +575,7 @@ int trs_write_config_file(char *filename)
   fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
   fprintf(config_file, "%slower\n", lowercase ? "" : "no");
   fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
+  fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
 
   fclose(config_file);
   return 0;
@@ -753,6 +770,16 @@ static void trs_opt_disk(char *arg, int intarg, char *stringarg)
 static void trs_opt_hard(char *arg, int intarg, char *stringarg)
 {
   trs_hard_attach(intarg, arg);
+}
+
+static void trs_opt_stringy(char *arg, int intarg, char *stringarg)
+{
+  stringy = intarg;
+}
+
+static void trs_opt_wafer(char *arg, int intarg, char *stringarg)
+{
+  stringy_insert(intarg, arg);
 }
 
 static void trs_opt_cass(char *arg, int intarg, char *stringarg)
@@ -1182,6 +1209,15 @@ void trs_rom_init(void)
       if (trs_rom4p_size > 0)
         trs_load_compiled_rom(trs_rom4p_size, trs_rom4p);
       break;
+  }
+
+  if (trs_model == 1 && stringy) {
+    unsigned int i;
+
+    /* Load ROM for ESF and adjust size */
+    for (i = 0; i < trs_romesf_size; ++i)
+      mem_write_rom(0x3000 + i, trs_romesf[i]);
+    trs_rom_size = 0x3780;
   }
 }
 
@@ -1757,6 +1793,9 @@ int call_function(int function)
     case HARD:
       trs_gui_hard_management();
       break;
+    case STRINGY:
+      trs_gui_stringy_management();
+      break;
     case TAPE:
       trs_gui_cassette_management();
       break;
@@ -2093,6 +2132,9 @@ void trs_get_event(int wait)
               case SDLK_u:
                 trs_sound = !trs_sound;
                 trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+                break;
+              case SDLK_y:
+                call_function(STRINGY);
                 break;
               case SDLK_z:
                 if (!fullscreen)
@@ -3782,6 +3824,7 @@ void trs_main_save(FILE *file)
   trs_save_int(file,&key_queue_entries,1);
   trs_save_int(file,&lowe_le18,1);
   trs_save_int(file,&lowercase,1);
+  trs_save_int(file,&stringy,1);
 }
 
 void trs_main_load(FILE *file)
@@ -3814,6 +3857,7 @@ void trs_main_load(FILE *file)
   trs_load_int(file,&key_queue_entries,1);
   trs_load_int(file,&lowe_le18,1);
   trs_load_int(file,&lowercase,1);
+  trs_load_int(file,&stringy,1);
 }
 
 void trs_sdl_cleanup(void)
