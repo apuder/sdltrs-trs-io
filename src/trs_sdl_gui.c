@@ -1174,7 +1174,7 @@ void trs_gui_hard_creation(void)
    {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
    {"Create Hard Disk Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
-  char *drive_choices[5] = {"    None"," Drive 0"," Drive 1"," Drive 2"," Drive 3"};
+  char *drive_choices[5] = {"   None","Drive 0","Drive 1","Drive 2","Drive 3"};
   static int cylinder_count = 202;
   static int sector_count = 256;
   static int granularity = 8;
@@ -1188,11 +1188,11 @@ void trs_gui_hard_creation(void)
   char browse_dir[FILENAME_MAX];
 
   while(!done) {
-    snprintf(&disk_creation_menu[0].title[52],9,"%8d",cylinder_count);
-    snprintf(&disk_creation_menu[1].title[52],9,"%8d",sector_count);
-    snprintf(&disk_creation_menu[2].title[52],9,"%8d",granularity);
-    snprintf(&disk_creation_menu[3].title[52],9,"%8d",dir_sector);
-    snprintf(&disk_creation_menu[4].title[52],9,"%8s",drive_choices[drive_insert]);
+    snprintf(&disk_creation_menu[0].title[57],4,"%3d",cylinder_count);
+    snprintf(&disk_creation_menu[1].title[57],4,"%3d",sector_count);
+    snprintf(&disk_creation_menu[2].title[57],4,"%3d",granularity);
+    snprintf(&disk_creation_menu[3].title[57],4,"%3d",dir_sector);
+    snprintf(&disk_creation_menu[4].title[53],8,"%7s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Hard Disk Creation Menu",
         disk_creation_menu, selection);
@@ -1301,14 +1301,14 @@ void trs_gui_disk_creation(void)
    {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
    {"Create Disk Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
-  char *image_type_choices[3] = {"     JV1","     JV3","     DMK"};
-  char *num_sides_choices[2] =  {"       1","       2"};
-  char *density_choices[2] =    {"  Single","  Double"};
-  char *size_choices[2] =       {"  5 Inch","  8 Inch"};
-  char *ignore_choices[2] =     {"      No","     Yes"};
-  char *drive_choices[9] =      {"    None"," Drive 0"," Drive 1"," Drive 2",
-                                 " Drive 3"," Drive 4"," Drive 5"," Drive 6",
-                                 " Drive 7"};
+  char *image_type_choices[3] = {"    JV1","    JV3","    DMK"};
+  char *num_sides_choices[2] =  {"      1","      2"};
+  char *density_choices[2] =    {" Single"," Double"};
+  char *size_choices[2] =       {" 5 Inch"," 8 Inch"};
+  char *ignore_choices[2] =     {"     No","    Yes"};
+  char *drive_choices[9] =      {"   None","Drive 0","Drive 1","Drive 2",
+                                 "Drive 3","Drive 4","Drive 5","Drive 6",
+                                 "Drive 7"};
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
   int selection = 6;
@@ -1321,12 +1321,12 @@ void trs_gui_disk_creation(void)
   static int drive_insert = 0;
 
   while(!done) {
-    snprintf(&disk_creation_menu[0].title[52],9,"%s",image_type_choices[image_type]);
-    snprintf(&disk_creation_menu[1].title[52],9,"%s",num_sides_choices[num_sides-1]);
-    snprintf(&disk_creation_menu[2].title[52],9,"%s",density_choices[density-1]);
-    snprintf(&disk_creation_menu[3].title[52],9,"%s",size_choices[eight]);
-    snprintf(&disk_creation_menu[4].title[52],9,"%s",ignore_choices[ignore_density]);
-    snprintf(&disk_creation_menu[5].title[52],9,"%s",drive_choices[drive_insert]);
+    snprintf(&disk_creation_menu[0].title[53],8,"%s",image_type_choices[image_type]);
+    snprintf(&disk_creation_menu[1].title[53],8,"%s",num_sides_choices[num_sides-1]);
+    snprintf(&disk_creation_menu[2].title[53],8,"%s",density_choices[density-1]);
+    snprintf(&disk_creation_menu[3].title[53],8,"%s",size_choices[eight]);
+    snprintf(&disk_creation_menu[4].title[53],8,"%s",ignore_choices[ignore_density]);
+    snprintf(&disk_creation_menu[5].title[53],8,"%s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Creation Menu",
         disk_creation_menu, selection);
@@ -1340,7 +1340,7 @@ void trs_gui_disk_creation(void)
             num_sides - 1) + 1;
         break;
       case 2:
-        density = trs_gui_display_popup("Density",density_choices,2,
+        density = trs_gui_display_popup("Dens.",density_choices,2,
             density - 1) + 1;
         break;
       case 3:
@@ -1476,7 +1476,7 @@ void trs_gui_disk_sizes(void)
    {"",MENU_NORMAL_TYPE},
    {"",MENU_NORMAL_TYPE},
    {"",0,}};
-  char *size_choices[2] = {"   5 Inch Disk","   8 Inch Disk"};
+  char *size_choices[2] = {"5 Inch","8 Inch"};
   int selection = 0;
   int done = 0;
   int gui_disk_sizes[8];
@@ -1494,7 +1494,7 @@ void trs_gui_disk_sizes(void)
       else
         choice = 1;
       sprintf(disk_sizes_menu[i].title,
-          "Disk Drive Number %d Size                      %s",
+          "Disk Drive Number %d Size                              %s",
           i,size_choices[choice]);
     }
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Size Menu",
@@ -1502,7 +1502,7 @@ void trs_gui_disk_sizes(void)
     if (selection == -1)
       done = 1;
     else {
-      size = trs_gui_display_popup("Choose Size",size_choices,2,
+      size = trs_gui_display_popup("Size",size_choices,2,
           gui_disk_sizes[selection]==8);
       if (size == 0)
         gui_disk_sizes[selection] = 5;
@@ -1526,7 +1526,7 @@ void trs_gui_disk_steps(void)
    {"",MENU_NORMAL_TYPE},
    {"",MENU_NORMAL_TYPE},
    {"",0}};
-  char *step_choices[2] = {"        Single","        Double"};
+  char *step_choices[2] = {"Single","Double"};
   int selection = 0;
   int done = 0;
   int gui_disk_steps[8];
@@ -1544,7 +1544,7 @@ void trs_gui_disk_steps(void)
       else
         choice = 1;
       sprintf(disk_steps_menu[i].title,
-          "Disk Drive Number %d Step                      %s",
+          "Disk Drive Number %d Step                              %s",
           i,step_choices[choice]);
     }
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",
@@ -1552,7 +1552,7 @@ void trs_gui_disk_steps(void)
     if (selection == -1)
       done = 1;
     else {
-      step = trs_gui_display_popup("Choose Step",step_choices,2,
+      step = trs_gui_display_popup("Step",step_choices,2,
           gui_disk_steps[selection]==2);
       if (step == 0)
         gui_disk_steps[selection] = 1;
@@ -1638,7 +1638,7 @@ void trs_gui_disk_management(void)
       if (diskname[0] == 0)
         snprintf(&disk_menu[i].title[8],6,"%s","Empty");
       else
-        trs_gui_limit_string(trs_disk_getfilename(i),&disk_menu[i].title[8],52);
+        trs_gui_limit_string(diskname,&disk_menu[i].title[8],52);
       disk_menu[i].title[0] = trs_disk_getwriteprotect(i) ? '*' : ' ';
     }
     trs_gui_clear_screen();
