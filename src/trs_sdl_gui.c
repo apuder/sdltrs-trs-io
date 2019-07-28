@@ -150,7 +150,6 @@ static int trs_gui_display_popup(const char* title, char **entry,
 static int trs_gui_display_popup_matrix(const char* title, char **entry,
                                         int rows, int columns, int selection);
 static int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
-static void trs_gui_hard_creation(void);
 static void trs_gui_disk_creation(void);
 static void trs_gui_disk_sizes(void);
 #ifdef __linux
@@ -1177,132 +1176,6 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
   return(selection);
 }
 
-void trs_gui_hard_creation(void)
-{
-  MENU_ENTRY disk_creation_menu[] =
-  {{"Cylinder Count                                              ",MENU_NORMAL_TYPE},
-   {"Sector Count                                                ",MENU_NORMAL_TYPE},
-   {"Granularity                                                 ",MENU_NORMAL_TYPE},
-   {"Directory Sector                                            ",MENU_NORMAL_TYPE},
-   {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
-   {"Create Hard Disk Image with Above Parameters",MENU_NORMAL_TYPE},
-   {"",0}};
-  char *drive_choices[5] = {"   None","Drive 0","Drive 1","Drive 2","Drive 3"};
-  static int cylinder_count = 202;
-  static int sector_count = 256;
-  static int granularity = 8;
-  static int dir_sector = 1;
-  static int drive_insert = 0;
-  int done = 0;
-  int selection = 5;
-  int value;
-  char filename[FILENAME_MAX];
-  char input[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
-
-  while(!done) {
-    snprintf(&disk_creation_menu[0].title[57],4,"%3d",cylinder_count);
-    snprintf(&disk_creation_menu[1].title[57],4,"%3d",sector_count);
-    snprintf(&disk_creation_menu[2].title[57],4,"%3d",granularity);
-    snprintf(&disk_creation_menu[3].title[57],4,"%3d",dir_sector);
-    snprintf(&disk_creation_menu[4].title[53],8,"%7s",drive_choices[drive_insert]);
-    trs_gui_clear_screen();
-    selection = trs_gui_display_menu("SDLTRS Hard Disk Creation Menu",
-        disk_creation_menu, selection);
-    switch(selection) {
-      case 0:
-        snprintf(input,4,"%d",cylinder_count);
-        if (trs_gui_input_string("Enter Cylinder Count",input,input,3,0) == 0) {
-          value = atoi(input);
-          if (value >=3 && value <= 256) {
-            cylinder_count = value;
-            if (cylinder_count > 203)
-              trs_gui_display_message("Warning",
-                  "Cylinder Count > 203 is incompatible with XTRSHARD/DCT");
-          } else
-            trs_gui_display_message("Error",
-                "Cylinder Count must be between 3 and 256");
-        }
-        break;
-      case 1:
-        snprintf(input,4,"%d",sector_count);
-        if (trs_gui_input_string("Enter Sector Count",input,input,3,0) == 0) {
-          value = atoi(input);
-          if (value >=4 && value <= 256) {
-            sector_count = value;
-            if ((sector_count % 32) != 0) {
-              trs_gui_display_message("Warning",
-                  "Sector not a mult of 32 is incompatible with WD1000/1010");
-              if (sector_count > 32)
-                trs_gui_display_message("Warning",
-                    "Sector is incompatible with Matthew Reed's emulators");
-            }
-          } else
-            trs_gui_display_message("Error",
-                "Sector Count must be between 4 and 256");
-        }
-        break;
-      case 2:
-        snprintf(input,2,"%d",granularity);
-        if (trs_gui_input_string("Enter Granularity",input,input,1,0) == 0) {
-          value = atoi(input);
-          if (value >= 1 && value <= 8) {
-            granularity = value;
-          } else
-            trs_gui_display_message("Error",
-                "Granularity must be between 1 and 8");
-        }
-        break;
-      case 3:
-        snprintf(input,4,"%d",dir_sector);
-        if (trs_gui_input_string("Enter Directory Sector",input,input,3,0) == 0) {
-          value = atoi(input);
-          if (value >= 1 && value < cylinder_count) {
-            dir_sector = value;
-          } else
-            trs_gui_display_message("Error",
-                "Directory Sector must be between 1 and Cylinder Count-1");
-        }
-        break;
-      case 4:
-        drive_insert = trs_gui_display_popup("Drive",drive_choices,5,
-            drive_insert);
-        break;
-      case 5:
-        if (sector_count < granularity) {
-          trs_gui_display_message("Error",
-              "Sector Count must be >= Granularity");
-          break;
-        }
-        if ((sector_count % granularity) != 0) {
-          trs_gui_display_message("Error",
-              "Sector Count must be multiple of Granularity");
-          break;
-        }
-        if ((sector_count / granularity) > 32) {
-          trs_gui_display_message("Error",
-              "Sector Count / Granularity must be <= 32");
-          break;
-        }
-        filename[0] = 0;
-        trs_expand_dir(trs_hard_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
-          break;
-        if (trs_create_blank_hard(filename, cylinder_count, sector_count,
-              granularity, dir_sector))
-          trs_gui_display_message("Error","Error creating Hard Disk Image");
-        else if (drive_insert)
-          trs_hard_attach(drive_insert-1, filename);
-        done = 1;
-        break;
-      case -1:
-        done = 1;
-        break;
-    }
-  }
-}
-
 void trs_gui_disk_creation(void)
 {
   MENU_ENTRY disk_creation_menu[] =
@@ -1612,17 +1485,29 @@ void trs_gui_hard_management(void)
    {"",MENU_TITLE_TYPE},
    {"Save Disk Set",MENU_NORMAL_TYPE},
    {"Load Disk Set",MENU_NORMAL_TYPE},
-   {"Create Blank Hard Disk",MENU_NORMAL_TYPE},
+   {"Cylinder Count                                              ",MENU_NORMAL_TYPE},
+   {"Sector Count                                                ",MENU_NORMAL_TYPE},
+   {"Granularity                                                 ",MENU_NORMAL_TYPE},
+   {"Directory Sector                                            ",MENU_NORMAL_TYPE},
+   {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
+   {"Create Hard Disk Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
+  static int cylinder_count = 202;
+  static int sector_count = 256;
+  static int granularity = 8;
+  static int dir_sector = 1;
+  static int drive_insert = 0;
+  char *drive_choices[5] = {"   None","Drive 0","Drive 1","Drive 2","Drive 3"};
   char filename[FILENAME_MAX];
+  char input[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
   int selection = 0;
   int done = 0;
-  int i;
+  int i, value;
 
   while(!done) {
     for (i=0;i<4;i++) {
-      char *diskname = trs_hard_getfilename(i);
+      const char *diskname = trs_hard_getfilename(i);
 
       if (diskname[0] == 0)
         snprintf(&hard_menu[i].title[8],6,"%s","Empty");
@@ -1630,7 +1515,11 @@ void trs_gui_hard_management(void)
         trs_gui_limit_string(diskname,&hard_menu[i].title[8],52);
       hard_menu[i].title[0] = trs_hard_getwriteprotect(i) ? '*' : ' ';
     }
-
+    snprintf(&hard_menu[7].title[57],4,"%3d",cylinder_count);
+    snprintf(&hard_menu[8].title[57],4,"%3d",sector_count);
+    snprintf(&hard_menu[9].title[57],4,"%3d",granularity);
+    snprintf(&hard_menu[10].title[57],4,"%3d",dir_sector);
+    snprintf(&hard_menu[11].title[53],8,"%7s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Hard Disk Menu",
         hard_menu, selection);
@@ -1652,7 +1541,90 @@ void trs_gui_hard_management(void)
           trs_gui_display_message("Error", "Failed to load Disk Set");
         break;
       case 7:
-        trs_gui_hard_creation();
+        snprintf(input,4,"%d",cylinder_count);
+        if (trs_gui_input_string("Enter Cylinder Count",input,input,3,0) == 0) {
+          value = atoi(input);
+          if (value >=3 && value <= 256) {
+            cylinder_count = value;
+            if (cylinder_count > 203)
+              trs_gui_display_message("Warning",
+                  "Cylinder Count > 203 is incompatible with XTRSHARD/DCT");
+          } else
+            trs_gui_display_message("Error",
+                "Cylinder Count must be between 3 and 256");
+        }
+        break;
+      case 8:
+        snprintf(input,4,"%d",sector_count);
+        if (trs_gui_input_string("Enter Sector Count",input,input,3,0) == 0) {
+          value = atoi(input);
+          if (value >=4 && value <= 256) {
+            sector_count = value;
+            if ((sector_count % 32) != 0) {
+              trs_gui_display_message("Warning",
+                  "Sector not a mult of 32 is incompatible with WD1000/1010");
+              if (sector_count > 32)
+                trs_gui_display_message("Warning",
+                    "Sector is incompatible with Matthew Reed's emulators");
+            }
+          } else
+            trs_gui_display_message("Error",
+                "Sector Count must be between 4 and 256");
+        }
+        break;
+      case 9:
+        snprintf(input,2,"%d",granularity);
+        if (trs_gui_input_string("Enter Granularity",input,input,1,0) == 0) {
+          value = atoi(input);
+          if (value >= 1 && value <= 8) {
+            granularity = value;
+          } else
+            trs_gui_display_message("Error",
+                "Granularity must be between 1 and 8");
+        }
+        break;
+      case 10:
+        snprintf(input,4,"%d",dir_sector);
+        if (trs_gui_input_string("Enter Directory Sector",input,input,3,0) == 0) {
+          value = atoi(input);
+          if (value >= 1 && value < cylinder_count) {
+            dir_sector = value;
+          } else
+            trs_gui_display_message("Error",
+                "Directory Sector must be between 1 and Cylinder Count-1");
+        }
+        break;
+      case 11:
+        drive_insert = trs_gui_display_popup("Drive",drive_choices,5,
+            drive_insert);
+        break;
+      case 12:
+        if (sector_count < granularity) {
+          trs_gui_display_message("Error",
+              "Sector Count must be >= Granularity");
+          break;
+        }
+        if ((sector_count % granularity) != 0) {
+          trs_gui_display_message("Error",
+              "Sector Count must be multiple of Granularity");
+          break;
+        }
+        if ((sector_count / granularity) > 32) {
+          trs_gui_display_message("Error",
+              "Sector Count / Granularity must be <= 32");
+          break;
+        }
+        filename[0] = 0;
+        trs_expand_dir(trs_hard_dir, browse_dir);
+        if (trs_gui_input_string("Enter Filename, TAB selects directory",
+              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+          break;
+        if (trs_create_blank_hard(filename, cylinder_count, sector_count,
+              granularity, dir_sector))
+          trs_gui_display_message("Error","Error creating Hard Disk Image");
+        else if (drive_insert)
+          trs_hard_attach(drive_insert-1, filename);
+        done = 1;
         break;
       case -1:
         done = 1;
