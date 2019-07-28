@@ -152,7 +152,6 @@ static int trs_gui_display_popup_matrix(const char* title, char **entry,
 static int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
 static void trs_gui_hard_creation(void);
 static void trs_gui_disk_creation(void);
-static void trs_gui_cassette_creation(void);
 static void trs_gui_disk_sizes(void);
 #ifdef __linux
 static void trs_gui_disk_steps(void);
@@ -1394,90 +1393,6 @@ void trs_gui_disk_creation(void)
   }
 }
 
-void trs_gui_cassette_creation(void)
-{
-  MENU_ENTRY cassette_creation_menu[] =
-  {{"Image Type                                                  ",MENU_NORMAL_TYPE},
-   {"Insert Created Disk Into Drive                              ",MENU_NORMAL_TYPE},
-   {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE},
-   {"",0}};
-  char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
-  char *drive_choices[2]  =     {"      No","     Yes"};
-  char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
-  static int image_type = 0;
-  static int drive_insert = 1;
-  int selection = 2;
-  int done = 0, ret;
-  FILE *cassette_file;
-
-  while(!done) {
-    snprintf(&cassette_creation_menu[0].title[54],9,"%s",image_type_choices[image_type]);
-    snprintf(&cassette_creation_menu[1].title[52],9,"%s",drive_choices[drive_insert]);
-    trs_gui_clear_screen();
-    selection = trs_gui_display_menu("SDLTRS Cassette Creation Menu",
-        cassette_creation_menu, selection);
-    switch(selection) {
-      case 0:
-        image_type = trs_gui_display_popup("Type",image_type_choices,3,
-            image_type);
-        break;
-      case 1:
-        drive_insert = trs_gui_display_popup("Insert",drive_choices,2,
-            drive_insert);
-        break;
-      case 2:
-        filename[0] = 0;
-        trs_expand_dir(trs_cass_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
-          break;
-
-        if (image_type == 0) {
-          trs_add_extension(filename,".cas");
-          cassette_file = fopen(filename, "wb");
-          if (cassette_file == NULL)
-            ret = -1;
-          else {
-            ret = 0;
-            fclose(cassette_file);
-          }
-        }
-        else if (image_type == 1) {
-          trs_add_extension(filename,".cpt");
-          cassette_file = fopen(filename, "wb");
-          if (cassette_file == NULL)
-            ret = -1;
-          else {
-            ret = 0;
-            fclose(cassette_file);
-          }
-        }
-        else {
-          trs_add_extension(filename,".wav");
-          cassette_file = fopen(filename, "wb");
-          if (cassette_file == NULL)
-            ret = -1;
-          else {
-            ret = create_wav_header(cassette_file);
-            fclose(cassette_file);
-          }
-        }
-        if (ret)
-          trs_gui_display_message("Error","Error creating Cassette Image");
-        else {
-          if (drive_insert)
-            trs_cassette_insert(filename);
-        }
-        done = 1;
-        break;
-      case -1:
-        done = 1;
-        break;
-    }
-  }
-}
-
 void trs_gui_disk_sizes(void)
 {
   MENU_ENTRY disk_sizes_menu[] =
@@ -1827,18 +1742,29 @@ void trs_gui_stringy_management(void)
 void trs_gui_cassette_management(void)
 {
   MENU_ENTRY cass_menu[] =
-  {{"Cass   :",MENU_CASS_BROWSE_TYPE},
+  {{" Cass  :",MENU_CASS_BROWSE_TYPE},
+   {"",MENU_TITLE_TYPE},
    {"Cassette Position                                           ",MENU_NORMAL_TYPE},
    {"Cassette Default Sample Rate                                ",MENU_NORMAL_TYPE},
-   {"Create Blank Cassette",MENU_NORMAL_TYPE},
+   {"",MENU_TITLE_TYPE},
+   {"Image Type                                                  ",MENU_NORMAL_TYPE},
+   {"Insert Created Cassette Into Drive                          ",MENU_NORMAL_TYPE},
+   {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
   char input[FILENAME_MAX];
+  char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
+  char *drive_choices[2]  =     {"      No","     Yes"};
+  char filename[FILENAME_MAX];
+  char browse_dir[FILENAME_MAX];
+  static int image_type = 0;
+  static int drive_insert = 1;
   int selection = 0;
-  int done = 0;
+  int done = 0, ret;
   int value;
+  FILE *cassette_file;
 
   while(!done) {
-    char *cass_name = trs_cassette_getfilename();
+    const char *cass_name = trs_cassette_getfilename();
 
     if (cass_name[0] == 0)
       snprintf(&cass_menu[0].title[8],6,"%s","Empty");
@@ -1846,11 +1772,13 @@ void trs_gui_cassette_management(void)
       trs_gui_limit_string(cass_name,&cass_menu[0].title[8],52);
 
     trs_gui_clear_screen();
-    snprintf(&cass_menu[1].title[36],25,"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());
-    snprintf(&cass_menu[2].title[50],11,"%10d",cassette_default_sample_rate);
+    snprintf(&cass_menu[2].title[36],25,"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());
+    snprintf(&cass_menu[3].title[50],11,"%10d",cassette_default_sample_rate);
+    snprintf(&cass_menu[5].title[54],7,"%s",image_type_choices[image_type]);
+    snprintf(&cass_menu[6].title[52],9,"%s",drive_choices[drive_insert]);
     selection = trs_gui_display_menu("SDLTRS Cassette Menu",cass_menu, selection);
     switch(selection) {
-      case 1:
+      case 2:
         snprintf(input,11,"%d",trs_get_cassette_position());
         if (trs_gui_input_string("Enter Cassette Position in Bytes",
               input,input, 10, 0) == -1)
@@ -1859,7 +1787,7 @@ void trs_gui_cassette_management(void)
         if (value >= 0 && value <= trs_get_cassette_length())
           trs_set_cassette_position(value);
         break;
-      case 2:
+      case 3:
         snprintf(input,11,"%d",cassette_default_sample_rate);
         if (trs_gui_input_string("Enter Cassette Default Sample Rate",
               input,input, 10, 0) == -1)
@@ -1869,8 +1797,57 @@ void trs_gui_cassette_management(void)
           value = DEFAULT_SAMPLE_RATE;
         cassette_default_sample_rate = value;
         break;
-      case 3:
-        trs_gui_cassette_creation();
+      case 5:
+        image_type = trs_gui_display_popup("Type",image_type_choices,3,
+            image_type);
+        break;
+      case 6:
+        drive_insert = trs_gui_display_popup("Insert",drive_choices,2,
+            drive_insert);
+        break;
+      case 7:
+        filename[0] = 0;
+        trs_expand_dir(trs_cass_dir, browse_dir);
+        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+          break;
+        if (image_type == 0) {
+          trs_add_extension(filename,".cas");
+          cassette_file = fopen(filename, "wb");
+          if (cassette_file == NULL)
+            ret = -1;
+          else {
+            ret = 0;
+            fclose(cassette_file);
+          }
+        }
+        else if (image_type == 1) {
+          trs_add_extension(filename,".cpt");
+          cassette_file = fopen(filename, "wb");
+          if (cassette_file == NULL)
+            ret = -1;
+          else {
+            ret = 0;
+            fclose(cassette_file);
+          }
+        }
+        else {
+          trs_add_extension(filename,".wav");
+          cassette_file = fopen(filename, "wb");
+          if (cassette_file == NULL)
+            ret = -1;
+          else {
+            ret = create_wav_header(cassette_file);
+            fclose(cassette_file);
+          }
+        }
+        if (ret)
+          trs_gui_display_message("Error","Error creating Cassette Image");
+        else {
+          if (drive_insert)
+            trs_cassette_insert(filename);
+        }
+        done = 1;
         break;
       case -1:
         done = 1;
