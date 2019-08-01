@@ -2060,6 +2060,9 @@ void trs_get_event(int wait)
               case SDLK_h:
                 call_function(HARD);
                 break;
+              case SDLK_g:
+                call_function(STRINGY);
+                break;
               case SDLK_t:
                 call_function(TAPE);
                 break;
@@ -2132,9 +2135,6 @@ void trs_get_event(int wait)
               case SDLK_u:
                 trs_sound = !trs_sound;
                 trs_screen_caption(trs_timer_is_turbo(), trs_sound);
-                break;
-              case SDLK_y:
-                call_function(STRINGY);
                 break;
               case SDLK_z:
                 if (!fullscreen)

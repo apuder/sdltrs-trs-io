@@ -2930,7 +2930,7 @@ void trs_gui(void)
   {{"Floppy Disk Management   (ALT-D)",MENU_NORMAL_TYPE},
    {"Hard Disk Management     (ALT-H)",MENU_NORMAL_TYPE},
    {"Cassette Management      (ALT-T)",MENU_NORMAL_TYPE},
-   {"Stringy Wafer Management (ALT-Y)",MENU_NORMAL_TYPE},
+   {"Stringy Wafer Management (ALT-G)",MENU_NORMAL_TYPE},
    {"Emulator Settings        (ALT-E)",MENU_NORMAL_TYPE},
    {"Configuration/State File Management",MENU_NORMAL_TYPE},
    {"Printer Management",MENU_NORMAL_TYPE},
