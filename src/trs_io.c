@@ -58,6 +58,7 @@
 #include "trs_disk.h"
 #include "trs_hard.h"
 #include "trs_state_save.h"
+#include "trs_stringy.h"
 #include "trs_uart.h"
 
 static int modesel = 0;     /* Model I */

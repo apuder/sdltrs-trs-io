@@ -38,6 +38,7 @@
 #include "trs_cassette.h"
 #include "trs_disk.h"
 #include "trs_hard.h"
+#include "trs_stringy.h"
 #include "trs_uart.h"
 #include "trs_state_save.h"
 #include "trs_mkdisk.h"

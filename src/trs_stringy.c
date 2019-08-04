@@ -19,9 +19,8 @@
 #define _XOPEN_SOURCE 500 /* string.h: strdup() */
 
 #include "error.h"
-#include "z80.h"
 #include "trs.h"
-#include "trs_disk.h"
+#include "trs_stringy.h"
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
