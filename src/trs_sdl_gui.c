@@ -1164,6 +1164,11 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             trs_protect_hard(selection, 0);
           else
             trs_protect_hard(selection, 1);
+        } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
+          if (stringy_get_writeprotect(selection))
+            trs_protect_stringy(selection, 0);
+          else
+            trs_protect_stringy(selection, 1);
         }
         done = 1;
         break;
@@ -1668,6 +1673,7 @@ void trs_gui_stringy_management(void)
         snprintf(&stringy_menu[i].title[9],6,"%s","Empty");
       else
         trs_gui_limit_string(wafername,&stringy_menu[i].title[9],52);
+      stringy_menu[i].title[0] = stringy_get_writeprotect(i) ? '*' : ' ';
     }
     snprintf(&stringy_menu[11].title[52],10,"%8s",wafer_choices[wafer_insert]);
     trs_gui_clear_screen();

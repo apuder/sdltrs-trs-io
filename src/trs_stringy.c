@@ -317,6 +317,12 @@ stringy_get_name(int drive)
   return stringy_info[drive].name;
 }
 
+int
+stringy_get_writeprotect(int drive)
+{
+  return stringy_info[drive].in_port & STRINGY_WRITE_PROT;
+}
+
 /* Returns 0 if OK, -1 if invalid header, errno value otherwise. */
 int
 stringy_insert(int drive, const char *name)

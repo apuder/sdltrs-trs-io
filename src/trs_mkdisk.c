@@ -50,6 +50,7 @@
 #include "trs_disk.h"
 #include "trs_hard.h"
 #include "trs_mkdisk.h"
+#include "trs_stringy.h"
 
 typedef unsigned char Uchar;
 #include "reed.h"
@@ -171,6 +172,59 @@ void trs_protect_hard(int drive, int writeprot)
   chmod(prot_filename, newmode);
 #endif
   trs_hard_attach(drive,prot_filename);
+}
+
+void trs_protect_stringy(int drive, int writeprot)
+{
+  char prot_filename[FILENAME_MAX];
+#ifndef _WIN32
+  struct stat st;
+#endif
+  int newmode;
+  FILE *f;
+
+  const char *diskname = stringy_get_name(drive);
+  if (diskname[0] == 0)
+    return;
+
+  strcpy(prot_filename, diskname);
+
+#ifndef _WIN32
+  if (stat(prot_filename, &st) < 0)
+    return;
+#endif
+  stringy_remove(drive);
+
+#ifdef _WIN32
+  win_set_readonly(prot_filename,0);
+#else
+  chmod(prot_filename, st.st_mode | (S_IWUSR|S_IWGRP|S_IWOTH));
+#endif
+  f=fopen(prot_filename,"r+");
+  if (f!=NULL) {
+    fseek(f, 5, 0);
+    newmode = getc(f);
+    if (newmode != EOF) {
+      if (writeprot)
+        newmode |= 1 << 0;
+      else
+        newmode &= ~(1 << 0);
+      fseek(f, 5, 0);
+      putc(newmode, f);
+    }
+    fclose(f);
+  }
+
+#ifdef _WIN32
+  win_set_readonly(prot_filename,writeprot);
+#else
+  if (writeprot)
+    newmode = st.st_mode & ~(S_IWUSR);
+  else
+    newmode = st.st_mode | (S_IWUSR);
+  chmod(prot_filename, newmode);
+#endif
+  stringy_insert(drive,prot_filename);
 }
 
 int trs_create_blank_jv1(char *fname)
@@ -356,5 +410,3 @@ int trs_create_blank_hard(char *fname, int cyl, int sec,
   fclose(f);
   return 0;
 }
-
-
