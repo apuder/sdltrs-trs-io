@@ -347,13 +347,13 @@ trs_opt options[] = {
 {"hard3",trs_opt_hard,1,3,NULL},
 {"stringy",trs_opt_stringy,0,1,NULL},
 {"nostringy",trs_opt_stringy,0,0,NULL},
-{"stringy0",trs_opt_wafer,1,0,NULL},
-{"stringy1",trs_opt_wafer,1,1,NULL},
-{"stringy2",trs_opt_wafer,1,2,NULL},
-{"stringy3",trs_opt_wafer,1,3,NULL},
-{"stringy4",trs_opt_wafer,1,4,NULL},
-{"stringy5",trs_opt_wafer,1,5,NULL},
-{"stringy6",trs_opt_wafer,1,6,NULL},
+{"wafer0",trs_opt_wafer,1,0,NULL},
+{"wafer1",trs_opt_wafer,1,1,NULL},
+{"wafer2",trs_opt_wafer,1,2,NULL},
+{"wafer3",trs_opt_wafer,1,3,NULL},
+{"wafer4",trs_opt_wafer,1,4,NULL},
+{"wafer5",trs_opt_wafer,1,5,NULL},
+{"wafer6",trs_opt_wafer,1,6,NULL},
 {"cassette",trs_opt_cass,1,0,NULL},
 {"diskset",trs_opt_diskset,1,0,NULL},
 {"diskdir",trs_opt_string,1,0,trs_disk_dir},
@@ -553,7 +553,7 @@ int trs_write_config_file(char *filename)
     const char *diskname = stringy_get_name(i);
 
     if (diskname[0] != 0)
-      fprintf(config_file,"stringy%d=%s\n",i,diskname);
+      fprintf(config_file,"wafer%d=%s\n",i,diskname);
   }
   {
     const char *cassname = trs_cassette_getfilename();
