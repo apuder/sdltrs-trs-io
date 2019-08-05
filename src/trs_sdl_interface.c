@@ -590,6 +590,8 @@ void trs_set_to_defaults(void)
     trs_disk_remove(i);
   for (i=0;i<4;i++)
     trs_hard_remove(i);
+  for (i=0;i<7;i++)
+    stringy_remove(i);
   trs_cassette_remove();
 
   scale_x = 1;
