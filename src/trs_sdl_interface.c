@@ -538,13 +538,13 @@ int trs_write_config_file(char *filename)
   fprintf(config_file,"turborate=%d\n", timer_overclock_rate);
 
   for (i=0;i<8;i++) {
-    char *diskname = trs_disk_getfilename(i);
+    const char *diskname = trs_disk_getfilename(i);
 
     if (diskname[0] != 0)
       fprintf(config_file,"disk%d=%s\n",i,diskname);
   }
   for (i=0;i<4;i++) {
-    char *diskname = trs_hard_getfilename(i);
+    const char *diskname = trs_hard_getfilename(i);
 
     if (diskname[0] != 0)
       fprintf(config_file,"hard%d=%s\n",i,diskname);
@@ -556,7 +556,7 @@ int trs_write_config_file(char *filename)
       fprintf(config_file,"stringy%d=%s\n",i,diskname);
   }
   {
-    char *cassname = trs_cassette_getfilename();
+    const char *cassname = trs_cassette_getfilename();
 
     if (cassname[0] != 0)
       fprintf(config_file,"cassette=%s\n",cassname);
@@ -1002,7 +1002,7 @@ int trs_load_config_file(char *alternate_file)
   else
 #ifdef __linux
     {
-      char *home = getenv("HOME");
+      const char *home = getenv("HOME");
 
       snprintf(trs_config_file, FILENAME_MAX-1, "%s/sdltrs.t8c", home);
     }

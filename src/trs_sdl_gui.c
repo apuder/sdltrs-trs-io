@@ -1441,7 +1441,7 @@ void trs_gui_disk_management(void)
 
   while(!done) {
     for (i=0;i<8;i++) {
-      char *diskname = trs_disk_getfilename(i);
+      const char *diskname = trs_disk_getfilename(i);
 
       if (diskname[0] == 0)
         snprintf(&disk_menu[i].title[8],6,"%s","Empty");

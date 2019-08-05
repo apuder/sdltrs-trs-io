@@ -77,10 +77,9 @@ void trs_protect_disk(int drive, int writeprot)
   int newmode;
 #endif
   FILE *f;
-  char *diskname;
   int emutype = trs_disk_getdisktype(drive);
 
-  diskname = trs_disk_getfilename(drive);
+  const char *diskname = trs_disk_getfilename(drive);
   if (diskname[0] == 0)
     return;
 
@@ -130,10 +129,9 @@ void trs_protect_hard(int drive, int writeprot)
   struct stat st;
 #endif
   int newmode;
-  char *diskname;
   FILE *f;
 
-  diskname = trs_hard_getfilename(drive);
+  const char *diskname = trs_hard_getfilename(drive);
   if (diskname[0] == 0)
     return;
 
