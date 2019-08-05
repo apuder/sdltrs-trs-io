@@ -25,6 +25,7 @@
   <li><a href="#Floppy_Disk_Management">Floppy Disk Management</a></li>
   <li><a href="#Hard_Disk_Management">Hard Disk Management</a></li>
   <li><a href="#Cassette_Management">Cassette Management</a></li>
+  <li><a href="#Stringy_Wafer_Management">Stringy Wafer Management</a></li>
   <li><a href="#Emulator_Settings">Emulator Settings</a></li>
   <li><a href="#ConfigurationState">Configuration/State File Management</a></li>
   <li><a href="#Printer_Management">Printer Management</a></li>
@@ -70,7 +71,7 @@ new disk images, and set emulated disk drive options.</p>
 
 <h3>Save Disk Set:</h3>
 
-<p>This ote, allows the user to save the names of the disk images that are
+<p>This option allows the user to save the names of the disk images that are
 currently in the drives to a file, to be loaded later. The file that the set
 is save in has an extension of <code>.set</code>, and it is a human readable
 text file, containing the paths of the image files, or a blank line for a
@@ -149,13 +150,13 @@ create new disk images.</p>
   <li>Hitting <b>Backspace</b> will remove a disk image if there is one in the
       drive.</li>
   <li>Hitting <b>Space</b> will toggle the write protect for the drive.
-      The indicator for write protect is an asterisk "*" in front of the "Disk"
+      The indicator for write protect is an asterisk "*" in front of the "Hard"
       in the menu item.</li>
 </ul>
 
 <h3>Save Disk Set:</h3>
 
-<p>This ote, allows the user to save the names of the disk images that are
+<p>This option allows the user to save the names of the disk images that are
 currently in the drives to a file, to be loaded later. The file that the set
 is save in has an extension of <code>.set</code>, and it is a human readable
 text file, containing the paths of the image files, or a blank line for a
@@ -170,14 +171,14 @@ specified in the file into the corresponding drives. If a drive in the set
 file is a blank line, no changes are made to the drive. This allows the user
 to load multiple disk sets sequentially.</p>
 
-<p><img alt="" src="images/TextGUIHardCreateMenu.png"></p>
-
-<p>In the Create Hard Disk Image window, you may choose a format of a disk.
-(See the <a href="Features.html#Emulated_hard_disks">Features</a> page for
-info on the hard disk formats).</p>
+<p>The next four options allows you to specify parameters for creating a hard
+disk image (See the <a href="Features.html#Emulated_hard_disks">Features</a>
+page for info on the hard disk formats).</p>
 
 <p>If the "Insert Created Disk Into This Drive" is set to something besides
 none, the created image will be mounted on the specified hard drive.</p>
+
+<p>The final option allows you to create a blank hard disk image.</p>
 
 <h2><a name="Cassette_Management"></a><u>Cassette Management</u></h2>
 
@@ -199,17 +200,35 @@ images into the emulated drive, as well as create new cassette images.</p>
 changing the Position field. Valid values are 0 (fully rewound) through the
 number of bytes on the tape (at end of tape).</p>
 
-<p>The third options allows you to define the default sample rate in Hz.</p>
+<p>The third option allows you to define the default sample rate in Hz.</p>
+
+<p>The fourth option allows you to choose a format of a cassette
+(<code>.cas</code> or <code>.wav</code>).</p>
+
+<p>If the "Insert Created Cassette Into Drive" is set to Yes, the created
+image will be used in the cassette drive.</p>
 
 <p>The final option allows you to create a blank cassette image.</p>
 
-<p><img alt="" src="images/TextGUICassetteCreateMenu.png"></p>
+<h2><a name="Stringy_Wafer_Management"></a><u>Stringy Wafer Management</u></h2>
 
-<p>In the Create Cassette Image window, you may choose a format of a cassette
-(<code>.cas</code> or <code>.wav</code>).</p>
+<p><img alt="" src="images/TextGUIStringyMenu.png"></p>
 
-<p>If the "Insert Created Disk Into This Drive" is set to Yes, the created
-image will be mounted on the specified hard drive.</p>
+<p>The stringy wafer management menu allows you to insert and remove wafer
+images into the emulated drives, as well as save and load disk sets, and
+create new wafer images with default parameters.</p>
+
+<p>For the first 7 options in the menu, there are three options:</p>
+
+<ul>
+  <li>Hitting <b>Enter</b> while the item is selected, will move to the image
+      selection screen, which is explained above in the floppy disk section.</li>
+  <li>Hitting <b>Backspace</b> will remove a disk image if there is one in the
+      drive.</li>
+  <li>Hitting <b>Space</b> will toggle the write protect for the wafer.
+      The indicator for write protect is an asterisk "*" in front of the
+      "Wafer" in the menu item.</li>
+</ul>
 
 <h2><a name="Emulator_Settings"></a><u>Emulator Settings</u></h2>
 
@@ -222,6 +241,10 @@ image will be mounted on the specified hard drive.</p>
 <h3>Lowercase:</h3>
 
 <p>Emulate a "Lowercase Modification Kit" for the TRS-80 Model I.</p>
+
+<h3>Exatron Stringy Floppy:</h3>
+
+<p>Emulates up to 7 Stringy Floppy Wafers for the TRS-80 Model I.</p>
 
 <h3>Graphics Emulations:</h3>
 
