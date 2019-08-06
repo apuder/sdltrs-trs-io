@@ -997,7 +997,7 @@ int trs_load_config_file(char *alternate_file)
   char line[FILENAME_MAX];
   char *arg;
   FILE *config_file;
-  unsigned int i;
+  int i;
 
   if (alternate_file)
     strcpy(trs_config_file,alternate_file);
@@ -1051,7 +1051,7 @@ int trs_load_config_file(char *alternate_file)
 
 int trs_parse_command_line(int argc, char **argv, int *debug)
 {
-  unsigned int i,j;
+  int i,j;
   char alt_config_file[FILENAME_MAX];
 
   title = program_name; /* default */
@@ -1215,7 +1215,7 @@ void trs_rom_init(void)
   }
 
   if (trs_model == 1 && stringy) {
-    unsigned int i;
+    int i;
 
     /* Load ROM for ESF and adjust size */
     for (i = 0; i < trs_romesf_size; ++i)
@@ -2371,7 +2371,7 @@ void trs_screen_expanded(int flag)
 void trs_screen_inverse(int flag)
 {
   int bit = flag ? INVERSE : 0;
-  unsigned int i;
+  int i;
 
   if ((currentmode ^ bit) & INVERSE) {
     currentmode ^= INVERSE;
@@ -2385,7 +2385,7 @@ void trs_screen_inverse(int flag)
 void trs_screen_alternate(int flag)
 {
   int bit = flag ? ALTERNATE : 0;
-  unsigned int i;
+  int i;
 
   if ((currentmode ^ bit) & ALTERNATE) {
     currentmode ^= ALTERNATE;
@@ -3051,7 +3051,7 @@ void trs_gui_clear_screen(void)
 
 void trs_gui_save_rect(int x, int y, int w, int h)
 {
-  unsigned int i, j, position;
+  int i, j, position;
 
   for (j = y; j < y + h; j++) {
     for (i = x; i < x + w; i++) {
@@ -3064,7 +3064,7 @@ void trs_gui_save_rect(int x, int y, int w, int h)
 
 void trs_gui_restore_rect(int x, int y, int w, int h)
 {
-  unsigned int i, j, position;
+  int i, j, position;
 
   for (j = y; j < y + h; j++) {
     for (i = x; i < x + w; i++) {
@@ -3081,7 +3081,7 @@ void trs_gui_restore_rect(int x, int y, int w, int h)
     Doesn't need to clear line col_chars-1. */
 void trs_screen_scroll()
 {
-  unsigned int i = 0;
+  int i = 0;
   SDL_Rect srcRect, destRect;
 
   for (i = row_chars; i < screen_chars; i++)

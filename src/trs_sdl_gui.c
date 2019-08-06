@@ -172,8 +172,8 @@ int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert)
 {
-  unsigned int position = x + y * 64;
-  unsigned int i;
+  int position = x + y * 64;
+  int i;
 
   for (i=0;i<len && i<60;i++)
     trs_gui_write_char(position+i,text[i],invert);
@@ -191,16 +191,16 @@ void trs_gui_write_text_char(const char text, int x, int y, int invert)
 
 void trs_gui_center_text(const char *text, int y, int invert)
 {
-  unsigned int position = (64-strlen(text))/2 + y * 64;
-  unsigned int i;
+  int position = (64-strlen(text))/2 + y * 64;
+  int i;
 
-  for (i=0;i<strlen(text);i++)
+  for (i=0;i<(int) strlen(text);i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
 
 void trs_gui_frame(int x, int y, int w, int h)
 {
-  unsigned int i;
+  int i;
 
   for (i=(x+1)+64*y; i<(x+w-1)+64*y; i++)
     trs_gui_write_char(i,TOP_HORIZ_LINE,0);
@@ -219,7 +219,7 @@ void trs_gui_frame(int x, int y, int w, int h)
 void trs_gui_clear_rect(int x, int y, int w, int h)
 {
   char clear[w+1];
-  unsigned int i;
+  int i;
 
   for (i=0;i<w;i++)
     clear[i]=' ';
@@ -540,7 +540,7 @@ void trs_gui_quicksort(char **start, char **end, int (*sort_function) ())
 
 void trs_gui_delete_filename_list(void)
 {
-  unsigned int i;
+  int i;
 
   for (i=0;i<filenamecount;i++)
     free(filenamelist[i]);

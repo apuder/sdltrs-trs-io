@@ -123,7 +123,7 @@ int trs_load_rom(char *filename)
 
 void trs_load_compiled_rom(int size, unsigned char rom[])
 {
-  unsigned int i;
+  int i;
 
   trs_rom_size = size;
   for(i = 0; i < size; ++i)
