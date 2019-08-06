@@ -1013,6 +1013,8 @@ int trs_load_config_file(char *alternate_file)
 #endif
 
   trs_set_to_defaults();
+  trs_disk_setsizes();
+  trs_disk_setsteps();
 
   config_file = fopen(trs_config_file,"r");
   if (config_file == NULL) {
@@ -1044,8 +1046,6 @@ int trs_load_config_file(char *alternate_file)
 
   fclose(config_file);
 
-  trs_disk_setsizes();
-  trs_disk_setsteps();
   return 1;
 }
 
