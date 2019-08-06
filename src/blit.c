@@ -249,6 +249,7 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
     switch (dst->BytesPerPixel) {
       case 1:
         map[i*bpp] = (Uint8)mapValue;
+        break;
       case 2:
         *((Uint16 *)(&map[i*bpp])) = (Uint16)mapValue;
         break;
