@@ -1853,14 +1853,14 @@ void trs_gui_display_management(void)
   char input[FILENAME_MAX];
   char *resize_choices[2] =   {"        No","       Yes"};
   char *disk_led_choices[2] = {" Hide"," Show"};
-  char *font1_choices[8] =    {"             early",
-                               "             stock",
-                               "             lcmod",
-                               "             wider",
-                               "             genie"};
-  char *font34_choices[8] =   {"            katakana",
-                               "       international",
-                               "                bold"};
+  char *font1_choices[8] =    {"      early",
+                               "      stock",
+                               "      lcmod",
+                               "      wider",
+                               "      genie"};
+  char *font34_choices[8] =   {"     katakana",
+                               "international",
+                               "         bold"};
 
   int local_trs_charset1 = trs_charset1;
   int selection = 0;
@@ -1893,9 +1893,9 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[1].title[52],9,"0x%06X",local_foreground);
     snprintf(&display_menu[2].title[52],9,"0x%06X",local_gui_background);
     snprintf(&display_menu[3].title[52],9,"0x%06X",local_gui_foreground);
-    snprintf(&display_menu[4].title[42],19,"%s",font1_choices[charset1_selection]);
-    snprintf(&display_menu[5].title[40],21,"%s",font34_choices[charset3_selection]);
-    snprintf(&display_menu[6].title[40],21,"%s",font34_choices[charset4_selection]);
+    snprintf(&display_menu[4].title[49],12,"%s",font1_choices[charset1_selection]);
+    snprintf(&display_menu[5].title[47],14,"%s",font34_choices[charset3_selection]);
+    snprintf(&display_menu[6].title[47],14,"%s",font34_choices[charset4_selection]);
     snprintf(&display_menu[7].title[52],9,"%8d",gui_border_width);
     snprintf(&display_menu[8].title[50],11,"%s",resize_choices[gui_resize3]);
     snprintf(&display_menu[9].title[50],11,"%s",resize_choices[gui_resize4]);
@@ -1948,15 +1948,15 @@ void trs_gui_display_management(void)
         }
         break;
       case 4:
-        charset1_selection = trs_gui_display_popup("Charset Model 1",font1_choices,5,
+        charset1_selection = trs_gui_display_popup("Charset 1",font1_choices,5,
             charset1_selection);
         break;
       case 5:
-        charset3_selection = trs_gui_display_popup("Charset Model 3",font34_choices,3,
+        charset3_selection = trs_gui_display_popup("Charset 3",font34_choices,3,
             charset3_selection);
         break;
       case 6:
-        charset4_selection = trs_gui_display_popup("Charset Model 4/4P",font34_choices,3,
+        charset4_selection = trs_gui_display_popup("Charset 4/4P",font34_choices,3,
             charset4_selection);
         break;
       case 7:
@@ -2386,19 +2386,19 @@ void trs_gui_misc_management(void)
    {"Serial Port Name:                                           ",MENU_TITLE_TYPE},
    {"                                                            ",MENU_NORMAL_TYPE},
    {"",0}};
-  char *on_off_choices[2] = {"       Off","        On"};
+  char *on_off_choices[2] = {"      Off","       On"};
   char input[FILENAME_MAX];
   int selection = 0;
   int done = 0;
 
   while(!done) {
     trs_gui_clear_screen();
-    snprintf(&misc_menu[0].title[50],11,"%s",on_off_choices[trs_kb_bracket_state]);
-    snprintf(&misc_menu[1].title[50],11,"%s",on_off_choices[trs_sound]);
-    snprintf(&misc_menu[2].title[50],11,"%s",on_off_choices[timer_overclock]);
+    snprintf(&misc_menu[0].title[51],10,"%s",on_off_choices[trs_kb_bracket_state]);
+    snprintf(&misc_menu[1].title[51],10,"%s",on_off_choices[trs_sound]);
+    snprintf(&misc_menu[2].title[51],10,"%s",on_off_choices[timer_overclock]);
     snprintf(&misc_menu[3].title[50],11,"%10d", timer_overclock_rate);
     snprintf(&misc_menu[4].title[50],11,"%10d",stretch_amount);
-    snprintf(&misc_menu[5].title[50],11,"%s",on_off_choices[trs_emtsafe]);
+    snprintf(&misc_menu[5].title[51],10,"%s",on_off_choices[trs_emtsafe]);
     snprintf(&misc_menu[6].title[56],5,"0x%02X",trs_uart_switches);
     trs_gui_limit_string(trs_uart_name,&misc_menu[8].title[2],60);
     selection = trs_gui_display_menu("SDLTRS Misc Settings Menu",
@@ -2465,14 +2465,14 @@ void trs_gui_printer_management(void)
    {"Printer Command:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
-  char *printer_choices[2] = {"      None","      Text"};
+  char *printer_choices[2] = {"     None","     Text"};
   char input[FILENAME_MAX];
   int selection = 0;
   int done = 0;
 
   while(!done) {
     trs_gui_clear_screen();
-    snprintf(&printer_menu[0].title[50],11,"%s",printer_choices[trs_printer]);
+    snprintf(&printer_menu[0].title[51],10,"%s",printer_choices[trs_printer]);
     trs_gui_limit_string(trs_printer_command,&printer_menu[3].title[2],60);
     selection = trs_gui_display_menu("SDLTRS Printer Management Menu",
         printer_menu, selection);
