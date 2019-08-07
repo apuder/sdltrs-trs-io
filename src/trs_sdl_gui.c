@@ -1193,14 +1193,14 @@ void trs_gui_disk_creation(void)
    {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
    {"Create Disk Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
-  char *image_type_choices[3] = {"    JV1","    JV3","    DMK"};
-  char *num_sides_choices[2] =  {"      1","      2"};
-  char *density_choices[2] =    {" Single"," Double"};
-  char *size_choices[2] =       {" 5 Inch"," 8 Inch"};
-  char *ignore_choices[2] =     {"     No","    Yes"};
-  char *drive_choices[9] =      {"   None","Drive 0","Drive 1","Drive 2",
-                                 "Drive 3","Drive 4","Drive 5","Drive 6",
-                                 "Drive 7"};
+  char *image_type_choices[3] = {"   JV1","   JV3","   DMK"};
+  char *num_sides_choices[2] =  {"     1","     2"};
+  char *density_choices[2] =    {"Single","Double"};
+  char *size_choices[2] =       {"5 Inch","8 Inch"};
+  char *ignore_choices[2] =     {"    No","   Yes"};
+  char *drive_choices[9] =      {"  None","Disk 0","Disk 1","Disk 2",
+                                 "Disk 3","Disk 4","Disk 5","Disk 6",
+                                 "Disk 7"};
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
   int selection = 6;
@@ -1213,12 +1213,12 @@ void trs_gui_disk_creation(void)
   static int drive_insert = 0;
 
   while(!done) {
-    snprintf(&disk_creation_menu[0].title[53],8,"%s",image_type_choices[image_type]);
-    snprintf(&disk_creation_menu[1].title[53],8,"%s",num_sides_choices[num_sides-1]);
-    snprintf(&disk_creation_menu[2].title[53],8,"%s",density_choices[density-1]);
-    snprintf(&disk_creation_menu[3].title[53],8,"%s",size_choices[eight]);
-    snprintf(&disk_creation_menu[4].title[53],8,"%s",ignore_choices[ignore_density]);
-    snprintf(&disk_creation_menu[5].title[53],8,"%s",drive_choices[drive_insert]);
+    snprintf(&disk_creation_menu[0].title[54],7,"%s",image_type_choices[image_type]);
+    snprintf(&disk_creation_menu[1].title[54],7,"%s",num_sides_choices[num_sides-1]);
+    snprintf(&disk_creation_menu[2].title[54],7,"%s",density_choices[density-1]);
+    snprintf(&disk_creation_menu[3].title[54],7,"%s",size_choices[eight]);
+    snprintf(&disk_creation_menu[4].title[54],7,"%s",ignore_choices[ignore_density]);
+    snprintf(&disk_creation_menu[5].title[54],7,"%s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Creation Menu",
         disk_creation_menu, selection);
@@ -1232,7 +1232,7 @@ void trs_gui_disk_creation(void)
             num_sides - 1) + 1;
         break;
       case 2:
-        density = trs_gui_display_popup("Dens.",density_choices,2,
+        density = trs_gui_display_popup("Dens",density_choices,2,
             density - 1) + 1;
         break;
       case 3:
@@ -1244,7 +1244,7 @@ void trs_gui_disk_creation(void)
             ignore_density);
         break;
       case 5:
-        drive_insert = trs_gui_display_popup("Drive",drive_choices,9,
+        drive_insert = trs_gui_display_popup("Disk",drive_choices,9,
             drive_insert);
         break;
       case 6:
@@ -1503,7 +1503,7 @@ void trs_gui_hard_management(void)
   static int granularity = 8;
   static int dir_sector = 1;
   static int drive_insert = 0;
-  char *drive_choices[5] = {"   None","Drive 0","Drive 1","Drive 2","Drive 3"};
+  char *drive_choices[5] = {"  None","Hard 0","Hard 1","Hard 2","Hard 3"};
   char filename[FILENAME_MAX];
   char input[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
@@ -1525,7 +1525,7 @@ void trs_gui_hard_management(void)
     snprintf(&hard_menu[8].title[57],4,"%3d",sector_count);
     snprintf(&hard_menu[9].title[57],4,"%3d",granularity);
     snprintf(&hard_menu[10].title[57],4,"%3d",dir_sector);
-    snprintf(&hard_menu[11].title[53],8,"%7s",drive_choices[drive_insert]);
+    snprintf(&hard_menu[11].title[54],7,"%6s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Hard Disk Menu",
         hard_menu, selection);
@@ -1601,7 +1601,7 @@ void trs_gui_hard_management(void)
         }
         break;
       case 11:
-        drive_insert = trs_gui_display_popup("Drive",drive_choices,5,
+        drive_insert = trs_gui_display_popup("Hard",drive_choices,5,
             drive_insert);
         break;
       case 12:
