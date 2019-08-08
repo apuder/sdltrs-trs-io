@@ -1849,6 +1849,7 @@ void trs_gui_display_management(void)
    {"Border Width                                                ",MENU_NORMAL_TYPE},
    {"Resize Window on Mode Change for Model 3                    ",MENU_NORMAL_TYPE},
    {"Resize Window on Mode Change for Model 4                    ",MENU_NORMAL_TYPE},
+   {"Scale Factor for Window                                     ",MENU_NORMAL_TYPE},
    {"LED Display for Disks and Turbo Mode                        ",MENU_NORMAL_TYPE},
    {"Display Scanlines to simulate old CRT                       ",MENU_NORMAL_TYPE},
    {"",0,}};
@@ -1863,7 +1864,7 @@ void trs_gui_display_management(void)
   char *font34_choices[8] =   {"     katakana",
                                "international",
                                "         bold"};
-
+  char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
   int local_trs_charset1 = trs_charset1;
   int selection = 0;
   int charset1_selection;
@@ -1879,6 +1880,7 @@ void trs_gui_display_management(void)
   int gui_show_led = trs_show_led;
   int gui_resize3 = resize3;
   int gui_resize4 = resize4;
+  int gui_scale = scale_x;
   int gui_scanlines = scanlines;
   int gui_border_width = window_border_width;
 
@@ -1902,8 +1904,9 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[7].title[52],9,"%8d",gui_border_width);
     snprintf(&display_menu[8].title[50],11,"%s",resize_choices[gui_resize3]);
     snprintf(&display_menu[9].title[50],11,"%s",resize_choices[gui_resize4]);
-    snprintf(&display_menu[10].title[55],6,"%s",disk_led_choices[gui_show_led]);
-    snprintf(&display_menu[11].title[50],11,"%s",resize_choices[gui_scanlines]);
+    snprintf(&display_menu[10].title[54],7,"%s",scale_choices[gui_scale - 1]);
+    snprintf(&display_menu[11].title[55],6,"%s",disk_led_choices[gui_show_led]);
+    snprintf(&display_menu[12].title[50],11,"%s",resize_choices[gui_scanlines]);
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu",
         display_menu, selection);
     switch(selection) {
@@ -1977,10 +1980,14 @@ void trs_gui_display_management(void)
             gui_resize4);
         break;
       case 10:
+        gui_scale = trs_gui_display_popup("Scale",scale_choices,4,
+            gui_scale - 1) + 1;
+        break;
+      case 11:
         gui_show_led = trs_gui_display_popup("LED",disk_led_choices,2,
             gui_show_led);
         break;
-      case 11:
+      case 12:
         gui_scanlines = trs_gui_display_popup("Scanlines",resize_choices,2,
             gui_scanlines);
         break;
@@ -2004,6 +2011,7 @@ void trs_gui_display_management(void)
       (gui_show_led != trs_show_led) ||
       (gui_resize3 != resize3) ||
       (gui_resize4 != resize4) ||
+      (gui_scale != scale_x) ||
       (gui_scanlines != scanlines) ||
       (gui_border_width != window_border_width))
   {
@@ -2013,6 +2021,10 @@ void trs_gui_display_management(void)
     trs_show_led = gui_show_led;
     resize3 = gui_resize3;
     resize4 = gui_resize4;
+    if (!fullscreen) {
+      scale_x = gui_scale;
+      scale_y = scale_x*2;
+    }
     scanlines = gui_scanlines;
     window_border_width = gui_border_width;
     trs_screen_init(0);
