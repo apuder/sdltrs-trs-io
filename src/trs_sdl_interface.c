@@ -1688,7 +1688,7 @@ inline void trs_x_flush()
     rect.w = OrigWidth;
     rect.h = scale_y / 2;
 
-    for (y = 0; y < OrigHeight - scale_y * 2; y += scale_y) {
+    for (y = 0; y < OrigHeight - (led_width / 2); y += scale_y) {
       rect.y = y;
       SDL_FillRect(screen, &rect, background);
     }
