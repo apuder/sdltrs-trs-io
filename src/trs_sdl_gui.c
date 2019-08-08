@@ -123,6 +123,7 @@ int jbutton_map[N_JOYBUTTONS]    = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 int jbutton_active[N_JOYBUTTONS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int jaxis_mapped = 0;
 
+extern int scanlines;
 extern void trs_gui_write_char(int position, int char_index, int invert);
 #ifdef SDL2
 extern int trs_sdl_sym2upper(int sym);
@@ -1849,6 +1850,7 @@ void trs_gui_display_management(void)
    {"Resize Window on Mode Change for Model 3                    ",MENU_NORMAL_TYPE},
    {"Resize Window on Mode Change for Model 4                    ",MENU_NORMAL_TYPE},
    {"LED Display for Disks and Turbo Mode                        ",MENU_NORMAL_TYPE},
+   {"Display Scanlines to simulate old CRT                       ",MENU_NORMAL_TYPE},
    {"",0,}};
   char input[FILENAME_MAX];
   char *resize_choices[2] =   {"        No","       Yes"};
@@ -1877,6 +1879,7 @@ void trs_gui_display_management(void)
   int gui_show_led = trs_show_led;
   int gui_resize3 = resize3;
   int gui_resize4 = resize4;
+  int gui_scanlines = scanlines;
   int gui_border_width = window_border_width;
 
   if (local_trs_charset1 == 10)
@@ -1900,6 +1903,7 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[8].title[50],11,"%s",resize_choices[gui_resize3]);
     snprintf(&display_menu[9].title[50],11,"%s",resize_choices[gui_resize4]);
     snprintf(&display_menu[10].title[55],6,"%s",disk_led_choices[gui_show_led]);
+    snprintf(&display_menu[11].title[50],11,"%s",resize_choices[gui_scanlines]);
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu",
         display_menu, selection);
     switch(selection) {
@@ -1976,6 +1980,10 @@ void trs_gui_display_management(void)
         gui_show_led = trs_gui_display_popup("LED",disk_led_choices,2,
             gui_show_led);
         break;
+      case 11:
+        gui_scanlines = trs_gui_display_popup("Scanlines",resize_choices,2,
+            gui_scanlines);
+        break;
       case -1:
         done = 1;
         break;
@@ -1996,6 +2004,7 @@ void trs_gui_display_management(void)
       (gui_show_led != trs_show_led) ||
       (gui_resize3 != resize3) ||
       (gui_resize4 != resize4) ||
+      (gui_scanlines != scanlines) ||
       (gui_border_width != window_border_width))
   {
     trs_charset1 = local_trs_charset1;
@@ -2004,6 +2013,7 @@ void trs_gui_display_management(void)
     trs_show_led = gui_show_led;
     resize3 = gui_resize3;
     resize4 = gui_resize4;
+    scanlines = gui_scanlines;
     window_border_width = gui_border_width;
     trs_screen_init(0);
     trs_gui_clear_screen();

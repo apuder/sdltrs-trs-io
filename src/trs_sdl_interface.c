@@ -118,6 +118,7 @@ int drawnRectCount = 0;
 int resize = 0;
 int resize3 = 1;
 int resize4 = 0;
+int scanlines = 0;
 int trs_paused = 0;
 int mousepointer = 1;
 
@@ -309,6 +310,7 @@ static void trs_opt_selector(char *arg, int intarg, char *stringarg);
 static void trs_opt_le18(char *arg, int intarg, char *stringarg);
 static void trs_opt_lower(char *arg, int intarg, char *stringarg);
 static void trs_opt_sound(char *arg, int intarg, char *stringarg);
+static void trs_opt_scanlines(char *arg, int intarg, char *stringarg);
 
 trs_opt options[] = {
 {"scale",trs_opt_scale,1,0,NULL},
@@ -412,6 +414,8 @@ trs_opt options[] = {
 {"nolower",trs_opt_lower,0,0,NULL},
 {"sound",trs_opt_sound,0,1,NULL},
 {"nosound",trs_opt_sound,0,0,NULL},
+{"scanlines",trs_opt_scanlines,0,1,NULL},
+{"noscanlines",trs_opt_scanlines,0,0,NULL},
 };
 
 static int num_options = sizeof(options)/sizeof(trs_opt);
@@ -577,6 +581,7 @@ int trs_write_config_file(char *filename)
   fprintf(config_file, "%slower\n", lowercase ? "" : "no");
   fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
   fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
+  fprintf(config_file, "%sscanlines\n", scanlines ? "" : "no");
 
   fclose(config_file);
   return 0;
@@ -990,6 +995,11 @@ static void trs_opt_lower(char *arg, int intarg, char *stringarg)
 static void trs_opt_sound(char *arg, int intarg, char *stringarg)
 {
   trs_sound = intarg;
+}
+
+static void trs_opt_scanlines(char *arg, int intarg, char *stringarg)
+{
+  scanlines = intarg;
 }
 
 int trs_load_config_file(char *alternate_file)
@@ -1669,6 +1679,21 @@ inline void trs_x_flush()
 #endif
   if (drawnRectCount == 0)
     return;
+
+  if (scanlines) {
+    SDL_Rect rect;
+    int y;
+
+    rect.x = 0;
+    rect.w = OrigWidth;
+    rect.h = scale_y / 2;
+
+    for (y = 0; y < OrigHeight - scale_y * 2; y += scale_y) {
+      rect.y = y;
+      SDL_FillRect(screen, &rect, background);
+    }
+  }
+
   if (drawnRectCount == MAX_RECTS)
 #ifdef SDL2
     SDL_UpdateWindowSurface(window);
@@ -2138,6 +2163,11 @@ void trs_get_event(int wait)
               case SDLK_u:
                 trs_sound = !trs_sound;
                 trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+                break;
+              case SDLK_y:
+                scanlines = !scanlines;
+                trs_screen_refresh();
+                trs_x_flush();
                 break;
               case SDLK_z:
                 if (!fullscreen)
