@@ -1856,12 +1856,12 @@ void trs_gui_display_management(void)
   char input[FILENAME_MAX];
   char *resize_choices[2] =   {"        No","       Yes"};
   char *disk_led_choices[2] = {" Hide"," Show"};
-  char *font1_choices[8] =    {"      early",
+  char *font1_choices[5] =    {"      early",
                                "      stock",
                                "      lcmod",
                                "      wider",
                                "      genie"};
-  char *font34_choices[8] =   {"     katakana",
+  char *font34_choices[3] =   {"     katakana",
                                "international",
                                "         bold"};
   char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
