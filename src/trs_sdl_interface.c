@@ -2164,6 +2164,12 @@ void trs_get_event(int wait)
                 trs_sound = !trs_sound;
                 trs_screen_caption(trs_timer_is_turbo(), trs_sound);
                 break;
+              case SDLK_x:
+                trs_show_led = !trs_show_led;
+                trs_screen_init(1);
+                trs_screen_refresh();
+                trs_x_flush();
+                break;
               case SDLK_y:
                 scanlines = !scanlines;
                 trs_screen_refresh();
