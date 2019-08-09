@@ -94,34 +94,24 @@ int trs_sdl_sym2upper(int);
 #define BLACK 0
 #define GREEN 0x344843
 
-#define MENU_MOD KMOD_LALT
-
 /* Public data */
-int screen_chars = 1024;
-int row_chars = 64;
-int col_chars = 16;
-int border_width = 2;
 int window_border_width = 2;
 unsigned int foreground = WHITE;
 unsigned int background = 0;
 unsigned int gui_foreground = WHITE;
 unsigned int gui_background = GREEN;
 int trs_show_led = 1;
-int text80x24 = 0, screen640x240 = 0;
 int scale_x = 1;
 int scale_y = 2;
 char romfile[FILENAME_MAX];
 char romfile3[FILENAME_MAX];
 char romfile4p[FILENAME_MAX];
 int fullscreen = 0;
-int drawnRectCount = 0;
 int resize = 0;
 int resize3 = 1;
 int resize4 = 0;
 int scanlines = 0;
 int trs_paused = 0;
-int mousepointer = 1;
-
 char trs_disk_dir[FILENAME_MAX] = "disks";
 char trs_hard_dir[FILENAME_MAX] = "harddisks";
 char trs_cass_dir[FILENAME_MAX] = "cassettes";
@@ -143,6 +133,12 @@ static unsigned char trs_gui_screen[1024];
 static unsigned char trs_gui_screen_invert[1024];
 static unsigned char trs_gui_screen_copy[1024];
 static unsigned char trs_gui_screen_invert_copy[1024];
+static int screen_chars = 1024;
+static int row_chars = 64;
+static int col_chars = 16;
+static int border_width = 2;
+static int text80x24 = 0, screen640x240 = 0;
+static int drawnRectCount = 0;
 static int top_margin = 0;
 static int left_margin = 0;
 static int led_width = 0;
@@ -152,6 +148,12 @@ static int cur_char_width = TRS_CHAR_WIDTH;
 static int cur_char_height = TRS_CHAR_HEIGHT * 2;
 static int disksizes[8] = {5,5,5,5,8,8,8,8};
 static int disksteps[8] = {1,1,1,1,2,2,2,2};
+static int mousepointer = 1;
+static int mouse_x_size = 640, mouse_y_size = 240;
+static int mouse_sens = 3;
+static int mouse_last_x = -1, mouse_last_y = -1;
+static int mouse_old_style = 0;
+static unsigned int mouse_last_buttons;
 static SDL_Surface *trs_char[6][MAXCHARS];
 static SDL_Surface *trs_box[3][64];
 static SDL_Surface *image;
@@ -164,6 +166,7 @@ static Uint32 light_red;
 static Uint32 bright_red;
 static Uint32 light_orange;
 static Uint32 bright_orange;
+static Uint32 last_key[256];
 
 #if defined(SDL2) || !defined(NOX)
 #define PASTE_IDLE    0
@@ -186,7 +189,7 @@ static int selectionStartX = 0;
 static int selectionStartY = 0;
 static int selectionEndX = 0;
 static int selectionEndY = 0;
-int requestSelectAll = FALSE;
+static int requestSelectAll = FALSE;
 #endif
 
 /* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
@@ -194,14 +197,14 @@ int requestSelectAll = FALSE;
 /* True size of graphics memory -- some is offscreen */
 #define G_XSIZE 128
 #define G_YSIZE 256
-char grafyx[(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE)];
-unsigned char grafyx_unscaled[G_YSIZE][G_XSIZE];
+static char grafyx[(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE)];
+static unsigned char grafyx_unscaled[G_YSIZE][G_XSIZE];
 
-unsigned char grafyx_microlabs = 0;
-unsigned char grafyx_x = 0, grafyx_y = 0, grafyx_mode = 0;
-unsigned char grafyx_enable = 0;
-unsigned char grafyx_overlay = 0;
-unsigned char grafyx_xoffset = 0, grafyx_yoffset = 0;
+static unsigned char grafyx_microlabs = 0;
+static unsigned char grafyx_x = 0, grafyx_y = 0, grafyx_mode = 0;
+static unsigned char grafyx_enable = 0;
+static unsigned char grafyx_overlay = 0;
+static unsigned char grafyx_xoffset = 0, grafyx_yoffset = 0;
 
 /* Port 0x83 (grafyx_mode) bits */
 #define G_ENABLE    1
@@ -421,9 +424,7 @@ trs_opt options[] = {
 static int num_options = sizeof(options)/sizeof(trs_opt);
 
 /* Private routines */
-void bitmap_init();
-void trs_event_init();
-void trs_event();
+static void bitmap_init();
 static int call_function(int function);
 
 extern char *program_name;
@@ -1044,9 +1045,8 @@ int trs_load_config_file(char *alternate_file)
     for (i=0;i<num_options;i++) {
       if (strcasecmp(line, options[i].name) == 0) {
         if (options[i].hasArg) {
-          if (arg) {
+          if (arg)
             (*options[i].handler)(arg,options[i].intArg,options[i].strArg);
-          }
         } else
           (*options[i].handler)(NULL,options[i].intArg,options[i].strArg);
         break;
@@ -1081,12 +1081,10 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
     }
     else if (strlen(argv[i]) < 4) {
     }
-    else if (strcmp(&argv[i][strlen(argv[i])-4],".t8c") == 0) {
+    else if (strcmp(&argv[i][strlen(argv[i])-4],".t8c") == 0)
       strcpy(alt_config_file,argv[i]);
-    }
-    else if (strcmp(&argv[i][strlen(argv[i])-4],".t8s") == 0) {
+    else if (strcmp(&argv[i][strlen(argv[i])-4],".t8s") == 0)
       strcpy(init_state_file,argv[i]);
-    }
   }
 
   if (alt_config_file[0] == 0)
@@ -1101,9 +1099,8 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
       if (argv[i][0] == '-') {
         if (strcasecmp(&argv[i][1], options[j].name) == 0) {
           if (options[j].hasArg) {
-            if (argAvail) {
+            if (argAvail)
               (*options[j].handler)(argv[++i],options[j].intArg,options[j].strArg);
-            }
           } else
             (*options[j].handler)(NULL,options[j].intArg,options[j].strArg);
           break;
@@ -1123,9 +1120,8 @@ void trs_disk_setsizes(void)
   unsigned int j;
 
   for (j=0; j<=7; j++) {
-    if (disksizes[j] == 5 || disksizes[j] == 8) {
-            trs_disk_setsize(j, disksizes[j]);
-    }
+    if (disksizes[j] == 5 || disksizes[j] == 8)
+      trs_disk_setsize(j, disksizes[j]);
   }
 }
 
@@ -1134,9 +1130,8 @@ void trs_disk_setsteps(void)
   unsigned int j;
 
   for (j=0; j<=7; j++) {
-    if (disksteps[j] == 1 || disksteps[j] == 2) {
-            trs_disk_setstep(j, disksteps[j]);
-    }
+    if (disksteps[j] == 1 || disksteps[j] == 2)
+      trs_disk_setstep(j, disksteps[j]);
   }
 }
 
@@ -1407,13 +1402,10 @@ void trs_screen_init(int gui_init)
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
-Uint32 last_key[256];
-
 void addToDrawList(SDL_Rect *rect)
 {
-  if (drawnRectCount < MAX_RECTS) {
+  if (drawnRectCount < MAX_RECTS)
     drawnRects[drawnRectCount++] = *rect;
-  }
 }
 
 void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
@@ -1567,9 +1559,8 @@ void ProcessCopySelection(int selectAll)
   if (selectAll) {
     if (copyStatus == COPY_STARTED)
       return;
-    if (copyStatus == COPY_DEFINED || copyStatus == COPY_CLEAR) {
+    if (copyStatus == COPY_DEFINED || copyStatus == COPY_CLEAR)
       DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
-    }
     orig_x = 0;
     orig_y = 0;
     copy_x = end_x = screen->w - scale_x;
@@ -1672,9 +1663,7 @@ inline void trs_x_flush()
 {
 #if defined(SDL2) || !defined(NOX)
   if (!trs_emu_mouse)
-  {
     ProcessCopySelection(requestSelectAll);
-  }
   requestSelectAll = FALSE;
 #endif
   if (drawnRectCount == 0)
@@ -1876,9 +1865,8 @@ void trs_get_event(int wait)
 #endif
   Uint32 keyup;
 
-  if (trs_model > 1) {
+  if (trs_model > 1)
     (void)trs_uart_check_avail();
-  }
 
   trs_x_flush();
 
@@ -1952,14 +1940,14 @@ void trs_get_event(int wait)
             keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
 #if defined(SDL2) || !defined(NOX)
-        if ((keysym.mod & MENU_MOD) == 0) {
+        if ((keysym.mod & KMOD_LALT) == 0) {
           if (copyStatus != COPY_IDLE)
             copyStatus = COPY_CLEAR;
         }
 
         else if (keysym.sym != SDLK_c &&
 #ifdef SDL2
-            keysym.sym != MENU_MOD) {
+            keysym.sym != KMOD_LALT) {
 #else
           keysym.sym != SDLK_LMETA &&
             keysym.sym != SDLK_RMETA) {
@@ -2036,7 +2024,7 @@ void trs_get_event(int wait)
               break;
           }
 #if defined(SDL2) || !defined(NOX)
-          if (keysym.mod & MENU_MOD) {
+          if (keysym.mod & KMOD_LALT) {
             switch (keysym.sym) {
               case SDLK_c:
                 PasteManagerStartCopy(trs_get_copy_data());
@@ -2066,7 +2054,7 @@ void trs_get_event(int wait)
 #endif
 
           /* Trap the menu keys here */
-          if (keysym.mod & MENU_MOD) {
+          if (keysym.mod & KMOD_LALT) {
             switch (keysym.sym) {
               case SDLK_q:
                 trs_exit(1);
@@ -2112,9 +2100,8 @@ void trs_get_event(int wait)
                 call_function(WRITE);
                 break;
               case SDLK_r:
-                if (call_function(READ) == 0) {
+                if (call_function(READ) == 0)
                   trs_screen_init(1);
-                }
                 trs_screen_refresh();
                 trs_x_flush();
                 break;
@@ -2232,12 +2219,10 @@ void trs_get_event(int wait)
               keysym.unicode = (int) keysym.unicode + 0x20;
 #endif
             }
-            if (keysym.sym == SDLK_RSHIFT && trs_model == 1) {
+            if (keysym.sym == SDLK_RSHIFT && trs_model == 1)
               keysym.sym = SDLK_LSHIFT;
-            }
-            if (last_key[keysym.scancode] != 0) {
+            if (last_key[keysym.scancode] != 0)
               trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
-            }
 
 #ifdef SDL2
             /* Convert arrow/control/function/shift keys */
@@ -2279,17 +2264,17 @@ void trs_get_event(int wait)
             break;
 
             case SDL_KEYUP:
-            keysym  = event.key.keysym;
+              keysym  = event.key.keysym;
 #if XDEBUG
-            debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
-                keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
+              debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
+                  keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
-            if (keysym.mod & MENU_MOD)
+              if (keysym.mod & KMOD_LALT)
+                break;
+              keyup = last_key[event.key.keysym.scancode];
+              last_key[event.key.keysym.scancode] = 0;
+              trs_xlate_keysym(0x10000 | keyup);
               break;
-            keyup = last_key[event.key.keysym.scancode];
-            last_key[event.key.keysym.scancode] = 0;
-            trs_xlate_keysym(0x10000 | keyup);
-            break;
 
             case SDL_JOYAXISMOTION:
               if (jaxis_mapped == 1 && (event.jaxis.axis == 0 || event.jaxis.axis == 1)) {
@@ -2354,6 +2339,7 @@ void trs_get_event(int wait)
             case SDL_JOYBUTTONUP:
               if (event.jbutton.button < N_JOYBUTTONS) {
                 int key = jbutton_map[event.jbutton.button];
+
                 if (key >= 0)
                   trs_xlate_keysym(0x10000 | key);
                 else if (key == -1)
@@ -2366,6 +2352,7 @@ void trs_get_event(int wait)
             case SDL_JOYBUTTONDOWN:
               if (event.jbutton.button < N_JOYBUTTONS) {
                 int key = jbutton_map[event.jbutton.button];
+
                 if (key >= 0)
                   trs_xlate_keysym(key);
                 else if (key == -1)
@@ -2446,9 +2433,9 @@ void trs_screen_640x240(int flag)
     cur_char_height = TRS_CHAR_HEIGHT * scale_y;
   }
   screen_chars = row_chars * col_chars;
-  if (resize) {
+  if (resize)
     trs_screen_init(1);
-  } else {
+  else {
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
     top_margin = (TRS_CHAR_HEIGHT4 * scale_y * 24 -
         cur_char_height * col_chars)/2 + border_width;
@@ -2460,9 +2447,8 @@ void trs_screen_640x240(int flag)
 
 void trs_screen_80x24(int flag)
 {
-  if (!grafyx_enable || grafyx_overlay) {
+  if (!grafyx_enable || grafyx_overlay)
     trs_screen_640x240(flag);
-  }
   text80x24 = flag;
 }
 
@@ -2506,7 +2492,7 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
     if (trs_box[expanded][graphics_char])
       SDL_FreeSurface(trs_box[expanded][graphics_char]);
     trs_box[expanded][graphics_char] =
-  SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
+      SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
                            0x00ff0000, 0x0000ff00,0x000000ff,0);
 
     /* Clear everything */
@@ -2545,20 +2531,14 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
 
   /* Read the character data */
   for (j= 0; (unsigned)j< width * height; j += 8)
-  {
     for (i= j + 7; i >= j; i--)
-    {
       *(mypixels + i)= (*(data + (j >> 3)) >> (i - j)) & 1;
-    }
-  }
 
   currdata = mydata;
   /* And prepare our rescaled character. */
-  for (j= 0; (unsigned)j< height * scale_y; j++)
-  {
+  for (j= 0; (unsigned)j< height * scale_y; j++) {
     currpixel = mypixels + ((j/scale_y) * width);
-    for (w= 0; w< width ; w++)
-    {
+    for (w= 0; w< width ; w++) {
       if (*currpixel++ == 0) {
         for (i=0;(unsigned)i<scale_x;i++)
           *currdata++ = background;
@@ -2573,8 +2553,7 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
   free(mypixels);
 
   return(SDL_CreateRGBSurfaceFrom(mydata, width*scale_x, height*scale_y, 32, width*scale_x*4,
-         0x00ff0000, 0x0000ff00,
-         0x000000ff,0));
+         0x00ff0000, 0x0000ff00, 0x000000ff,0));
 }
 
 void bitmap_init(unsigned long foreground, unsigned long background)
@@ -2734,9 +2713,8 @@ void trs_screen_refresh()
       }
     }
   } else {
-    for (i = 0; i < screen_chars; i++) {
+    for (i = 0; i < screen_chars; i++)
       trs_screen_write_char(i, trs_screen[i]);
-    }
   }
 
   if (trs_show_led) {
@@ -2859,15 +2837,13 @@ void trs_screen_write_char(int position, int char_index)
   SDL_Rect srcRect, destRect;
 
   trs_screen[position] = char_index;
-  if (position >= screen_chars) {
+  if (position >= screen_chars)
     return;
-  }
-  if ((currentmode & EXPANDED) && (position & 1)) {
+  if ((currentmode & EXPANDED) && (position & 1))
     return;
-  }
-  if (grafyx_enable && !grafyx_overlay) {
+  if (grafyx_enable && !grafyx_overlay)
     return;
-  }
+
   row = position / row_chars;
   col = position - (row * row_chars);
   destx = col * cur_char_width + left_margin;
@@ -3001,9 +2977,8 @@ void trs_screen_write_char(int position, int char_index)
       TrsSoftBlit(image, &srcRect, screen, &destRect,1);
     }
   }
-  if (hrg_enable) {
+  if (hrg_enable)
     hrg_update_char(position);
-  }
 }
 
 void trs_gui_refresh()
@@ -3019,9 +2994,8 @@ void trs_gui_write_char(int position, int char_index, int invert)
   int row,col,destx,desty;
   SDL_Rect srcRect, destRect;
 
-  if (position >= screen_chars) {
+  if (position >= screen_chars)
     return;
-  }
 
   trs_gui_screen[position] = char_index;
   trs_gui_screen_invert[position] = invert;
@@ -3039,10 +3013,9 @@ void trs_gui_write_char(int position, int char_index, int invert)
   destx = col * cur_char_width + left_margin;
   desty = row * cur_char_height + top_margin;
 
-  if (trs_model == 1 && char_index >= 0xc0) {
+  if (trs_model == 1 && char_index >= 0xc0)
     /* On Model I, 0xc0-0xff is another copy of 0x80-0xbf */
     char_index -= 0x40;
-  }
   if (char_index >= 0x80 && char_index <= 0xbf && !(currentmode & INVERSE)) {
     /* Use graphics character bitmap instead of font */
     srcRect.x = 0;
@@ -3058,9 +3031,8 @@ void trs_gui_write_char(int position, int char_index, int invert)
   } else {
     /* Draw character using a builtin bitmap */
     if (trs_model > 1 && char_index >= 0xc0 &&
-        (currentmode & (ALTERNATE+INVERSE)) == 0) {
+        (currentmode & (ALTERNATE+INVERSE)) == 0)
       char_index -= 0x40;
-    }
     srcRect.x = 0;
     srcRect.y = 0;
     srcRect.w = cur_char_width;
@@ -3124,12 +3096,11 @@ void trs_screen_scroll()
     trs_screen[i-row_chars] = trs_screen[i];
 
   if (grafyx_enable) {
-    if (grafyx_overlay) {
+    if (grafyx_overlay)
       trs_screen_refresh();
-    }
-  } else if (hrg_enable) {
+  } else if (hrg_enable)
     trs_screen_refresh();
-  } else {
+  else {
     srcRect.x = left_margin;
     srcRect.y = cur_char_height+top_margin;
     srcRect.w = cur_char_width*row_chars;
@@ -3194,11 +3165,9 @@ void grafyx_write_byte(int x, int y, char byte)
       exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
       break;
   }
-  for (j=0; j<scale_y; j++) {
-    for (i=0; i<scale_x; i++) {
+  for (j=0; j<scale_y; j++)
+    for (i=0; i<scale_x; i++)
       grafyx[(y*scale_y + j)*imageSize.bytes_per_line + x*scale_x + i] = exp[i];
-    }
-  }
 
   if (grafyx_enable && on_screen) {
     /* Draw new byte */
@@ -3211,11 +3180,10 @@ void grafyx_write_byte(int x, int y, char byte)
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
     addToDrawList(&destRect);
-    if (grafyx_overlay) {
+    if (grafyx_overlay)
       TrsSoftBlit(image, &srcRect, screen, &destRect,1);
-    } else {
+    else
       TrsSoftBlit(image, &srcRect, screen, &destRect,0);
-    }
   }
 }
 
@@ -3255,11 +3223,9 @@ void grafyx_redraw(void)
           exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
           break;
       }
-      for (j=0; j<scale_y; j++) {
-        for (i=0; i<scale_x; i++) {
+      for (j=0; j<scale_y; j++)
+        for (i=0; i<scale_x; i++)
           grafyx[(y*scale_y + j)*imageSize.bytes_per_line + x*scale_x + i] = exp[i];
-        }
-      }
     }
   }
 }
@@ -3278,18 +3244,16 @@ void grafyx_write_data(int value)
 {
   grafyx_write_byte(grafyx_x % G_XSIZE, grafyx_y, value);
   if (!(grafyx_mode & G_XNOCLKW)) {
-    if (grafyx_mode & G_XDEC) {
+    if (grafyx_mode & G_XDEC)
       grafyx_x--;
-    } else {
+    else
       grafyx_x++;
-    }
   }
   if (!(grafyx_mode & G_YNOCLKW)) {
-    if (grafyx_mode & G_YDEC) {
+    if (grafyx_mode & G_YDEC)
       grafyx_y--;
-    } else {
+    else
       grafyx_y++;
-    }
   }
 }
 
@@ -3298,18 +3262,16 @@ int grafyx_read_data()
   int value = grafyx_unscaled[grafyx_y][grafyx_x % G_XSIZE];
 
   if (!(grafyx_mode & G_XNOCLKR)) {
-    if (grafyx_mode & G_XDEC) {
+    if (grafyx_mode & G_XDEC)
       grafyx_x--;
-    } else {
+    else
       grafyx_x++;
-    }
   }
   if (!(grafyx_mode & G_YNOCLKR)) {
-    if (grafyx_mode & G_YDEC) {
+    if (grafyx_mode & G_YDEC)
       grafyx_y--;
-    } else {
+    else
       grafyx_y++;
-    }
   }
   return value;
 }
@@ -3320,16 +3282,13 @@ void grafyx_write_mode(int value)
   unsigned char old_overlay = grafyx_overlay;
 
   grafyx_enable = value & G_ENABLE;
-  if (grafyx_microlabs) {
+  if (grafyx_microlabs)
     grafyx_overlay = (value & G_UL_NOTEXT) == 0;
-  }
   grafyx_mode = value;
   trs_screen_640x240((grafyx_enable && !grafyx_overlay) || text80x24);
   if (old_enable != grafyx_enable ||
-      (grafyx_enable && old_overlay != grafyx_overlay)) {
-
+      (grafyx_enable && old_overlay != grafyx_overlay))
     trs_screen_refresh();
-  }
 }
 
 void grafyx_write_xoffset(int value)
@@ -3337,9 +3296,8 @@ void grafyx_write_xoffset(int value)
   unsigned char old_xoffset = grafyx_xoffset;
 
   grafyx_xoffset = value % G_XSIZE;
-  if (grafyx_enable && old_xoffset != grafyx_xoffset) {
+  if (grafyx_enable && old_xoffset != grafyx_xoffset)
     trs_screen_refresh();
-  }
 }
 
 void grafyx_write_yoffset(int value)
@@ -3347,9 +3305,8 @@ void grafyx_write_yoffset(int value)
   unsigned char old_yoffset = grafyx_yoffset;
 
   grafyx_yoffset = value;
-  if (grafyx_enable && old_yoffset != grafyx_yoffset) {
+  if (grafyx_enable && old_yoffset != grafyx_yoffset)
     trs_screen_refresh();
-  }
 }
 
 void grafyx_write_overlay(int value)
@@ -3399,9 +3356,8 @@ int grafyx_m3_write_byte(int position, int byte)
 
     grafyx_write_byte(x, y, byte);
     return 1;
-  } else {
+  } else
     return 0;
-  }
 }
 
 unsigned char grafyx_m3_read_byte(int position)
@@ -3411,9 +3367,8 @@ unsigned char grafyx_m3_read_byte(int position)
     int y = (position / 64) * 12 + grafyx_y;
 
     return grafyx_unscaled[y][x];
-  } else {
+  } else
     return trs_screen[position];
-  }
 }
 
 int grafyx_m3_active()
@@ -3737,14 +3692,6 @@ hrg_update_char(int position)
     SDL_FillRect(screen, &rect[i], foreground);
 }
 
-
-/*---------- X mouse support --------------*/
-
-int mouse_x_size = 640, mouse_y_size = 240;
-int mouse_sens = 3;
-int mouse_last_x = -1, mouse_last_y = -1;
-int mouse_old_style = 0;
-unsigned int mouse_last_buttons;
 
 void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
 {

@@ -141,7 +141,6 @@ extern int resize;
 extern int resize3;
 extern int resize4;
 extern int stretch_amount;
-extern unsigned char grafyx_microlabs;
 extern int trs_uart_switches;
 extern int trs_show_led;
 extern int window_border_width;

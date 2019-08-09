@@ -65,8 +65,6 @@
 #define MENU_WAFER_BROWSE_TYPE    5
 #define MENU_CASS_BROWSE_TYPE     6
 
-#define MENU_MOD KMOD_ALT
-
 #define CHECK_TIMEOUT (4000)
 #define N_KEYS        (52)
 #define SHIFT         (39)
@@ -195,7 +193,7 @@ void trs_gui_center_text(const char *text, int y, int invert)
   int position = (64-strlen(text))/2 + y * 64;
   int i;
 
-  for (i=0;i<(int) strlen(text);i++)
+  for (i=0;i<(int)strlen(text);i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
 
@@ -326,9 +324,8 @@ void trs_add_extension(char *filename, const char *ext)
   if (flen > elen) {
     if (strcmp(&filename[flen - elen],ext) != 0)
       strcat(filename, ext);
-  } else {
+  } else
     strcat(filename, ext);
-  }
 }
 
 int trs_gui_get_key(void)
@@ -351,8 +348,7 @@ int trs_gui_get_key(void)
          trs_x_flush();
          break;
        case SDL_KEYDOWN:
-         if (event.key.keysym.mod & MENU_MOD)
-         {
+         if (event.key.keysym.mod & KMOD_ALT) {
            switch (event.key.keysym.sym) {
              case SDLK_q:
                trs_exit(2);
@@ -520,6 +516,7 @@ void trs_gui_quicksort(char **start, char **end, int (*sort_function) ())
     char **right = end;
     char *pivot = *start;
     char *tmp;
+
     while (left < right) {
       if ((*sort_function)(*left, pivot) < 0)
         left++;
@@ -574,6 +571,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       stat(pathname, &st);
       if ((st.st_mode & S_IFMT) == S_IFDIR) {
         int dirname_len;
+
         dirname_len = strlen(dir_entry->d_name);
         if ( (filename = (char *) malloc(dirname_len + 3)) ) {
           filename[0] = '<';
@@ -597,9 +595,11 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
     {
       char letter;
       DWORD drive_mask = GetLogicalDrives();
+
       for (letter = 'A'; letter <= 'Z'; letter++) {
         if (drive_mask & 1) {
           static char drive[5] = "[C:]";
+
           drive[1] = letter;
           trs_gui_add_to_filename_list(strdup(drive));
         }
@@ -816,8 +816,8 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
       strcpy(filename, current_dir);
       if (browse_dir) {
         char *new_dir;
-        new_dir = filenamelist[current_first + selection];
 
+        new_dir = filenamelist[current_first + selection];
         if (new_dir[1] != '.' && new_dir[2] != '.') {
 #ifdef _WIN32
           if (new_dir[0] == '[') {
@@ -982,9 +982,8 @@ int trs_gui_display_popup(const char* title, char **entry,
   trs_gui_frame(first_x-1,first_y-1,max_len+2,entry_count+2);
   trs_gui_write_text(title, first_x+1, first_y-1, 0);
 
-  for (num=0;num<entry_count;num++) {
+  for (num=0;num<entry_count;num++)
     trs_gui_write_text(entry[num], first_x, first_y+num,0);
-  }
 
   do {
     trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
@@ -1291,9 +1290,8 @@ void trs_gui_disk_sizes(void)
   int gui_disk_sizes[8];
   int i, choice, size;
 
-  for (i=0;i<8;i++) {
+  for (i=0;i<8;i++)
     gui_disk_sizes[i] = trs_disk_getsize(i);
-  }
 
   while(!done) {
     trs_gui_clear_screen();
@@ -1341,9 +1339,8 @@ void trs_gui_disk_steps(void)
   int gui_disk_steps[8];
   int i, choice, step;
 
-  for (i=0;i<8;i++) {
+  for (i=0;i<8;i++)
     gui_disk_steps[i] = trs_disk_getstep(i);
-  }
 
   while(!done) {
     trs_gui_clear_screen();
@@ -1865,12 +1862,12 @@ void trs_gui_display_management(void)
                                "international",
                                "         bold"};
   char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
-  int local_trs_charset1 = trs_charset1;
-  int selection = 0;
   int charset1_selection;
   int charset3_selection;
   int charset4_selection;
   int done = 0;
+  int selection = 0;
+  int local_trs_charset1 = trs_charset1;
   int local_trs_charset3 = trs_charset3;
   int local_trs_charset4 = trs_charset4;
   unsigned int local_foreground = foreground;
@@ -2013,8 +2010,7 @@ void trs_gui_display_management(void)
       (gui_resize4 != resize4) ||
       (gui_scale != scale_x) ||
       (gui_scanlines != scanlines) ||
-      (gui_border_width != window_border_width))
-  {
+      (gui_border_width != window_border_width)) {
     trs_charset1 = local_trs_charset1;
     trs_charset3 = local_trs_charset3;
     trs_charset4 = local_trs_charset4;
@@ -2512,9 +2508,8 @@ void trs_gui_printer_management(void)
         break;
       case 3:
         strcpy(input,trs_printer_command);
-        if (trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0) == 0) {
+        if (trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0) == 0)
           strcpy(trs_printer_command,input);
-        }
         break;
       case -1:
         done = 1;
@@ -3053,9 +3048,8 @@ int trs_gui_display_popup_matrix(const char* title, char **entry,
   trs_gui_write_text(title, first_x + 1, first_y - 1, 0);
   trs_gui_clear_rect(first_x, first_y, width, rows);
   for (i = 0; i < rows; i++)
-    for (j = 0; j < columns; j++) {
+    for (j = 0; j < columns; j++)
       trs_gui_write_text(entry[i*columns + j], first_x + j*(max_len + 1), first_y + i, 0);
-    }
 
   do {
     selection = row*columns + column;
