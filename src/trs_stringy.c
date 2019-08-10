@@ -20,6 +20,7 @@
 
 #include "error.h"
 #include "trs.h"
+#include "trs_state_save.h"
 #include "trs_stringy.h"
 #include <errno.h>
 #include <string.h>
@@ -537,7 +538,7 @@ stringy_in(int unit)
 
       s->in_port = (s->in_port & ~STRINGY_FLUX) |
 	(s->flux_change_to ? 0 : STRINGY_FLUX);
-      
+
       if (!stringy_flux_read(s, &flux, &delta)) {
 	break;
       }
@@ -576,7 +577,7 @@ stringy_out(int unit, int value)
     debug("stringy state %d -> %d, new pos %ld\n",
 	  old_state, new_state, s->pos);
   }
-#endif  
+#endif
 
   if (old_state == STRINGY_STOPPED &&
       new_state != STRINGY_STOPPED) {
@@ -639,5 +640,81 @@ stringy_out(int unit, int value)
 #if STRINGYDEBUG_OUT
   debug("stringy_out(%d, %d)\n", unit, value);
   s->prev_in_port = -1;
-#endif  
+#endif
+}
+
+static void trs_save_stringy(FILE *file, stringy_info_t *d)
+{
+  int one = 1;
+  int zero = 0;
+
+  if (d->file == NULL)
+     trs_save_int(file, &zero, 1);
+  else
+     trs_save_int(file, &one, 1);
+  trs_save_filename(file, d->name);
+  trs_save_uint64(file, (unsigned long long *)&d->length, 1);
+  trs_save_uint64(file, (unsigned long long *)&d->eotWidth, 1);
+  trs_save_uint64(file, (unsigned long long *)&d->pos, 1);
+  trs_save_uint64(file, (unsigned long long *)&d->pos_time, 1);
+  trs_save_uint64(file, (unsigned long long *)&d->flux_change_pos, 1);
+  trs_save_int(file, &d->flux_change_to, 1);
+  trs_save_uchar(file, &d->in_port, 1);
+  trs_save_uchar(file, &d->out_port, 1);
+  trs_save_uchar(file, &d->format, 1);
+  trs_save_uint64(file, (unsigned long long *)&d->esf_bytelen, 1);
+  trs_save_uint64(file, (unsigned long long *)&d->esf_bytepos, 1);
+  trs_save_uchar(file, &d->esf_bytebuf, 1);
+  trs_save_uchar(file, &d->esf_bitpos, 1);
+}
+
+static void trs_load_stringy(FILE *file, stringy_info_t *d)
+{
+  int file_not_null;
+
+  trs_load_int(file,&file_not_null, 1);
+  if (file_not_null)
+    d->file = (FILE *) 1;
+  else
+    d->file = NULL;
+  trs_load_filename(file, d->name);
+  trs_load_uint64(file, (unsigned long long *)&d->length, 1);
+  trs_load_uint64(file, (unsigned long long *)&d->eotWidth, 1);
+  trs_load_uint64(file, (unsigned long long *)&d->pos, 1);
+  trs_load_uint64(file, (unsigned long long *)&d->pos_time, 1);
+  trs_load_uint64(file, (unsigned long long *)&d->flux_change_pos, 1);
+  trs_load_int(file, &d->flux_change_to, 1);
+  trs_load_uchar(file, &d->in_port, 1);
+  trs_load_uchar(file, &d->out_port, 1);
+  trs_load_uchar(file, &d->format, 1);
+  trs_load_uint64(file, (unsigned long long *)&d->esf_bytelen, 1);
+  trs_load_uint64(file, (unsigned long long *)&d->esf_bytepos, 1);
+  trs_load_uchar(file, &d->esf_bytebuf, 1);
+  trs_load_uchar(file, &d->esf_bitpos, 1);
+}
+
+void trs_stringy_save(FILE *file)
+{
+  int i;
+
+  for (i=0;i<STRINGY_MAX_UNITS;i++)
+    trs_save_stringy(file, &stringy_info[i]);
+}
+
+void trs_stringy_load(FILE *file)
+{
+  int i;
+
+  for (i=0;i<STRINGY_MAX_UNITS;i++) {
+    trs_load_stringy(file, &stringy_info[i]);
+    if (stringy_info[i].file != NULL) {
+      stringy_info[i].file = fopen(stringy_info[i].name,"rb+");
+      if (stringy_info[i].file == NULL) {
+        stringy_info[i].file = fopen(stringy_info[i].name,"rb");
+        stringy_info[i].in_port |= 1 << 0;
+      } else {
+        stringy_info[i].in_port &= ~(1 << 0);;
+      }
+    }
+  }
 }

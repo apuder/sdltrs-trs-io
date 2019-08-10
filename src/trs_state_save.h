@@ -45,6 +45,7 @@ void trs_main_save(FILE *file);
 void trs_cassette_save(FILE *file);
 void trs_disk_save(FILE *file);
 void trs_hard_save(FILE *file);
+void trs_stringy_save(FILE *file);
 void trs_interrupt_save(FILE *file);
 void trs_io_save(FILE *file);
 void trs_mem_save(FILE *file);
@@ -57,6 +58,7 @@ void trs_main_load(FILE *file);
 void trs_cassette_load(FILE *file);
 void trs_disk_load(FILE *file);
 void trs_hard_load(FILE *file);
+void trs_stringy_load(FILE *file);
 void trs_interrupt_load(FILE *file);
 void trs_io_load(FILE *file);
 void trs_mem_load(FILE *file);
@@ -64,5 +66,3 @@ void trs_keyboard_load(FILE *file);
 void trs_uart_load(FILE *file);
 void trs_z80_load(FILE *file);
 void trs_imp_exp_load(FILE *file);
-
-
