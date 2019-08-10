@@ -307,6 +307,7 @@ void
 stringy_change_all(void)
 {
   int i;
+
   for (i = 0; i < STRINGY_MAX_UNITS; i++) {
     stringy_change(i);
   }
@@ -328,7 +329,6 @@ stringy_get_writeprotect(int drive)
 int
 stringy_insert(int drive, const char *name)
 {
-  stringy_remove(drive);
   strcpy(stringy_info[drive].name, name);
   return stringy_change(drive);
 }
@@ -345,7 +345,7 @@ stringy_remove(int drive)
 void
 stringy_init(void)
 {
-  /* Nothing to do */
+  stringy_change_all();
 }
 
 /* Stringy controller hardware reset */

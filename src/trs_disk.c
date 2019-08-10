@@ -462,6 +462,7 @@ trs_disk_init(int poweron)
     }
   }
   trs_hard_init();
+  stringy_init();
   trs_cancel_event();
 
   trs_disk_nocontroller = (trs_model < 5 && disk[0].file == NULL);
