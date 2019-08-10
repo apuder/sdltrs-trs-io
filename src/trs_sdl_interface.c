@@ -2157,6 +2157,10 @@ void trs_get_event(int wait)
                 trs_sound = !trs_sound;
                 trs_screen_caption(trs_timer_is_turbo(), trs_sound);
                 break;
+              case SDLK_x:
+                mousepointer = !mousepointer;
+                SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
+                break;
               case SDLK_y:
                 scanlines = !scanlines;
                 trs_screen_refresh();
