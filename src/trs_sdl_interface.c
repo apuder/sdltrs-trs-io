@@ -90,7 +90,7 @@ int trs_sdl_sym2upper(int);
 #endif
 
 #define MAX_RECTS 2048
-#define WHITE 0xe0e0e0
+#define WHITE 0xe0e0ff
 #define BLACK 0
 #define GREEN 0x344843
 
