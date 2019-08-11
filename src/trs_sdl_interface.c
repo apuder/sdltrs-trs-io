@@ -1163,7 +1163,6 @@ void trs_flip_fullscreen(void)
       screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                 SDL_ANYFORMAT | SDL_FULLSCREEN);
 #endif
-      SDL_ShowCursor(SDL_DISABLE);
     }
   }
   else {
@@ -1184,9 +1183,9 @@ void trs_flip_fullscreen(void)
             SDL_ANYFORMAT);
       SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
 #endif
-      SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
   }
+  SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 }
 
 void trs_rom_init(void)
@@ -1339,8 +1338,7 @@ void trs_screen_init(int gui_init)
      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT | SDL_FULLSCREEN);
 #endif
-     SDL_ShowCursor(SDL_DISABLE);
-}
+  }
   else {
 #ifdef SDL2
      SDL_SetWindowFullscreen(window, 0);
@@ -1350,8 +1348,8 @@ void trs_screen_init(int gui_init)
                                SDL_ANYFORMAT);
      SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
 #endif
-     SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
     }
+  SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
 #ifdef SDL2
   SDL_SetWindowSize(window, OrigWidth, OrigHeight);
