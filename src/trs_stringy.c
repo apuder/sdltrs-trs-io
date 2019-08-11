@@ -31,7 +31,7 @@
 
 #define STRINGYDEBUG_IN 0
 #define STRINGYDEBUG_OUT 0
-#define STRINGYDEBUG_STATE 1
+#define STRINGYDEBUG_STATE 0
 
 /* Input port bits */
 #define STRINGY_WRITE_PROT  0x01
