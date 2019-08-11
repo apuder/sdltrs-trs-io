@@ -31,6 +31,7 @@
   <li><a href="#Emulated_8-inch_floppy_disks">Emulated 8-inch Floppy Disks</a></li>
   <li><a href="#Real_floppy_disks">Real Floppy Disks</a></li>
   <li><a href="#Emulated_hard_disks">Emulated Hard Disks</a></li>
+  <li><a href="#Emulated_stringy_floppy">Emulated Stringy Floppy</a></li>
   <li><a href="#Data_import_and_export">Data Import and Export</a></li>
   <li><a href="#Interrupts">Interrupts</a></li>
   <li><a href="#Processor_speed_selection">Processor Speed Selection</a></li>
@@ -49,12 +50,12 @@
 keyboard and video I/O through a SDL interface. The hardware emulation can
 operate as a TRS-80 Model I, Model III, Model 4, or Model 4P.</p>
 
-<p>SDLTRS supports 48K of RAM in Model I or Model III mode, 128K in Model 4 or
-Model 4P mode. Some memory expansions like Alpha Technology's "SuperMem" and
-"HyperMem", Dave Huffman's (and others), "Selector" from the Dutch TRS-80
-Users Society, are also supported (to a total of 2 MB). Floppy disks and
-hard disks are emulated using files to store the data; or under Linux only,
-real floppy drives can be used.</p>
+<p>SDLTRS supports 48K of RAM in Model I or Model III mode, 128K in Model 4
+or Model 4P mode. Some memory expansions like Alpha Technology's "SuperMem"
+and "HyperMem", Dave Huffman's (and others), "Selector" from the Dutch TRS-80
+Users Society, are also supported (to a total of 2 MB). Floppy disks and hard
+disks are emulated using files to store the data; under Linux only, real
+floppy drives can be used.</p>
 
 <p>A printer is emulated by sending its output to a text file. A serial port
 is emulated using a host serial port. Cassette I/O is emulated using files to
@@ -63,7 +64,7 @@ Though the cassette port, through the Model 4 sound option, and through the
 optional Orchestra-85/90 music synthesizer card are all emulated. In Model I
 mode, the HRG1B graphics card is emulated. The Lowe Electronics LE18 graphics
 adapter is also supported. In Model III and 4/4P mode, you can select whether
-the Radio Shack graphics card or Micro Labs Grafyx Solution is emulated. There
+the Radio Shack Graphics Card or Micro Labs Grafyx Solution is emulated. There
 is also a mouse driver for model 4/4P mode. Several common time-of-day clock
 cards are emulated on all models. The Alpha Products joystick is emulated
 using the numeric keypad, or through a SDL compatible joystick.</p>
@@ -77,15 +78,9 @@ provided for all operating systems.</p>
 
 <p>The Z80 emulator has a debugger called <b>zbx</b>. You can enter the
 debugger either by starting SDLTRS with the <code>-debug</code> flag or by
-pressing <b>F9</b> (<b>Alt-Z</b>) while SDLTRS is running. The debugger runs
+pressing <b>F9</b> or <b>Alt-Z</b> while SDLTRS is running. The debugger runs
 in the command line terminal window that you started SDLTRS from. Once you
 are in the debugger, type <code>help</code> for more information.</p>
-
-<p>Special support in the emulator allows the program to block when waiting
-for information from the keyboard. This will work only for programs that wait
-for keyboard input using the standard Model I/III ROM call; the emulator
-decides whether to block the Z80 program when it tries to read from the
-keyboard memory by pattern-matching its stack.</p>
 
 <h2><a name="Keys"></a><u>Keys</u></h2>
 
@@ -122,11 +117,11 @@ keyboard memory by pattern-matching its stack.</p>
     <td>TRS-80 '0' key (so that a shifted 0 can be obtained)</td>
   </tr>
   <tr>
-    <td><b>F7</b> or <b>Alt-M</b></td>
+    <td><b>F7</b></td>
     <td>Enter Text GUI Main Menu</td>
   </tr>
   <tr>
-    <td><b>F8</b> or <b>Alt-Q</b></td>
+    <td><b>F8</b></td>
     <td>Exit SDLTRS</td>
   </tr>
   <tr>
@@ -134,7 +129,7 @@ keyboard memory by pattern-matching its stack.</p>
     <td>Abort SDLTRS without confirmation</td>
   </tr>
   <tr>
-    <td><b>F9</b> or <b>Alt-Z</b></td>
+    <td><b>F9</b></td>
     <td>Enter the debugger (zbx)</td>
   </tr>
   <tr>
@@ -198,11 +193,11 @@ keyboard memory by pattern-matching its stack.</p>
     <td>TRS-80 Right Shift key (address bit 7, data bit 1)</td>
   </tr>
   <tr>
-    <td><b>End</b> Key</td>
+    <td><b>End</b></td>
     <td>TRS-80 Unused key (address bit 7, data bit 7)</td>
   </tr>
   <tr>
-    <td><b>Insert</b> Key</td>
+    <td><b>Insert</b></td>
     <td>TRS-80 Underscore key (address bit 3, data bit 7)</td>
   </tr>
   <tr>
@@ -210,16 +205,8 @@ keyboard memory by pattern-matching its stack.</p>
     <td>TRS-80 ESC key</td>
   </tr>
   <tr>
-    <td><b>Alt-C</b></td>
-    <td>Copy from TRS-80 Emulator to clipboard</td>
-  </tr>
-  <tr>
-    <td><b>Alt-V</b></td>
-    <td>Paste from clipboard to TRS-80 Emulator</td>
-  </tr>
-  <tr>
-    <td><b>Alt-A</b></td>
-    <td>Select All on TRS-80 Emulator screen</td>
+    <td><b>Alt-Enter</b></td>
+    <td>Switch from Windowed to Fullscreen mode and back</td>
   </tr>
   <tr>
     <td><b>Alt-'+'</b> or <b>Alt-Page Down</b></td>
@@ -230,76 +217,108 @@ keyboard memory by pattern-matching its stack.</p>
     <td>Set windowed mode scaling to next lower size (3x, 2x, 1x and then wraps)</td>
   </tr>
   <tr>
-    <td><b>Alt-Enter</b></td>
-    <td>Switch from Windowed to Fullscreen mode and back.<br>
-  </tr>
-  <tr>
-    <td><b>Alt-D</b> or <b>Alt-F</b></td>
-    <td>Enter Floppy Disk Management GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-H</b></td>
-    <td>Enter Hard Disk Management GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-T</b></td>
-    <td>Enter Cassette (Tape) Management GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-G</b></td>
-    <td>Enter Stringy Floppy Wafer Management GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-E</b></td>
-    <td>Enter Emulator Settings GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-I</b></td>
-    <td>Enter Display Settings GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-J</b></td>
-    <td>Enter Joystick GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-O</b></td>
-    <td>Enter Miscellaneous (Other) Settings GUI</td>
-  </tr>
-  <tr>
-    <td><b>Alt-S</b></td>
-    <td>Save Emulator State</td>
-  </tr>
-  <tr>
-    <td><b>Alt-L</b></td>
-    <td>Load Emulator State</td>
-  </tr>
-  <tr>
-    <td><b>Alt-W</b></td>
-    <td>Write Configuration File</td>
-  </tr>
-  <tr>
-    <td><b>Alt-R</b></td>
-    <td>Read Configuration File</td>
-  </tr>
-  <tr>
-    <td><b>Alt-K</b></td>
-    <td>Show key bindings</td>
-  </tr>
-  <tr>
-    <td><b>Alt-P</b> or <b>Pause</b> key</td>
-    <td>Pause Emulator (and then unpause)</td>
-  </tr>
-  <tr>
-    <td><b>Alt-U</b></td>
-    <td>Toggle Sound Output (mUte/Unmute)</td>
-  </tr>
-  <tr>
     <td><b>Alt-0</b> (or 1,2,3,4,5,6,7)</td>
     <td>Insert Floppy disk into drive N</td>
   </tr>
   <tr>
     <td><b>Shift-Alt-0</b> (or 1,2,3,4,5,6,7)</td>
     <td>Remove Floppy disk from drive N</td>
+  </tr>
+  <tr>
+    <td><b>Alt-A</b></td>
+    <td>Select All on TRS-80 Emulator screen</td>
+  </tr>
+  <tr>
+    <td><b>Alt-B</b></td>
+    <td>Toggle LED Display at bottom of the Emulator screen</td>
+  </tr>
+  <tr>
+    <td><b>Alt-C</b></td>
+    <td>Copy from TRS-80 Emulator to clipboard</td>
+  </tr>
+  <tr>
+    <td><b>Alt-D</b> or <b>Alt-F</b></td>
+    <td>Enter Floppy Disk Management</td>
+  </tr>
+  <tr>
+    <td><b>Alt-E</b></td>
+    <td>Enter Emulator Setting Menu</td>
+  </tr>
+  <tr>
+    <td><b>Alt-G</b></td>
+    <td>Enter Stringy Floppy Wafer Management</td>
+  </tr>
+  <tr>
+    <td><b>Alt-H</b></td>
+    <td>Enter Hard Disk Management</td>
+  </tr>
+  <tr>
+    <td><b>Alt-I</b></td>
+    <td>Enter Display (Interface) setting menu</td>
+  </tr>
+  <tr>
+    <td><b>Alt-J</b></td>
+    <td>Enter Joystick GUI</td>
+  </tr>
+  <tr>
+    <td><b>Alt-K</b></td>
+    <td>Show key bindings</td>
+  </tr>
+  <tr>
+    <td><b>Alt-L</b></td>
+    <td>Load Emulator State</td>
+  </tr>
+  <tr>
+    <td><b>Alt-M</b></td>
+    <td>Enter Text GUI Main Menu</td>
+  </tr>
+  <tr>
+    <td><b>Alt-O</b></td>
+    <td>Enter Miscellaneous (Other) Settings</td>
+  </tr>
+  <tr>
+    <td><b>Alt-P</b> or <b>Pause</b></td>
+    <td>Pause Emulator (and then unpause)</td>
+  </tr>
+  <tr>
+    <td><b>Alt-Q</b></td>
+    <td>Exit SDLTRS</td>
+  </tr>
+  <tr>
+    <td><b>Alt-R</b></td>
+    <td>Read Configuration File</td>
+  </tr>
+  <tr>
+    <td><b>Alt-S</b></td>
+    <td>Save Emulator State</td>
+  </tr>
+  <tr>
+    <td><b>Alt-T</b></td>
+    <td>Enter Cassette (Tape) Management</td>
+  </tr>
+  <tr>
+    <td><b>Alt-U</b></td>
+    <td>Toggle Sound Output (mUte/Unmute)</td>
+  </tr>
+  <tr>
+    <td><b>Alt-V</b></td>
+    <td>Paste from clipboard to TRS-80 Emulator</td>
+  </tr>
+  <tr>
+    <td><b>Alt-W</b></td>
+    <td>Write Configuration File</td>
+  </tr>
+  <tr>
+    <td><b>Alt-X</b></td>
+    <td>Show or hide the mouse pointer in the Emulator window</td>
+  </tr>
+  <tr>
+    <td><b>Alt-Y</b></td>
+    <td>Switch Scanlines in the Emulator window on or off</td>
+  </tr>
+  <tr>
+    <td><b>Alt-Z</b></td>
+    <td>Enter the debugger (zbx)</td>
   </tr>
 </table>
 
@@ -378,8 +397,7 @@ both single and double density.</p>
 inserted into the emulated drives with command line options or text GUI
 controls. If the user does not have write permission for a floppy file,
 and/or the file has an internal write protect flag set, a write-protect tab
-is emulated. Use the mkdisk(1) program to turn the write protect flag on or
-off.</p>
+is emulated. The write protect flag can be changed in the Text GUI.</p>
 
 <p>If you try to boot an emulated Model I, III, or 4 with no emulated disk
 (that is, no disk in drive 0), SDLTRS emulates having no floppy disk
@@ -503,12 +521,12 @@ than one 8-inch drive. You might want to repeat four times using 4, 5, 6, and
 7, or you might want to save some drive numbers for hard drives (see
 below).</p>
 
-<p>Finally, it's a good idea to give the SYSTEM (SYSGEN) command (Model
-I/III) or SYSGEN command (Model 4/4P). This command saves the SYSTEM
-settings, so the 8-inch drives will be available again the next time you
-reboot or restart the emulator. If you need to access an 8-inch drive after
-booting from a disk that hasn't been SYSGENed, simply use the same SYSTEM
-command again.</p>
+<p>Finally, it's a good idea to give the <code>SYSTEM (SYSGEN)</code> command
+(Model I/III) or <code>SYSGEN</code> command (Model 4/4P). This command saves
+the SYSTEM settings, so the 8-inch drives will be available again the next
+time you reboot or restart the emulator. If you need to access an 8-inch
+drive after booting from a disk that hasn't been SYSGENed, simply use the
+same SYSTEM command again.</p>
 
 <p>In case you want to write your own driver for another TRS-80 operating
 system, here are details on the emulated pseudo-hardware. The 8-inch drives
@@ -603,9 +621,9 @@ line option or the Text GUI.</p>
 <p>Third, make sure an appropriate version of LDOS is in emulated floppy
 drive 0, and the supplied file utility.dsk is in another emulated floppy
 drive. Boot LDOS. If you are using Model I LDOS 5.3.1, patch a bug in the
-FORMAT command by typing PATCH FORMAT/CMD.UTILITY M1FOR- MAT/FIX. You need to
-apply this patch only once. It must not be applied to Model III or Model 4/4P
-LDOS.</p>
+FORMAT command by typing <code>PATCH FORMAT/CMD.UTILITY M1FORMAT/FIX</code>.
+You need to apply this patch only once. It must not be applied to Model III
+or Model 4/4P LDOS.</p>
 
 <p>Fourth, type the following commands. Here <code>d</code> is the LDOS drive
 number you want to use for the hard drive (a typical choice would be 4) and
@@ -659,15 +677,31 @@ command line option or the Text GUI.</p>
 <p>Note that if hard drive unit 0 is loaded on a Model 4P, the Radio Shack
 boot ROM will always try to boot from it, even if the operating system does
 not support booting from a hard drive. If you have this problem, either hold
-down F2 while booting to force the ROM to boot from floppy, or simply avoid
-using unit number 0. Stock TRSDOS/LS-DOS 6 systems do not support booting
-from a hard drive; M.A.D. Software's HBUILD6 add-on to LS-DOS for hard drive
-booting should work, but is untested. Montezuma CP/M 2.2 does boot from the
-emulated hard drive.</p>
+down <b>F2</b> while booting to force the ROM to boot from floppy, or simply
+avoid using unit number 0. Stock TRSDOS/LS-DOS 6 systems do not support
+booting from a hard drive; M.A.D. Software's HBUILD6 add-on to LS-DOS for
+hard drive booting should work, but is untested. Montezuma CP/M 2.2 does boot
+from the emulated hard drive.</p>
 
 <p>Finally, obtain the correct driver for the operating system you will be
 using, read its documentation, configure the driver, and format the drive.
 Detailed instructions are beyond the scope of this manual page.</p>
+
+<h2><a name="Emulated_stringy_floppy"></a><u>Emulated Stringy Floppy</u></h2>
+
+<p>SDLTRS can emulate up to 7 drives for the Exatron Stringy Floppy (ESF) in
+Model I mode. The emulation can be activated with the <code>-stringy</code>
+option on the command line or in the "Emulator Settings Menu". The built-in
+ROM for ESF will be loaded. To initialize the ESF firmware in BASIC, type:</p>
+
+<pre><code>
+  SYSTEM
+
+  *? /12345
+</code></pre>
+
+<p>and press <b>Enter</b>. Stringy Floppys (Wafers) can be inserted into a
+drive using the "Stringy Wafer Management" with <b>Alt-G</b>.</p>
 
 <h2><a name="Data_import_and_export"></a><u>Data import and export</u></h2>
 
@@ -679,7 +713,7 @@ host files, discussed further at the end of this section.</p>
 <p>The emulated floppy <code>utility.dsk</code> contains some programs for
 transferring data between the emulator and ordinary Unix files. IMPORT/CMD,
 IMPORT/BAS, EXPORT/CMD, EXPORT/BAS, and SETTIME/CMD run on the emulator under
-Model I/III TRSDOS, Model I/III LDOS, Model I/III Newdos/80, and Model 4/4P
+Model I/III TRSDOS, Model I/III LDOS, Model I/III NEWDOS/80, and Model 4/4P
 TRSDOS/LS-DOS 6; they may also work under other TRS-80 operating systems.
 Model III TRSDOS users will have to use TRSDOS's CONVERT command to read
 <code>utility.dsk</code>.</p>
@@ -800,7 +834,7 @@ than the emulator traps.</p>
 
 <p>The emulator supports only interrupt mode 1 of the Z80. It will complain if
 your program enables interrupts after powerup without executing an IM 1
-instructionfirst. All Model I/III/4/4P software does this, as the built-in
+instruction first. All Model I/III/4/4P software does this, as the built-in
 peripherals in these machines support only IM 1.</p>
 
 <p>The Model I has a 40 Hz heartbeat clock interrupt, while the Model III
@@ -845,14 +879,14 @@ as on an unmodified Model I and generate better sound.</p>
 
 <p>A few Model 4 programs could use a mouse, such as the shareware hi-res
 drawing program MDRAW-II. The program XTRSMOUS/CMD on the utility disk
-(utility.dsk) is a mouse driver for Model 4/4P mode that should work with
-most such programs. SDLTRS does not emulate the actual mouse hard- ware (a
-serial mouse plugged into the Model 4 RS-232 port), so the original mouse
-drivers will not work under SDLTRS. Instead, XTRSMOUS accesses the host mouse
-pointer using an emulator trap. XTRSMOUS implements the same TRSDOS/LS-DOS 6
-SVC interface as the David Goben and Matthew Reed mouse drivers. (It does not
-implement the interface of the older Scott McBurney mouse driver, which may
-be required by some programs.)</p>
+(<code>utility.dsk</code>) is a mouse driver for Model 4/4P mode that should
+work with most such programs. SDLTRS does not emulate the actual mouse
+hardware (a serial mouse plugged into the Model 4 RS-232 port), so the
+original mouse drivers will not work under SDLTRS. Instead, XTRSMOUS accesses
+the host mouse pointer using an emulator trap. XTRSMOUS implements the same
+TRSDOS/LS-DOS 6 SVC interface as the David Goben and Matthew Reed mouse
+drivers. (It does not implement the interface of the older Scott McBurney
+mouse driver, which may be required by some programs.)</p>
 
 <p>By default XTRSMOUS installs itself in high memory. This is done because
 MDRAW-II tests for the presence of a mouse by looking to see whether the
@@ -937,8 +971,9 @@ that has been saved.</p>
 <h2><a name="LED_Indicators"></a><u>LED Indicators</u></h2>
 
 <p>SDLTRS provides optional LED indicators at the bottom of the emulated
-screen. You can turn these off with the <code>-showled</code> and
-<code>-hideled</code> options, or through the Text GUI.</p>
+screen. You can turn these on or off with the <code>-showled</code> and
+<code>-hideled</code> options, through "Display Settings" in the Text GUI,
+or with the <b>Alt-B</b> key binding.</p>
 
 <p>The following picture illustrates the LED's:</p>
 
@@ -949,7 +984,7 @@ and in this case the first drive is active, and the other seven are not. The
 LED's for the 4 hard drives are on the right bottom of the screen, and in
 this case none of the drives are active.</p>
 
-<p>The LED in the middle illuminates orange on active Turbo Mode.</p>
+<p>The LED in the middle lights up orange on active Turbo Mode.</p>
 
 </body>
 </html>

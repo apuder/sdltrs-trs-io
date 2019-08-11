@@ -37,15 +37,15 @@ and that state will be restored upon startup of the emulator.</p>
 <table align="center" border="1" cellpadding="10" cellspacing="0">
   <tr>
     <td><code>-background color</code></td>
-    <td>Specifies the background color of the SDLTRS window.
+    <td>Specifies the background color of the SDLTRS emulator window.
         Format is <code>0xRRGGBB</code>, where <code>RR</code>, <code>GG
-        </code> and <code>BB</code> are the hex values of the Red, Greeen,
+        </code> and <code>BB</code> are the hex values of the Red, Green,
         and Blue components. Default is black (<code>0x000000</code>).</td>
   </tr>
   <tr>
     <td><code>-foreground color</code></td>
-    <td>Specifies the foreground color of the SDLTRS window.
-        Default is white (<code>0xe0e0e0</code>).</td>
+    <td>Specifies the foreground color of the SDLTRS emulator window.
+        Default is white (<code>0xE0E0FF</code>).</td>
   </tr>
   <tr>
     <td><code>-guibackground color</code></td>
@@ -55,7 +55,7 @@ and that state will be restored upon startup of the emulator.</p>
   <tr>
     <td><code>-guiforeground color</code></td>
     <td>Specifies the foreground color of the SDLTRS text based GUI window.
-        Default is white (<code>0xe0e0e0</code>).</td>
+        Default is white (<code>0xE0E0FF</code>).</td>
   </tr>
   <tr>
     <td><code>-borderwidth width</code></td>
@@ -65,7 +65,7 @@ and that state will be restored upon startup of the emulator.</p>
   <tr>
     <td><code>-scale factor</code></td>
     <td>Scale the emulator window by factor times.
-        Valid values for factor are 1,2,3, and 4. Default is 1.</td>
+        Valid values for factor are 1,2,3 and 4. Default is 1.</td>
   </tr>
   <tr>
     <td><code>-scale1<br>
@@ -102,11 +102,31 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-showled</code></td>
-    <td>Show disk activity and Turbo LED at bottom of emulator screen.</td>
+    <td>Show disk activity and Turbo LED at bottom of the emulator screen.
+        This is the default, but can be toggled with <b>Alt-B</b>.</td>
   </tr>
   <tr>
     <td><code>-hideled</code></td>
-    <td>Hide disk activity and Turbo LED at bottom of emulator screen.</td>
+    <td>Hide disk activity and Turbo LED at bottom of the emulator screen.</td>
+  </tr>
+  <tr>
+    <td><code>-mousepointer</code></td>
+    <td>Show mouse pointer in the emulator window.
+        This is the default, but can be toggled with <b>Alt-X</b>.</td>
+  </tr>
+  <tr>
+    <td><code>-nomousepointer</code></td>
+    <td>Hide mouse pointer in the emulator window.</td>
+  </tr>
+  <tr>
+    <td><code>-scanlines</code></td>
+    <td>Fill every second line of the emulator screen with the background
+        color: this should very roughly simulate an old CRT monitor.</td>
+  </tr>
+  <tr>
+    <td><code>-noscanlines</code></td>
+    <td>No scanlines in the emulator screen.
+        This is the default, but can be toggled with <b>Alt-Y</b>.</td>
   </tr>
   <tr>
     <td><code>-charset1 name<br>
@@ -206,7 +226,7 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-nomicrolabs</code></td>
-    <td>In Model I mode, emulate the HRG1B 384x192 hi-res graphics card.
+    <td>In Model I mode, emulate the HRG1B 384x192 Hi-Res graphics card.
         In Model III mode or Model 4/4P mode, emulate the Radio Shack Hi-Res
         card. This is now the default.</td>
   </tr>
@@ -278,7 +298,7 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-cassdir dir</code></td>
-    <td>Specify the directory containing cassette images.
+    <td>Specify the directory containing cassette and stringy wafer images.
         The default value is ".".</td>
   </tr>
   <tr>
@@ -300,7 +320,7 @@ and that state will be restored upon startup of the emulator.</p>
   <tr>
     <td><code>-printercmd "cmd"</code></td>
     <td>Specify the command to be executed when the printer device is closed.
-        On Linux, this defaults to <code>"lpr %s"</code>, on Windows
+        On Linux, this defaults to <code>"lpr %s"</code>, on Windows to
         <code>"notepad %s"</code>. The <code>%s</code> in the printer command
         will be replaced with the name of the printer output file.</td>
   </tr>
@@ -420,7 +440,7 @@ and that state will be restored upon startup of the emulator.</p>
   <tr>
     <td><code>-noturbo</code></td>
     <td>Switch "Turbo" mode off. The emulator will run at the original speed
-        of the selected TRS-80 Model. This is the default but can be toggled
+        of the selected TRS-80 Model. This is the default, but can be toggled
         with the <B>F11</B> key in the emulator.</td>
   </tr>
   <tr>
@@ -432,8 +452,8 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-sound</code></td>
-    <td>Enable Sound Output. Can be toggled with <B>Alt-U</B> in the emulator.
-        This is the default.</td>
+    <td>Enable Sound Output. This is the default, but can be toggled with
+        <B>Alt-U</B> in the emulator.</td>
   </tr>
   <tr>
     <td><code>-nosound</code></td>

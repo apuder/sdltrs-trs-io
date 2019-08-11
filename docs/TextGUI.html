@@ -244,7 +244,7 @@ create new wafer images with default parameters.</p>
 
 <h3>Exatron Stringy Floppy:</h3>
 
-<p>Emulates up to 7 Stringy Floppy Wafers for the TRS-80 Model I.</p>
+<p>Emulates up to 7 Stringy Floppy Drives for the TRS-80 Model I.</p>
 
 <h3>Graphics Emulations:</h3>
 
@@ -345,13 +345,13 @@ section above.</p>
 <h3>Emulator Colors:</h3>
 
 <p>Specifies the foreground and background color of the SDLTRS window.
-Default is white (<code>0xE0E0E0</code>) for foreground and black
+Default is white (<code>0xE0E0FF</code>) for foreground and black
 (<code>0x000000</code>) for background.</p>
 
 <h3>GUI Colors:</h3>
 
 <p>Specifies the foreground and background color of the fullscreen Text GUI.
-Default is white (<code>0x0E0E0E</code>) for foreground and dark green
+Default is white (<code>0xE0E0FF</code>) for foreground and dark green
 (<code>0x344843</code>) for background.</p>
 
 <h3>Character Sets:</h3>
@@ -381,7 +381,7 @@ and a few early machines were actually shipped with this ROM. Finally,
 German Model I clone. Characters are 8 pixels wide, and double width is
 supported even though later GENIE models did not include it.</p>
 
-<p>In Model III , 4 and 4P ( modes, three sets are available:</p>
+<p>In Model III, 4 and 4P modes, three sets are available:</p>
 
 <p><b>katakana</b> (the default for Model III) is the original Model III set
 with Japanese Katakana characters in the alternate character positions. This
@@ -408,10 +408,23 @@ graphics).</p>
 changes between 64x16 text (or 512x192 graphics) and 80x24 text (or 640x240
 graphics).</p>
 
+<h3>Scale Factor for Window:</h3>
+
+<p>This options allows scaling of the SDLTRS window by the selected factor:
+"none", "2 x", "3 x" or "4 x".<p>
+
+<p><b>Note:</b> Scaling the window in fullscreen mode is not possible.</p>
+
 <h3>LED Display for Disks and Turbo Mode:</h3>
 
 <p>This option allows the user to chose if disk activity indicators and
 Turbo Mode LED are shown in the TRS-80 Emulator window (lower edge).</p>
+
+<h3>Display Scanlines to simulate old CRT:</h3>
+
+<p>This option fills every second line of the emulator screen with the
+background color to roughly simulate the pixel resolution of an old CRT
+monitor.</p>
 
 <h2><a name="Joystick_Settings"></a><u>Joystick Settings Menu</u></h2>
 
@@ -491,9 +504,8 @@ bit.</p>
 
 <h3>Serial Port Name:</h3>
 
-<p>Set the tty device to be used for I/O to the TRS-80's serial port. The
-default is "". Setting the name to be empty emulates having no serial
-port.</p>
+<p>Set the tty device to be used for I/O to the TRS-80's serial port. Setting
+the name to be empty emulates having no serial port.</p>
 
 </body>
 </html>
