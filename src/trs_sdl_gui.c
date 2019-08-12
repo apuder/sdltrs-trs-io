@@ -2894,25 +2894,25 @@ int trs_gui_load_state(void)
 
 void trs_gui_save_or_load_single_state(int save)
 {
-  char filename[FILENAME_MAX], *ptr, text[62];
-  int answer;
+  char filename[FILENAME_MAX], *ptr, text[24];
   FILE *file;
 
   strcpy(filename, trs_config_file);
-  ptr = strchr(filename, '.');
+  ptr = strrchr(filename, '.');
   if (ptr != NULL)
     *ptr = '\0';
   strcat(filename, ".t8s");
+#ifdef _WIN32
+  ptr = strrchr(filename, '\\');
+#else
+  ptr = strrchr(filename, '/');
+#endif
   file = fopen(filename, "r");
-  if (save) {
-    if (file)
-      sprintf(text, "Overwrite State?");
-    else
-      sprintf(text, "Save State?");
-  }
+  if (save)
+    snprintf(text, 22, "Save %s?", ptr != NULL ? ptr + 1 : filename);
   else {
     if (file)
-      sprintf(text, "Load State?");
+      snprintf(text, 22, "Load %s?", ptr != NULL ? ptr + 1 : filename);
     else {
       trs_gui_display_message("Error", "No Saved State");
       return;
@@ -2920,8 +2920,7 @@ void trs_gui_save_or_load_single_state(int save)
   }
   if (file)
     fclose(file);
-  answer = trs_gui_display_question(text);
-  if (answer == 1)
+  if (trs_gui_display_question(text) == 1)
     save ? trs_state_save(filename) : trs_state_load(filename);
 }
 
