@@ -2109,12 +2109,12 @@ void trs_gui_joystick_unmap_button(void)
 
 void trs_gui_joystick_unmap_all_buttons(void)
 {
-  int answer, i;
+  if (trs_gui_display_question("Are You Sure?") == 1) {
+    int i;
 
-  answer = trs_gui_display_question("Are You Sure?");
-  if (answer == 1)
     for (i = 0; i < N_JOYBUTTONS; i++)
       jbutton_map[i] = -1;
+ }
 }
 
 void trs_gui_joystick_display_map(int show_active)
