@@ -120,7 +120,7 @@ char trs_state_dir[FILENAME_MAX] = "savedstates";
 char trs_printer_dir[FILENAME_MAX] = "printer";
 char trs_config_file[FILENAME_MAX];
 char init_state_file[FILENAME_MAX];
-char trs_printer_command[256];
+char trs_printer_command[FILENAME_MAX];
 int trs_charset = 3;
 int trs_charset1 = 3;
 int trs_charset3 = 4;
