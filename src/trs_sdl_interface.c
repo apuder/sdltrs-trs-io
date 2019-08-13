@@ -1003,16 +1003,14 @@ static void trs_opt_scanlines(char *arg, int intarg, char *stringarg)
   scanlines = intarg;
 }
 
-int trs_load_config_file(char *alternate_file)
+int trs_load_config_file()
 {
   char line[FILENAME_MAX];
   char *arg;
   FILE *config_file;
   int i;
 
-  if (alternate_file)
-    strcpy(trs_config_file,alternate_file);
-  else
+  if (trs_config_file[0] == 0)
 #ifdef _WIN32
     snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
 #else
@@ -1062,12 +1060,11 @@ int trs_load_config_file(char *alternate_file)
 int trs_parse_command_line(int argc, char **argv, int *debug)
 {
   int i,j;
-  char alt_config_file[FILENAME_MAX];
 
   title = program_name; /* default */
 
   /* Check for config or state files on the command line */
-  alt_config_file[0] = 0;
+  trs_config_file[0] = 0;
   init_state_file[0] = 0;
   for (i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
@@ -1082,15 +1079,12 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
     else if (strlen(argv[i]) < 4) {
     }
     else if (strcmp(&argv[i][strlen(argv[i])-4],".t8c") == 0)
-      strcpy(alt_config_file,argv[i]);
+      strcpy(trs_config_file,argv[i]);
     else if (strcmp(&argv[i][strlen(argv[i])-4],".t8s") == 0)
       strcpy(init_state_file,argv[i]);
   }
 
-  if (alt_config_file[0] == 0)
-    trs_load_config_file(NULL);
-  else
-    trs_load_config_file(alt_config_file);
+  trs_load_config_file();
 
   for (i = 1; i < argc; i++) {
     int argAvail = ((i + 1) < argc); /* is argument available? */

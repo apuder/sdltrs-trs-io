@@ -2815,13 +2815,12 @@ void trs_gui_write_config(void)
 
 int trs_gui_read_config(void)
 {
-  char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
 
   trs_expand_dir(".",browse_dir);
-  if (trs_gui_file_browse(browse_dir, filename, ".t8c", 0," Configuration (.t8c) ") == -1)
+  if (trs_gui_file_browse(browse_dir, trs_config_file, ".t8c", 0," Configuration (.t8c) ") == -1)
     return -1;
-  trs_load_config_file(filename);
+  trs_load_config_file();
   trs_gui_new_machine();
   return 0;
 }

@@ -97,7 +97,7 @@ extern int trs_emtsafe;
 
 extern int trs_parse_command_line(int argc, char **argv, int *debug);
 extern int trs_write_config_file(char *filename);
-extern int trs_load_config_file(char *alternate_file);
+extern int trs_load_config_file(void);
 
 extern void trs_screen_init(int gui_init);
 extern void screen_init();
