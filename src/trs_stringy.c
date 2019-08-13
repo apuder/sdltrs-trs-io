@@ -140,24 +140,25 @@ stringy_create_with(const char *name,
 		   (stringy_pos_t)lengthBytes * STRINGY_CELL_WIDTH * 8,
 		   (stringy_pos_t)eotCells * STRINGY_CELL_WIDTH,
 		   writeProt);
-    if (ires < 0) return errno;
+    if (ires < 0) goto error;
     break;
 
   case STRINGY_FMT_ESF:
     sres = fwrite(stringy_esf_magic, sizeof(stringy_esf_magic), 1, f);
-    if (sres < 1) return errno;
+    if (sres < 1) goto error;
     ires = fputc(stringy_esf_header_length, f);
-    if (ires < 0) return errno;
+    if (ires < 0) goto error;
     ires = fputc(writeProt ? stringy_esf_write_protected : 0, f);
-    if (ires < 0) return errno;
+    if (ires < 0) goto error;
     ires = put_twobyte(eotCells, f);
-    if (ires < 0) return errno;
+    if (ires < 0) goto error;
     ires = put_fourbyte(lengthBytes, f);
-    if (ires < 0) return errno;
+    if (ires < 0) goto error;
     break;
 
   default:
     error("unknown wafer image type on write");
+    fclose(f);
     return -1;
   }
 
@@ -165,6 +166,10 @@ stringy_create_with(const char *name,
   if (ires < 0) return errno;
 
   return 0;
+
+error:
+  fclose(f);
+  return errno;
 }
 
 /*
