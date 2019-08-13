@@ -1013,14 +1013,14 @@ int trs_load_config_file(char *alternate_file)
   if (alternate_file)
     strcpy(trs_config_file,alternate_file);
   else
-#ifdef __linux
+#ifdef _WIN32
+    snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
+#else
     {
       const char *home = getenv("HOME");
 
       snprintf(trs_config_file, FILENAME_MAX-1, "%s/sdltrs.t8c", home);
     }
-#else
-    snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
 #endif
 
   trs_set_to_defaults();
