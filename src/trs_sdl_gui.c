@@ -143,7 +143,7 @@ static int trs_gui_filename_cmp(const char *name1, const char *name2);
 static void trs_gui_quicksort(char **start, char **end, int (*sort_function) ());
 static void trs_gui_delete_filename_list(void);
 static int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir);
-static int trs_gui_input_string(const char *title, char* input, char* output,
+static int trs_gui_input_string(const char *title, const char *input, char* output,
                                 unsigned int limit, int file);
 static int trs_gui_display_popup(const char* title, char **entry,
                                  int entry_count, int selection);
@@ -615,7 +615,8 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
   return(-1);
 }
 
-int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, char* type)
+int trs_gui_file_browse(const char* path, char* filename, const char *mask,
+                        int browse_dir, const char* type)
 {
   char current_dir[FILENAME_MAX];
   char limited_dir[64];
@@ -848,7 +849,8 @@ int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, 
       return(current_first + selection);
   }
 
-int trs_gui_input_string(const char *title, char* input, char* output, unsigned int limit, int file)
+int trs_gui_input_string(const char *title, const char* input, char* output,
+                         unsigned int limit, int file)
 {
   char directory_name[FILENAME_MAX];
   int key,ret_code=0;

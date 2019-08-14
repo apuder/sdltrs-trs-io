@@ -53,7 +53,8 @@ extern int jaxis_mapped;
 
 void trs_expand_dir(char *dir, char *expanded_dir);
 void trs_gui_display_pause(void);
-int  trs_gui_file_browse(char* path, char* filename, char* mask, int browse_dir, char* type);
+int  trs_gui_file_browse(const char* path, char* filename, const char* mask,
+                         int browse_dir, const char* type);
 void trs_gui_disk_management(void);
 void trs_gui_hard_management(void);
 void trs_gui_stringy_management(void);
