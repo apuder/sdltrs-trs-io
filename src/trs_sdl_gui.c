@@ -74,7 +74,7 @@ static int filenamecount = 0;
 static int filenamelistsize = 0;
 
 typedef struct menu_entry_type {
-  char title[80];
+  char title[64];
   int type;
 } MENU_ENTRY;
 
@@ -618,7 +618,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
 int trs_gui_file_browse(char* path, char* filename, char *mask, int browse_dir, char* type)
 {
   char current_dir[FILENAME_MAX];
-  char limited_dir[80];
+  char limited_dir[64];
   char title[64];
   char *new_dir;
   int i,key;
