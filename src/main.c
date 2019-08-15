@@ -71,7 +71,7 @@ static void check_endian()
     fatal("Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.");
 }
 
-int trs_load_rom(char *filename)
+int trs_load_rom(const char *filename)
 {
   FILE *program;
   int c;

@@ -96,7 +96,7 @@ extern int trs_io_debug_flags;
 extern int trs_emtsafe;
 
 extern int trs_parse_command_line(int argc, char **argv, int *debug);
-extern int trs_write_config_file(char *filename);
+extern int trs_write_config_file(const char *filename);
 extern int trs_load_config_file(void);
 
 extern void trs_screen_init(int gui_init);
@@ -178,7 +178,7 @@ extern unsigned char trs_rom4p[];
 extern unsigned char trs_romesf[];
 
 extern void trs_load_compiled_rom(int size, unsigned char rom[]);
-extern int trs_load_rom(char *filename);
+extern int trs_load_rom(const char *filename);
 
 extern unsigned char trs_interrupt_latch_read(void);
 extern unsigned char trs_nmi_latch_read(void);

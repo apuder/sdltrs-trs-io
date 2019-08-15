@@ -133,7 +133,7 @@ static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
-static int trs_remove_dir(char *file, char *dir);
+static int trs_remove_dir(const char *file, char *dir);
 static void trs_add_extension(char *filename, const char *ext);
 static int trs_gui_get_key(void);
 static void trs_gui_display_message(const char *title, const char *message);
@@ -297,7 +297,7 @@ void trs_expand_dir(char *dir, char *expanded_dir)
   strcat(expanded_dir, dir);
 }
 
-int trs_remove_dir(char *file, char *dir)
+int trs_remove_dir(const char *file, char *dir)
 {
   unsigned int i;
 
@@ -621,7 +621,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   char current_dir[FILENAME_MAX];
   char limited_dir[64];
   char title[64];
-  char *new_dir;
+  const char *new_dir;
   int i,key;
   int selection = 0;
   int current_first = 0;
@@ -816,8 +816,6 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     if (selection != -1) {
       strcpy(filename, current_dir);
       if (browse_dir) {
-        char *new_dir;
-
         new_dir = filenamelist[current_first + selection];
         if (new_dir[1] != '.' && new_dir[2] != '.') {
 #ifdef _WIN32

@@ -32,10 +32,10 @@
 #include <unistd.h>
 #include "trs_state_save.h"
 
-static char stateFileBanner[] = "sldtrs State Save File";
+static const char stateFileBanner[] = "sldtrs State Save File";
 static unsigned stateVersionNumber = 1;
 
-void trs_state_save(char *filename)
+void trs_state_save(const char *filename)
 {
   FILE *file;
 
@@ -59,7 +59,7 @@ void trs_state_save(char *filename)
   }
 }
 
-void trs_state_load(char *filename)
+void trs_state_load(const char *filename)
 {
   FILE *file;
   char banner[80];

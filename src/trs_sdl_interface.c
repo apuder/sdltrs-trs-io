@@ -444,7 +444,7 @@ static void stripWhitespace (char *inputStr)
   *(end + 1) = '\0';
 }
 
-int trs_write_config_file(char *filename)
+int trs_write_config_file(const char *filename)
 {
   FILE *config_file;
   int i;

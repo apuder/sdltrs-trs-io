@@ -22,8 +22,8 @@
  * SUCH DAMAGE.
 */
 
-void trs_state_save(char *filename);
-void trs_state_load(char *filename);
+void trs_state_save(const char *filename);
+void trs_state_load(const char *filename);
 void trs_save_uchar(FILE *file, unsigned char *buffer, int count);
 void trs_load_uchar(FILE *file, unsigned char *buffer, int count);
 void trs_save_uint16(FILE *file, unsigned short *buffer, int count);
