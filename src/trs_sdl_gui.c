@@ -2830,7 +2830,7 @@ int trs_gui_load_state(void)
 
 void trs_gui_save_or_load_single_state(int save)
 {
-  char filename[FILENAME_MAX], *ptr, text[24];
+  char filename[FILENAME_MAX], *ptr, text[12];
   FILE *file;
 
   strcpy(filename, trs_config_file);
@@ -2838,17 +2838,12 @@ void trs_gui_save_or_load_single_state(int save)
   if (ptr != NULL)
     *ptr = '\0';
   strcat(filename, ".t8s");
-#ifdef _WIN32
-  ptr = strrchr(filename, '\\');
-#else
-  ptr = strrchr(filename, '/');
-#endif
   file = fopen(filename, "r");
   if (save)
-    snprintf(text, 22, "Save %s?", ptr != NULL ? ptr + 1 : filename);
+    snprintf(text, 12, "Save State?");
   else {
     if (file)
-      snprintf(text, 22, "Load %s?", ptr != NULL ? ptr + 1 : filename);
+      snprintf(text, 12, "Load State?");
     else {
       trs_gui_display_message("Error", "No Saved State");
       return;
