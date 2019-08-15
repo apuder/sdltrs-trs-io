@@ -2162,67 +2162,6 @@ int trs_gui_display_question(const char *text)
   return trs_gui_display_popup(text, answer_choices, 2, 0);
 }
 
-void trs_gui_joystick_save_mapping(void)
-{
-  FILE *config_file;
-  struct stat st;
-  char *ptr, string[FILENAME_MAX + 14], *new_config_string;
-  int i, index = 0;
-
-#ifdef _WIN32
-  ptr = strrchr(trs_config_file, '\\');
-#else
-  ptr = strrchr(trs_config_file, '/');
-#endif
-  snprintf(string, FILENAME_MAX + 14, "Overwrite %s?", ptr != NULL ? ptr + 1 : trs_config_file);
-  if (trs_gui_display_question(string) == 0)
-    return;
-  if (stat(trs_config_file, &st) < 0) {
-    trs_gui_display_message("Error", "Cannot Get Configuration File Info");
-    return;
-  }
-  config_file = fopen(trs_config_file, "r");
-  if (config_file == NULL) {
-    trs_gui_display_message("Error", "Cannot Open Configuration File for Reading");
-    return;
-  }
-  new_config_string = (char *)malloc(st.st_size + 1);
-  if (new_config_string == NULL) {
-    fclose(config_file);
-    trs_gui_display_message("Error", "Cannot Allocate Memory");
-    return;
-  }
-  while (fgets(string, sizeof(string), config_file) != NULL) {
-    i = 0;
-    while (string[i] == ' ' || string[i] == '\t')
-      i++;
-    if (strncasecmp(&string[i], "joybuttonmap", 12) != 0 &&
-        strncasecmp(&string[i], "joyaxismapped", 13) != 0 &&
-        strncasecmp(&string[i], "nojoyaxismapped", 15) != 0
-    ) {
-      strcpy(&new_config_string[index], string);
-      index += strlen(string);
-    }
-  }
-  fclose(config_file);
-  config_file = fopen(trs_config_file, "w");
-  if (config_file == NULL) {
-    trs_gui_display_message("Error", "Cannot Open Configuration File for Writing");
-    free(new_config_string);
-    return;
-  }
-  fprintf(config_file, "%s", new_config_string);
-  fprintf(config_file, "joybuttonmap=");
-  for (i = 0; i < N_JOYBUTTONS; i++)
-    fprintf(config_file, i < N_JOYBUTTONS - 1 ? "%d," : "%d\n", jbutton_map[i]);
-  if (jaxis_mapped)
-    fprintf(config_file, "joyaxismapped\n");
-  else
-    fprintf(config_file, "nojoyaxismapped\n");
-  fclose(config_file);
-  free(new_config_string);
-}
-
 void trs_gui_joystick_map_joystick(void)
 {
   MENU_ENTRY display_menu[] = {
@@ -2232,7 +2171,6 @@ void trs_gui_joystick_map_joystick(void)
     {"Unmap All Buttons",MENU_NORMAL_TYPE},
     {"Check Button Mapping",MENU_NORMAL_TYPE},
     {"Map Analog Stick to Arrow Keys                              ",MENU_NORMAL_TYPE},
-    {"Save Mapping to Configuration File",MENU_NORMAL_TYPE},
     {"",0}
   };
   char *on_off_choices[2] = {"   Off","    On"};
@@ -2261,9 +2199,6 @@ void trs_gui_joystick_map_joystick(void)
         break;
       case 5:
         jaxis_mapped = trs_gui_display_popup("Stick", on_off_choices, 2, jaxis_mapped);
-        break;
-      case 6:
-        trs_gui_joystick_save_mapping();
         break;
       case -1:
         done = 1;
