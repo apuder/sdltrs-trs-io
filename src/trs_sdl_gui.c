@@ -2226,13 +2226,13 @@ void trs_gui_joystick_save_mapping(void)
 void trs_gui_joystick_map_joystick(void)
 {
   MENU_ENTRY display_menu[] = {
-    {"Map Button to Key                                           ", MENU_NORMAL_TYPE},
-    {"Map Button to Function                                      ", MENU_NORMAL_TYPE},
-    {"Unmap Button                                                ", MENU_NORMAL_TYPE},
-    {"Unmap All Buttons                                           ", MENU_NORMAL_TYPE},
-    {"Check Button Mapping                                        ", MENU_NORMAL_TYPE},
-    {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE},
-    {"Save Mapping to Configuration File                          ", MENU_NORMAL_TYPE},
+    {"Map Button to Key",MENU_NORMAL_TYPE},
+    {"Map Button to Function",MENU_NORMAL_TYPE},
+    {"Unmap Button",MENU_NORMAL_TYPE},
+    {"Unmap All Buttons",MENU_NORMAL_TYPE},
+    {"Check Button Mapping",MENU_NORMAL_TYPE},
+    {"Map Analog Stick to Arrow Keys                              ",MENU_NORMAL_TYPE},
+    {"Save Mapping to Configuration File",MENU_NORMAL_TYPE},
     {"",0}
   };
   char *on_off_choices[2] = {"   Off","    On"};
@@ -2320,7 +2320,7 @@ void trs_gui_joystick_management(void)
   MENU_ENTRY display_menu[] =
   {{"Use Keypad for Joystick                                     ",MENU_NORMAL_TYPE},
    {"USB Joystick/Gamepad                                        ",MENU_NORMAL_TYPE},
-   {"Map Joystick to Keys/Functions                              ",MENU_NORMAL_TYPE},
+   {"Map Joystick to Keys/Functions",MENU_NORMAL_TYPE},
    {"",0}};
   char *keypad_choices[2] =     {"      No","     Yes"};
   char *joystick_choices[MAX_JOYSTICKS+1];
