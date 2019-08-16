@@ -2060,15 +2060,14 @@ int trs_gui_joystick_get_button(void)
 void trs_gui_joystick_map_button_to_key(void)
 {
   int key, button;
-  int first_x = 21, first_y = 2;
 
-  trs_gui_frame(first_x - 1, first_y - 1, 23, 3);
-  trs_gui_write_text("     Select Key      ", first_x, first_y, 0);
+  trs_gui_frame(20, 1, 23, 3);
+  trs_gui_write_text("     Select Key      ", 21, 2, 0);
   trs_x_flush();
   key = trs_gui_virtual_keyboard();
   if (key == -1)
     return;
-  trs_gui_write_text("Press Joystick Button", first_x, first_y, 0);
+  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
   trs_x_flush();
   button = trs_gui_joystick_get_button();
   if (button != -1)
@@ -2078,16 +2077,14 @@ void trs_gui_joystick_map_button_to_key(void)
 void trs_gui_joystick_map_button_to_function(void)
 {
   int selection, button;
-  int first_x = 21, first_y = 2;
-  int rows = 4, columns = 2;
 
-  trs_gui_frame(first_x - 1, first_y - 1, 23, 3);
-  trs_gui_write_text("   Select Function   ", first_x, first_y, 0);
+  trs_gui_frame(20, 1, 23, 3);
+  trs_gui_write_text("   Select Function   ", 21, 2, 0);
   trs_x_flush();
-  selection = trs_gui_display_popup_matrix("", function_choices, rows, columns, 0);
+  selection = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0);
   if (selection == -1)
     return;
-  trs_gui_write_text("Press Joystick Button", first_x, first_y, 0);
+  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
   trs_x_flush();
   button = trs_gui_joystick_get_button();
   if (button != -1)
@@ -2097,10 +2094,9 @@ void trs_gui_joystick_map_button_to_function(void)
 void trs_gui_joystick_unmap_button(void)
 {
   int button;
-  int first_x = 21, first_y = 2;
 
-  trs_gui_frame(first_x - 1, first_y - 1, 23, 3);
-  trs_gui_write_text("Press Joystick Button", first_x, first_y, 0);
+  trs_gui_frame(20, 1, 23, 3);
+  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
   trs_x_flush();
   button = trs_gui_joystick_get_button();
   if (button != -1)
@@ -2119,35 +2115,31 @@ void trs_gui_joystick_unmap_all_buttons(void)
 
 void trs_gui_joystick_display_map(int show_active)
 {
-  int first_x = 2, first_y = 10;
-  int rows = 4, columns = 5; /* Should equal N_JOYBUTTONS */
-  int column_width = 12;
   int row, column, i;
-  char text[62];
+  char text[10];
 
-  for (column = 0; column < columns; column++) {
-    for (row = 0; row < rows; row++) {
-      i = column*rows + row;
+  for (column = 0; column < 5; column++) {
+    for (row = 0; row < 4; row++) {
+      i = column * 4 + row;
       snprintf(text, 4,"%2d:", i);
-      trs_gui_write_text(text, first_x + column*column_width, first_y + row + 1, 0);
+      trs_gui_write_text(text, 2 + column * 12, 11 + row, 0);
       switch (jbutton_map[i]) {
-        case -1:     sprintf(text, "---");      break;
-        case GUI:    sprintf(text, "<GUI>");    break;
-        case KEYBRD: sprintf(text, "<KEYBRD>"); break;
-        case SAVE:   sprintf(text, "<SAVE>");   break;
-        case LOAD:   sprintf(text, "<LOAD>");   break;
-        case RESET:  sprintf(text, "<RESET>");  break;
-        case EXIT:   sprintf(text, "<EXIT>");   break;
-        case PAUSE:  sprintf(text, "<PAUSE>");  break;
-        case JOYGUI: sprintf(text, "<JOYGUI>"); break;
+        case -1:     snprintf(text, 9,"---     "); break;
+        case GUI:    snprintf(text, 9,"<GUI>   "); break;
+        case KEYBRD: snprintf(text, 9,"<KEYBRD>"); break;
+        case SAVE:   snprintf(text, 9,"<SAVE>  "); break;
+        case LOAD:   snprintf(text, 9,"<LOAD>  "); break;
+        case RESET:  snprintf(text, 9,"<RESET> "); break;
+        case EXIT:   snprintf(text, 9,"<EXIT>  "); break;
+        case PAUSE:  snprintf(text, 9,"<PAUSE> "); break;
+        case JOYGUI: snprintf(text, 9,"<JOYGUI>"); break;
         default:
-          sprintf(text, "%s", trs_gui_get_key_name(jbutton_map[i]));
+          snprintf(text, 9,"%s", trs_gui_get_key_name(jbutton_map[i]));
           break;
       }
-      trs_gui_write_text(text, 4 + first_x + column*column_width, first_y + row + 1, show_active ? jbutton_active[i] : 0);
+      trs_gui_write_text(text, 5 + column * 12, 11 + row, show_active ? jbutton_active[i] : 0);
     }
   }
-  trs_x_flush();
 }
 
 int trs_gui_display_question(const char *text)
