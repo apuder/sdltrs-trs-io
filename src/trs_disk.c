@@ -807,7 +807,7 @@ int trs_diskset_load(char *filename)
   if (f) {
     for (i=0;i<8;i++) {
       if (fgets(diskname,FILENAME_MAX,f) == NULL)
-        return(-1);
+        continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
@@ -817,7 +817,7 @@ int trs_diskset_load(char *filename)
     }
     for (i=0;i<4;i++) {
       if (fgets(diskname,FILENAME_MAX,f) == NULL)
-        return(-1);
+        continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
@@ -827,7 +827,7 @@ int trs_diskset_load(char *filename)
     }
     for (i=0;i<7;i++) {
       if (fgets(diskname,FILENAME_MAX,f) == NULL)
-        return(-1);
+        continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
