@@ -3059,9 +3059,8 @@ void trs_gui_get_virtual_key(void)
 
 void trs_gui_joy_gui(void)
 {
-  int selection;
+  int selection = trs_gui_display_popup_matrix("Joystick GUI", function_choices, 3, 2, 0);
 
-  selection = trs_gui_display_popup_matrix("Joystick GUI", function_choices, 3, 2, 0);
   if (selection == -1)
     return;
   trs_screen_refresh();
