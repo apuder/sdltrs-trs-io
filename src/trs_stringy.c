@@ -379,7 +379,7 @@ stringy_byte_flush(stringy_info_t *s)
   mask = 0xff << s->esf_bitpos;
   s->esf_bytebuf = (ires & mask) | (s->esf_bytebuf & ~mask);
   if (fputc(s->esf_bytebuf, s->file) == EOF)
-    error("stringy byte flush: %s\n", strerror(errno));
+    error("stringy byte flush: %s", strerror(errno));
   fseek(s->file, -1, SEEK_CUR);
 }
 
@@ -391,7 +391,7 @@ stringy_bit_write(stringy_info_t *s, int flux)
   s->esf_bitpos++;
   if (s->esf_bitpos == 8) {
     if (fputc(s->esf_bytebuf, s->file) == EOF)
-      error("stringy bit write: %s\n", strerror(errno));
+      error("stringy bit write: %s", strerror(errno));
     if (++s->esf_bytepos >= s->esf_bytelen) {
       fseek(s->file, stringy_esf_header_length, SEEK_SET);
       s->esf_bytepos = 0;
@@ -455,7 +455,7 @@ stringy_bit_read(stringy_info_t *s, int *bit)
     }
     if ((ires = fgetc(s->file)) == EOF)
       if (ferror(s->file) != 0) {
-        error("stringy bit read: %s\n", strerror(errno));
+        error("stringy bit read: %s", strerror(errno));
         clearerr(s->file);
         return FALSE;
     }
