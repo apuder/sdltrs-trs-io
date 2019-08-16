@@ -94,9 +94,9 @@ int function_codes[8] = {
 
 static char *key_names[N_KEYS] = {
   " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 ", " 0 ", " : ", " - ", "BRK",
-  " UP", " Q ", " W ", " E ", " R ", " T ", " Y ", " U ", " I ", " O ", " P ", "LFT", "RGT",
-  "DWN", " A ", " S ", " D ", " F ", " G ", " H ", " J ", " K ", " L ", " ; ", "ENT", "CLR",
-  "SHF", " Z ", " X ", " C ", " V ", " B ", " N ", " M ", " , ", " . ", " / ", " @ ", "SPC"
+  " UP", " q ", " w ", " e ", " r ", " t ", " y ", " u ", " i ", " o ", " p ", "LFT", "RGT",
+  "DWN", " a ", " s ", " d ", " f ", " g ", " h ", " j ", " k ", " l ", " ; ", "ENT", "CLR",
+  "SHF", " z ", " x ", " c ", " v ", " b ", " n ", " m ", " , ", " . ", " / ", " @ ", "SPC"
 };
 static int key_syms[N_KEYS] = {
   SDLK_1,    SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,     SDLK_0,      SDLK_COLON,     SDLK_MINUS,  SDLK_ESCAPE,
