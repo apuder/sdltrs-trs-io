@@ -1454,7 +1454,8 @@ void trs_gui_disk_management(void)
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
-        trs_diskset_save(filename);
+        if (trs_diskset_save(filename) == -1)
+          trs_gui_display_message("Error", "Failed to save Disk Set");
         break;
       case 10:
         trs_expand_dir(trs_disk_set_dir,browse_dir);
@@ -1532,7 +1533,8 @@ void trs_gui_hard_management(void)
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
-        trs_diskset_save(filename);
+        if (trs_diskset_save(filename) == -1)
+          trs_gui_display_message("Error", "Failed to save Disk Set");
         break;
       case 6:
         trs_expand_dir(trs_disk_set_dir,browse_dir);
@@ -1681,7 +1683,8 @@ void trs_gui_stringy_management(void)
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
-        trs_diskset_save(filename);
+        if (trs_diskset_save(filename) == -1)
+          trs_gui_display_message("Error", "Failed to save Disk Set");
         break;
       case 9:
         trs_expand_dir(trs_disk_set_dir,browse_dir);
@@ -2734,7 +2737,8 @@ void trs_gui_write_config(void)
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8c");
-  trs_write_config_file(filename);
+  if (trs_write_config_file(filename) == -1)
+    trs_gui_display_message("Error", "Failed to write Configuration");
 }
 
 int trs_gui_read_config(void)
@@ -2744,7 +2748,10 @@ int trs_gui_read_config(void)
   trs_expand_dir(".",browse_dir);
   if (trs_gui_file_browse(browse_dir, trs_config_file, ".t8c", 0," Configuration (.t8c) ") == -1)
     return -1;
-  trs_load_config_file();
+  if (trs_load_config_file() == -1) {
+    trs_gui_display_message("Error", "Failed to read Configuration");
+    return -1;
+  }
   trs_gui_new_machine();
   return 0;
 }
@@ -2800,7 +2807,8 @@ void trs_gui_save_state(void)
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8s");
-  trs_state_save(filename);
+  if (trs_state_save(filename) == -1)
+    trs_gui_display_message("Error", "Failed to save State");
 }
 
 int trs_gui_load_state(void)
@@ -2811,7 +2819,10 @@ int trs_gui_load_state(void)
   trs_expand_dir(trs_state_dir,browse_dir);
   if (trs_gui_file_browse(browse_dir, filename, ".t8s", 0," Saved State (.t8s) ") == -1)
     return -1;
-  trs_state_load(filename);
+  if (trs_state_load(filename) == -1) {
+    trs_gui_display_message("Error", "Failed to load State");
+    return -1;
+  }
   return 0;
 }
 

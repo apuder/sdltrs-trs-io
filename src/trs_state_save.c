@@ -35,7 +35,7 @@
 static const char stateFileBanner[] = "sldtrs State Save File";
 static unsigned stateVersionNumber = 1;
 
-void trs_state_save(const char *filename)
+int trs_state_save(const char *filename)
 {
   FILE *file;
 
@@ -56,10 +56,12 @@ void trs_state_save(const char *filename)
     trs_z80_save(file);
     trs_imp_exp_save(file);
     fclose(file);
+    return 0;
   }
+  return -1;
 }
 
-void trs_state_load(const char *filename)
+int trs_state_load(const char *filename)
 {
   FILE *file;
   char banner[80];
@@ -71,12 +73,12 @@ void trs_state_load(const char *filename)
     banner[strlen(stateFileBanner)] = 0;
     if (strcmp(banner, stateFileBanner)) {
       fclose(file);
-      return;
+      return -1;
     }
     trs_load_uint32(file, &version, 1);
     if (version != stateVersionNumber) {
       fclose(file);
-      return;
+      return -1;
     }
     trs_main_load(file);
     trs_cassette_load(file);
@@ -91,7 +93,9 @@ void trs_state_load(const char *filename)
     trs_z80_load(file);
     trs_imp_exp_load(file);
     fclose(file);
+    return 0;
   }
+  return -1;
 }
 
 void trs_save_uchar(FILE *file, unsigned char *buffer, int count)

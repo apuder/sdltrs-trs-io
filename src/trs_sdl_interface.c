@@ -799,7 +799,7 @@ static void trs_opt_cass(char *arg, int intarg, char *stringarg)
 static void trs_opt_diskset(char *arg, int intarg, char *stringarg)
 {
   if (trs_diskset_load(arg) == -1)
-    warn("could not load diskset: %s", arg);
+    error("Failed to load Diskset %s: %s", arg, strerror(errno));
 }
 
 static void trs_opt_keystretch(char *arg, int intarg, char *stringarg)
@@ -1010,25 +1010,24 @@ int trs_load_config_file()
   FILE *config_file;
   int i;
 
-  if (trs_config_file[0] == 0)
-#ifdef _WIN32
-    snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
-#else
-    {
-      const char *home = getenv("HOME");
-
-      snprintf(trs_config_file, FILENAME_MAX-1, "%s/sdltrs.t8c", home);
-    }
-#endif
-
   trs_set_to_defaults();
   trs_disk_setsizes();
   trs_disk_setsteps();
 
-  config_file = fopen(trs_config_file,"r");
-  if (config_file == NULL) {
-    trs_write_config_file(trs_config_file);
-    return(0);
+  if (trs_config_file[0] == 0) {
+#ifdef _WIN32
+    snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
+#else
+    const char *home = getenv("HOME");
+
+    snprintf(trs_config_file, FILENAME_MAX-1, "%s/sdltrs.t8c", home);
+#endif
+  }
+
+  if ((config_file = fopen(trs_config_file,"r")) == NULL) {
+    if (trs_write_config_file(trs_config_file) == -1)
+      error("Failed to write %s: %s", trs_config_file, strerror(errno));
+    return -1;
   }
 
   while (fgets(line, sizeof(line), config_file)) {
@@ -1053,8 +1052,7 @@ int trs_load_config_file()
   }
 
   fclose(config_file);
-
-  return 1;
+  return 0;
 }
 
 int trs_parse_command_line(int argc, char **argv, int *debug)
@@ -1084,7 +1082,8 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
       strcpy(init_state_file,argv[i]);
   }
 
-  trs_load_config_file();
+  if (trs_load_config_file() == -1)
+    error("Failed to load %s: %s", trs_config_file, strerror(errno));
 
   for (i = 1; i < argc; i++) {
     int argAvail = ((i + 1) < argc); /* is argument available? */
