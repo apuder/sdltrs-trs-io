@@ -1453,7 +1453,7 @@ void trs_gui_disk_management(void)
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
-        strcat(filename,".set");
+        trs_add_extension(filename,".set");
         trs_diskset_save(filename);
         break;
       case 10:
@@ -1531,7 +1531,7 @@ void trs_gui_hard_management(void)
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
-        strcat(filename,".set");
+        trs_add_extension(filename,".set");
         trs_diskset_save(filename);
         break;
       case 6:
@@ -1680,7 +1680,7 @@ void trs_gui_stringy_management(void)
         if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
-        strcat(filename,".set");
+        trs_add_extension(filename,".set");
         trs_diskset_save(filename);
         break;
       case 9:
@@ -2733,7 +2733,7 @@ void trs_gui_write_config(void)
   if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
-  strcat(filename,".t8c");
+  trs_add_extension(filename,".t8c");
   trs_write_config_file(filename);
 }
 
@@ -2799,7 +2799,7 @@ void trs_gui_save_state(void)
   if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
-  strcat(filename,".t8s");
+  trs_add_extension(filename,".t8s");
   trs_state_save(filename);
 }
 
@@ -2824,7 +2824,7 @@ void trs_gui_save_or_load_single_state(int save)
   ptr = strrchr(filename, '.');
   if (ptr != NULL)
     *ptr = '\0';
-  strcat(filename, ".t8s");
+  trs_add_extension(filename, ".t8s");
   file = fopen(filename, "r");
   if (save)
     snprintf(text, 12, "Save State?");
