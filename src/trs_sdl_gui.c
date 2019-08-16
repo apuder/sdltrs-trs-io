@@ -217,14 +217,11 @@ void trs_gui_frame(int x, int y, int w, int h)
 
 void trs_gui_clear_rect(int x, int y, int w, int h)
 {
-  char clear[w+1];
-  int i;
+  int i,j;
 
-  for (i=0;i<w;i++)
-    clear[i]=' ';
-  clear[i] = 0;
   for (i=0;i<h;i++)
-    trs_gui_write_text(clear, x, y+i, 0);
+    for (j=0;j<w;j++)
+      trs_gui_write_text_char(' ', x+j, y+i, 0);
 }
 
 void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
