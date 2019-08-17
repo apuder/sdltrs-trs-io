@@ -318,11 +318,11 @@ void trs_add_extension(char *filename, const char *ext)
   int flen = strlen(filename);
   int elen = strlen(ext);
 
-  if (flen > elen) {
-    if (strcmp(&filename[flen - elen],ext) != 0)
-      strcat(filename, ext);
-  } else
-    strcat(filename, ext);
+  if (flen > elen)
+    if (strcmp(&filename[flen - elen],ext) == 0)
+      return;
+
+  snprintf(filename + flen, sizeof(filename) - flen, "%s", ext);
 }
 
 int trs_gui_get_key(void)
