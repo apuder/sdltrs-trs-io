@@ -2138,6 +2138,9 @@ void trs_get_event(int wait)
               case SDLK_m:
                 call_function(GUI);
                 break;
+              case SDLK_n:
+                trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+                break;
               case SDLK_o:
                 call_function(OTHER);
                 break;

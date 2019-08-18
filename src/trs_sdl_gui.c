@@ -2709,7 +2709,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt A/C/V: Select/Copy/Paste", 2, 6, 0);
   trs_gui_write_text("F9/Alt Z: Enter debugger (zbx)  Alt D/F: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt H: Hard Disk Menu       ", 2, 8, 0);
-  trs_gui_write_text("F11: Switch Turbo Mode On/Off   Alt T: Cassette/Tape Menu   ", 2, 9, 0);
+  trs_gui_write_text("F11/Alt N: Switch Turbo On/Off  Alt T: Cassette/Tape Menu   ", 2, 9, 0);
   trs_gui_write_text("F12/Shift-F12: Save/Load State  Alt L/S: Load / Save State  ", 2, 10, 0);
   trs_gui_write_text("ESC: TRS-80 Break Key           Alt R/W: Read / Write Config", 2, 11, 0);
   trs_gui_write_text("Home/Clear: TRS-80 Clear Key    Alt P/Pause: Pause Emulator ", 2, 12, 0);
