@@ -1143,10 +1143,6 @@ void trs_flip_fullscreen(void)
     if (scale_x != 1) {
       scale_x = 1;
       scale_y = 2;
-#ifdef SDL2
-      SDL_DestroyWindow(window);
-      window = NULL;
-#endif
       trs_screen_init(0);
     }
     else {
@@ -1162,10 +1158,6 @@ void trs_flip_fullscreen(void)
     if (window_scale_x != 1) {
       scale_x = window_scale_x;
       scale_y = window_scale_y;
-#ifdef SDL2
-      SDL_DestroyWindow(window);
-      window = NULL;
-#endif
       trs_screen_init(0);
     }
     else {
