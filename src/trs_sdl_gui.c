@@ -234,10 +234,9 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
     pos_second_part = strlen(orig) - (limit - len_first_part - 3);
     strncpy(limited, orig, len_first_part);
     limited[len_first_part] = '\0';
-    strcat(limited, "...");
-    strcat(limited, orig + pos_second_part);
+    snprintf(limited + len_first_part, limit, "...%s", orig + pos_second_part);
   } else
-    strcpy(limited, orig);
+    snprintf(limited, limit + 1, "%s", orig);
 }
 
 void trs_expand_dir(char *dir, char *expanded_dir)
