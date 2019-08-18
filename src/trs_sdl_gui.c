@@ -1246,7 +1246,7 @@ void trs_gui_disk_creation(void)
       case 6:
         filename[0] = 0;
         trs_expand_dir(trs_disk_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename, TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Disk Image, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (image_type == 0)
@@ -1449,7 +1449,7 @@ void trs_gui_disk_management(void)
       case 9:
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
@@ -1528,7 +1528,7 @@ void trs_gui_hard_management(void)
       case 5:
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
@@ -1618,7 +1618,7 @@ void trs_gui_hard_management(void)
         }
         filename[0] = 0;
         trs_expand_dir(trs_hard_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename, TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Hard Disk Image, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (trs_create_blank_hard(filename, cylinder_count, sector_count,
@@ -1678,7 +1678,7 @@ void trs_gui_stringy_management(void)
       case 8:
         filename[0] = 0;
         trs_expand_dir(trs_disk_set_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
@@ -1699,7 +1699,7 @@ void trs_gui_stringy_management(void)
       case 12:
         filename[0] = 0;
         trs_expand_dir(trs_cass_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename, TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Wafer Image, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (stringy_create(filename))
@@ -1784,7 +1784,7 @@ void trs_gui_cassette_management(void)
       case 7:
         filename[0] = 0;
         trs_expand_dir(trs_cass_dir, browse_dir);
-        if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+        if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
               browse_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (image_type == 0) {
@@ -2732,7 +2732,7 @@ void trs_gui_write_config(void)
   char browse_dir[FILENAME_MAX];
 
   trs_expand_dir(".",browse_dir);
-  if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+  if (trs_gui_input_string("Enter Filename for Configuration, TAB selects directory",
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8c");
@@ -2802,7 +2802,7 @@ void trs_gui_save_state(void)
 
   filename[0] = 0;
   trs_expand_dir(trs_state_dir, browse_dir);
-  if (trs_gui_input_string("Enter Filename (without extension), TAB selects directory",
+  if (trs_gui_input_string("Enter Filename for Emulator State, TAB selects directory",
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8s");
