@@ -2047,9 +2047,6 @@ void trs_get_event(int wait)
           /* Trap the menu keys here */
           if (keysym.mod & KMOD_LALT) {
             switch (keysym.sym) {
-              case SDLK_q:
-                trs_exit(1);
-                break;
 #ifdef _WIN32
               case SDLK_F4:
                 trs_exit(1);
@@ -2057,48 +2054,6 @@ void trs_get_event(int wait)
 #endif
               case SDLK_RETURN:
                 trs_flip_fullscreen();
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_b:
-                trs_show_led = !trs_show_led;
-                trs_screen_init(1);
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_d:
-              case SDLK_f:
-                call_function(DISK);
-                break;
-              case SDLK_h:
-                call_function(HARD);
-                break;
-              case SDLK_g:
-                call_function(STRINGY);
-                break;
-              case SDLK_t:
-                call_function(TAPE);
-                break;
-              case SDLK_s:
-                call_function(SAVE_STATE);
-                break;
-              case SDLK_k:
-                trs_gui_keys_sdltrs();
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_l:
-                call_function(LOAD_STATE);
-                trs_screen_init(1);
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_w:
-                call_function(WRITE);
-                break;
-              case SDLK_r:
-                if (call_function(READ) == 0)
-                  trs_screen_init(1);
                 trs_screen_refresh();
                 trs_x_flush();
                 break;
@@ -2126,14 +2081,41 @@ void trs_get_event(int wait)
                   trs_x_flush();
                 }
                 break;
+              case SDLK_b:
+                trs_show_led = !trs_show_led;
+                trs_screen_init(1);
+                trs_screen_refresh();
+                trs_x_flush();
+                break;
+              case SDLK_d:
+              case SDLK_f:
+                call_function(DISK);
+                break;
               case SDLK_e:
                 call_function(EMULATOR);
+                break;
+              case SDLK_g:
+                call_function(STRINGY);
+                break;
+              case SDLK_h:
+                call_function(HARD);
                 break;
               case SDLK_i:
                 call_function(INTERFACE);
                 break;
               case SDLK_j:
                 call_function(JOYGUI);
+                break;
+              case SDLK_k:
+                trs_gui_keys_sdltrs();
+                trs_screen_refresh();
+                trs_x_flush();
+                break;
+              case SDLK_l:
+                call_function(LOAD_STATE);
+                trs_screen_init(1);
+                trs_screen_refresh();
+                trs_x_flush();
                 break;
               case SDLK_m:
                 call_function(GUI);
@@ -2147,9 +2129,27 @@ void trs_get_event(int wait)
               case SDLK_p:
                 call_function(PAUSE);
                 break;
+              case SDLK_q:
+                trs_exit(1);
+                break;
+              case SDLK_r:
+                if (call_function(READ) == 0)
+                  trs_screen_init(1);
+                trs_screen_refresh();
+                trs_x_flush();
+                break;
+              case SDLK_s:
+                call_function(SAVE_STATE);
+                break;
+              case SDLK_t:
+                call_function(TAPE);
+                break;
               case SDLK_u:
                 trs_sound = !trs_sound;
                 trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+                break;
+              case SDLK_w:
+                call_function(WRITE);
                 break;
               case SDLK_x:
                 mousepointer = !mousepointer;
