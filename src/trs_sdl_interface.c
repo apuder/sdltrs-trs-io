@@ -1178,7 +1178,6 @@ void trs_flip_fullscreen(void)
 #endif
     }
   }
-  SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 }
 
 void trs_rom_init(void)
