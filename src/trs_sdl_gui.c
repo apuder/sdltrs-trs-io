@@ -1852,11 +1852,12 @@ void trs_gui_display_management(void)
   char input[FILENAME_MAX];
   char *resize_choices[2] =   {"        No","       Yes"};
   char *disk_led_choices[2] = {" Hide"," Show"};
-  char *font1_choices[5] =    {"      early",
+  char *font1_choices[6] =    {"      early",
                                "      stock",
                                "      lcmod",
                                "      wider",
-                               "      genie"};
+                               "      genie",
+                               "   ht-1080z"};
   char *font34_choices[3] =   {"     katakana",
                                "international",
                                "         bold"};
@@ -1880,8 +1881,8 @@ void trs_gui_display_management(void)
   int gui_scanlines = scanlines;
   int gui_border_width = window_border_width;
 
-  if (local_trs_charset1 == 10)
-    charset1_selection = 4;
+  if (local_trs_charset1 >= 10)
+    charset1_selection = local_trs_charset1 - 6;
   else
     charset1_selection = local_trs_charset1;
 
@@ -1951,7 +1952,7 @@ void trs_gui_display_management(void)
         }
         break;
       case 4:
-        charset1_selection = trs_gui_display_popup("Charset 1",font1_choices,5,
+        charset1_selection = trs_gui_display_popup("Charset 1",font1_choices,6,
             charset1_selection);
         break;
       case 5:
@@ -1993,8 +1994,8 @@ void trs_gui_display_management(void)
     }
   }
 
-  if (charset1_selection == 4)
-    local_trs_charset1 = 10;
+  if (charset1_selection >= 4)
+    local_trs_charset1 = charset1_selection + 6;
   else
     local_trs_charset1 = charset1_selection;
 
