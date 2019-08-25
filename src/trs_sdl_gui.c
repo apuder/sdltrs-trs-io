@@ -1500,7 +1500,7 @@ void trs_gui_hard_management(void)
   static int drive_insert = 0;
   char *drive_choices[5] = {"  None","Hard 0","Hard 1","Hard 2","Hard 3"};
   char filename[FILENAME_MAX];
-  char input[FILENAME_MAX];
+  char input[4];
   char browse_dir[FILENAME_MAX];
   int selection = 0;
   int done = 0;
@@ -1727,7 +1727,7 @@ void trs_gui_cassette_management(void)
    {"Insert Created Cassette Into Drive                          ",MENU_NORMAL_TYPE},
    {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
-  char input[FILENAME_MAX];
+  char input[12];
   char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
   char *drive_choices[2]  =     {"      No","     Yes"};
   char filename[FILENAME_MAX];
@@ -1849,7 +1849,7 @@ void trs_gui_display_management(void)
    {"LED Display for Disks and Turbo Mode                        ",MENU_NORMAL_TYPE},
    {"Display Scanlines to simulate old CRT                       ",MENU_NORMAL_TYPE},
    {"",0,}};
-  char input[FILENAME_MAX];
+  char input[8];
   char *resize_choices[2] =   {"        No","       Yes"};
   char *disk_led_choices[2] = {" Hide"," Show"};
   char *font1_choices[6] =    {"      early",
