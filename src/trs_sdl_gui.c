@@ -1852,12 +1852,13 @@ void trs_gui_display_management(void)
   char input[8];
   char *resize_choices[2] =   {"        No","       Yes"};
   char *disk_led_choices[2] = {" Hide"," Show"};
-  char *font1_choices[6] =    {"      early",
+  char *font1_choices[7] =    {"      early",
                                "      stock",
                                "      lcmod",
                                "      wider",
                                "      genie",
-                               "   ht-1080z"};
+                               "   ht-1080z",
+                               "video genie"};
   char *font34_choices[3] =   {"     katakana",
                                "international",
                                "         bold"};
@@ -1944,7 +1945,7 @@ void trs_gui_display_management(void)
         }
         break;
       case 4:
-        local_trs_charset1 = trs_gui_display_popup("Charset 1",font1_choices,6,
+        local_trs_charset1 = trs_gui_display_popup("Charset 1",font1_choices,7,
             local_trs_charset1);
         break;
       case 5:

@@ -715,7 +715,7 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
 {
   if (isdigit((int)*arg)) {
     trs_charset1 = atoi(arg);
-    if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 != 10 && trs_charset1 != 11)))
+    if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 < 10 || trs_charset1 > 12)))
       trs_charset1 = 3;
   } else if (arg[0] == 'e'/*early*/) {
      trs_charset1 = 0;
@@ -729,6 +729,8 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
      trs_charset1 = 10;
   } else if (arg[0] == 'h'/*ht-1080z*/) {
      trs_charset1 = 11;
+  } else if (arg[0] == 'v'/*video genie*/) {
+     trs_charset1 = 12;
   } else {
      trs_charset1 = 3;
   }
