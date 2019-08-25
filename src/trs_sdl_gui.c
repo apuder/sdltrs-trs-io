@@ -1862,14 +1862,11 @@ void trs_gui_display_management(void)
                                "international",
                                "         bold"};
   char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
-  int charset1_selection;
-  int charset3_selection;
-  int charset4_selection;
   int done = 0;
   int selection = 0;
   int local_trs_charset1 = trs_charset1;
-  int local_trs_charset3 = trs_charset3;
-  int local_trs_charset4 = trs_charset4;
+  int local_trs_charset3 = trs_charset3 - 4;
+  int local_trs_charset4 = trs_charset4 - 7;
   unsigned int local_foreground = foreground;
   unsigned int local_background = background;
   unsigned int local_gui_foreground = gui_foreground;
@@ -1882,12 +1879,7 @@ void trs_gui_display_management(void)
   int gui_border_width = window_border_width;
 
   if (local_trs_charset1 >= 10)
-    charset1_selection = local_trs_charset1 - 6;
-  else
-    charset1_selection = local_trs_charset1;
-
-  charset3_selection = local_trs_charset3 - 4;
-  charset4_selection = local_trs_charset4 - 7;
+    local_trs_charset1 -= 6;
 
   while(!done) {
     trs_gui_clear_screen();
@@ -1895,9 +1887,9 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[1].title[52],9,"0x%06X",local_foreground);
     snprintf(&display_menu[2].title[52],9,"0x%06X",local_gui_background);
     snprintf(&display_menu[3].title[52],9,"0x%06X",local_gui_foreground);
-    snprintf(&display_menu[4].title[49],12,"%s",font1_choices[charset1_selection]);
-    snprintf(&display_menu[5].title[47],14,"%s",font34_choices[charset3_selection]);
-    snprintf(&display_menu[6].title[47],14,"%s",font34_choices[charset4_selection]);
+    snprintf(&display_menu[4].title[49],12,"%s",font1_choices[local_trs_charset1]);
+    snprintf(&display_menu[5].title[47],14,"%s",font34_choices[local_trs_charset3]);
+    snprintf(&display_menu[6].title[47],14,"%s",font34_choices[local_trs_charset4]);
     snprintf(&display_menu[7].title[52],9,"%8d",gui_border_width);
     snprintf(&display_menu[8].title[50],11,"%s",resize_choices[gui_resize3]);
     snprintf(&display_menu[9].title[50],11,"%s",resize_choices[gui_resize4]);
@@ -1952,16 +1944,16 @@ void trs_gui_display_management(void)
         }
         break;
       case 4:
-        charset1_selection = trs_gui_display_popup("Charset 1",font1_choices,6,
-            charset1_selection);
+        local_trs_charset1 = trs_gui_display_popup("Charset 1",font1_choices,6,
+            local_trs_charset1);
         break;
       case 5:
-        charset3_selection = trs_gui_display_popup("Charset 3",font34_choices,3,
-            charset3_selection);
+        local_trs_charset3 = trs_gui_display_popup("Charset 3",font34_choices,3,
+            local_trs_charset3);
         break;
       case 6:
-        charset4_selection = trs_gui_display_popup("Charset 4/4P",font34_choices,3,
-            charset4_selection);
+        local_trs_charset4 = trs_gui_display_popup("Charset 4/4P",font34_choices,3,
+            local_trs_charset4);
         break;
       case 7:
         snprintf(input,3,"%d",gui_border_width);
@@ -1994,13 +1986,11 @@ void trs_gui_display_management(void)
     }
   }
 
-  if (charset1_selection >= 4)
-    local_trs_charset1 = charset1_selection + 6;
-  else
-    local_trs_charset1 = charset1_selection;
+  if (local_trs_charset1 >= 4)
+    local_trs_charset1 += 6;
 
-  local_trs_charset3 = charset3_selection+4;
-  local_trs_charset4 = charset4_selection+7;
+  local_trs_charset3 += 4;
+  local_trs_charset4 += 7;
 
   if ((trs_charset1 != local_trs_charset1) ||
       (trs_charset3 != local_trs_charset3) ||
