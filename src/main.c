@@ -43,6 +43,7 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -78,6 +79,7 @@ int trs_load_rom(const char *filename)
 
   if((program = fopen(filename, "rb")) == NULL)
   {
+    error("Failed to load ROM file %s: %s", filename, strerror(errno));
     return(-1);
   }
   c = getc(program);
@@ -86,9 +88,10 @@ int trs_load_rom(const char *filename)
     rewind(program);
     trs_rom_size = load_hex(program);
     fclose(program);
-    if (trs_rom_size == -1)
+    if (trs_rom_size == -1) {
+      error("ROM file %s not in Intel hex format", filename);
       return(-1);
-    else
+    } else
       return(0);
   } else if (c == 1 || c == 5) {
     /* Assume MODELA/III file */
