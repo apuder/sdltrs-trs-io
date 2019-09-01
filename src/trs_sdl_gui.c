@@ -1044,7 +1044,12 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
     trs_x_flush();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection].title, 2, selection+2,0);
-    if (key >= '0' && key <= 'z') {
+    if (key >= '0' && key <= '9') {
+      key -= '0';
+      if (key < num && entry[key].type != MENU_TITLE_TYPE)
+        selection = key;
+    } else
+    if (key >= 'a' && key <= 'z') {
       for (i=0;i<num+1;i++) {
         if (tolower((int)*entry[i].title) == key && selection != i) {
           selection = i;
