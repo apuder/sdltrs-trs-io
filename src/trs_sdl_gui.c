@@ -2693,8 +2693,8 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_frame(0,0,64,16);
   trs_gui_write_text("Keys in SDLTRS", 2, 0, 0);
 
-  trs_gui_write_text("F1-F3: TRS-80 Model 4/4P F1-F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
-  trs_gui_write_text("F4: TRS-80 Model 4/4P CapsLock  Insert: TRS-80 Underscore   ", 2, 2, 0);
+  trs_gui_write_text("F1-F3: Functions Keys F1/F2/F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
+  trs_gui_write_text("F4: F4/CapsLock on TRS-80 4/4P  Insert: TRS-80 Underscore   ", 2, 2, 0);
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Alt PgUp/PgDn: Scale Window ", 2, 4, 0);
   trs_gui_write_text("F7/Alt M: Main Menu of SDLTRS   Alt Enter: Toggle Fullscreen", 2, 5, 0);
