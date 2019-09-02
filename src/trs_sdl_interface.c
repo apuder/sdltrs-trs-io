@@ -1936,431 +1936,431 @@ void trs_get_event(int wait)
         }
 #endif
 
+        switch (keysym.sym) {
+          /* Trap some function keys here */
+          case SDLK_F10:
+            if (keysym.mod & KMOD_SHIFT)
+            {
+              trs_reset(1);
+              trs_disk_led(-1,0);
+              trs_hard_led(-1,0);
+              trs_turbo_led(trs_timer_is_turbo());
+            }
+            else
+              trs_reset(0);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F11:
+            trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F9:
+            if (!fullscreen)
+              trs_debug();
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F8:
+            trs_exit(!(keysym.mod & KMOD_SHIFT));
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F7:
+            call_function(GUI);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F12:
+            if (keysym.mod & KMOD_SHIFT)
+              call_function(LOAD);
+            else
+              call_function(SAVE);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_PAUSE:
+            call_function(PAUSE);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          default:
+            break;
+        }
+        /* Trap the alt keys here */
+        if (keysym.mod & KMOD_LALT) {
           switch (keysym.sym) {
-            /* Trap some function keys here */
-            case SDLK_F10:
-              if (keysym.mod & KMOD_SHIFT)
-              {
-                trs_reset(1);
-                trs_disk_led(-1,0);
-                trs_hard_led(-1,0);
-                trs_turbo_led(trs_timer_is_turbo());
-              }
-              else
-                trs_reset(0);
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            case SDLK_F11:
-              trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            case SDLK_F9:
-              if (!fullscreen)
-                trs_debug();
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            case SDLK_F8:
-              trs_exit(!(keysym.mod & KMOD_SHIFT));
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            case SDLK_F7:
-              call_function(GUI);
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            case SDLK_F12:
-              if (keysym.mod & KMOD_SHIFT)
-                call_function(LOAD);
-              else
-                call_function(SAVE);
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            case SDLK_PAUSE:
-              call_function(PAUSE);
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
-              break;
-            default:
-              break;
-          }
-          /* Trap the alt keys here */
-          if (keysym.mod & KMOD_LALT) {
-            switch (keysym.sym) {
 #if defined(SDL2) || !defined(NOX)
-              case SDLK_c:
-                PasteManagerStartCopy(trs_get_copy_data());
+            case SDLK_c:
+              PasteManagerStartCopy(trs_get_copy_data());
 #ifndef SDL2
-                keysym.unicode = 0;
+              keysym.unicode = 0;
 #endif
-                keysym.sym = 0;
-                break;
-              case SDLK_v:
-                PasteManagerStartPaste();
+              keysym.sym = 0;
+              break;
+            case SDLK_v:
+              PasteManagerStartPaste();
 #ifndef SDL2
-                keysym.unicode = 0;
+              keysym.unicode = 0;
 #endif
-                keysym.sym = 0;
-                break;
-              case SDLK_a:
-                requestSelectAll = TRUE;
+              keysym.sym = 0;
+              break;
+            case SDLK_a:
+              requestSelectAll = TRUE;
 #ifndef SDL2
-                keysym.unicode = 0;
+              keysym.unicode = 0;
 #endif
-                keysym.sym = 0;
-                break;
+              keysym.sym = 0;
+              break;
 #endif
 
 #ifdef _WIN32
-              case SDLK_F4:
-                trs_exit(1);
-                break;
+            case SDLK_F4:
+              trs_exit(1);
+              break;
 #endif
-              case SDLK_RETURN:
-                trs_flip_fullscreen();
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_PLUS:
-              case SDLK_PAGEDOWN:
-                if (!fullscreen) {
-                  scale_x++;
-                  if (scale_x > MAX_SCALE)
-                    scale_x = 1;
-                  scale_y = scale_x * 2;
-                  trs_screen_init(1);
-                  trs_screen_refresh();
-                  trs_x_flush();
-                }
-                break;
-              case SDLK_MINUS:
-              case SDLK_PAGEUP:
-                if (!fullscreen) {
-                  scale_x--;
-                  if (scale_x < 1)
-                    scale_x = MAX_SCALE;
-                  scale_y = scale_x * 2;
-                  trs_screen_init(1);
-                  trs_screen_refresh();
-                  trs_x_flush();
-                }
-                break;
-              case SDLK_b:
-                trs_show_led = !trs_show_led;
+            case SDLK_RETURN:
+              trs_flip_fullscreen();
+              trs_screen_refresh();
+              trs_x_flush();
+              break;
+            case SDLK_PLUS:
+            case SDLK_PAGEDOWN:
+              if (!fullscreen) {
+                scale_x++;
+                if (scale_x > MAX_SCALE)
+                  scale_x = 1;
+                scale_y = scale_x * 2;
                 trs_screen_init(1);
                 trs_screen_refresh();
                 trs_x_flush();
-                break;
-              case SDLK_d:
-              case SDLK_f:
-                call_function(DISK);
-                break;
-              case SDLK_e:
-                call_function(EMULATOR);
-                break;
-              case SDLK_g:
-                call_function(STRINGY);
-                break;
-              case SDLK_h:
-                call_function(HARD);
-                break;
-              case SDLK_i:
-                call_function(INTERFACE);
-                break;
-              case SDLK_j:
-                call_function(JOYGUI);
-                break;
-              case SDLK_k:
-                trs_gui_keys_sdltrs();
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_l:
-                call_function(LOAD_STATE);
+              }
+              break;
+            case SDLK_MINUS:
+            case SDLK_PAGEUP:
+              if (!fullscreen) {
+                scale_x--;
+                if (scale_x < 1)
+                  scale_x = MAX_SCALE;
+                scale_y = scale_x * 2;
                 trs_screen_init(1);
                 trs_screen_refresh();
                 trs_x_flush();
-                break;
-              case SDLK_m:
-                call_function(GUI);
-                break;
-              case SDLK_n:
-                trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
-                break;
-              case SDLK_o:
-                call_function(OTHER);
-                break;
-              case SDLK_p:
-                call_function(PAUSE);
-                break;
-              case SDLK_q:
-                trs_exit(1);
-                break;
-              case SDLK_r:
-                if (call_function(READ) == 0)
-                  trs_screen_init(1);
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_s:
-                call_function(SAVE_STATE);
-                break;
-              case SDLK_t:
-                call_function(TAPE);
-                break;
-              case SDLK_u:
-                trs_sound = !trs_sound;
-                trs_screen_caption(trs_timer_is_turbo(), trs_sound);
-                break;
-              case SDLK_w:
-                call_function(WRITE);
-                break;
-              case SDLK_x:
-                mousepointer = !mousepointer;
-                SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
-                break;
-              case SDLK_y:
-                scanlines = !scanlines;
-                trs_screen_refresh();
-                trs_x_flush();
-                break;
-              case SDLK_z:
-                if (!fullscreen)
-                  trs_debug();
-                break;
-              case SDLK_0:
-              case SDLK_1:
-              case SDLK_2:
-              case SDLK_3:
-              case SDLK_4:
-              case SDLK_5:
-              case SDLK_6:
-              case SDLK_7:
-                {
-                  char filename[FILENAME_MAX];
-                  char browse_dir[FILENAME_MAX];
-
-                  if (keysym.mod & KMOD_SHIFT) {
-                    trs_disk_remove(keysym.sym-SDLK_0);
-                  } else {
-#ifndef SDL2
-                    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
-                        SDL_DEFAULT_REPEAT_INTERVAL);
-#endif
-                    trs_expand_dir(trs_disk_dir, browse_dir);
-                    if (trs_gui_file_browse(browse_dir, filename, NULL,0,
-                          " Floppy Disk Image ") != -1)
-                      trs_disk_insert(keysym.sym-SDLK_0, filename);
-#ifndef SDL2
-                    SDL_EnableKeyRepeat(0,0);
-#endif
-                    trs_screen_refresh();
-                    trs_x_flush();
-                  }
-                }
-                break;
-              default:
-                break;
-            }
-            break;
-          }
-
-          /* Make Shift + CapsLock give lower case */
-          if (((keysym.mod & (KMOD_CAPS|KMOD_LSHIFT))
-                == (KMOD_CAPS|KMOD_LSHIFT) ||
-                ((keysym.mod & (KMOD_CAPS|KMOD_RSHIFT))
-                 == (KMOD_CAPS|KMOD_RSHIFT)))
-#ifdef SDL2
-            && keysym.sym >= 'A' && keysym.sym <= 'Z')
-              keysym.sym = (int) keysym.sym + 0x20;
-#else
-            && keysym.unicode >= 'A' && keysym.unicode <= 'Z')
-              keysym.unicode = (int) keysym.unicode + 0x20;
-#endif
-            if (keysym.sym == SDLK_RSHIFT && trs_model == 1)
-              keysym.sym = SDLK_LSHIFT;
-            if (last_key[keysym.scancode] != 0)
-              trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
-
-            if (trs_model == 1) {
-                   if (keysym.sym == SDLK_F1) keysym.sym = 0x115;
-              else if (keysym.sym == SDLK_F2) keysym.sym = 0x120;
-              else if (keysym.sym == SDLK_F3) keysym.sym = 0x121;
-              else if (keysym.sym == SDLK_F4) keysym.sym = 0x122;
-            }
-
-#ifdef SDL2
-            /* Convert arrow/control/function/shift keys */
-                 if (keysym.sym == SDLK_UP)       keysym.sym = 0x111;
-            else if (keysym.sym == SDLK_DOWN)     keysym.sym = 0x112;
-            else if (keysym.sym == SDLK_RIGHT)    keysym.sym = 0x113;
-            else if (keysym.sym == SDLK_LEFT)     keysym.sym = 0x114;
-            else if (keysym.sym == SDLK_INSERT)   keysym.sym = 0x115;
-            else if (keysym.sym == SDLK_HOME)     keysym.sym = 0x116;
-            else if (keysym.sym == SDLK_END)      keysym.sym = 0x117;
-            else if (keysym.sym == SDLK_PAGEUP)   keysym.sym = 0x118;
-            else if (keysym.sym == SDLK_PAGEDOWN) keysym.sym = 0x119;
-            else if (keysym.sym == SDLK_F1)       keysym.sym = 0x11a;
-            else if (keysym.sym == SDLK_F2)       keysym.sym = 0x11b;
-            else if (keysym.sym == SDLK_F3)       keysym.sym = 0x11c;
-            else if (keysym.sym == SDLK_F4)       keysym.sym = 0x11d;
-            else if (keysym.sym == SDLK_F5)       keysym.sym = 0x11e;
-            else if (keysym.sym == SDLK_F6)       keysym.sym = 0x11f;
-            else if (keysym.sym == SDLK_RSHIFT)   keysym.sym = 0x12f;
-            else if (keysym.sym == SDLK_LSHIFT)   keysym.sym = 0x130;
-            else if (keysym.sym == SDLK_LCTRL)    keysym.sym = 0x132;
-
-            if (keysym.sym >= 0x20 && keysym.sym <= 0xFF) {
-              if (keysym.mod & KMOD_SHIFT)
-                keysym.sym = trs_sdl_sym2upper(keysym.sym);
-            }
-            last_key[keysym.scancode] = keysym.sym;
-            trs_xlate_keysym(keysym.sym);
-#else
-            if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
-              last_key[keysym.scancode] = keysym.unicode;
-              trs_xlate_keysym(keysym.unicode);
-            }
-            else if (keysym.sym != 0) {
-              last_key[keysym.scancode] = keysym.sym;
-              trs_xlate_keysym(keysym.sym);
-            }
-#endif
-            break;
-
-            case SDL_KEYUP:
-              keysym  = event.key.keysym;
-#if XDEBUG
-              debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
-                  keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
-#endif
-              if (keysym.mod & KMOD_LALT)
-                break;
-              keyup = last_key[event.key.keysym.scancode];
-              last_key[event.key.keysym.scancode] = 0;
-              trs_xlate_keysym(0x10000 | keyup);
-              break;
-
-            case SDL_JOYAXISMOTION:
-              if (jaxis_mapped == 1 && (event.jaxis.axis == 0 || event.jaxis.axis == 1)) {
-                static int hor_value = 0, ver_value = 0, hor_key = 0, ver_key = 0;
-                int value = 0, trigger_keyup = 0, trigger_keydown = 0;
-
-                if (event.jaxis.axis == 0)
-                  value = hor_value;
-                else
-                  value = ver_value;
-
-                if (event.jaxis.value < -JOY_BOUNCE) {
-                  if (value == 1)
-                    trigger_keyup = 1;
-                  if (value != -1)
-                    trigger_keydown = 1;
-                  value = -1;
-                }
-                else if (event.jaxis.value > JOY_BOUNCE) {
-                  if (value == -1)
-                    trigger_keyup = 1;
-                  if (value != 1)
-                    trigger_keydown = 1;
-                  value = 1;
-                }
-                else if (abs(event.jaxis.value) < JOY_BOUNCE/8) {
-                  if (value != 0)
-                    trigger_keyup = 1;
-                  value = 0;
-                }
-
-                if (trigger_keyup) {
-                  if (event.jaxis.axis == 0)
-                    trs_xlate_keysym(0x10000 | hor_key);
-                  else
-                    trs_xlate_keysym(0x10000 | ver_key);
-                }
-                if (trigger_keydown) {
-                  if (event.jaxis.axis == 0) {
-                    hor_key = (value == -1 ? SDLK_LEFT : SDLK_RIGHT);
-                    trs_xlate_keysym(hor_key);
-                  }
-                  else {
-                    ver_key = (value == -1 ? SDLK_UP : SDLK_DOWN);
-                    trs_xlate_keysym(ver_key);
-                  }
-                }
-
-                if (event.jaxis.axis == 0)
-                  hor_value = value;
-                else
-                  ver_value = value;
               }
-              else
-                trs_joy_axis(event.jaxis.axis, event.jaxis.value);
               break;
-
-            case SDL_JOYHATMOTION:
-              trs_joy_hat(event.jhat.value);
+            case SDLK_b:
+              trs_show_led = !trs_show_led;
+              trs_screen_init(1);
+              trs_screen_refresh();
+              trs_x_flush();
               break;
-
-            case SDL_JOYBUTTONUP:
-              if (event.jbutton.button < N_JOYBUTTONS) {
-                int key = jbutton_map[event.jbutton.button];
-
-                if (key >= 0)
-                  trs_xlate_keysym(0x10000 | key);
-                else if (key == -1)
-                  trs_joy_button_up();
-              }
-              else
-                trs_joy_button_up();
+            case SDLK_d:
+            case SDLK_f:
+              call_function(DISK);
               break;
+            case SDLK_e:
+              call_function(EMULATOR);
+              break;
+            case SDLK_g:
+              call_function(STRINGY);
+              break;
+            case SDLK_h:
+              call_function(HARD);
+              break;
+            case SDLK_i:
+              call_function(INTERFACE);
+              break;
+            case SDLK_j:
+              call_function(JOYGUI);
+              break;
+            case SDLK_k:
+              trs_gui_keys_sdltrs();
+              trs_screen_refresh();
+              trs_x_flush();
+              break;
+            case SDLK_l:
+              call_function(LOAD_STATE);
+              trs_screen_init(1);
+              trs_screen_refresh();
+              trs_x_flush();
+              break;
+            case SDLK_m:
+              call_function(GUI);
+              break;
+            case SDLK_n:
+              trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+              break;
+            case SDLK_o:
+              call_function(OTHER);
+              break;
+            case SDLK_p:
+              call_function(PAUSE);
+              break;
+            case SDLK_q:
+              trs_exit(1);
+              break;
+            case SDLK_r:
+              if (call_function(READ) == 0)
+                trs_screen_init(1);
+              trs_screen_refresh();
+              trs_x_flush();
+              break;
+            case SDLK_s:
+              call_function(SAVE_STATE);
+              break;
+            case SDLK_t:
+              call_function(TAPE);
+              break;
+            case SDLK_u:
+              trs_sound = !trs_sound;
+              trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+              break;
+            case SDLK_w:
+              call_function(WRITE);
+              break;
+            case SDLK_x:
+              mousepointer = !mousepointer;
+              SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
+              break;
+            case SDLK_y:
+              scanlines = !scanlines;
+              trs_screen_refresh();
+              trs_x_flush();
+              break;
+            case SDLK_z:
+              if (!fullscreen)
+                trs_debug();
+              break;
+            case SDLK_0:
+            case SDLK_1:
+            case SDLK_2:
+            case SDLK_3:
+            case SDLK_4:
+            case SDLK_5:
+            case SDLK_6:
+            case SDLK_7:
+              {
+                char filename[FILENAME_MAX];
+                char browse_dir[FILENAME_MAX];
 
-            case SDL_JOYBUTTONDOWN:
-              if (event.jbutton.button < N_JOYBUTTONS) {
-                int key = jbutton_map[event.jbutton.button];
-
-                if (key >= 0)
-                  trs_xlate_keysym(key);
-                else if (key == -1)
-                  trs_joy_button_down();
-                else {
-                  call_function(key);
+                if (keysym.mod & KMOD_SHIFT) {
+                  trs_disk_remove(keysym.sym-SDLK_0);
+                } else {
 #ifndef SDL2
-                  keysym.unicode = 0;
+                  SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
+                      SDL_DEFAULT_REPEAT_INTERVAL);
 #endif
-                  keysym.sym = 0;
+                  trs_expand_dir(trs_disk_dir, browse_dir);
+                  if (trs_gui_file_browse(browse_dir, filename, NULL,0,
+                        " Floppy Disk Image ") != -1)
+                    trs_disk_insert(keysym.sym-SDLK_0, filename);
+#ifndef SDL2
+                  SDL_EnableKeyRepeat(0,0);
+#endif
+                  trs_screen_refresh();
+                  trs_x_flush();
                 }
               }
-              else
-                trs_joy_button_down();
               break;
-
             default:
-#if XDEBUG
-              /* debug("Unhandled event: type %d\n", event.type); */
-#endif
               break;
           }
-          if (trs_paused)
-            trs_gui_display_pause();
-        } while (!wait);
+          break;
+        }
+
+        /* Make Shift + CapsLock give lower case */
+        if (((keysym.mod & (KMOD_CAPS|KMOD_LSHIFT))
+              == (KMOD_CAPS|KMOD_LSHIFT) ||
+              ((keysym.mod & (KMOD_CAPS|KMOD_RSHIFT))
+                == (KMOD_CAPS|KMOD_RSHIFT)))
+#ifdef SDL2
+          && keysym.sym >= 'A' && keysym.sym <= 'Z')
+            keysym.sym = (int) keysym.sym + 0x20;
+#else
+          && keysym.unicode >= 'A' && keysym.unicode <= 'Z')
+            keysym.unicode = (int) keysym.unicode + 0x20;
+#endif
+        if (keysym.sym == SDLK_RSHIFT && trs_model == 1)
+          keysym.sym = SDLK_LSHIFT;
+        if (last_key[keysym.scancode] != 0)
+          trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
+
+        if (trs_model == 1) {
+               if (keysym.sym == SDLK_F1) keysym.sym = 0x115;
+          else if (keysym.sym == SDLK_F2) keysym.sym = 0x120;
+          else if (keysym.sym == SDLK_F3) keysym.sym = 0x121;
+          else if (keysym.sym == SDLK_F4) keysym.sym = 0x122;
+        }
+
+#ifdef SDL2
+        /* Convert arrow/control/function/shift keys */
+             if (keysym.sym == SDLK_UP)       keysym.sym = 0x111;
+        else if (keysym.sym == SDLK_DOWN)     keysym.sym = 0x112;
+        else if (keysym.sym == SDLK_RIGHT)    keysym.sym = 0x113;
+        else if (keysym.sym == SDLK_LEFT)     keysym.sym = 0x114;
+        else if (keysym.sym == SDLK_INSERT)   keysym.sym = 0x115;
+        else if (keysym.sym == SDLK_HOME)     keysym.sym = 0x116;
+        else if (keysym.sym == SDLK_END)      keysym.sym = 0x117;
+        else if (keysym.sym == SDLK_PAGEUP)   keysym.sym = 0x118;
+        else if (keysym.sym == SDLK_PAGEDOWN) keysym.sym = 0x119;
+        else if (keysym.sym == SDLK_F1)       keysym.sym = 0x11a;
+        else if (keysym.sym == SDLK_F2)       keysym.sym = 0x11b;
+        else if (keysym.sym == SDLK_F3)       keysym.sym = 0x11c;
+        else if (keysym.sym == SDLK_F4)       keysym.sym = 0x11d;
+        else if (keysym.sym == SDLK_F5)       keysym.sym = 0x11e;
+        else if (keysym.sym == SDLK_F6)       keysym.sym = 0x11f;
+        else if (keysym.sym == SDLK_RSHIFT)   keysym.sym = 0x12f;
+        else if (keysym.sym == SDLK_LSHIFT)   keysym.sym = 0x130;
+        else if (keysym.sym == SDLK_LCTRL)    keysym.sym = 0x132;
+
+        if (keysym.sym >= 0x20 && keysym.sym <= 0xFF) {
+          if (keysym.mod & KMOD_SHIFT)
+            keysym.sym = trs_sdl_sym2upper(keysym.sym);
+        }
+        last_key[keysym.scancode] = keysym.sym;
+        trs_xlate_keysym(keysym.sym);
+#else
+        if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
+          last_key[keysym.scancode] = keysym.unicode;
+          trs_xlate_keysym(keysym.unicode);
+        }
+        else if (keysym.sym != 0) {
+          last_key[keysym.scancode] = keysym.sym;
+          trs_xlate_keysym(keysym.sym);
+        }
+#endif
+        break;
+
+      case SDL_KEYUP:
+        keysym  = event.key.keysym;
+#if XDEBUG
+        debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
+            keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
+#endif
+        if (keysym.mod & KMOD_LALT)
+          break;
+        keyup = last_key[event.key.keysym.scancode];
+        last_key[event.key.keysym.scancode] = 0;
+        trs_xlate_keysym(0x10000 | keyup);
+        break;
+
+      case SDL_JOYAXISMOTION:
+        if (jaxis_mapped == 1 && (event.jaxis.axis == 0 || event.jaxis.axis == 1)) {
+          static int hor_value = 0, ver_value = 0, hor_key = 0, ver_key = 0;
+          int value = 0, trigger_keyup = 0, trigger_keydown = 0;
+
+          if (event.jaxis.axis == 0)
+            value = hor_value;
+          else
+            value = ver_value;
+
+          if (event.jaxis.value < -JOY_BOUNCE) {
+            if (value == 1)
+              trigger_keyup = 1;
+            if (value != -1)
+              trigger_keydown = 1;
+            value = -1;
+          }
+          else if (event.jaxis.value > JOY_BOUNCE) {
+            if (value == -1)
+              trigger_keyup = 1;
+            if (value != 1)
+              trigger_keydown = 1;
+            value = 1;
+          }
+          else if (abs(event.jaxis.value) < JOY_BOUNCE/8) {
+            if (value != 0)
+              trigger_keyup = 1;
+            value = 0;
+          }
+
+          if (trigger_keyup) {
+            if (event.jaxis.axis == 0)
+              trs_xlate_keysym(0x10000 | hor_key);
+            else
+              trs_xlate_keysym(0x10000 | ver_key);
+          }
+          if (trigger_keydown) {
+            if (event.jaxis.axis == 0) {
+              hor_key = (value == -1 ? SDLK_LEFT : SDLK_RIGHT);
+              trs_xlate_keysym(hor_key);
+            }
+            else {
+              ver_key = (value == -1 ? SDLK_UP : SDLK_DOWN);
+              trs_xlate_keysym(ver_key);
+            }
+          }
+
+          if (event.jaxis.axis == 0)
+            hor_value = value;
+          else
+            ver_value = value;
+        }
+        else
+          trs_joy_axis(event.jaxis.axis, event.jaxis.value);
+        break;
+
+      case SDL_JOYHATMOTION:
+        trs_joy_hat(event.jhat.value);
+        break;
+
+      case SDL_JOYBUTTONUP:
+        if (event.jbutton.button < N_JOYBUTTONS) {
+          int key = jbutton_map[event.jbutton.button];
+
+          if (key >= 0)
+            trs_xlate_keysym(0x10000 | key);
+          else if (key == -1)
+            trs_joy_button_up();
+        }
+        else
+          trs_joy_button_up();
+        break;
+
+      case SDL_JOYBUTTONDOWN:
+        if (event.jbutton.button < N_JOYBUTTONS) {
+          int key = jbutton_map[event.jbutton.button];
+
+          if (key >= 0)
+            trs_xlate_keysym(key);
+          else if (key == -1)
+            trs_joy_button_down();
+          else {
+            call_function(key);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+          }
+        }
+        else
+          trs_joy_button_down();
+        break;
+
+      default:
+#if XDEBUG
+      /* debug("Unhandled event: type %d\n", event.type); */
+#endif
+        break;
+    }
+    if (trs_paused)
+      trs_gui_display_pause();
+  } while (!wait);
 }
 
 void trs_screen_expanded(int flag)
