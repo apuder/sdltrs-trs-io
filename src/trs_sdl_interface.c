@@ -1938,6 +1938,28 @@ void trs_get_event(int wait)
 
         switch (keysym.sym) {
           /* Trap some function keys here */
+          case SDLK_F7:
+            call_function(GUI);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F8:
+            trs_exit(!(keysym.mod & KMOD_SHIFT));
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+          case SDLK_F9:
+            if (!fullscreen)
+              trs_debug();
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
           case SDLK_F10:
             if (keysym.mod & KMOD_SHIFT)
             {
@@ -1955,28 +1977,6 @@ void trs_get_event(int wait)
             break;
           case SDLK_F11:
             trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
-#ifndef SDL2
-            keysym.unicode = 0;
-#endif
-            keysym.sym = 0;
-            break;
-          case SDLK_F9:
-            if (!fullscreen)
-              trs_debug();
-#ifndef SDL2
-            keysym.unicode = 0;
-#endif
-            keysym.sym = 0;
-            break;
-          case SDLK_F8:
-            trs_exit(!(keysym.mod & KMOD_SHIFT));
-#ifndef SDL2
-            keysym.unicode = 0;
-#endif
-            keysym.sym = 0;
-            break;
-          case SDLK_F7:
-            call_function(GUI);
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
