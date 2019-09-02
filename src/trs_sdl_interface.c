@@ -1926,21 +1926,14 @@ void trs_get_event(int wait)
             keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
 #if defined(SDL2) || !defined(NOX)
-        if ((keysym.mod & KMOD_LALT) == 0) {
+        if (keysym.sym != SDLK_LALT) {
+          if (copyStatus != COPY_IDLE)
+            copyStatus = COPY_CLEAR;
+        } else
+        if ((keysym.mod & KMOD_LALT) && keysym.sym != SDLK_c) {
           if (copyStatus != COPY_IDLE)
             copyStatus = COPY_CLEAR;
         }
-
-        else if (keysym.sym != SDLK_c &&
-#ifdef SDL2
-            keysym.sym != KMOD_LALT) {
-#else
-          keysym.sym != SDLK_LMETA &&
-            keysym.sym != SDLK_RMETA) {
-#endif
-              if (copyStatus != COPY_IDLE)
-                copyStatus = COPY_CLEAR;
-            }
 #endif
 
           switch (keysym.sym) {
@@ -2009,9 +2002,10 @@ void trs_get_event(int wait)
             default:
               break;
           }
-#if defined(SDL2) || !defined(NOX)
+          /* Trap the alt keys here */
           if (keysym.mod & KMOD_LALT) {
             switch (keysym.sym) {
+#if defined(SDL2) || !defined(NOX)
               case SDLK_c:
                 PasteManagerStartCopy(trs_get_copy_data());
 #ifndef SDL2
@@ -2033,15 +2027,8 @@ void trs_get_event(int wait)
 #endif
                 keysym.sym = 0;
                 break;
-              default:
-                break;
-            }
-          }
 #endif
 
-          /* Trap the menu keys here */
-          if (keysym.mod & KMOD_LALT) {
-            switch (keysym.sym) {
 #ifdef _WIN32
               case SDLK_F4:
                 trs_exit(1);
