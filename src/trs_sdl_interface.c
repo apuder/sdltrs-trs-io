@@ -1227,10 +1227,10 @@ void trs_screen_caption(int turbo, int sound)
   char title[80];
 
   if (trs_model == 5) {
-    sprintf(title,"TRS-80 Model 4P %s%s", turbo ? "Turbo " : "", sound ? "" : "(Mute)");
+    snprintf(title, 79, "TRS-80 Model 4P %s%s", turbo ? "Turbo " : "", sound ? "" : "(Mute)");
   }
   else {
-    sprintf(title,"TRS-80 Model %d %s%s",trs_model, turbo ? "Turbo " : "", sound ? "" : "(Mute)");
+    snprintf(title, 79, "TRS-80 Model %d %s%s",trs_model, turbo ? "Turbo " : "", sound ? "" : "(Mute)");
   }
 #ifdef SDL2
   SDL_SetWindowTitle(window, title);
