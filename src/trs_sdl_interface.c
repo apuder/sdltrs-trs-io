@@ -428,7 +428,6 @@ static void bitmap_init();
 static int call_function(int function);
 
 extern char *program_name;
-char *title;
 
 static void stripWhitespace (char *inputStr)
 {
@@ -1063,8 +1062,6 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 {
   int i,j;
 
-  title = program_name; /* default */
-
   /* Check for config or state files on the command line */
   trs_config_file[0] = 0;
   init_state_file[0] = 0;
@@ -1311,7 +1308,7 @@ void trs_screen_init(int gui_init)
   }
 #ifdef SDL2
   if (window == NULL) {
-    window = SDL_CreateWindow(title,
+    window = SDL_CreateWindow(program_name,
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
                               OrigWidth, OrigHeight,
