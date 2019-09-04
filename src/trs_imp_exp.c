@@ -192,9 +192,9 @@ void do_emt_setddir()
     char* home = getenv("HOME");
     if (home) {
 #ifdef _WIN32
-      sprintf(trs_disk_dir, "%s\\%s", home, trs_disk_dir+1);
+      snprintf(trs_disk_dir, FILENAME_MAX - 1, "%s\\%s", home, trs_disk_dir+1);
 #else
-      sprintf(trs_disk_dir, "%s/%s", home, trs_disk_dir+1);
+      snprintf(trs_disk_dir, FILENAME_MAX - 1, "%s/%s", home, trs_disk_dir+1);
 #endif
     }
   }

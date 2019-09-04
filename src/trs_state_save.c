@@ -313,7 +313,7 @@ void trs_save_float(FILE *file, float *buffer, int count)
 
   for (i=0;i<count;i++)
     {
-    sprintf(float_buff,"%20f",*buffer++);
+    snprintf(float_buff,21,"%20f",*buffer++);
     trs_save_uchar(file, (unsigned char *)float_buff, 20);
     }
 }

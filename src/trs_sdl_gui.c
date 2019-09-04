@@ -637,11 +637,11 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   trs_gui_clear_screen();
   trs_gui_frame(0,0,64,16);
   if (browse_dir) {
-    sprintf(title,"Choose%sDirectory",type);
+    snprintf(title,63,"Choose%sDirectory",type);
     trs_gui_center_text("TAB selects directory",15,1);
   }
   else
-    sprintf(title,"Select%sFile To Load",type);
+    snprintf(title,63,"Select%sFile To Load",type);
   trs_gui_write_text(title, 2, 0, 0);
   trs_gui_limit_string(current_dir, limited_dir, 58);
   trs_gui_center_text(limited_dir,1,0);
@@ -1301,7 +1301,7 @@ void trs_gui_disk_sizes(void)
         choice = 0;
       else
         choice = 1;
-      sprintf(disk_sizes_menu[i].title,
+      snprintf(disk_sizes_menu[i].title,63,
           "Disk Drive Number %d Size                              %s",
           i,size_choices[choice]);
     }
@@ -1350,7 +1350,7 @@ void trs_gui_disk_steps(void)
         choice = 0;
       else
         choice = 1;
-      sprintf(disk_steps_menu[i].title,
+      snprintf(disk_steps_menu[i].title,63,
           "Disk Drive Number %d Step                              %s",
           i,step_choices[choice]);
     }
@@ -2196,7 +2196,7 @@ void trs_gui_joystick_map_joystick(void)
       int len, first_x;
       SDL_Event event;
 
-      sprintf(text, "Press Joystick Button (%d sec)", counter/1000 + 1);
+      snprintf(text, 60, "Press Joystick Button (%d sec)", counter/1000 + 1);
       len = strlen(text);
       first_x = (64 - len)/2;
       trs_gui_frame(first_x - 1, 1, len + 2, 3);
@@ -2261,7 +2261,7 @@ void trs_gui_joystick_management(void)
     if (gui_joystick_num == -1)
       snprintf(&display_menu[1].title[48],13,"        None");
     else
-      sprintf(&display_menu[1].title[48],"Joystick %1d",gui_joystick_num);
+      snprintf(&display_menu[1].title[48],13,"Joystick %1d",gui_joystick_num);
     selection = trs_gui_display_menu("SDLTRS Joystick Setting Menu",
         display_menu, selection);
     switch(selection) {
@@ -2273,9 +2273,9 @@ void trs_gui_joystick_management(void)
         num_joysticks = SDL_NumJoysticks();
         if (num_joysticks > MAX_JOYSTICKS)
           num_joysticks = MAX_JOYSTICKS;
-        sprintf(joystick_choices[0],"%60s","None");
+        snprintf(joystick_choices[0],61,"%60s","None");
         for (i=0;i<num_joysticks;i++) {
-          sprintf(joystick_choices[i+1],"Joystick %1d - %47s",i,
+          snprintf(joystick_choices[i+1],61,"Joystick %1d - %47s",i,
 #ifdef SDL2
               SDL_JoystickName(SDL_JoystickOpen(i)));
 #else

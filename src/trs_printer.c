@@ -59,7 +59,7 @@ int trs_printer_reset(void)
   if (printer_open) {
     fclose(printer);
     printer_open = FALSE;
-    sprintf(command, trs_printer_command, printer_filename);
+    snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
     if (system(command) == -1)
       return(-1);
     return(0);
@@ -73,7 +73,7 @@ void trs_printer_open(void)
   struct stat st;
 
   for (file_num = 0; file_num < 10000; file_num++) {
-    sprintf(printer_filename, "trsprn%04d.txt", file_num);
+    snprintf(printer_filename, FILENAME_MAX - 1, "trsprn%04d.txt", file_num);
     if (stat(printer_filename, &st) < 0) {
       printer_open = TRUE;
       printer = fopen(printer_filename,"w");
