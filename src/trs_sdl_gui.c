@@ -2729,7 +2729,7 @@ void trs_gui_write_config(void)
   char browse_dir[FILENAME_MAX];
 
   trs_expand_dir(".",browse_dir);
-  if (trs_gui_input_string("Enter Filename for Configuration, TAB selects directory",
+  if (trs_gui_input_string("Write Configuration to file, TAB selects directory",
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8c");
@@ -2799,7 +2799,7 @@ void trs_gui_save_state(void)
 
   filename[0] = 0;
   trs_expand_dir(trs_state_dir, browse_dir);
-  if (trs_gui_input_string("Enter Filename for Emulator State, TAB selects directory",
+  if (trs_gui_input_string("Save Emulator State to file, TAB selects directory",
                             browse_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8s");
