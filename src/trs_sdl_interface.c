@@ -1924,12 +1924,10 @@ void trs_get_event(int wait)
 #endif
 #if defined(SDL2) || !defined(NOX)
         if (keysym.sym != SDLK_LALT) {
-          if (copyStatus != COPY_IDLE)
+          if (copyStatus != COPY_IDLE) {
             copyStatus = COPY_CLEAR;
-        } else
-        if ((keysym.mod & KMOD_LALT) && keysym.sym != SDLK_c) {
-          if (copyStatus != COPY_IDLE)
-            copyStatus = COPY_CLEAR;
+            trs_x_flush();
+          }
         }
 #endif
 
@@ -2009,6 +2007,7 @@ void trs_get_event(int wait)
               keysym.unicode = 0;
 #endif
               keysym.sym = 0;
+              copyStatus = COPY_IDLE;
               break;
             case SDLK_v:
               PasteManagerStartPaste();
