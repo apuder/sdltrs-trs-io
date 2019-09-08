@@ -1900,7 +1900,7 @@ void trs_get_event(int wait)
         break;
 #ifdef SDL2
       case SDL_WINDOWEVENT:
-        if (event.window.event) {
+        if (event.window.event == SDL_WINDOWEVENT_EXPOSED) {
 #else
       case SDL_ACTIVEEVENT:
         if (event.active.state & SDL_APPACTIVE) {
