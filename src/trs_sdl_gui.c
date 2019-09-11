@@ -2645,9 +2645,9 @@ void trs_gui_rom_files(void)
 
   while(!done) {
     trs_gui_clear_screen();
-    trs_gui_limit_string(romfile,&romfile_menu[1].title[2],60);
-    trs_gui_limit_string(romfile3,&romfile_menu[4].title[2],60);
-    trs_gui_limit_string(romfile4p,&romfile_menu[7].title[2],60);
+    trs_gui_limit_string(romfile,&romfile_menu[1].title[2],58);
+    trs_gui_limit_string(romfile3,&romfile_menu[4].title[2],58);
+    trs_gui_limit_string(romfile4p,&romfile_menu[7].title[2],58);
     selection = trs_gui_display_menu("SDLTRS ROM File Selection Menu",romfile_menu, selection);
     switch(selection) {
       case -1:
