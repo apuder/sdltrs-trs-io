@@ -1052,6 +1052,8 @@ int trs_load_config_file()
         break;
       }
     }
+    if (i == num_options)
+      error("unrecognized option %s", line);
   }
 
   fclose(config_file);
@@ -1101,6 +1103,8 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
         }
       }
     }
+    if (j == num_options && argv[i][0] == '-')
+      error("unrecognized option %s", argv[i]);
   }
 
   trs_disk_setsizes();
@@ -1116,6 +1120,8 @@ void trs_disk_setsizes(void)
   for (j=0; j<=7; j++) {
     if (disksizes[j] == 5 || disksizes[j] == 8)
       trs_disk_setsize(j, disksizes[j]);
+    else
+      error("bad value %d for disk %d size", disksizes[j], j);
   }
 }
 
@@ -1126,6 +1132,8 @@ void trs_disk_setsteps(void)
   for (j=0; j<=7; j++) {
     if (disksteps[j] == 1 || disksteps[j] == 2)
       trs_disk_setstep(j, disksteps[j]);
+    else
+      error("bad value %d for disk %d single/double step", disksteps[j], j);
   }
 }
 
