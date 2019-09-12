@@ -321,7 +321,7 @@ void trs_add_extension(char *filename, const char *ext)
     if (strcmp(&filename[flen - elen],ext) == 0)
       return;
 
-  snprintf(filename + flen, sizeof(filename) - flen, "%s", ext);
+  snprintf(filename + flen, FILENAME_MAX - 1, "%s", ext);
 }
 
 int trs_gui_get_key(void)
