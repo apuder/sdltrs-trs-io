@@ -159,9 +159,7 @@ int SDLmain(int argc, char *argv[])
   SDL_EnableUNICODE(TRUE);
 #endif
 
-  argc = trs_parse_command_line(argc, argv, &debug);
-  if (argc > 1)
-    fatal("erroneous argument %s", argv[1]);
+  trs_parse_command_line(argc, argv, &debug);
 
   trs_set_keypad_joystick();
   trs_open_joystick();

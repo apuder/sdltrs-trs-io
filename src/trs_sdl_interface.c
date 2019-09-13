@@ -1060,7 +1060,7 @@ int trs_load_config_file()
   return 0;
 }
 
-int trs_parse_command_line(int argc, char **argv, int *debug)
+void trs_parse_command_line(int argc, char **argv, int *debug)
 {
   int i,j;
 
@@ -1109,8 +1109,6 @@ int trs_parse_command_line(int argc, char **argv, int *debug)
 
   trs_disk_setsizes();
   trs_disk_setsteps();
-
-  return 1;
 }
 
 void trs_disk_setsizes(void)
