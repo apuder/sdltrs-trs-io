@@ -702,7 +702,7 @@ static void trs_opt_model(char *arg, int intarg, char *stringarg)
              strcasecmp(arg, "IVp") == 0) {
     trs_model = 5;
   } else
-    trs_model = 1;
+    error("TRS-80 Model %s not supported", arg);
 }
 
 static void trs_opt_model2(char *arg, int intarg, char *stringarg)
@@ -717,21 +717,21 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
     if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 < 10 || trs_charset1 > 12)))
       trs_charset1 = 3;
   } else if (arg[0] == 'e'/*early*/) {
-     trs_charset1 = 0;
+    trs_charset1 = 0;
   } else if (arg[0] == 's'/*stock*/) {
-     trs_charset1 = 1;
+    trs_charset1 = 1;
   } else if (arg[0] == 'l'/*lcmod*/) {
-     trs_charset1 = 2;
+    trs_charset1 = 2;
   } else if (arg[0] == 'w'/*wider*/) {
-     trs_charset1 = 3;
+    trs_charset1 = 3;
   } else if (arg[0] == 'g'/*genie or german*/) {
-     trs_charset1 = 10;
+    trs_charset1 = 10;
   } else if (arg[0] == 'h'/*ht-1080z*/) {
-     trs_charset1 = 11;
+    trs_charset1 = 11;
   } else if (arg[0] == 'v'/*video genie*/) {
-     trs_charset1 = 12;
+    trs_charset1 = 12;
   } else {
-     trs_charset1 = 3;
+    error("unknown charset name %s", arg);
   }
 }
 
@@ -748,7 +748,7 @@ static void trs_opt_charset3(char *arg, int intarg, char *stringarg)
   } else if (arg[0] == 'b'/*bold*/) {
     trs_charset3 = 6;
   } else {
-    trs_charset3 = 5;
+    error("unknown charset name %s", arg);
   }
 }
 
@@ -765,7 +765,7 @@ static void trs_opt_charset4(char *arg, int intarg, char *stringarg)
   } else if (arg[0] == 'b'/*bold*/) {
     trs_charset4 = 9;
   } else {
-    trs_charset4 = 8;
+    error("unknown charset name %s", arg);
   }
 }
 
