@@ -234,35 +234,6 @@ void selector_out(unsigned char value)
 		bank_base = 0;
 }
 
-void trs_exit(int confirm)
-{
-extern void trs_sdl_cleanup();
-extern void trs_gui_save_rect(int x, int y, int w, int h);
-extern void trs_gui_restore_rect(int x, int y, int w, int h);
-extern int trs_gui_exit_sdltrs();
-static int recursion = 0;
-
-    if (recursion) return;
-    recursion = 1;
-
-    if (confirm != 0) {
-      if (confirm == 2)
-        trs_gui_save_rect(0, 0, 63, 15);
-      if (!trs_gui_exit_sdltrs()) {
-        if (confirm == 2)
-          trs_gui_restore_rect(0, 0, 63, 15);
-        else
-          trs_screen_refresh();
-        trs_x_flush();
-        recursion = 0;
-        return;
-      }
-    }
-    trs_sdl_cleanup();
-    exit(0);
-}
-
-
 /* Handle reset button if poweron=0;
    handle hard reset or initial poweron if poweron=1 */
 void trs_reset(int poweron)
