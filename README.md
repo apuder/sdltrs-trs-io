@@ -15,7 +15,18 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
   * Port to SDL2 (see [BUILDING]) ...
   * Support for Exatron Stringy Floppy ...
 
+## Binaries
+
+  * [sdltrs.exe]    32 bit (needs  SDL.DLL 1.2.x)
+  * [sdl2trs.exe]   32 bit (needs SDL2.DLL 2.0.x)
+  * [sdl2trs64.exe] 64 bit (needs SDL2.DLL 2.0.x)
+
+(Build with Mingw32 & Mingw-w64)
+
 [BUILDING]: BUILDING
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
 [FUZIX]: https://www.github.com/EtchedPixels/FUZIX
 [SDLTRS]: http://sdltrs.sourceforge.net
+[sdltrs.exe]: bin/sdltrs.exe
+[sdl2trs.exe]: bin/sdl2trs.exe
+[sdl2trs64.exe]: bin/sdl2trs64.exe
