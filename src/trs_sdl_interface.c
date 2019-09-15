@@ -1135,45 +1135,6 @@ void trs_disk_setsteps(void)
   }
 }
 
-void trs_exit(int confirm)
-{
-  extern int trs_gui_exit_sdltrs();
-  static int recursion = 0;
-  unsigned int i, ch;
-
-  if (recursion) return;
-  recursion = 1;
-
-  if (confirm != 0) {
-    if (confirm == 2)
-      trs_gui_save_rect(0, 0, 63, 15);
-    if (!trs_gui_exit_sdltrs()) {
-      if (confirm == 2)
-        trs_gui_restore_rect(0, 0, 63, 15);
-      else
-        trs_screen_refresh();
-      trs_x_flush();
-      recursion = 0;
-      return;
-    }
-  }
-
-  /* SDL cleanup */
-  for (i = 0; i < 6; i++)
-    for (ch = 0; ch < MAXCHARS; ch++) {
-      free(trs_char[i][ch]->pixels);
-      SDL_FreeSurface(trs_char[i][ch]);
-    }
-  for (i = 0; i < 3; i++)
-    for (ch = 0; ch < 64; ch++)
-      SDL_FreeSurface(trs_box[i][ch]);
-  SDL_FreeSurface(image);
-
-  SDL_Quit(); /* Will free screen */
-
-  exit(0);
-}
-
 void trs_flip_fullscreen(void)
 {
   static unsigned int window_scale_x = 1;
@@ -1724,6 +1685,45 @@ inline void trs_x_flush()
     SDL_UpdateRects(screen,drawnRectCount,drawnRects);
 #endif
   drawnRectCount = 0;
+}
+
+void trs_exit(int confirm)
+{
+  extern int trs_gui_exit_sdltrs();
+  static int recursion = 0;
+  unsigned int i, ch;
+
+  if (recursion) return;
+  recursion = 1;
+
+  if (confirm != 0) {
+    if (confirm == 2)
+      trs_gui_save_rect(0, 0, 63, 15);
+    if (!trs_gui_exit_sdltrs()) {
+      if (confirm == 2)
+        trs_gui_restore_rect(0, 0, 63, 15);
+      else
+        trs_screen_refresh();
+      trs_x_flush();
+      recursion = 0;
+      return;
+    }
+  }
+
+  /* SDL cleanup */
+  for (i = 0; i < 6; i++)
+    for (ch = 0; ch < MAXCHARS; ch++) {
+      free(trs_char[i][ch]->pixels);
+      SDL_FreeSurface(trs_char[i][ch]);
+    }
+  for (i = 0; i < 3; i++)
+    for (ch = 0; ch < 64; ch++)
+      SDL_FreeSurface(trs_box[i][ch]);
+  SDL_FreeSurface(image);
+
+  SDL_Quit(); /* Will free screen */
+
+  exit(0);
 }
 
 #if defined(SDL2) || !defined(NOX)
