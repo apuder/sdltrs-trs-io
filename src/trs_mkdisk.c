@@ -259,15 +259,6 @@ int trs_create_blank_dmk(char *fname, int sides, int density,
   int i;
   /* Unformatted DMK disk */
 
-  if (sides == -1) sides = 2;
-  if (density == -1) density = 2;
-
-  if (sides != 1 && sides != 2)
-    return -1;
-
-  if (density < 1 || density > 2)
-    return -1;
-
   f = fopen(fname, "wb");
   if (f == NULL)
 	return -1;
@@ -322,53 +313,6 @@ int trs_create_blank_hard(char *fname, int cyl, int sec,
   ReedHardHeader rhh;
   Uchar *rhhp;
   int cksum;
-
-  if (cyl == -1) cyl = 202;
-  if (sec == -1) sec = 256;
-  if (gran == -1) gran = 8;
-  if (dir == -1) dir = 1;
-
-  if (cyl < 3) {
-    printf( " error: cyl < 3\n");
-    return(-1);
-  }
-  if (cyl > 256) {
-    printf( " error: cyl > 256\n");
-    return(-1);
-  }
-  if (cyl > 203) {
-    printf(
-     " warning: cyl > 203 is incompatible with XTRSHARD/DCT\n");
-  }
-  if (sec < 4) {
-    printf( " error: sec < 4\n");
-    return(-1);
-  }
-  if (sec > 256) {
-    printf( " error: sec > 256\n");
-    return(-1);
-  }
-  if (gran < 1) {
-    return(-1);
-  }
-  if (gran > 8) {
-    return(-1);
-  }
-  if (sec < gran) {
-    return(-1);
-  }
-  if (sec % gran != 0) {
-    return(-1);
-  }
-  if (sec / gran > 32) {
-    return(-1);
-  }
-  if (dir < 1) {
-    return(-1);
-  }
-  if (dir >= cyl) {
-    return(-1);
-  }
 
   memset(&rhh,0,sizeof(rhh));
 
