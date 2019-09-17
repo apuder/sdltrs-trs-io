@@ -1624,7 +1624,7 @@ void trs_gui_hard_management(void)
         filename[0] = 0;
         trs_expand_dir(trs_hard_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Hard Disk Image, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+              browse_dir,filename,191,1) == -1)
           break;
         if (trs_create_blank_hard(filename, cylinder_count, sector_count,
               granularity, dir_sector))

@@ -335,8 +335,8 @@ int trs_create_blank_hard(char *fname, int cyl, int sec,
   rhh.sec = sec;
   rhh.gran = gran;
   rhh.dcyl = dir;
-  strcpy(rhh.label, "xtrshard");
-  strcpy(rhh.filename, fname); /* note we don't limit to 8 chars */
+  snprintf(rhh.label, 9, "%s", "xtrshard");
+  snprintf(rhh.filename, 192, "%s", fname);
 
   cksum = 0;
   rhhp = (Uchar *) &rhh;
