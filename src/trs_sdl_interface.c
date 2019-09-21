@@ -1140,9 +1140,6 @@ void trs_flip_fullscreen(void)
   static unsigned int window_scale_x = 1;
   static unsigned int window_scale_y = 2;
 
-#if defined(SDL2) || !defined(NOX)
-  copyStatus = COPY_IDLE;
-#endif
   fullscreen = !fullscreen;
   if (fullscreen) {
     window_scale_x = scale_x;
@@ -1150,33 +1147,19 @@ void trs_flip_fullscreen(void)
     if (scale_x != 1) {
       scale_x = 1;
       scale_y = 2;
-      trs_screen_init(0);
-    }
-    else {
-#ifdef SDL2
-      SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-#else
-      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
-                                SDL_ANYFORMAT | SDL_FULLSCREEN);
-#endif
     }
   }
   else {
     if (window_scale_x != 1) {
       scale_x = window_scale_x;
       scale_y = window_scale_y;
-      trs_screen_init(0);
-    }
-    else {
-#ifdef SDL2
-      SDL_SetWindowFullscreen(window, 0);
-#else
-      screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
-            SDL_ANYFORMAT);
-      SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
-#endif
     }
   }
+#ifdef SDL2
+  SDL_DestroyWindow(window);
+  window = NULL;
+#endif
+  trs_screen_init(0);
 }
 
 void trs_rom_init(void)
