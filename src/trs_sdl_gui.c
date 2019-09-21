@@ -78,7 +78,7 @@ typedef struct menu_entry_type {
   int type;
 } MENU_ENTRY;
 
-static char *function_choices[8] = {
+static const char *function_choices[8] = {
   "      GUI       ", "Virtual Keyboard",
   "   Save State   ", "   Load State   ",
   "     Reset      ", "      Exit      ",
@@ -92,7 +92,7 @@ int function_codes[8] = {
   PAUSE,  JOYGUI
 };
 
-static char *key_names[N_KEYS] = {
+static const char *key_names[N_KEYS] = {
   " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 ", " 0 ", " : ", " - ", "BRK",
   " UP", " q ", " w ", " e ", " r ", " t ", " y ", " u ", " i ", " o ", " p ", "LFT", "RGT",
   "DWN", " a ", " s ", " d ", " f ", " g ", " h ", " j ", " k ", " l ", " ; ", "ENT", "CLR",
@@ -104,7 +104,7 @@ static int key_syms[N_KEYS] = {
   SDLK_DOWN, SDLK_a, SDLK_s, SDLK_d, SDLK_f, SDLK_g, SDLK_h, SDLK_j, SDLK_k,     SDLK_l,      SDLK_SEMICOLON, SDLK_RETURN, SDLK_HOME,
   -1,        SDLK_z, SDLK_x, SDLK_c, SDLK_v, SDLK_b, SDLK_n, SDLK_m, SDLK_COMMA, SDLK_PERIOD, SDLK_SLASH,     SDLK_AT,     SDLK_SPACE
 };
-static char *key_names_shifted[N_KEYS] = {
+static const char *key_names_shifted[N_KEYS] = {
   " ! ", " \" ", " # ", " $ ", " % ", " & ", " ' ", " ( ", " ) ", "   ", " * ", " = ", "   ",
   "   ", " Q ",  " W ", " E ", " R ", " T ", " Y ", " U ", " I ", " O ", " P ", "   ", "   ",
   "   ", " A ",  " S ", " D ", " F ", " G ", " H ", " J ", " K ", " L ", " + ", "   ", "   ",
@@ -147,7 +147,7 @@ static int trs_gui_input_string(const char *title, const char *input, char* outp
                                 unsigned int limit, int file);
 static int trs_gui_display_popup(const char* title, char **entry,
                                  int entry_count, int selection);
-static int trs_gui_display_popup_matrix(const char* title, char **entry,
+static int trs_gui_display_popup_matrix(const char* title, const char **entry,
                                         int rows, int columns, int selection);
 static int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
 static void trs_gui_disk_creation(void);
@@ -162,7 +162,7 @@ static void trs_gui_default_dirs(void);
 static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static int trs_gui_config_management(void);
-static char *trs_gui_get_key_name(int key);
+static const char *trs_gui_get_key_name(int key);
 static int trs_gui_virtual_keyboard(void);
 static int trs_gui_display_question(const char *text);
 void trs_gui_keys_sdltrs(void);
@@ -2944,7 +2944,7 @@ void trs_gui(void)
   }
 }
 
-int trs_gui_display_popup_matrix(const char* title, char **entry,
+int trs_gui_display_popup_matrix(const char* title, const char **entry,
   int rows, int columns, int selection)
 {
   int row, column;
@@ -3009,7 +3009,7 @@ int trs_gui_display_popup_matrix(const char* title, char **entry,
 }
 
 
-char *trs_gui_get_key_name(int key)
+const char *trs_gui_get_key_name(int key)
 {
   int i, found = 0, shifted = 0;
 
