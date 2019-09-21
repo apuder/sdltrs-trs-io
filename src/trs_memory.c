@@ -280,6 +280,7 @@ void trs_reset(int poweron)
 	selector_reg = 0;
     }
     trs_kb_reset();  /* Part of keyboard stretch kludge */
+    clear_key_queue(); /* init the key queue */
 
     trs_cancel_event();
     trs_timer_interrupt(0);

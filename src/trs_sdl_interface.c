@@ -1281,8 +1281,6 @@ void trs_screen_init(int gui_init)
   else
     led_width = 0;
 
-  clear_key_queue(); /* init the key queue */
-
   if (trs_model >= 3  && !resize) {
     OrigWidth = cur_char_width * 80 + 2 * border_width;
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
