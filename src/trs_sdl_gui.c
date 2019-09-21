@@ -78,7 +78,7 @@ typedef struct menu_entry_type {
   int type;
 } MENU_ENTRY;
 
-char *function_choices[8] = {
+static char *function_choices[8] = {
   "      GUI       ", "Virtual Keyboard",
   "   Save State   ", "   Load State   ",
   "     Reset      ", "      Exit      ",
