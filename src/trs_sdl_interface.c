@@ -2617,12 +2617,6 @@ void bitmap_init(unsigned long foreground, unsigned long background)
             gui_foreground, gui_background,
             TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
             scale_x,scale_y);
-    else if (trs_charset<3)
-      trs_char[4][i] =
-        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-            gui_foreground, gui_background,
-            TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
-            scale_x,scale_y);
     else
       trs_char[4][i] =
         CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
@@ -2636,12 +2630,6 @@ void bitmap_init(unsigned long foreground, unsigned long background)
     if (i=='\\' || i>=128)
       trs_char[5][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
-            gui_background, gui_foreground,
-            TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
-            scale_x,scale_y);
-    else if (trs_charset<3)
-      trs_char[5][i] =
-        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
             gui_background, gui_foreground,
             TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
             scale_x,scale_y);
