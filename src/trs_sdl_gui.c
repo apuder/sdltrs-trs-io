@@ -3051,6 +3051,7 @@ void trs_gui_get_virtual_key(void)
 
   if (key != -1) {
     SDL_Event event;
+
     event.type = SDL_KEYDOWN;
     event.key.keysym.sym = key;
     event.key.keysym.mod = 0;
@@ -3058,8 +3059,6 @@ void trs_gui_get_virtual_key(void)
 #ifndef SDL2
     event.key.keysym.unicode = 0;
 #endif
-    SDL_PushEvent(&event);
-    event.type = SDL_KEYUP;
     SDL_PushEvent(&event);
   }
 }
