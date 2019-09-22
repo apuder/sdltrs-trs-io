@@ -105,16 +105,16 @@ static int key_syms[N_KEYS] = {
   -1,        SDLK_z, SDLK_x, SDLK_c, SDLK_v, SDLK_b, SDLK_n, SDLK_m, SDLK_COMMA, SDLK_PERIOD, SDLK_SLASH,     SDLK_AT,     SDLK_SPACE
 };
 static const char *key_names_shifted[N_KEYS] = {
-  " ! ", " \" ", " # ", " $ ", " % ", " & ", " ' ", " ( ", " ) ", "   ", " * ", " = ", "   ",
-  "   ", " Q ",  " W ", " E ", " R ", " T ", " Y ", " U ", " I ", " O ", " P ", "   ", "   ",
-  "   ", " A ",  " S ", " D ", " F ", " G ", " H ", " J ", " K ", " L ", " + ", "   ", "   ",
-  "SHF", " Z ",  " X ", " C ", " V ", " B ", " N ", " M ", " < ", " > ", " ? ", "   ", "   "
+  " ! ", " \" ", " # ", " $ ", " % ", " & ", " ' ", " ( ", " ) ", " _ ", " * ", " = ", " ~ ",
+  "TAB", " Q ",  " W ", " E ", " R ", " T ", " Y ", " U ", " I ", " O ", " P ", " [ ", " ] ",
+  " ^ ", " A ",  " S ", " D ", " F ", " G ", " H ", " J ", " K ", " L ", " + ", " { ", " } ",
+  "SHF", " Z ",  " X ", " C ", " V ", " B ", " N ", " M ", " < ", " > ", " ? ", " \\ ", " | "
 };
 static int key_syms_shifted[N_KEYS] = {
-  SDLK_EXCLAIM, SDLK_QUOTEDBL, SDLK_HASH, SDLK_DOLLAR, 0x25, SDLK_AMPERSAND, SDLK_QUOTE, SDLK_LEFTPAREN, SDLK_RIGHTPAREN, -1, SDLK_ASTERISK, SDLK_EQUALS, -1,
-  -1, 0x51, 0x57, 0x45, 0x52, 0x54, 0x59, 0x55, 0x49,      0x4f,         0x50,          -1, -1,
-  -1, 0x41, 0x53, 0x44, 0x46, 0x47, 0x48, 0x4a, 0x4b,      0x4c,         SDLK_PLUS,     -1, -1,
-  -1, 0x5a, 0x58, 0x43, 0x56, 0x42, 0x4e, 0x4d, SDLK_LESS, SDLK_GREATER, SDLK_QUESTION, -1, -1
+  SDLK_EXCLAIM, SDLK_QUOTEDBL, SDLK_HASH, SDLK_DOLLAR, 0x25, SDLK_AMPERSAND, SDLK_QUOTE, SDLK_LEFTPAREN, SDLK_RIGHTPAREN, SDLK_UNDERSCORE, SDLK_ASTERISK, SDLK_EQUALS, SDLK_CARET,
+  SDLK_TAB, 0x51, 0x57, 0x45, 0x52, 0x54, 0x59, 0x55, 0x49,      0x4f,         0x50,          0xc4, 0xdc,
+  0x7e,     0x41, 0x53, 0x44, 0x46, 0x47, 0x48, 0x4a, 0x4b,      0x4c,         SDLK_PLUS,     0xe4, 0xfc,
+  -1,       0x5a, 0x58, 0x43, 0x56, 0x42, 0x4e, 0x4d, SDLK_LESS, SDLK_GREATER, SDLK_QUESTION, 0xd6, 0xf6
 };
 
 int jbutton_map[N_JOYBUTTONS]    = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
