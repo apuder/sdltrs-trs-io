@@ -2610,8 +2610,8 @@ void bitmap_init(unsigned long foreground, unsigned long background)
       free(trs_char[4][i]->pixels);
       SDL_FreeSurface(trs_char[4][i]);
     }
-    /* For the GUI, make sure we have a backslash , not arrow */
-    if (i=='\\')
+    /* For the GUI, make sure we have a backslash and block graphics */
+    if (i=='\\' || i>=128)
       trs_char[4][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
             gui_foreground, gui_background,
@@ -2619,13 +2619,13 @@ void bitmap_init(unsigned long foreground, unsigned long background)
             scale_x,scale_y);
     else if (trs_charset<3)
       trs_char[4][i] =
-        CreateSurfaceFromDataScale(trs_char_data[2][i],
+        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
             gui_foreground, gui_background,
             TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
             scale_x,scale_y);
     else
       trs_char[4][i] =
-        CreateSurfaceFromDataScale(trs_char_data[3][i],
+        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
             gui_foreground, gui_background,
             TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
             scale_x,scale_y);
@@ -2633,7 +2633,7 @@ void bitmap_init(unsigned long foreground, unsigned long background)
       free(trs_char[5][i]->pixels);
       SDL_FreeSurface(trs_char[5][i]);
     }
-    if (i=='\\')
+    if (i=='\\' || i>=128)
       trs_char[5][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
             gui_background, gui_foreground,
@@ -2641,13 +2641,13 @@ void bitmap_init(unsigned long foreground, unsigned long background)
             scale_x,scale_y);
     else if (trs_charset<3)
       trs_char[5][i] =
-        CreateSurfaceFromDataScale(trs_char_data[2][i],
+        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
             gui_background, gui_foreground,
             TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
             scale_x,scale_y);
     else
       trs_char[5][i] =
-        CreateSurfaceFromDataScale(trs_char_data[3][i],
+        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
             gui_background, gui_foreground,
             TRS_CHAR_WIDTH,TRS_CHAR_HEIGHT,
             scale_x,scale_y);
