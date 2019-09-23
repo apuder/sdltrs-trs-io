@@ -929,7 +929,11 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
-          if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") != -1) {
+          char browse_dir[FILENAME_MAX];
+
+          if (!trs_remove_dir(input, browse_dir))
+            trs_expand_dir(".",browse_dir);
+          if (trs_gui_file_browse(browse_dir, directory_name, NULL, 1, " ") != -1) {
             snprintf(output, limit, "%s", directory_name);
             pos = length = strlen(output);
             if (pos > 60)
@@ -2726,11 +2730,9 @@ int trs_gui_exit_sdltrs(void)
 void trs_gui_write_config(void)
 {
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
 
-  trs_expand_dir(".",browse_dir);
   if (trs_gui_input_string("Write Configuration to file, TAB selects directory",
-                            browse_dir,filename,FILENAME_MAX-5,1) == -1)
+                            trs_config_file,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8c");
   if (trs_write_config_file(filename) == -1)
@@ -2741,7 +2743,8 @@ int trs_gui_read_config(void)
 {
   char browse_dir[FILENAME_MAX];
 
-  trs_expand_dir(".",browse_dir);
+  if (!trs_remove_dir(trs_config_file, browse_dir))
+    trs_expand_dir(".",browse_dir);
   if (trs_gui_file_browse(browse_dir, trs_config_file, ".t8c", 0," Configuration (.t8c) ") == -1)
     return -1;
   if (trs_load_config_file() == -1) {
@@ -2812,7 +2815,7 @@ int trs_gui_load_state(void)
   char filename[FILENAME_MAX];
   char browse_dir[FILENAME_MAX];
 
-  trs_expand_dir(trs_state_dir,browse_dir);
+  trs_expand_dir(trs_state_dir, browse_dir);
   if (trs_gui_file_browse(browse_dir, filename, ".t8s", 0," Saved State (.t8s) ") == -1)
     return -1;
   if (trs_state_load(filename) == -1) {
