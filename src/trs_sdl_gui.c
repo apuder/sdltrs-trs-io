@@ -882,7 +882,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_UP:
         if (file) {
           if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") != -1) {
-            snprintf(output, limit, "%s", directory_name);
+            snprintf(output, limit + 1, "%s", directory_name);
             pos = length = strlen(output);
             if (pos > 60)
               first_disp = pos - 59;
