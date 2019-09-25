@@ -165,22 +165,22 @@ int SDLmain(int argc, char *argv[])
   trs_open_joystick();
 
   if (stat(trs_disk_dir, &st) < 0) {
-    strcpy(trs_disk_dir,".");
+    trs_disk_dir[0] = 0;
   }
   if (stat(trs_hard_dir, &st) < 0) {
-    strcpy(trs_hard_dir,".");
+    trs_hard_dir[0] = 0;
   }
   if (stat(trs_cass_dir, &st) < 0) {
-    strcpy(trs_cass_dir,".");
+    trs_cass_dir[0] = 0;
   }
   if (stat(trs_state_dir, &st) < 0) {
-    strcpy(trs_state_dir,".");
+    trs_state_dir[0] = 0;
   }
   if (stat(trs_disk_set_dir, &st) < 0) {
-    strcpy(trs_disk_set_dir,".");
+    trs_disk_set_dir[0] = 0;
   }
   if (stat(trs_printer_dir, &st) < 0) {
-    strcpy(trs_printer_dir,".");
+    trs_printer_dir[0] = 0;
   }
 
   mem_init();

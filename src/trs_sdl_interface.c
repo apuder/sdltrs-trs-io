@@ -2181,7 +2181,6 @@ void trs_get_event(int wait)
             case SDLK_7:
               {
                 char filename[FILENAME_MAX];
-                char browse_dir[FILENAME_MAX];
 
                 if (keysym.mod & KMOD_SHIFT) {
                   trs_disk_remove(keysym.sym-SDLK_0);
@@ -2190,8 +2189,7 @@ void trs_get_event(int wait)
                   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
                       SDL_DEFAULT_REPEAT_INTERVAL);
 #endif
-                  trs_expand_dir(trs_disk_dir, browse_dir);
-                  if (trs_gui_file_browse(browse_dir, filename, NULL,0,
+                  if (trs_gui_file_browse(trs_disk_dir, filename, NULL,0,
                         " Floppy Disk Image ") != -1)
                     trs_disk_insert(keysym.sym-SDLK_0, filename);
 #ifndef SDL2

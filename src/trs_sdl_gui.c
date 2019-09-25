@@ -133,7 +133,7 @@ static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
-static int trs_remove_dir(const char *file, char *dir);
+static void trs_remove_dir(const char *file, char *dir);
 static void trs_add_extension(char *filename, const char *ext);
 static int trs_gui_get_key(void);
 static void trs_gui_display_message(const char *title, const char *message);
@@ -239,77 +239,29 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
     snprintf(limited, limit + 1, "%s", orig);
 }
 
-void trs_expand_dir(char *dir, char *expanded_dir)
+void trs_remove_dir(const char *file, char *dir)
 {
   unsigned int i;
   struct stat st;
 
-  if (stat(dir, &st) < 0)
-    strcpy(dir, ".");
+  snprintf(dir, FILENAME_MAX-1, "%s", file);
 
+  for (i=strlen(dir)-1;i>0;i--) {
 #ifdef _WIN32
-  if (dir[0] == '\\' || dir[1] == ':') {
+    if (dir[i] == '\\') {
 #else
-  if (dir[0] == '/' || dir[1] == ':') {
+    if (dir[i] == '/') {
 #endif
-    strcpy(expanded_dir, dir);
-    return;
-  }
-
-  if (getcwd(expanded_dir,FILENAME_MAX) == NULL)
-    error("getcwd trs_expand_dir");
-#ifdef _WIN32
-  if (strncmp(dir,"..\\",3) == 0) {
-#else
-  if (strncmp(dir,"../",3) == 0) {
-#endif
-    dir += 3;
-    for (i=strlen(expanded_dir)-1;i>0;i--) {
-#ifdef _WIN32
-      if (expanded_dir[i] == '\\') {
-#else
-      if (expanded_dir[i] == '/') {
-#endif
-        expanded_dir[i]=0;
-          break;
-      }
+      dir[i+1]=0;
+      break;
     }
   }
-#ifdef _WIN32
-  else if (strncmp(dir,".\\",2) == 0) {
-#else
-  else if (strncmp(dir,"./",2) == 0) {
-#endif
-    dir += 2;
+
+  stat(dir, &st);
+  if ((st.st_mode & S_IFMT) != S_IFDIR) {
+    if (getcwd(dir,FILENAME_MAX) == NULL)
+      error("getcwd: %s", dir);
   }
-  else if (strcmp(dir,".") == 0) {
-    dir ++;
-  }
-#ifdef _WIN32
-  strcat(expanded_dir,"\\");
-#else
-  strcat(expanded_dir,"/");
-#endif
-  strcat(expanded_dir, dir);
-}
-
-int trs_remove_dir(const char *file, char *dir)
-{
-  unsigned int i;
-
-  strcpy(dir, file);
-
-    for (i=strlen(dir)-1;i>0;i--) {
-#ifdef _WIN32
-      if (dir[i] == '\\') {
-#else
-      if (dir[i] == '/') {
-#endif
-        dir[i+1]=0;
-        return 1;
-      }
-    }
-  return 0;
 }
 
 void trs_add_extension(char *filename, const char *ext)
@@ -625,7 +577,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   int drawcount;
   int redraw = 1;
 
-  strcpy(current_dir, path);
+  trs_remove_dir(path, current_dir);
 #ifdef _WIN32
   if (current_dir[strlen(current_dir)-1] != '\\')
     strcat(current_dir,"\\");
@@ -929,11 +881,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
-          char browse_dir[FILENAME_MAX];
-
-          if (!trs_remove_dir(input, browse_dir))
-            trs_expand_dir(".",browse_dir);
-          if (trs_gui_file_browse(browse_dir, directory_name, NULL, 1, " ") != -1) {
+          if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") != -1) {
             snprintf(output, limit, "%s", directory_name);
             pos = length = strlen(output);
             if (pos > 60)
@@ -1029,7 +977,6 @@ int trs_gui_display_popup(const char* title, char **entry,
 
 int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
 {
-  char browse_dir[FILENAME_MAX];
   char filename[FILENAME_MAX];
   int num = 0,i,key;
   int done = 0;
@@ -1118,8 +1065,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
-            trs_expand_dir(trs_disk_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename, NULL ,0,
+            if (trs_gui_file_browse(trs_disk_dir, filename, NULL ,0,
                   " Floppy Disk Image ") == -1)
             {
               done = 1;
@@ -1127,8 +1073,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             }
             trs_disk_insert(selection, filename);
           } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
-            trs_expand_dir(trs_hard_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
+            if (trs_gui_file_browse(trs_hard_dir, filename, NULL, 0,
                   " Hard Disk Image ") == -1)
             {
               done = 1;
@@ -1136,8 +1081,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             }
             trs_hard_attach(selection, filename);
           } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE)  {
-            trs_expand_dir(trs_cass_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
+            if (trs_gui_file_browse(trs_cass_dir, filename, NULL, 0,
                   " Wafer Image ") == -1)
             {
               done = 1;
@@ -1145,8 +1089,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             }
             stringy_insert(selection, filename);
           } else {
-            trs_expand_dir(trs_cass_dir, browse_dir);
-            if (trs_gui_file_browse(browse_dir, filename, NULL, 0,
+            if (trs_gui_file_browse(trs_cass_dir, filename, NULL, 0,
                   " Cassette Image ") == -1)
             {
               done = 1;
@@ -1207,7 +1150,6 @@ void trs_gui_disk_creation(void)
                                  "Disk 3","Disk 4","Disk 5","Disk 6",
                                  "Disk 7"};
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
   int selection = 6;
   int done = 0, ret;
   static int image_type = 1;
@@ -1254,9 +1196,8 @@ void trs_gui_disk_creation(void)
         break;
       case 6:
         filename[0] = 0;
-        trs_expand_dir(trs_disk_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Disk Image, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+              trs_disk_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (image_type == 0)
           ret = trs_create_blank_jv1(filename);
@@ -1437,7 +1378,6 @@ void trs_gui_disk_management(void)
    {"Disk Drive Options",MENU_NORMAL_TYPE},
    {"",0}};
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
   int selection = 0;
   int done = 0;
   int i;
@@ -1457,17 +1397,15 @@ void trs_gui_disk_management(void)
     switch(selection) {
       case 9:
         filename[0] = 0;
-        trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-5,1) == -1)
+              trs_disk_set_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
         if (trs_diskset_save(filename) == -1)
           trs_gui_display_message("Error", "Failed to save Disk Set");
         break;
       case 10:
-        trs_expand_dir(trs_disk_set_dir,browse_dir);
-        if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
+        if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
           trs_gui_display_message("Error", "Failed to load Disk Set");
@@ -1510,7 +1448,6 @@ void trs_gui_hard_management(void)
   char *drive_choices[5] = {"  None","Hard 0","Hard 1","Hard 2","Hard 3"};
   char filename[FILENAME_MAX];
   char input[4];
-  char browse_dir[FILENAME_MAX];
   int selection = 0;
   int done = 0;
   int i, value;
@@ -1536,17 +1473,15 @@ void trs_gui_hard_management(void)
     switch(selection) {
       case 5:
         filename[0] = 0;
-        trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-5,1) == -1)
+              trs_disk_set_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
         if (trs_diskset_save(filename) == -1)
           trs_gui_display_message("Error", "Failed to save Disk Set");
         break;
       case 6:
-        trs_expand_dir(trs_disk_set_dir,browse_dir);
-        if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
+        if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
           trs_gui_display_message("Error", "Failed to load Disk Set");
@@ -1626,9 +1561,8 @@ void trs_gui_hard_management(void)
           break;
         }
         filename[0] = 0;
-        trs_expand_dir(trs_hard_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Hard Disk Image, TAB selects directory",
-              browse_dir,filename,191,1) == -1)
+              trs_hard_dir,filename,191,1) == -1)
           break;
         if (trs_create_blank_hard(filename, cylinder_count, sector_count,
               granularity, dir_sector))
@@ -1664,7 +1598,6 @@ void trs_gui_stringy_management(void)
   char *wafer_choices[8] = {"   None","Wafer 0","Wafer 1","Wafer 2","Wafer 3",
                             "Wafer 4","Wafer 5","Wafer 6"};
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
   int selection = 0;
   int done = 0;
   int i;
@@ -1686,17 +1619,15 @@ void trs_gui_stringy_management(void)
     switch(selection) {
       case 8:
         filename[0] = 0;
-        trs_expand_dir(trs_disk_set_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-5,1) == -1)
+              trs_disk_set_dir,filename,FILENAME_MAX-5,1) == -1)
           break;
         trs_add_extension(filename,".set");
         if (trs_diskset_save(filename) == -1)
           trs_gui_display_message("Error", "Failed to save Disk Set");
         break;
       case 9:
-        trs_expand_dir(trs_disk_set_dir,browse_dir);
-        if (trs_gui_file_browse(browse_dir, filename, ".set", 0," Disk Set ") == -1)
+        if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0," Disk Set ") == -1)
           break;
         if (trs_diskset_load(filename) == -1)
           trs_gui_display_message("Error", "Failed to load Disk Set");
@@ -1707,9 +1638,8 @@ void trs_gui_stringy_management(void)
         break;
       case 12:
         filename[0] = 0;
-        trs_expand_dir(trs_cass_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Wafer Image, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+              trs_cass_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (stringy_create(filename))
           trs_gui_display_message("Error","Error creating Stringy Wafer Image");
@@ -1740,7 +1670,6 @@ void trs_gui_cassette_management(void)
   char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
   char *drive_choices[2]  =     {"      No","     Yes"};
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
   static int image_type = 0;
   static int drive_insert = 1;
   int selection = 0;
@@ -1792,9 +1721,8 @@ void trs_gui_cassette_management(void)
         break;
       case 7:
         filename[0] = 0;
-        trs_expand_dir(trs_cass_dir, browse_dir);
         if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
-              browse_dir,filename,FILENAME_MAX-1,1) == -1)
+              trs_cass_dir,filename,FILENAME_MAX-1,1) == -1)
           break;
         if (image_type == 0) {
           trs_add_extension(filename,".cas");
@@ -2585,7 +2513,6 @@ void trs_gui_default_dirs(void)
    {"Default Printer Output Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
-  char browse_dir[FILENAME_MAX];
   int selection = 1;
   int done = 0;
 
@@ -2604,28 +2531,22 @@ void trs_gui_default_dirs(void)
         done = 1;
         break;
       case 1:
-        trs_expand_dir(trs_disk_dir, browse_dir);
-        trs_gui_file_browse(browse_dir, trs_disk_dir, NULL, 1," Floppy Disk ");
+        trs_gui_file_browse(trs_disk_dir, trs_disk_dir, NULL, 1," Floppy Disk ");
         break;
       case 3:
-        trs_expand_dir(trs_hard_dir, browse_dir);
-        trs_gui_file_browse(browse_dir, trs_hard_dir, NULL, 1," Hard Disk ");
+        trs_gui_file_browse(trs_hard_dir, trs_hard_dir, NULL, 1," Hard Disk ");
         break;
       case 5:
-        trs_expand_dir(trs_cass_dir, browse_dir);
-        trs_gui_file_browse(browse_dir, trs_cass_dir, NULL, 1," Cassette ");
+        trs_gui_file_browse(trs_cass_dir, trs_cass_dir, NULL, 1," Cassette ");
         break;
       case 7:
-        trs_expand_dir(trs_disk_set_dir, browse_dir);
-        trs_gui_file_browse(browse_dir, trs_disk_set_dir, NULL, 1," Disk Set ");
+        trs_gui_file_browse(trs_disk_set_dir, trs_disk_set_dir, NULL, 1," Disk Set ");
         break;
       case 9:
-        trs_expand_dir(trs_state_dir, browse_dir);
-        trs_gui_file_browse(browse_dir, trs_state_dir, NULL, 1," Saved State ");
+        trs_gui_file_browse(trs_state_dir, trs_state_dir, NULL, 1," Saved State ");
         break;
       case 11:
-        trs_expand_dir(trs_printer_dir, browse_dir);
-        trs_gui_file_browse(browse_dir, trs_printer_dir, NULL, 1," Printer Output ");
+        trs_gui_file_browse(trs_printer_dir, trs_printer_dir, NULL, 1," Printer Output ");
         break;
     }
   }
@@ -2643,7 +2564,6 @@ void trs_gui_rom_files(void)
    {"Model 4P ROM File:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
-  char browse_dir[FILENAME_MAX];
   int selection = 1;
   int done = 0;
 
@@ -2658,19 +2578,13 @@ void trs_gui_rom_files(void)
         done = 1;
         break;
       case 1:
-        if (romfile[0]==0 || !trs_remove_dir(romfile, browse_dir))
-          trs_expand_dir(".",browse_dir);
-        trs_gui_file_browse(browse_dir, romfile, NULL, 0," Model 1 ROM ");
+        trs_gui_file_browse(romfile, romfile, NULL, 0," Model 1 ROM ");
         break;
       case 4:
-        if (romfile3[0]==0 || !trs_remove_dir(romfile3, browse_dir))
-          trs_expand_dir(".",browse_dir);
-        trs_gui_file_browse(browse_dir, romfile3, NULL, 0," Model 3 ROM ");
+        trs_gui_file_browse(romfile3, romfile3, NULL, 0," Model 3 ROM ");
         break;
       case 7:
-        if (romfile4p[0]==0 || !trs_remove_dir(romfile4p, browse_dir))
-          trs_expand_dir(".",browse_dir);
-        trs_gui_file_browse(browse_dir, romfile4p, NULL, 0," Model 4P ROM ");
+        trs_gui_file_browse(romfile4p, romfile4p, NULL, 0," Model 4P ROM ");
         break;
     }
   }
@@ -2741,11 +2655,7 @@ void trs_gui_write_config(void)
 
 int trs_gui_read_config(void)
 {
-  char browse_dir[FILENAME_MAX];
-
-  if (!trs_remove_dir(trs_config_file, browse_dir))
-    trs_expand_dir(".",browse_dir);
-  if (trs_gui_file_browse(browse_dir, trs_config_file, ".t8c", 0," Configuration (.t8c) ") == -1)
+  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0," Configuration (.t8c) ") == -1)
     return -1;
   if (trs_load_config_file() == -1) {
     trs_gui_display_message("Error", "Failed to read Configuration");
@@ -2798,12 +2708,10 @@ static int trs_gui_config_management(void)
 void trs_gui_save_state(void)
 {
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
 
   filename[0] = 0;
-  trs_expand_dir(trs_state_dir, browse_dir);
   if (trs_gui_input_string("Save Emulator State to file, TAB selects directory",
-                            browse_dir,filename,FILENAME_MAX-5,1) == -1)
+                            trs_state_dir,filename,FILENAME_MAX-5,1) == -1)
     return;
   trs_add_extension(filename,".t8s");
   if (trs_state_save(filename) == -1)
@@ -2813,10 +2721,8 @@ void trs_gui_save_state(void)
 int trs_gui_load_state(void)
 {
   char filename[FILENAME_MAX];
-  char browse_dir[FILENAME_MAX];
 
-  trs_expand_dir(trs_state_dir, browse_dir);
-  if (trs_gui_file_browse(browse_dir, filename, ".t8s", 0," Saved State (.t8s) ") == -1)
+  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0," Saved State (.t8s) ") == -1)
     return -1;
   if (trs_state_load(filename) == -1) {
     trs_gui_display_message("Error", "Failed to load State");
