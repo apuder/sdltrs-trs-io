@@ -246,7 +246,7 @@ void trs_remove_dir(const char *file, char *dir)
 
   snprintf(dir, FILENAME_MAX-1, "%s", file);
 
-  for (i=strlen(dir)-1;i>0;i--) {
+  for (i=strlen(dir);i>0;i--) {
 #ifdef _WIN32
     if (dir[i] == '\\') {
 #else
