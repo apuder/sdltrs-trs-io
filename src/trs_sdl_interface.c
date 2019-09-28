@@ -2608,8 +2608,8 @@ void bitmap_init(unsigned long foreground, unsigned long background)
       free(trs_char[4][i]->pixels);
       SDL_FreeSurface(trs_char[4][i]);
     }
-    /* For the GUI, make sure we have a backslash and block graphics */
-    if (i=='\\' || i>=128)
+    /* For the GUI, make sure we have brackets, backslash and block graphics */
+    if ((i>='[' && i<=']') || i>=128)
       trs_char[4][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
             gui_foreground, gui_background,
@@ -2625,7 +2625,7 @@ void bitmap_init(unsigned long foreground, unsigned long background)
       free(trs_char[5][i]->pixels);
       SDL_FreeSurface(trs_char[5][i]);
     }
-    if (i=='\\' || i>=128)
+    if ((i>='[' && i<=']') || i>=128)
       trs_char[5][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
             gui_background, gui_foreground,
