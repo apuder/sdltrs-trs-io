@@ -133,7 +133,6 @@ static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
-static void trs_remove_dir(const char *file, char *dir);
 static void trs_add_extension(char *filename, const char *ext);
 static int trs_gui_get_key(void);
 static void trs_gui_display_message(const char *title, const char *message);
@@ -237,31 +236,6 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
     snprintf(limited + len_first_part, limit, "...%s", orig + pos_second_part);
   } else
     snprintf(limited, limit + 1, "%s", orig);
-}
-
-void trs_remove_dir(const char *file, char *dir)
-{
-  unsigned int i;
-  struct stat st;
-
-  snprintf(dir, FILENAME_MAX-1, "%s", file);
-
-  for (i=strlen(dir);i>0;i--) {
-#ifdef _WIN32
-    if (dir[i] == '\\') {
-#else
-    if (dir[i] == '/') {
-#endif
-      dir[i+1]=0;
-      break;
-    }
-  }
-
-  stat(dir, &st);
-  if ((st.st_mode & S_IFMT) != S_IFDIR) {
-    if (getcwd(dir,FILENAME_MAX) == NULL)
-      error("getcwd: %s", dir);
-  }
 }
 
 void trs_add_extension(char *filename, const char *ext)
@@ -569,6 +543,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   char current_dir[FILENAME_MAX];
   char limited_dir[64];
   char title[64];
+  struct stat st;
   const char *new_dir;
   int i,key;
   int selection = 0;
@@ -577,7 +552,24 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   int drawcount;
   int redraw = 1;
 
-  trs_remove_dir(path, current_dir);
+  snprintf(current_dir, FILENAME_MAX-1, "%s", path);
+
+  for (i=strlen(current_dir);i>0;i--) {
+#ifdef _WIN32
+    if (current_dir[i] == '\\') {
+#else
+    if (current_dir[i] == '/') {
+#endif
+      current_dir[i+1]=0;
+      break;
+    }
+  }
+
+  stat(current_dir, &st);
+  if ((st.st_mode & S_IFMT) != S_IFDIR) {
+    if (getcwd(current_dir, FILENAME_MAX) == NULL)
+      error("getcwd: %s", current_dir);
+  }
 #ifdef _WIN32
   if (current_dir[strlen(current_dir)-1] != '\\')
     strcat(current_dir,"\\");
