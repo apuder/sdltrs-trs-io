@@ -477,7 +477,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
   struct dirent *dir_entry;
   struct stat st;
 
-  strcpy(pathname, path);
+  snprintf(pathname, FILENAME_MAX, "%s", path);
   pathlen = strlen(path);
   filename_pos = pathname + pathlen;
 
@@ -798,7 +798,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   unsigned int length;
   unsigned int first_disp;
 
-  strcpy(output, input);
+  snprintf(output, limit + 1, "%s", input);
   pos = length = strlen(input);
   if (pos > 60)
     first_disp = pos - 59;
@@ -2307,9 +2307,8 @@ void trs_gui_misc_management(void)
         }
         break;
       case 8:
-        strcpy(input,trs_uart_name);
-        if (trs_gui_input_string("Enter Serial Port Name",input,input,FILENAME_MAX-1,0) == 0) {
-          strcpy(trs_uart_name,input);
+        if (trs_gui_input_string("Enter Serial Port Name",trs_uart_name,input,FILENAME_MAX-1,0) == 0) {
+          snprintf(trs_uart_name, FILENAME_MAX, "%s", input);
           trs_uart_init(0);
         }
         break;
@@ -2354,9 +2353,8 @@ void trs_gui_printer_management(void)
           trs_gui_display_message("Warning","No Printer Output in File");
         break;
       case 3:
-        strcpy(input,trs_printer_command);
-        if (trs_gui_input_string("Enter Printer Command",input,input,FILENAME_MAX-1,0) == 0)
-          strcpy(trs_printer_command,input);
+        if (trs_gui_input_string("Enter Printer Command",trs_printer_command,input, FILENAME_MAX-1,0) == 0)
+          snprintf(trs_printer_command, FILENAME_MAX, "%s", input);
         break;
       case -1:
         done = 1;
@@ -2728,7 +2726,7 @@ void trs_gui_save_or_load_single_state(int save)
   char filename[FILENAME_MAX], *ptr, text[12];
   FILE *file;
 
-  strcpy(filename, trs_config_file);
+  snprintf(filename, FILENAME_MAX, "%s", trs_config_file);
   ptr = strrchr(filename, '.');
   if (ptr != NULL)
     *ptr = '\0';
