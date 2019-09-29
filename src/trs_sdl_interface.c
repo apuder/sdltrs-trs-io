@@ -2220,8 +2220,6 @@ void trs_get_event(int wait)
 #endif
         if (keysym.sym == SDLK_RSHIFT && trs_model == 1)
           keysym.sym = SDLK_LSHIFT;
-        if (last_key[keysym.scancode] != 0)
-          trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
 
         if (trs_model == 1) {
                if (keysym.sym == SDLK_F1) keysym.sym = 0x115;
