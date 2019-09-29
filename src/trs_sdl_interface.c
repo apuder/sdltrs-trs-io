@@ -2206,6 +2206,10 @@ void trs_get_event(int wait)
           break;
         }
 
+#ifdef SDL2
+        if (event.key.repeat)
+          break;
+#endif
         /* Make Shift + CapsLock give lower case */
         if (((keysym.mod & (KMOD_CAPS|KMOD_LSHIFT))
               == (KMOD_CAPS|KMOD_LSHIFT) ||
