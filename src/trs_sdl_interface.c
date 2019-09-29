@@ -2252,19 +2252,19 @@ void trs_get_event(int wait)
         if (keysym.sym >= 0x20 && keysym.sym <= 0xFF) {
           if (keysym.mod & KMOD_SHIFT)
             keysym.sym = trs_sdl_sym2upper(keysym.sym);
+          last_key[keysym.scancode] = keysym.sym;
+          trs_xlate_keysym(keysym.sym);
         }
-        last_key[keysym.scancode] = keysym.sym;
-        trs_xlate_keysym(keysym.sym);
 #else
         if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
           last_key[keysym.scancode] = keysym.unicode;
           trs_xlate_keysym(keysym.unicode);
         }
+#endif
         else if (keysym.sym != 0) {
           last_key[keysym.scancode] = keysym.sym;
           trs_xlate_keysym(keysym.sym);
         }
-#endif
         break;
 
       case SDL_KEYUP:
@@ -2278,6 +2278,7 @@ void trs_get_event(int wait)
         keyup = last_key[event.key.keysym.scancode];
         last_key[event.key.keysym.scancode] = 0;
         trs_xlate_keysym(0x10000 | keyup);
+        keysym.sym = 0;
         break;
 
       case SDL_JOYAXISMOTION:
