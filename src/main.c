@@ -151,6 +151,10 @@ int SDLmain(int argc, char *argv[])
 
   check_endian();
 
+#if defined(SDL2) && defined(_WIN32)
+  SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
+#endif
+
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
     fatal("Failed to initialize SDL library");
 
