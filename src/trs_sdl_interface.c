@@ -425,7 +425,7 @@ static int num_options = sizeof(options)/sizeof(trs_opt);
 
 /* Private routines */
 static void bitmap_init();
-static int call_function(int function);
+static void call_function(int function);
 
 extern char *program_name;
 
@@ -1775,10 +1775,8 @@ char *trs_get_copy_data()
 }
 #endif
 
-int call_function(int function)
+void call_function(int function)
 {
-  int ret = 0;
-
   if (function == PAUSE) {
     trs_paused = !trs_paused;
     if (!trs_paused)
@@ -1835,7 +1833,8 @@ int call_function(int function)
       trs_gui_write_config();
       break;
     case READ:
-      ret = trs_gui_read_config();
+      if (trs_gui_read_config() == 0)
+        trs_screen_init(1);
       break;
     case EMULATOR:
       trs_gui_model();
@@ -1854,7 +1853,6 @@ int call_function(int function)
     trs_screen_refresh();
     trs_x_flush();
   }
-  return ret;
 }
 
 /*
@@ -2140,10 +2138,7 @@ void trs_get_event(int wait)
               trs_exit(1);
               break;
             case SDLK_r:
-              if (call_function(READ) == 0)
-                trs_screen_init(1);
-              trs_screen_refresh();
-              trs_x_flush();
+              call_function(READ);
               break;
             case SDLK_s:
               call_function(SAVE_STATE);
