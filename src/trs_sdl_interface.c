@@ -2064,27 +2064,25 @@ void trs_get_event(int wait)
               break;
             case SDLK_PLUS:
             case SDLK_PAGEDOWN:
-              if (!fullscreen) {
-                scale_x++;
-                if (scale_x > MAX_SCALE)
-                  scale_x = 1;
-                scale_y = scale_x * 2;
-                trs_screen_init(1);
-                trs_screen_refresh();
-                trs_x_flush();
-              }
+              fullscreen = 0;
+              scale_x++;
+              if (scale_x > MAX_SCALE)
+                scale_x = 1;
+              scale_y = scale_x * 2;
+              trs_screen_init(1);
+              trs_screen_refresh();
+              trs_x_flush();
               break;
             case SDLK_MINUS:
             case SDLK_PAGEUP:
-              if (!fullscreen) {
-                scale_x--;
-                if (scale_x < 1)
-                  scale_x = MAX_SCALE;
-                scale_y = scale_x * 2;
-                trs_screen_init(1);
-                trs_screen_refresh();
-                trs_x_flush();
-              }
+              fullscreen = 0;
+              scale_x--;
+              if (scale_x < 1)
+                scale_x = MAX_SCALE;
+              scale_y = scale_x * 2;
+              trs_screen_init(1);
+              trs_screen_refresh();
+              trs_x_flush();
               break;
             case SDLK_b:
               trs_show_led = !trs_show_led;
