@@ -131,7 +131,7 @@ void trs_hard_init(void)
   }
 }
 
-void trs_hard_attach(int drive, char *diskname)
+void trs_hard_attach(int drive, const char *diskname)
 {
   if (state.d[drive].file != NULL)
     fclose(state.d[drive].file);

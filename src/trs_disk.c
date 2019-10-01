@@ -756,7 +756,7 @@ trs_disk_emutype(DiskState *d)
   d->emutype = JV1;
 }
 
-int trs_diskset_save(char *filename)
+int trs_diskset_save(const char *filename)
 {
     const char *diskfilename;
     char dirname[FILENAME_MAX];
@@ -796,7 +796,7 @@ int trs_diskset_save(char *filename)
       return(-1);
 }
 
-int trs_diskset_load(char *filename)
+int trs_diskset_load(const char *filename)
 {
   char diskname[FILENAME_MAX+1];
   FILE *f;
@@ -858,7 +858,7 @@ trs_disk_remove(int drive)
 }
 
 void
-trs_disk_insert(int drive, char *diskname)
+trs_disk_insert(int drive, const char *diskname)
 {
   DiskState *d = &disk[drive];
   struct stat st;

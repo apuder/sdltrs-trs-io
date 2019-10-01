@@ -225,7 +225,7 @@ void trs_protect_stringy(int drive, int writeprot)
   stringy_insert(drive,prot_filename);
 }
 
-int trs_create_blank_jv1(char *fname)
+int trs_create_blank_jv1(const char *fname)
 {
   FILE *f;
 
@@ -237,7 +237,7 @@ int trs_create_blank_jv1(char *fname)
   return 0;
 }
 
-int trs_create_blank_jv3(char *fname)
+int trs_create_blank_jv3(const char *fname)
 {
   FILE *f;
   int i;
@@ -252,7 +252,7 @@ int trs_create_blank_jv3(char *fname)
   return 0;
 }
 
-int trs_create_blank_dmk(char *fname, int sides, int density,
+int trs_create_blank_dmk(const char *fname, int sides, int density,
                          int eight, int ignden)
 {
   FILE *f;
@@ -297,7 +297,7 @@ int trs_create_blank_dmk(char *fname, int sides, int density,
   return 0;
 }
 
-int trs_create_blank_hard(char *fname, int cyl, int sec,
+int trs_create_blank_hard(const char *fname, int cyl, int sec,
                           int gran, int dir)
 {
   FILE *f;

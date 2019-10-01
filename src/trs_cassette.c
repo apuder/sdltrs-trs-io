@@ -538,10 +538,10 @@ set_audio_format(int state)
 }
 
 void
-trs_cassette_insert(char *filename)
+trs_cassette_insert(const char *filename)
 {
    int len;
-   char *extension;
+   const char *extension;
 
    strcpy(cassette_filename, filename);
    cassette_position = 0;

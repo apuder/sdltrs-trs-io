@@ -59,11 +59,11 @@ extern char* trs_disk_getfilename(int unit);
 extern int trs_disk_getwriteprotect(int unit);
 extern int trs_disk_getdisktype(int unit);
 
-extern void trs_disk_insert(int drive, char *diskname);
+extern void trs_disk_insert(int drive, const char *diskname);
 extern void trs_disk_remove(int drive);
 
-extern int trs_diskset_save(char *filename);
-extern int trs_diskset_load(char *filename);
+extern int trs_diskset_save(const char *filename);
+extern int trs_diskset_load(const char *filename);
 
 extern int trs_disk_doubler;
 extern char trs_disk_dir[FILENAME_MAX];

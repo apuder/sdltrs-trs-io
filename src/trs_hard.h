@@ -44,7 +44,7 @@
  */
 
 extern void trs_hard_init(void);
-extern void trs_hard_attach(int drive, char *diskname);
+extern void trs_hard_attach(int drive, const char *diskname);
 extern void trs_hard_remove(int drive);
 extern int trs_hard_in(int port);
 extern void trs_hard_out(int port, int value);

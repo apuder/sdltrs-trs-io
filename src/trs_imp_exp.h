@@ -296,6 +296,6 @@ extern void do_emt_opendisk();
 extern void do_emt_closedisk();
 extern void do_emt_resetdisk();
 
-extern void trs_impexp_xtrshard_attach(int drive, char *filename);
+extern void trs_impexp_xtrshard_attach(int drive, const char *filename);
 extern void trs_impexp_xtrshard_remove(int drive);
 

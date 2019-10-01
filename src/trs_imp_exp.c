@@ -885,7 +885,7 @@ void trs_imp_exp_load(FILE *file)
 }
 
 void
-trs_impexp_xtrshard_attach(int drive, char *filename)
+trs_impexp_xtrshard_attach(int drive, const char *filename)
 {
   int i;
   for (i=0;i<MAX_OPENDISK;i++) {

@@ -43,7 +43,7 @@
 */
 
 int create_wav_header(FILE *f);
-void trs_cassette_insert(char *filename);
+void trs_cassette_insert(const char *filename);
 void trs_cassette_remove(void);
 char* trs_cassette_getfilename(void);
 int trs_get_cassette_length(void);
@@ -61,5 +61,3 @@ void trs_cassette_update(int dummy);
 int trs_cassette_in();
 void trs_cassette_reset();
 void trs_pause_audio(int pause);
-
-
