@@ -2030,25 +2030,13 @@ void trs_get_event(int wait)
 #if defined(SDL2) || !defined(NOX)
             case SDLK_c:
               PasteManagerStartCopy(trs_get_copy_data());
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
               copyStatus = COPY_IDLE;
               break;
             case SDLK_v:
               PasteManagerStartPaste();
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
               break;
             case SDLK_a:
               requestSelectAll = TRUE;
-#ifndef SDL2
-              keysym.unicode = 0;
-#endif
-              keysym.sym = 0;
               break;
 #endif
 
@@ -2196,6 +2184,10 @@ void trs_get_event(int wait)
             default:
               break;
           }
+#ifndef SDL2
+          keysym.unicode = 0;
+#endif
+          keysym.sym = 0;
           break;
         }
 
