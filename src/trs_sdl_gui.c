@@ -170,7 +170,7 @@ int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert)
 {
-  int position = x + y * 64;
+  int const position = x + y * 64;
   int i;
 
   for (i=0;i<len && i<60;i++)
@@ -189,7 +189,7 @@ void trs_gui_write_text_char(const char text, int x, int y, int invert)
 
 void trs_gui_center_text(const char *text, int y, int invert)
 {
-  int position = (64-strlen(text))/2 + y * 64;
+  int const position = (64-strlen(text))/2 + y * 64;
   int i;
 
   for (i=0;i<(int)strlen(text);i++)
@@ -240,8 +240,8 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
 
 void trs_add_extension(char *filename, const char *ext)
 {
-  int flen = strlen(filename);
-  int elen = strlen(ext);
+  int const flen = strlen(filename);
+  int const elen = strlen(ext);
 
   if (flen > elen)
     if (strcmp(&filename[flen - elen],ext) == 0)

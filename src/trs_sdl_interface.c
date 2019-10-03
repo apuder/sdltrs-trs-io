@@ -2369,7 +2369,7 @@ void trs_get_event(int wait)
 
 void trs_screen_expanded(int flag)
 {
-  int bit = flag ? EXPANDED : 0;
+  int const bit = flag ? EXPANDED : 0;
 
   if ((currentmode ^ bit) & EXPANDED) {
     currentmode ^= EXPANDED;
@@ -2380,7 +2380,7 @@ void trs_screen_expanded(int flag)
 
 void trs_screen_inverse(int flag)
 {
-  int bit = flag ? INVERSE : 0;
+  int const bit = flag ? INVERSE : 0;
   int i;
 
   if ((currentmode ^ bit) & INVERSE) {
@@ -2394,7 +2394,7 @@ void trs_screen_inverse(int flag)
 
 void trs_screen_alternate(int flag)
 {
-  int bit = flag ? ALTERNATE : 0;
+  int const bit = flag ? ALTERNATE : 0;
   int i;
 
   if ((currentmode ^ bit) & ALTERNATE) {
@@ -3093,9 +3093,9 @@ void grafyx_write_byte(int x, int y, char byte)
 {
   char exp[MAX_SCALE];
   int i, j;
-  int screen_x = ((x - grafyx_xoffset + G_XSIZE) % G_XSIZE);
-  int screen_y = ((y - grafyx_yoffset + G_YSIZE) % G_YSIZE);
-  int on_screen = screen_x < row_chars &&
+  int const screen_x = ((x - grafyx_xoffset + G_XSIZE) % G_XSIZE);
+  int const screen_y = ((y - grafyx_yoffset + G_YSIZE) % G_YSIZE);
+  int const on_screen = screen_x < row_chars &&
     screen_y < col_chars*cur_char_height/scale_y;
   SDL_Rect srcRect, destRect;
 
@@ -3253,8 +3253,8 @@ int grafyx_read_data()
 
 void grafyx_write_mode(int value)
 {
-  unsigned char old_enable = grafyx_enable;
-  unsigned char old_overlay = grafyx_overlay;
+  const unsigned char old_enable = grafyx_enable;
+  const unsigned char old_overlay = grafyx_overlay;
 
   grafyx_enable = value & G_ENABLE;
   if (grafyx_microlabs)
@@ -3268,7 +3268,7 @@ void grafyx_write_mode(int value)
 
 void grafyx_write_xoffset(int value)
 {
-  unsigned char old_xoffset = grafyx_xoffset;
+  const unsigned char old_xoffset = grafyx_xoffset;
 
   grafyx_xoffset = value % G_XSIZE;
   if (grafyx_enable && old_xoffset != grafyx_xoffset)
@@ -3277,7 +3277,7 @@ void grafyx_write_xoffset(int value)
 
 void grafyx_write_yoffset(int value)
 {
-  unsigned char old_yoffset = grafyx_yoffset;
+  const unsigned char old_yoffset = grafyx_yoffset;
 
   grafyx_yoffset = value;
   if (grafyx_enable && old_yoffset != grafyx_yoffset)
@@ -3286,7 +3286,7 @@ void grafyx_write_yoffset(int value)
 
 void grafyx_write_overlay(int value)
 {
-  unsigned char old_overlay = grafyx_overlay;
+  const unsigned char old_overlay = grafyx_overlay;
 
   grafyx_overlay = value & 1;
   if (grafyx_enable && old_overlay != grafyx_overlay) {
@@ -3313,8 +3313,8 @@ void grafyx_m3_reset()
 
 void grafyx_m3_write_mode(int value)
 {
-  int enable = (value & G3_ENABLE) != 0;
-  int changed = (enable != grafyx_enable);
+  int const enable = (value & G3_ENABLE) != 0;
+  int const changed = (enable != grafyx_enable);
 
   grafyx_enable = enable;
   grafyx_overlay = enable;
@@ -3326,8 +3326,8 @@ void grafyx_m3_write_mode(int value)
 int grafyx_m3_write_byte(int position, int byte)
 {
   if (grafyx_microlabs && (grafyx_mode & G3_COORD)) {
-    int x = (position % 64);
-    int y = (position / 64) * 12 + grafyx_y;
+    int const x = (position % 64);
+    int const y = (position / 64) * 12 + grafyx_y;
 
     grafyx_write_byte(x, y, byte);
     return 1;
@@ -3338,8 +3338,8 @@ int grafyx_m3_write_byte(int position, int byte)
 unsigned char grafyx_m3_read_byte(int position)
 {
   if (grafyx_microlabs && (grafyx_mode & G3_COORD)) {
-    int x = (position % 64);
-    int y = (position / 64) * 12 + grafyx_y;
+    int const x = (position % 64);
+    int const y = (position / 64) * 12 + grafyx_y;
 
     return grafyx_unscaled[y][x];
   } else
@@ -3548,12 +3548,12 @@ hrg_write_data(int data)
      ) {
     /* Only additional bits set, or blank text character.
        No need for update of text. */
-    int destx = (position % row_chars) * cur_char_width + left_margin;
-    int desty = (position / row_chars) * cur_char_height + top_margin
+    int const destx = (position % row_chars) * cur_char_width + left_margin;
+    int const desty = (position / row_chars) * cur_char_height + top_margin
       + hrg_pixel_y[line];
-    int *x = hrg_pixel_x[(currentmode&EXPANDED)!=0];
-    int *w = hrg_pixel_width[(currentmode&EXPANDED)!=0];
-    int h = hrg_pixel_height[line];
+    int const *x = hrg_pixel_x[(currentmode&EXPANDED)!=0];
+    int const *w = hrg_pixel_width[(currentmode&EXPANDED)!=0];
+    int const h = hrg_pixel_height[line];
     int n0 = 0;
     int n1 = 0;
     int flag = 0;
@@ -3622,10 +3622,10 @@ hrg_read_data()
 static void
 hrg_update_char(int position)
 {
-  int destx = (position % row_chars) * cur_char_width + left_margin;
-  int desty = (position / row_chars) * cur_char_height + top_margin;
-  int *x = hrg_pixel_x[(currentmode&EXPANDED)!=0];
-  int *w = hrg_pixel_width[(currentmode&EXPANDED)!=0];
+  int const destx = (position % row_chars) * cur_char_width + left_margin;
+  int const desty = (position / row_chars) * cur_char_height + top_margin;
+  int const *x = hrg_pixel_x[(currentmode&EXPANDED)!=0];
+  int const *w = hrg_pixel_width[(currentmode&EXPANDED)!=0];
   int byte;
   int prev_byte = 0;
   int n = 0;
