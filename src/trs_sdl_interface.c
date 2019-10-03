@@ -1154,10 +1154,7 @@ void trs_flip_fullscreen(void)
       scale_y = window_scale_y;
     }
   }
-#ifdef SDL2
-  SDL_DestroyWindow(window);
-  window = NULL;
-#endif
+
   trs_screen_init(0);
 }
 
@@ -2629,6 +2626,9 @@ void trs_screen_refresh()
 #if XDEBUG
   debug("trs_screen_refresh\n");
 #endif
+#if defined(SDL2)
+  screen = SDL_GetWindowSurface(window);
+#endif
   if (grafyx_enable && !grafyx_overlay) {
     srcx = cur_char_width * grafyx_xoffset;
     srcy = scale_y * grafyx_yoffset;
@@ -2692,9 +2692,6 @@ void trs_screen_refresh()
     trs_turbo_led(trs_timer_is_turbo());
   }
 
-#if defined(SDL2)
-  screen = SDL_GetWindowSurface(window);
-#endif
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
