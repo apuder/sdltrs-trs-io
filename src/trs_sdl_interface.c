@@ -1377,7 +1377,7 @@ void addToDrawList(SDL_Rect *rect)
 
 void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 {
-  int i,y,scale;
+  int i,y;
 
   if (copy_x < orig_x) {
     int swap_x;
@@ -1394,39 +1394,37 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
     orig_y = swap_y;
   }
 
-  scale = scale_x;
-
   if (screen->format->BitsPerPixel == 8) {
     const int pitch = screen->pitch;
     Uint8 *start8;
 
     SDL_LockSurface(screen);
 
-    for (y=orig_y;y < orig_y+scale;y++) {
+    for (y=orig_y;y < orig_y+scale_x;y++) {
       start8 = (Uint8 *) screen->pixels +
         (y * pitch) + orig_x;
-      for (i=0;i<(copy_x-orig_x+scale);i++,start8++)
+      for (i=0;i<(copy_x-orig_x+scale_x);i++,start8++)
         *start8 ^= 0xFF;
     }
     if (copy_y > orig_y) {
-      for (y=copy_y;y < copy_y+scale;y++) {
+      for (y=copy_y;y < copy_y+scale_x;y++) {
         start8 = (Uint8 *) screen->pixels +
           (y * pitch) + orig_x;
-        for (i=0;i<(copy_x-orig_x+scale);i++,start8++)
+        for (i=0;i<(copy_x-orig_x+scale_x);i++,start8++)
           *start8 ^= 0xFF;
       }
     }
-    for (y=orig_y+scale;y < copy_y;y++) {
+    for (y=orig_y+scale_x;y < copy_y;y++) {
       start8 = (Uint8 *) screen->pixels +
         (y * pitch) + orig_x;
-      for (i=0;i<scale;i++)
+      for (i=0;i<scale_x;i++)
         *start8++ ^= 0xFF;
     }
     if (copy_x > orig_x) {
-      for (y=orig_y+scale;y < copy_y;y++) {
+      for (y=orig_y+scale_x;y < copy_y;y++) {
         start8 = (Uint8 *) screen->pixels +
           (y * pitch) + copy_x;
-        for (i=0;i<scale;i++)
+        for (i=0;i<scale_x;i++)
           *start8++ ^= 0xFF;
       }
     }
@@ -1438,31 +1436,31 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 
     SDL_LockSurface(screen);
 
-    for (y=orig_y;y < orig_y+scale;y++) {
+    for (y=orig_y;y < orig_y+scale_x;y++) {
       start16 = (Uint16 *) screen->pixels +
         (y * pitch2) + orig_x;
-      for (i=0;i<(copy_x-orig_x+scale);i++,start16++)
+      for (i=0;i<(copy_x-orig_x+scale_x);i++,start16++)
         *start16 ^= 0xFFFF;
     }
     if (copy_y > orig_y) {
-      for (y=copy_y;y < copy_y+scale;y++) {
+      for (y=copy_y;y < copy_y+scale_x;y++) {
         start16 = (Uint16 *) screen->pixels +
           (y * pitch2) + orig_x;
-        for (i=0;i<(copy_x-orig_x+scale);i++,start16++)
+        for (i=0;i<(copy_x-orig_x+scale_x);i++,start16++)
           *start16 ^= 0xFFFF;
       }
     }
-    for (y=orig_y+scale;y < copy_y;y++) {
+    for (y=orig_y+scale_x;y < copy_y;y++) {
       start16 = (Uint16 *) screen->pixels +
         (y * pitch2) + orig_x;
-      for (i=0;i<scale;i++)
+      for (i=0;i<scale_x;i++)
         *start16++ ^= 0xFFFF;
     }
     if (copy_x > orig_x) {
-      for (y=orig_y+scale;y < copy_y;y++) {
+      for (y=orig_y+scale_x;y < copy_y;y++) {
         start16 = (Uint16 *) screen->pixels +
           (y * pitch2) + copy_x;
-        for (i=0;i<scale;i++)
+        for (i=0;i<scale_x;i++)
           *start16++ ^= 0xFFFF;
       }
     }
@@ -1474,31 +1472,31 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 
     SDL_LockSurface(screen);
 
-    for (y=orig_y;y<orig_y+scale;y++) {
+    for (y=orig_y;y<orig_y+scale_x;y++) {
       start32 = (Uint32 *) screen->pixels +
         (y * pitch4) + orig_x;
-      for (i=0;i<(copy_x-orig_x+scale);i++,start32++)
+      for (i=0;i<(copy_x-orig_x+scale_x);i++,start32++)
         *start32 ^= 0xFFFFFFFF;
     }
     if (copy_y > orig_y) {
-      for (y=copy_y;y<copy_y+scale;y++) {
+      for (y=copy_y;y<copy_y+scale_x;y++) {
         start32 = (Uint32 *) screen->pixels +
           (y * pitch4) + orig_x;
-        for (i=0;i<(copy_x-orig_x+scale);i++,start32++)
+        for (i=0;i<(copy_x-orig_x+scale_x);i++,start32++)
           *start32 ^= 0xFFFFFFFF;
       }
     }
-    for (y=orig_y+scale;y < copy_y;y++) {
+    for (y=orig_y+scale_x;y < copy_y;y++) {
       start32 = (Uint32 *) screen->pixels +
         (y * pitch4) + orig_x;
-      for (i=0;i<scale;i++)
+      for (i=0;i<scale_x;i++)
         *start32++ ^= 0xFFFFFFFF;
     }
     if (copy_x > orig_x) {
-      for (y=orig_y+scale;y < copy_y;y++) {
+      for (y=orig_y+scale_x;y < copy_y;y++) {
         start32 = (Uint32 *) screen->pixels +
           (y * pitch4) + copy_x;
-        for (i=0;i<scale;i++)
+        for (i=0;i<scale_x;i++)
           *start32++ ^= 0xFFFFFFFF;
       }
     }
