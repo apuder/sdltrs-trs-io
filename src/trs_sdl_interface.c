@@ -1300,28 +1300,21 @@ void trs_screen_init(int gui_init)
                               OrigWidth, OrigHeight,
                               SDL_WINDOW_SHOWN);
   }
+  SDL_RaiseWindow(window);
+  SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
   SDL_SetWindowSize(window, OrigWidth, OrigHeight);
   screen = SDL_GetWindowSurface(window);
-#endif
-
-  if (fullscreen) {
-#ifdef SDL2
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 #else
+  if (fullscreen) {
     screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                               SDL_ANYFORMAT | SDL_FULLSCREEN);
-#endif
   }
   else {
-#ifdef SDL2
-    SDL_SetWindowFullscreen(window, 0);
-    SDL_RaiseWindow(window);
-#else
     screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
                                SDL_ANYFORMAT);
     SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
-#endif
   }
+#endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
   trs_screen_caption(trs_timer_is_turbo(), trs_sound);
