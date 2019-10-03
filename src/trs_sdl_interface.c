@@ -1691,6 +1691,9 @@ void trs_exit(int confirm)
       SDL_FreeSurface(trs_box[i][ch]);
   SDL_FreeSurface(image);
 
+#ifdef SDL2
+  SDL_DestroyWindow(window);
+#endif
   SDL_Quit(); /* Will free screen */
 
   exit(0);
