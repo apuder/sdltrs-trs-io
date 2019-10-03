@@ -421,7 +421,7 @@ trs_opt options[] = {
 {"noscanlines",trs_opt_scanlines,0,0,NULL},
 };
 
-static int num_options = sizeof(options)/sizeof(trs_opt);
+static const int num_options = sizeof(options)/sizeof(trs_opt);
 
 /* Private routines */
 static void bitmap_init();
@@ -1397,12 +1397,10 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
   scale = scale_x;
 
   if (screen->format->BitsPerPixel == 8) {
-    register int pitch;
-    register Uint8 *start8;
+    const int pitch = screen->pitch;
+    Uint8 *start8;
 
     SDL_LockSurface(screen);
-
-    pitch = screen->pitch;
 
     for (y=orig_y;y < orig_y+scale;y++) {
       start8 = (Uint8 *) screen->pixels +
@@ -1435,12 +1433,10 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
     SDL_UnlockSurface(screen);
   }
   else if (screen->format->BitsPerPixel == 16) {
-    register int pitch2;
-    register Uint16 *start16;
+    const int pitch2 = screen->pitch / 2;
+    Uint16 *start16;
 
     SDL_LockSurface(screen);
-
-    pitch2 = screen->pitch / 2;
 
     for (y=orig_y;y < orig_y+scale;y++) {
       start16 = (Uint16 *) screen->pixels +
@@ -1473,12 +1469,10 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
     SDL_UnlockSurface(screen);
   }
   else if (screen->format->BitsPerPixel == 32) {
-    register int pitch4;
-    register Uint32 *start32;
+    const int pitch4 = screen->pitch / 4;
+    Uint32 *start32;
 
     SDL_LockSurface(screen);
-
-    pitch4 = screen->pitch / 4;
 
     for (y=orig_y;y<orig_y+scale;y++) {
       start32 = (Uint32 *) screen->pixels +
