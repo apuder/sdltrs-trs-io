@@ -618,6 +618,11 @@ void trs_set_to_defaults(void)
   strcpy(trs_disk_set_dir,"disksets");
   strcpy(trs_state_dir,"savedstates");
   strcpy(trs_printer_dir,"printer");
+#ifdef _WIN32
+  strcpy(trs_printer_command,"notepad %s");
+#else
+  strcpy(trs_printer_command,"lpr %s");
+#endif
   stretch_amount = STRETCH_AMOUNT;
   window_border_width = 2;
   grafyx_set_microlabs(FALSE);
@@ -649,12 +654,6 @@ void trs_set_to_defaults(void)
   background = BLACK;
   gui_foreground = WHITE;
   gui_background = GREEN;
-#ifdef __linux
-  strcpy(trs_printer_command,"lpr %s");
-#endif
-#ifdef _WIN32
-  strcpy(trs_printer_command,"notepad %s");
-#endif
   trs_emtsafe = 1;
 }
 
