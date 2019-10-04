@@ -1146,16 +1146,24 @@ void trs_flip_fullscreen(void)
     if (scale_x != 1) {
       scale_x = 1;
       scale_y = 2;
+      trs_screen_init(0);
+      return;
     }
   }
   else {
     if (window_scale_x != 1) {
       scale_x = window_scale_x;
       scale_y = window_scale_y;
+      trs_screen_init(0);
+      return;
     }
   }
-
-  trs_screen_init(0);
+#ifdef SDL2
+  SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+#else
+  screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, fullscreen ?
+                            SDL_ANYFORMAT | SDL_FULLSCREEN : SDL_ANYFORMAT);
+#endif
 }
 
 void trs_rom_init(void)
