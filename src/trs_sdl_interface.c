@@ -1302,15 +1302,9 @@ void trs_screen_init(int gui_init)
   SDL_SetWindowSize(window, OrigWidth, OrigHeight);
   screen = SDL_GetWindowSurface(window);
 #else
-  if (fullscreen) {
-    screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
-                              SDL_ANYFORMAT | SDL_FULLSCREEN);
-  }
-  else {
-    screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0,
-                               SDL_ANYFORMAT);
-    SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
-  }
+  screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, fullscreen ?
+                            SDL_ANYFORMAT | SDL_FULLSCREEN : SDL_ANYFORMAT);
+  SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
 #endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
