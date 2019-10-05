@@ -1023,7 +1023,7 @@ int trs_load_config_file()
 #else
     const char *home = getenv("HOME");
 
-    snprintf(trs_config_file, FILENAME_MAX-1, "%s/sdltrs.t8c", home);
+    snprintf(trs_config_file, FILENAME_MAX-1, "%s/.sdltrs.t8c", home);
 #endif
   }
 
