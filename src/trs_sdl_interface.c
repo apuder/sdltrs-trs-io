@@ -2205,8 +2205,10 @@ void trs_get_event(int wait)
         }
 
 #ifdef SDL2
+        if ((keysym.mod & KMOD_RALT) && keysym.sym == SDLK_q)
+          keysym.sym = 0x11e;
         /* Convert arrow/control/function/shift keys */
-             if (keysym.sym == SDLK_UP)       keysym.sym = 0x111;
+        else if (keysym.sym == SDLK_UP)       keysym.sym = 0x111;
         else if (keysym.sym == SDLK_DOWN)     keysym.sym = 0x112;
         else if (keysym.sym == SDLK_RIGHT)    keysym.sym = 0x113;
         else if (keysym.sym == SDLK_LEFT)     keysym.sym = 0x114;
