@@ -1953,6 +1953,10 @@ int trs_gui_joystick_get_button(void)
 {
   SDL_Event event;
 
+  trs_gui_frame(20, 1, 23, 3);
+  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
+  trs_x_flush();
+
   while (1) {
     SDL_WaitEvent(&event);
     switch (event.type) {
@@ -1984,13 +1988,9 @@ void trs_gui_joystick_map_button_to_key(void)
   trs_gui_frame(20, 1, 23, 3);
   trs_gui_write_text("     Select Key      ", 21, 2, 0);
   trs_x_flush();
-  key = trs_gui_virtual_keyboard();
-  if (key == -1)
+  if ((key = trs_gui_virtual_keyboard()) == -1)
     return;
-  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
-  trs_x_flush();
-  button = trs_gui_joystick_get_button();
-  if (button != -1)
+  if ((button = trs_gui_joystick_get_button()) != -1)
     jbutton_map[button] = key;
 }
 
@@ -2001,24 +2001,16 @@ void trs_gui_joystick_map_button_to_function(void)
   trs_gui_frame(20, 1, 23, 3);
   trs_gui_write_text("   Select Function   ", 21, 2, 0);
   trs_x_flush();
-  selection = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0);
-  if (selection == -1)
+  if ((selection = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0)) == -1)
     return;
-  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
-  trs_x_flush();
-  button = trs_gui_joystick_get_button();
-  if (button != -1)
+  if ((button = trs_gui_joystick_get_button()) != -1)
     jbutton_map[button] = function_codes[selection];
 }
 
 void trs_gui_joystick_unmap_button(void)
 {
-  int button;
+  int button = trs_gui_joystick_get_button();
 
-  trs_gui_frame(20, 1, 23, 3);
-  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
-  trs_x_flush();
-  button = trs_gui_joystick_get_button();
   if (button != -1)
     jbutton_map[button] = -1;
 }
