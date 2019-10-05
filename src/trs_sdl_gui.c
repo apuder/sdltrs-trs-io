@@ -1580,15 +1580,15 @@ void trs_gui_stringy_management(void)
    {" Wafer 4:",MENU_WAFER_BROWSE_TYPE},
    {" Wafer 5:",MENU_WAFER_BROWSE_TYPE},
    {" Wafer 6:",MENU_WAFER_BROWSE_TYPE},
+   {" Wafer 7:",MENU_WAFER_BROWSE_TYPE},
    {"",MENU_TITLE_TYPE},
    {"Save Disk Set",MENU_NORMAL_TYPE},
    {"Load Disk Set",MENU_NORMAL_TYPE},
-   {"",MENU_TITLE_TYPE},
    {"Insert Created Image Into This Wafer                       ",MENU_NORMAL_TYPE},
    {"Create Blank Floppy Wafer",MENU_NORMAL_TYPE},
    {"",0}};
-  char *wafer_choices[8] = {"   None","Wafer 0","Wafer 1","Wafer 2","Wafer 3",
-                            "Wafer 4","Wafer 5","Wafer 6"};
+  char *wafer_choices[9] = {"   None","Wafer 0","Wafer 1","Wafer 2","Wafer 3",
+                            "Wafer 4","Wafer 5","Wafer 6","Wafer 7"};
   char filename[FILENAME_MAX];
   int selection = 0;
   int done = 0;
@@ -1596,7 +1596,7 @@ void trs_gui_stringy_management(void)
   static int wafer_insert = 0;
 
   while(!done) {
-    for (i=0;i<7;i++) {
+    for (i=0;i<8;i++) {
       const char *wafername = stringy_get_name(i);
 
       if (wafername[0] == 0)
@@ -1609,7 +1609,7 @@ void trs_gui_stringy_management(void)
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Stringy Wafer Menu",stringy_menu,selection);
     switch(selection) {
-      case 8:
+      case 9:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
               trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
@@ -1618,14 +1618,14 @@ void trs_gui_stringy_management(void)
             trs_gui_display_message("Error", "Failed to save Disk Set");
         }
         break;
-      case 9:
+      case 10:
         if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0," Disk Set ") >= 0) {
           if (trs_diskset_load(filename) == -1)
             trs_gui_display_message("Error", "Failed to load Disk Set");
         }
         break;
       case 11:
-        wafer_insert = trs_gui_display_popup("Wafer",wafer_choices,8,
+        wafer_insert = trs_gui_display_popup("Wafer",wafer_choices,9,
             wafer_insert);
         break;
       case 12:

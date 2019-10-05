@@ -359,6 +359,7 @@ trs_opt options[] = {
 {"wafer4",trs_opt_wafer,1,4,NULL},
 {"wafer5",trs_opt_wafer,1,5,NULL},
 {"wafer6",trs_opt_wafer,1,6,NULL},
+{"wafer7",trs_opt_wafer,1,7,NULL},
 {"cassette",trs_opt_cass,1,0,NULL},
 {"diskset",trs_opt_diskset,1,0,NULL},
 {"diskdir",trs_opt_string,1,0,trs_disk_dir},
@@ -553,7 +554,7 @@ int trs_write_config_file(const char *filename)
     if (diskname[0] != 0)
       fprintf(config_file,"hard%d=%s\n",i,diskname);
   }
-  for (i=0;i<7;i++) {
+  for (i=0;i<8;i++) {
     const char *diskname = stringy_get_name(i);
 
     if (diskname[0] != 0)
@@ -595,7 +596,7 @@ void trs_set_to_defaults(void)
     trs_disk_remove(i);
   for (i=0;i<4;i++)
     trs_hard_remove(i);
-  for (i=0;i<7;i++)
+  for (i=0;i<8;i++)
     stringy_remove(i);
   trs_cassette_remove();
 
