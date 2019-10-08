@@ -8,7 +8,7 @@
 <body>
 <table border="0" cellpadding="0" cellspacing="20">
   <tr>
-    <td><img src="images/TRS80.png" alt="TRS-80 Model I"></td>
+    <td><img src="images/TRS-80.png" alt="TRS-80 Model I"></td>
     <td><h1>SDLTRS</h1><h2>Text GUI</h2>
       <a href="index.html">Introduction</a> |
       <a href="Features.html">Features</a> |
@@ -40,14 +40,16 @@
 
 <p><img alt="" src="images/TextGUIMainMenu.png"></p>
 
-<p>The main menu is the entry point for the Text GUI. You may move up and
-down through the menu items using the up and down arrow keys. The <b>Home</b>
-or the <b>End</b> keys moves to the first or last menu item. Typing the first
-letter of a menu item marks it for selection. A menu item may be selected
-by pressing <b>Enter</b> when the item is highlighted. Pressing <b>ESC</b>
-moves up a menu level (or exits the GUI if you are at the top level). Besides
-entering the GUI using <b>F7</b> or <b>Alt-M</b>, submenus of the GUI may be
-entered by using the key shortcuts shown after the menu items.</p>
+<p>The main menu is the entry point for the Text GUI. You may move up and down
+through the menu items using the up and down arrow keys. The <b>Home</b> or
+the <b>End</b> keys moves to the first or last menu item. Typing the first
+letter of a menu item marks it for selection. Pressing a number key from
+<b>0</b> to <b>9</b> marks the corresponding menu item. A menu item may be
+selected by pressing <b>Enter</b> when the item is highlighted. Pressing
+<b>ESC</b> moves up a menu level (or exits the GUI if you are at the top
+level). Besides entering the GUI using <b>F7</b> or <b>Alt-M</b>, submenus of
+the GUI may be entered by using the key shortcuts shown after the menu
+items.</p>
 
 <h2><a name="Floppy_Disk_Management"></a><u>Floppy Disk Management</u></h2>
 
@@ -111,11 +113,10 @@ none, the created image will be mounted on the specified floppy drive.</p>
 
 <h3>Doubler Type:</h3>
 
-<p>Specify what type of double density adaptor to emulate (Model I mode
-only). The type may be percom, radioshack (or tandy), both, or none. The type
-may be abbreviated to one character. The default is both, which causes the
-double density adaptor emulation to respond to the special commands of both
-the Percom and Radio Shack cards.</p>
+<p>Specify what type of double density adaptor to emulate (Model I mode only).
+The type may be <b>Percom</b>, <b>Tandy</b>, <b>Both</b>, or <b>None</b>. The
+default is <b>Both</b>, which causes the double density adaptor emulation to
+respond to the special commands of both the Percom and Tandy cards.</p>
 
 <h3>True DAM Emulation:</h3>
 
@@ -218,7 +219,7 @@ image will be used in the cassette drive.</p>
 images into the emulated drives, as well as save and load disk sets, and
 create new wafer images with default parameters.</p>
 
-<p>For the first 7 options in the menu, there are three options:</p>
+<p>For the first 8 options in the menu, there are three options:</p>
 
 <ul>
   <li>Hitting <b>Enter</b> while the item is selected, will move to the image
@@ -244,7 +245,7 @@ create new wafer images with default parameters.</p>
 
 <h3>Exatron Stringy Floppy:</h3>
 
-<p>Emulates up to 7 Stringy Floppy Drives for the TRS-80 Model I.</p>
+<p>Emulates up to 8 Stringy Floppy Drives for the TRS-80 Model I.</p>
 
 <h3>Graphics Emulations:</h3>
 
@@ -307,8 +308,8 @@ the printer command to be executed using the file name.</p>
 
 <p>The only option for the text printer type is the command used to print.
 Within the command, <code>%s</code> is used to represent the file name of the
-temporary file generated during printing. On Linux, this defaults to
-<code>lpr %s</code> and on Windows <code>notepad %s</code>. The
+temporary file generated during printing. On UNIX like systems this defaults
+to <code>lpr %s</code> and on Windows to <code>notepad %s</code>. The
 <code>%s</code> in the printer command will be replaced with the name of the
 printer output file.</p>
 
@@ -359,27 +360,29 @@ Default is white (<code>0xE0E0FF</code>) for foreground and dark green
 <p>Select among several sets of built-in character bitmaps. The three
 different options allow you to specify the character set used for each model,
 should you change models during SDLTRS execution using the GUI. In Model I
-mode, five sets are available. The default, <b>wider</b>, is a modified
+mode, seven sets are available. The default, <b>wider</b>, is a modified
 Model III set with characters 8 pixels wide; it looks better on a modern
 computer screen with square pixels than the real Model I fonts, which were 6
 pixels wide. <b>lcmod</b> is the character set in the replacement character
-generator that was supplied with the Radio Shack lower case modification.
-(It was reconstructed partly from memory and may have some minor bit errors.)
+generator that was supplied with the Radio Shack lower case modification. (It
+was reconstructed partly from memory and may have some minor bit errors.)
 <b>stock</b> is the character set in the stock character generator supplied
 with most upper case only machines. Since SDLTRS currently always emulates
-the extra bit of display memory needed to support lower case, this
-character set gives you the authentic, unpleasant effect that real Model I
-users saw when they tried to do homebrew lower case modifications without
-replacing the character generator: lower case letters appear at an
-inconsistent height, and if you are using the Level II BASIC ROM display
-driver, upper case letters are replaced by meaningless symbols. early is the
-same as stock, but with the standard ASCII characters [, \, ], and ^ in the
-positions where most Model I's had directional arrows. This was the default
-programming in the Motorola character generator ROM that Radio Shack used,
-and a few early machines were actually shipped with this ROM. Finally,
-<b>german</b> or <b>genie</b> gives an approximate emulation of the GENIE, a
-German Model I clone. Characters are 8 pixels wide, and double width is
-supported even though later GENIE models did not include it.</p>
+the extra bit of display memory needed to support lower case, this character
+set gives you the authentic, unpleasant effect that real Model I users saw
+when they tried to do homebrew lower case modifications without replacing the
+character generator: lower case letters appear at an inconsistent height,
+and if you are using the Level II BASIC ROM display driver, upper case letters
+are replaced by meaningless symbols. early is the same as stock, but with the
+standard ASCII characters [, \, ], and ^ in the positions where most Model
+I's had directional arrows. This was the default programming in the Motorola
+character generator ROM that Radio Shack used, and a few early machines were
+actually shipped with this ROM. <b>genie</b> gives an emulation of the Genie
+I/II (relabled Video Genie in Germany) with German characters.
+<b>ht-1080z</b> emulates the HT-1080Z (relabled Video Genie in Hungary) with
+accented Hungarian characters. <b>video genie</b> displays the character set
+of the EACA Video Genie (also labeled as the System 80 in Australia/New
+Zealand and PMC-80/81 in North America).</p>
 
 <p>In Model III, 4 and 4P modes, three sets are available:</p>
 

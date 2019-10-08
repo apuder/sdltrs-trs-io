@@ -8,7 +8,7 @@
 <body>
 <table border="0" cellpadding="0" cellspacing="20">
   <tr>
-    <td><img src="images/TRS80.png" alt="TRS-80 Model I"></td>
+    <td><img src="images/TRS-80.png" alt="TRS-80 Model I"></td>
     <td><h1>SDLTRS</h1><h2>Options</h2>
       <a href="index.html">Introduction</a> |
       <a href="Features.html">Features</a> |
@@ -136,7 +136,7 @@ and that state will be restored upon startup of the emulator.</p>
         The three different options allow you to specify the character
         set used for each model, should you change models during SDLTRS
         execution using the GUI. In Model I mode (<code>-charset1</code>),
-        five sets are available. The default, <code>wider</code>, is a
+        seven sets are available. The default, <code>wider</code>, is a
         modified Model III set with characters 8 pixels wide; it looks better
         on a modern computer screen with square pixels than the real Model I
         fonts, which were 6 pixels wide. <code>lcmod</code> is the character
@@ -155,19 +155,22 @@ and that state will be restored upon startup of the emulator.</p>
         standard ASCII characters [, \, ], and ^ in the positions where most
         Model I's had directional arrows. This was the default programming in
         the Motorola character generator ROM that Radio Shack used, and a few
-        early machines were actually shipped with this ROM. Finally, <code>
-        german</code> or <code>genie</code> gives an approximate emulation of
-        the GENIE, a German Model I clone. Characters are 8 pixels wide, and
-        double width is supported even though later GENIE models did not
-        include it. In Model III (<code>-charset3</code>), 4 and 4P
-        (<code>-charset4</code>) modes, three sets are available: <code>
-        katakana</code> (the default for Model III) is the original Model III
-        set with Japanese Katakana characters in the alternate character
-        positions. This set was also used in early Model 4's.
-        <code>international</code> (the default for Model 4 and 4P) is a later
-        Model 4 set with accented Roman letters in the alternate positions.
-        <code>bold</code> is a bold set from a character generator ROM found in
-        one Model III, origin uncertain.</td>
+        early machines were actually shipped with this ROM. <code>genie</code>
+        or <code>german</code> gives an emulation of the Genie I/II (relabled
+        Video Genie in Germany) with german characters. <code>ht-1080z</code>
+        or <code>hungarian</code> emulates the HT-1080Z (relabled Video Genie in
+        Hungary) with accented hungarian characters. <code>videogenie</code>
+        displays the character set of the EACA Video Genie (also labeled as the
+        System 80 in Australia/New Zealand and PMC-80/81 in North America).<br>
+        In Model III (<code>-charset3</code>), 4 and 4P (<code>-charset4</code>)
+        modes, three sets are available: <code>katakana</code> (the default for
+        Model III) is the original Model III set with Japanese Katakana
+        characters in the alternate character positions. This set was also used
+        in early Model 4's. <code>international</code> (the default for Model 4
+        and 4P) is a later Model 4 set with accented Roman letters in the
+        alternate positions. <code>bold</code> is a bold set from a character
+        generator ROM found in one Model III, origin uncertain.
+        The name of the character set may be abbreviated to one character.</td>
   </tr>
   <tr>
     <td><code>-disk0 filename<br>
@@ -214,9 +217,10 @@ and that state will be restored upon startup of the emulator.</p>
               -wafer3 filename<br>
               -wafer4 filename<br>
               -wafer5 filename<br>
-              -wafer6 filename</code></td>
+              -wafer6 filename<br>
+              -wafer7 filename</code></td>
     <td>Specifies the name of the stringy wafer image file to be inserted
-        into Wafer<code>N</code>, where <code>N</code>=0 through 6.</td>
+        into Wafer<code>N</code>, where <code>N</code>=0 through 7.</td>
   </tr>
   <tr>
     <td><code>-microlabs</code></td>

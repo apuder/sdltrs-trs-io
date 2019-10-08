@@ -8,7 +8,7 @@
 <body>
 <table border="0" cellpadding="0" cellspacing="20">
   <tr>
-    <td><img src="images/TRS80.png" alt="TRS-80 Model I"></td>
+    <td><img src="images/TRS-80.png" alt="TRS-80 Model I"></td>
     <td><h1>SDLTRS</h1><h2>Features</h2>
       <a href="index.html">Introduction</a> |
       <a href="Features.html">Features</a> |
@@ -94,19 +94,22 @@ are in the debugger, type <code>help</code> for more information.</p>
   <tr>
     <td><b>F1</b></td>
     <td>TRS-80 Model 4/4P F1 key (address bit 7, data bits 4)<br>
-        TRS-80 Model 1 Electric Pencil control key</td>
+        or F1 key on Genie II, System 80 Mark II and PMC-81</td>
   </tr>
   <tr>
     <td><b>F2</b></td>
-    <td>TRS-80 Model 4/4P F2 key (address bit 7, data bits 5)</td>
+    <td>TRS-80 Model 4/4P F2 key (address bit 7, data bits 5)<br>
+        or F2 key on Genie II, System 80 Mark II and PMC-81</td>
   </tr>
   <tr>
     <td><b>F3</b></td>
-    <td>TRS-80 Model 4/4P F3 key (address bit 7, data bits 6)</td>
+    <td>TRS-80 Model 4/4P F3 key (address bit 7, data bits 6)<br>
+        or F3 key on Genie II, System 80 Mark II and PMC-81</td>
   </tr>
   <tr>
     <td><b>F4</b></td>
-    <td>TRS-80 Model 4 Caps Lock key (address bit 7, data bit 3)</td>
+    <td>TRS-80 Model 4/4P Caps Lock key (address bit 7, data bit 3)<br>
+        or F4 key on Genie II, System 80 Mark II and PMC-81</td>
   </tr>
   <tr>
     <td><b>F5</b> or <b>ScrollLock</b></td>
@@ -349,19 +352,18 @@ once; and key 0 (KP_Insert) or 5 (KP_Begin) is the fire button.</p>
 <p>In addition to command line options to set the <a
 href="Options.html">emulator options</a> (most of which are also settable in
 the <a href="TextGUI.html">Text GUI</a>), SDLTRS allows the use of
-Configuration Files. On Linux, if no configuration file is specified, it will
-use (or create if it doesn't exist) one in the users home directory named
-<code>sdltrs.t8c</code>. On Windows, if no configuration file is specified, it
-will use (or create if it doesn't exist) one in the same directory as the
-executable named <code>sdltrs.t8c</code>.</p>
+Configuration Files. On UNIX like systems, if no configuration file is
+specified, it will use (or create if it doesn't exist) one hidden in the users
+home directory named <code>.sdltrs.t8c</code>. On Windows, if no configuration
+file is specified, it will use (or create if it doesn't exist) one in the same
+directory as the executable named <code>sdltrs.t8c</code>.</p>
 
 <h2><a name="Text_GUI"></a><u>Text GUI</u></h2>
 
 <p>SDLTRS provides a Text based menuing system that allows you to most aspect
-of emulator operation. The GUI is available at all times in the Windows and
-Linux versions (more info on the <a href="TextGUI.html">Text GUI</a> page).
-The Text GUI is entered by pressing <b>F7</b> or <b>Alt-M</b>, and exited by
-using the <b>ESC</b> key.</p>
+of emulator operation (more info on the <a href="TextGUI.html">Text GUI</a>
+page). The Text GUI is entered by pressing <b>F7</b> or <b>Alt-M</b>, and
+exited by using the <b>ESC</b> key.</p>
 
 <p>A picture of the top level menu of the GUI is below:</p>
 
@@ -412,10 +414,10 @@ screen full of garbage; a real Model III or 4 goes into a retry loop printing
 4P always has a floppy controller, however, so SDLTRS always emulates
 one.</p>
 
-<p>Due to a limitation of the original Model I hardware, drive :3 cannot be
-double-sided in Model I mode. In the original Model I, you could not have a
-drive :3 at all if any drive in the system was double-sided, but the emulator
-is able to be more forgiving.</p>
+<p>Due to a limitation of the original Model I hardware, drive <code>:3</code>
+cannot be double-sided in Model I mode. In the original Model I, you could not
+have a drive <code>:3</code> at all if any drive in the system was
+double-sided, but the emulator is able to be more forgiving.</p>
 
 <p>Emulated floppy image files can be of any of three types: JV1, compatible
 with Jeff Vavasour's popular freeware Model I emulator for MS-DOS; JV3, a
@@ -425,9 +427,9 @@ threetypes work in SDLTRS regardless of what model it is emulating. A
 heuristic is used to decide which type of image is in a drive, as none of the
 types has a magic number or signature.</p>
 
-<p>JV1 supports only single density, single sided, with directory on track
-17. Sectors must be 256 bytes long. Use FORMAT (DIR=17) if you want to format
-JV1 disks with more (or less) than 35 tracks under LDOS.</p>
+<p>JV1 supports only single density, single sided, with directory on track 17.
+Sectors must be 256 bytes long. Use <code>FORMAT (DIR=17)</code> if you want
+to format JV1 disks with more (or less) than 35 tracks under LDOS.</p>
 
 <p>JV3 is much more flexible, though it still does not support everything the
 real controllers could do. It is probably best to use JV3 for all the disk
@@ -490,20 +492,20 @@ it.</p>
 
 <p>The only difference between 5.25-inch and 8-inch emulated drives is that
 the emulator allows you to format more bytes per track in the latter. A new
-JV3 floppy can be formatted as either 5.25-inch or 8-inch depending on
-whether you initially put it into a 5.25-inch or 8-inch emulated drive.  A
-new DMK floppy, however, must be created as an 8 inch image in order to be
-large enough for use in an 8-inch emulated drive. JV1 floppies cannot be used
-in 8-inch drives. Be careful not to put an emulated floppy into a 5.25-inch
-emulated drive after it has been formatted in an 8-inch emulated drive or
-vice versa; the results are likely to be confusing. Consider using different
-file extensions for the two types; say, <code>.dsk</code> for 5.25-inch and
+JV3 floppy can be formatted as either 5.25-inch or 8-inch depending on whether
+you initially put it into a 5.25-inch or 8-inch emulated drive. A new DMK
+floppy, however, must be created as an 8 inch image in order to be large
+enough for use in an 8-inch emulated drive. JV1 floppies cannot be used in
+8-inch drives. Be careful not to put an emulated floppy into a 5.25-inch
+emulated drive after it has been formatted in an 8-inch emulated drive or vice
+versa; the results are likely to be confusing. Consider using different file
+extensions for the two types; say, <code>.dsk</code> for 5.25-inch and
 <code>.8in</code> for 8-inch.</p>
 
 <p>To use the emulated 8-inch drives, you'll need a driver. Under LDOS or
-LS-DOS, use the program XTRS8/DCT supplied on the emulated floppy
-utility.dsk. This driver is a very simple wrapper around the native
-LDOS/LS-DOS floppy driver. Here are detailed instructions.</p>
+LS-DOS, use the program XTRS8/DCT supplied on the emulated floppy utility.dsk.
+This driver is a very simple wrapper around the native LDOS/LS-DOS floppy
+driver. Here are detailed instructions.</p>
 
 <p>First, make sure an appropriate version of LDOS is in emulated floppy
 drive 0, and the supplied file utility.dsk is in another emulated floppy
@@ -693,7 +695,7 @@ Detailed instructions are beyond the scope of this manual page.</p>
 
 <h2><a name="Emulated_stringy_floppy"></a><u>Emulated Stringy Floppy</u></h2>
 
-<p>SDLTRS can emulate up to 7 drives for the Exatron Stringy Floppy (ESF) in
+<p>SDLTRS can emulate up to 8 drives for the Exatron Stringy Floppy (ESF) in
 Model I mode. The emulation can be activated with the <code>-stringy</code>
 option on the command line or in the "Emulator Settings Menu". The built-in
 ROM for ESF will be loaded. To initialize the ESF firmware in BASIC, type:</p>
