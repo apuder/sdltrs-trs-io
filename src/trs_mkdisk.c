@@ -83,7 +83,7 @@ void trs_protect_disk(int drive, int writeprot)
   if (diskname[0] == 0)
     return;
 
-  strcpy(prot_filename, diskname);
+  snprintf(prot_filename, FILENAME_MAX - 1, "%s", diskname);
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)
     return;
@@ -135,7 +135,7 @@ void trs_protect_hard(int drive, int writeprot)
   if (diskname[0] == 0)
     return;
 
-  strcpy(prot_filename, diskname);
+  snprintf(prot_filename, FILENAME_MAX - 1, "%s", diskname);
 
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)
@@ -185,7 +185,7 @@ void trs_protect_stringy(int drive, int writeprot)
   if (diskname[0] == 0)
     return;
 
-  strcpy(prot_filename, diskname);
+  snprintf(prot_filename, FILENAME_MAX - 1, "%s", diskname);
 
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)
