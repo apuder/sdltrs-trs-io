@@ -114,9 +114,9 @@ void trs_protect_disk(int drive, int writeprot)
   win_set_readonly(prot_filename,writeprot);
 #else
   if (writeprot)
-    newmode = st.st_mode & ~(S_IWUSR|S_IWGRP|S_IWOTH);
+    newmode = st.st_mode & ~(S_IWUSR);
   else
-    newmode = st.st_mode | (S_IWUSR|S_IWGRP|S_IWOTH);
+    newmode = st.st_mode | (S_IWUSR);
   chmod(prot_filename, newmode);
 #endif
   trs_disk_insert(drive,prot_filename);
