@@ -47,6 +47,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
+#include "trs_cassette.h"
 #include "trs_disk.h"
 #include "trs_hard.h"
 #include "trs_mkdisk.h"
@@ -68,6 +69,38 @@ static void win_set_readonly(char *filename, int readonly)
 		: (attr & ~FILE_ATTRIBUTE_READONLY));
 }
 #endif
+
+void trs_protect_cass(int writeprot)
+{
+  char prot_filename[FILENAME_MAX];
+#ifndef _WIN32
+  struct stat st;
+  int newmode;
+#endif
+
+  const char *cassname = trs_cassette_getfilename();
+  if (cassname[0] == 0)
+    return;
+
+  snprintf(prot_filename, FILENAME_MAX - 1, "%s", cassname);
+
+#ifndef _WIN32
+  if (stat(prot_filename, &st) < 0)
+    return;
+#endif
+  trs_cassette_remove();
+
+#ifdef _WIN32
+  win_set_readonly(prot_filename,writeprot);
+#else
+  if (writeprot)
+    newmode = st.st_mode & ~(S_IWUSR);
+  else
+    newmode = st.st_mode | (S_IWUSR);
+  chmod(prot_filename, newmode);
+#endif
+  trs_cassette_insert(prot_filename);
+}
 
 void trs_protect_disk(int drive, int writeprot)
 {

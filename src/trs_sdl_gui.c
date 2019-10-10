@@ -1104,6 +1104,11 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             trs_protect_hard(selection, 0);
           else
             trs_protect_hard(selection, 1);
+        } else if (entry[selection].type == MENU_CASS_BROWSE_TYPE) {
+          if (trs_cass_getwriteprotect())
+            trs_protect_cass(0);
+          else
+            trs_protect_cass(1);
         } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
           if (stringy_get_writeprotect(selection))
             trs_protect_stringy(selection, 0);
@@ -1676,6 +1681,7 @@ void trs_gui_cassette_management(void)
       snprintf(&cass_menu[0].title[8],6,"%s","Empty");
     else
       trs_gui_limit_string(cass_name,&cass_menu[0].title[8],52);
+    cass_menu[0].title[0] = trs_cass_getwriteprotect() ? '*' : ' ';
 
     trs_gui_clear_screen();
     snprintf(&cass_menu[2].title[36],25,"%10d of %10d",trs_get_cassette_position(),trs_get_cassette_length());

@@ -46,6 +46,7 @@ int create_wav_header(FILE *f);
 void trs_cassette_insert(const char *filename);
 void trs_cassette_remove(void);
 char* trs_cassette_getfilename(void);
+int trs_cass_getwriteprotect(void);
 int trs_get_cassette_length(void);
 int trs_get_cassette_position(void);
 void trs_set_cassette_position(int pos);
