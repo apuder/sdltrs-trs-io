@@ -862,14 +862,13 @@ trs_disk_insert(int drive, const char *diskname)
 {
   DiskState *d = &disk[drive];
   struct stat st;
-  int c, res;
+  int c;
 
   if (d->file != NULL) {
     c = fclose(d->file);
     if (c == EOF) state.status |= TRSDISK_WRITEFLT;
   }
-  res = stat(diskname, &st);
-  if (res == -1) {
+  if (stat(diskname, &st) == -1) {
     d->file = NULL;
     d->filename[0] = 0;
     d->writeprot = 0;
@@ -1042,7 +1041,6 @@ trs_disk_motoroff()
 void
 dmk_get_track(DiskState* d)
 {
-  int res;
   if (d->phytrack == d->u.dmk.curtrack &&
       state.curside == d->u.dmk.curside) return;
   d->u.dmk.curtrack = d->phytrack;
@@ -1055,8 +1053,7 @@ dmk_get_track(DiskState* d)
   fseek(d->file, (DMK_HDR_SIZE +
 		  (d->u.dmk.curtrack * d->u.dmk.nsides + d->u.dmk.curside)
 		  * d->u.dmk.tracklen), 0);
-  res = fread(d->u.dmk.buf, d->u.dmk.tracklen, 1, d->file);
-  if (res != 1) {
+  if (fread(d->u.dmk.buf, d->u.dmk.tracklen, 1, d->file) != 1) {
     memset(d->u.dmk.buf, 0, sizeof(d->u.dmk.buf));
     return;
   }
@@ -3435,7 +3432,7 @@ real_check_empty(DiskState *d)
 #if __linux
   int reset_now = 0;
   struct floppy_raw_cmd raw_cmd;
-  int res, i = 0;
+  int i = 0;
 
   if (time(NULL) <= d->u.real.empty_timeout) return d->u.real.empty;
 
@@ -3456,8 +3453,7 @@ real_check_empty(DiskState *d)
   raw_cmd.cmd_count = i;
   raw_cmd.data = NULL;
   raw_cmd.length = 0;
-  res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  if (res < 0) {
+  if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
     real_error(d, raw_cmd.flags, "check_empty");
   } else {
     real_ok(d);
@@ -3481,14 +3477,13 @@ real_restore(int curdrive)
 #if __linux
   DiskState *d = &disk[curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, i = 0;
+  int i = 0;
 
   raw_cmd.flags = FD_RAW_INTR;
   raw_cmd.cmd[i++] = FD_RECALIBRATE;
   raw_cmd.cmd[i++] = 0;
   raw_cmd.cmd_count = i;
-  res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  if (res < 0) {
+  if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
     real_error(d, raw_cmd.flags, "restore");
     state.status |= TRSDISK_SEEKERR;
     return;
@@ -3504,7 +3499,7 @@ real_seek()
 #if __linux
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, i = 0;
+  int i = 0;
 
   /* Always use a recal if going to track 0.  This should help us
      recover from confusion about what track the disk is really on.
@@ -3524,8 +3519,7 @@ real_seek()
   raw_cmd.cmd[i++] = 0;
   raw_cmd.cmd[i++] = d->phytrack * d->real_step;
   raw_cmd.cmd_count = i;
-  res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  if (res < 0) {
+  if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
     real_error(d, raw_cmd.flags, "seek");
     state.status |= TRSDISK_SEEKERR;
     return;
@@ -3541,7 +3535,7 @@ real_read()
 #if __linux
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, i, retry, new_status;
+  int i, retry, new_status;
 
   /* Try once at each supported sector size */
   retry = 0;
@@ -3564,8 +3558,7 @@ real_read()
     raw_cmd.cmd_count = i;
     raw_cmd.data = (void*) d->u.real.buf;
     raw_cmd.length = 128 << d->u.real.size_code;
-    res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-    if (res < 0) {
+    if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
       real_error(d, raw_cmd.flags, "read");
       new_status |= TRSDISK_NOTFOUND;
     } else {
@@ -3629,7 +3622,7 @@ real_write()
 #if __linux
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, i = 0;
+  int i = 0;
 
   state.status = 0;
   memset(&raw_cmd, 0, sizeof(raw_cmd));
@@ -3663,8 +3656,7 @@ real_write()
   raw_cmd.cmd_count = i;
   raw_cmd.data = (void*) d->u.real.buf;
   raw_cmd.length = 128 << d->u.real.size_code;
-  res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  if (res < 0) {
+  if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
     real_error(d, raw_cmd.flags, "write");
     state.status |= TRSDISK_NOTFOUND;
   } else {
@@ -3716,7 +3708,7 @@ real_readadr()
 #if __linux
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, i, new_status;
+  int i, new_status;
 
   state.status = 0;
   new_status = 0;
@@ -3729,9 +3721,8 @@ real_readadr()
   raw_cmd.cmd_count = i;
   raw_cmd.data = NULL;
   raw_cmd.length = 0;
-  res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
   state.bytecount = 0;
-  if (res < 0) {
+  if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
     real_error(d, raw_cmd.flags, "readadr");
     new_status |= TRSDISK_NOTFOUND;
   } else {
@@ -3779,7 +3770,7 @@ real_writetrk()
 #if __linux
   DiskState *d = &disk[state.curdrive];
   struct floppy_raw_cmd raw_cmd;
-  int res, gap3;
+  int gap3;
   unsigned i;
   state.status = 0;
 
@@ -3844,8 +3835,7 @@ real_writetrk()
     debug("\n");
   }
 
-  res = ioctl(fileno(d->file), FDRAWCMD, &raw_cmd);
-  if (res < 0) {
+  if (ioctl(fileno(d->file), FDRAWCMD, &raw_cmd) < 0) {
     real_error(d, raw_cmd.flags, "writetrk");
     state.status |= TRSDISK_WRITEFLT;
   } else {

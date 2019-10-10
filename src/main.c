@@ -95,12 +95,10 @@ int trs_load_rom(const char *filename)
       return(0);
   } else if (c == 1 || c == 5) {
     /* Assume MODELA/III file */
-    int res;
     extern Uchar *rom; /*!! fixme*/
     Uchar loadmap[Z80_ADDRESS_LIMIT];
     rewind(program);
-    res = load_cmd(program, rom, loadmap, 0, NULL, -1, NULL, NULL, 1);
-    if (res == LOAD_CMD_OK) {
+    if (load_cmd(program, rom, loadmap, 0, NULL, -1, NULL, NULL, 1) == LOAD_CMD_OK) {
       trs_rom_size = Z80_ADDRESS_LIMIT;
       while (trs_rom_size > 0) {
         if (loadmap[--trs_rom_size] != 0) {

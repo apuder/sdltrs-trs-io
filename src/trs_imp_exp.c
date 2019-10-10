@@ -242,9 +242,7 @@ void do_emt_open()
 
 void do_emt_close()
 {
-  int res;
-  res = close(REG_DE);
-  if (res >= 0) {
+  if (close(REG_DE) >= 0) {
     REG_A = 0;
     REG_F |= ZERO_MASK;
   } else {
@@ -765,7 +763,6 @@ int do_emt_closefd(int odindex)
 void do_emt_closedisk()
 {
   int i;
-  int res;
   if (REG_DE == 0xffff) {
     for (i = 0; i < MAX_OPENDISK; i++) {
       if (od[i].inuse) {
@@ -791,8 +788,7 @@ void do_emt_closedisk()
   od[i].inuse = 0;
   od[i].xtrshard = 0;
   od[i].filename[0] = 0;
-  res = do_emt_closefd(i);
-  if (res >= 0) {
+  if (do_emt_closefd(i) >= 0) {
     REG_A = 0;
     REG_F |= ZERO_MASK;
   } else {
