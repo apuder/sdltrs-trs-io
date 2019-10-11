@@ -1943,7 +1943,8 @@ void trs_gui_display_management(void)
     trs_show_led = gui_show_led;
     resize3 = gui_resize3;
     resize4 = gui_resize4;
-    if (!fullscreen) {
+    if (gui_scale != scale_x) {
+      fullscreen = 0;
       scale_x = gui_scale;
       scale_y = scale_x*2;
     }
