@@ -344,7 +344,7 @@ int trs_create_blank_hard(const char *fname, int cyl, int sec,
   time_t tt = time(0);
   struct tm *lt = localtime(&tt);
   ReedHardHeader rhh;
-  Uchar *rhhp;
+  Uchar *rhhp = (Uchar *) &rhh;
   int cksum;
 
   memset(&rhh,0,sizeof(rhh));
@@ -372,7 +372,6 @@ int trs_create_blank_hard(const char *fname, int cyl, int sec,
   snprintf(rhh.filename, 192, "%s", fname);
 
   cksum = 0;
-  rhhp = (Uchar *) &rhh;
   for (i=0; i<=31; i++) {
     cksum += rhhp[i];
   }

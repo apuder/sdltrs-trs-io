@@ -540,13 +540,12 @@ set_audio_format(int state)
 void
 trs_cassette_insert(const char *filename)
 {
-   int len;
+   int len = strlen(filename);
    const char *extension;
 
    strcpy(cassette_filename, filename);
    cassette_position = 0;
 
-   len = strlen(filename);
    if (len >= 3)
      extension = filename + len - 3;
    else
