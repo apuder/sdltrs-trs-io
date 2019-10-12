@@ -551,7 +551,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   char title[64];
   struct stat st;
   const char *new_dir;
-  int i,key;
+  int i,j,key;
   int selection = 0;
   int current_first = 0;
   int done = 0;
@@ -615,10 +615,11 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     key = trs_gui_get_key();
     trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,0);
     if (key >= '0' && key <= 'z') {
-      for (i=0;i<filenamecount-1;i++) {
-        if (tolower((int)*filenamelist[i]) >= key)
-          break;
-      }
+      i = j = current_first + selection;
+      do {
+        if (++i > filenamecount - 1)
+          i = 0;
+      } while (i != j && (tolower((int)*filenamelist[i]) != key));
       if (filenamecount <= 13) {
         current_first = 0;
         selection = i;
