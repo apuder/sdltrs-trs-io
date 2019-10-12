@@ -173,7 +173,10 @@ void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert)
   int const position = x + y * 64;
   int i;
 
-  for (i=0;i<len && i<60;i++)
+  if (len > 60)
+    len = 60;
+
+  for (i=0;i<len;i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
 
