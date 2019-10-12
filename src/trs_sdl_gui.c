@@ -398,9 +398,12 @@ void trs_gui_add_to_filename_list(char *filename)
 {
   filenamelist[filenamecount++] = filename;
   if (filenamecount == filenamelistsize) {
-    if ((filenamelist = (char **) realloc(filenamelist, 2 *
+    char **filenamelist_new;
+
+    if ((filenamelist_new = realloc(filenamelist, 2 *
         filenamelistsize * sizeof(char*))) == NULL)
       fatal("Failed to reallocate filenamelist");
+    filenamelist = filenamelist_new;
     filenamelistsize *= 2;
   }
 }
