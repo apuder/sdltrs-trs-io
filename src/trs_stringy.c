@@ -334,7 +334,7 @@ stringy_get_writeprotect(int drive)
 int
 stringy_insert(int drive, const char *name)
 {
-  strcpy(stringy_info[drive].name, name);
+  snprintf(stringy_info[drive].name, FILENAME_MAX - 1, "%s", name);
   return stringy_change(drive);
 }
 

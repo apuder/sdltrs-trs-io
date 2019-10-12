@@ -57,7 +57,7 @@ void PasteManagerStartCopy(char *string)
     EmptyClipboard();
     hCopyData = GlobalAlloc(GMEM_DDESHARE, strlen(string)+1);
     pchData = (char *)GlobalLock(hCopyData);
-    strcpy(pchData, string);
+    snprintf(pchData, strlen(string), "%s", string);
     GlobalUnlock(hCopyData);
     SetClipboardData(CF_TEXT, hCopyData);
     CloseClipboard();

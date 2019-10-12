@@ -104,8 +104,8 @@ static void put_scrap(int srclen, char *src)
   char *dst;
 
   dstlen = srclen;
-  dst = (char *)malloc(dstlen);
-  strcpy(dst, src);
+  dst = (char *)malloc(dstlen) + 1;
+  snprintf(dst, dstlen, "%s", src);
   if (clipboard)
     free(clipboard);
   clipboard = dst;

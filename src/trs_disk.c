@@ -906,7 +906,7 @@ trs_disk_insert(int drive, const char *diskname)
       d->phytrack = 0;
       real_restore(drive);
     }
-	strcpy(d->filename, diskname);
+    snprintf(d->filename, FILENAME_MAX - 1, "%s", diskname);
   } else
 #endif
   {
@@ -919,7 +919,7 @@ trs_disk_insert(int drive, const char *diskname)
       d->writeprot = 0;
     }
     trs_disk_emutype(d);
-	strcpy(d->filename, diskname);
+    snprintf(d->filename, FILENAME_MAX - 1, "%s", diskname);
   }
   if (d->emutype == JV3) {
     int id_index, n;

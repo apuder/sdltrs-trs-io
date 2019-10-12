@@ -721,7 +721,7 @@ void do_emt_opendisk()
         (strlen(name) == 8))) {
     int hard_unit = name[strlen(name) -1] - '0';
     if (hard_unit >=0 && hard_unit <= 3) {
-      strcpy(od[i].filename,trs_hard_getfilename(hard_unit));
+      snprintf(od[i].filename, FILENAME_MAX - 1, "%s", trs_hard_getfilename(hard_unit));
       od[i].fd = open(od[i].filename, oflag, REG_DE);
       od[i].oflag = oflag;
       if (od[i].fd >= 0)
@@ -733,7 +733,7 @@ void do_emt_opendisk()
     }
   } else {
     od[i].fd = open(qname, oflag, REG_DE);
-    strcpy(od[i].filename,qname);
+    snprintf(od[i].filename, FILENAME_MAX - 1, "%s", qname);
     od[i].xtrshard = 0;
   }
   free(qname);
@@ -887,7 +887,7 @@ trs_impexp_xtrshard_attach(int drive, const char *filename)
   for (i=0;i<MAX_OPENDISK;i++) {
     if (od[i].inuse && od[i].xtrshard && (od[i].xtrshard_unit == drive)) {
       close(od[i].fd);
-      strcpy(od[i].filename, filename);
+      snprintf(od[i].filename, FILENAME_MAX - 1, "%s", filename);
       od[i].fd = open(filename, od[i].oflag);
       xtrshard_fd[od[i].xtrshard_unit] = od[i].fd;
     }

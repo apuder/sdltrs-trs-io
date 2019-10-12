@@ -135,7 +135,7 @@ void trs_hard_attach(int drive, const char *diskname)
 {
   if (state.d[drive].file != NULL)
     fclose(state.d[drive].file);
-  strcpy(state.d[drive].filename, diskname);
+  snprintf(state.d[drive].filename, FILENAME_MAX - 1, "%s", diskname);
   if (open_drive(drive) == 0) {
     trs_hard_remove(drive);
   }
