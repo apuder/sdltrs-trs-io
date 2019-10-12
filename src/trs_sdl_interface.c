@@ -2719,7 +2719,7 @@ void trs_disk_led(int drive, int on_off)
         addToDrawList(&rect);
       }
     }
-    if (on_off) {
+    else if (on_off) {
       if (countdown[drive] == 0) {
         rect.x = drive0_led_x + 24*scale_x*drive;
         SDL_FillRect(screen, &rect, bright_red);
@@ -2761,7 +2761,7 @@ void trs_hard_led(int drive, int on_off)
         addToDrawList(&rect);
       }
     }
-    if (on_off) {
+    else if (on_off) {
       if (countdown[drive] == 0) {
         rect.x = drive0_led_x + 24*scale_x*drive;
         SDL_FillRect(screen, &rect, bright_red);
