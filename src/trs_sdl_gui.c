@@ -620,15 +620,14 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
         if (++i > filenamecount - 1)
           i = 0;
       } while (i != j && (tolower((int)*filenamelist[i]) != key));
-      if (filenamecount <= 13) {
+      if (i < 13) {
         current_first = 0;
         selection = i;
       } else if (i + 13 > filenamecount) {
         current_first = filenamecount - 13;
         selection = i - current_first;
       } else {
-        current_first = i;
-        selection = 0;
+        current_first = i - selection;
       }
       redraw = 1;
     } else {
