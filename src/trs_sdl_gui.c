@@ -793,7 +793,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
                          unsigned int limit, int file)
 {
   char directory_name[FILENAME_MAX];
-  int key,ret_code=0;
+  int key,ret=0;
   int done = 0;
   int invert;
   unsigned int i, pos;
@@ -865,11 +865,11 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         }
         break;
       case SDLK_RETURN:
-        ret_code = 0;
+        ret = 0;
         done = 1;
         break;
       case SDLK_ESCAPE:
-        ret_code = -1;
+        ret = -1;
         done = 1;
         break;
       case SDLK_TAB:
@@ -902,7 +902,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   }
 
   output[length] = 0;
-  return(ret_code);
+  return(ret);
 }
 
 int trs_gui_display_popup(const char* title, char **entry,
