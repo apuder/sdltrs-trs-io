@@ -613,7 +613,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
       do {
         if (++i > filenamecount - 1)
           i = 0;
-      } while (i != j && (tolower((int)*filenamelist[i]) != key));
+      } while (i != j && (tolower((int)*filenamelist[i]) != tolower(key)));
       if (i < 13) {
         current_first = 0;
         selection = i;
@@ -992,9 +992,9 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
       if (key < num && entry[key].type != MENU_TITLE_TYPE)
         selection = key;
     } else
-    if (key >= 'a' && key <= 'z') {
+    if (key >= 'A' && key <= 'z') {
       for (i=0;i<num+1;i++) {
-        if (tolower((int)*entry[i].title) == key && selection != i) {
+        if (tolower((int)*entry[i].title) == tolower(key) && selection != i) {
           selection = i;
           while(entry[selection].type == MENU_TITLE_TYPE) {
             if (selection < num)
