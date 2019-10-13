@@ -45,6 +45,7 @@
 #define EMULATOR     (15)
 #define INTERFACE    (16)
 #define OTHER        (17)
+#define KEYS         (18)
 
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;

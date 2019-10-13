@@ -1822,6 +1822,9 @@ void call_function(int function)
     case OTHER:
       trs_gui_misc_management();
       break;
+    case KEYS:
+      trs_gui_keys_sdltrs();
+      break;
     }
     trs_pause_audio(0);
 #ifndef SDL2
@@ -1975,17 +1978,14 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F11:
-            trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+            call_function(KEYS);
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
             keysym.sym = 0;
             break;
           case SDLK_F12:
-            if (keysym.mod & KMOD_SHIFT)
-              call_function(LOAD);
-            else
-              call_function(SAVE);
+            trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -2075,9 +2075,7 @@ void trs_get_event(int wait)
               call_function(JOYGUI);
               break;
             case SDLK_k:
-              trs_gui_keys_sdltrs();
-              trs_screen_refresh();
-              trs_x_flush();
+              call_function(KEYS);
               break;
             case SDLK_l:
               call_function(LOAD);
