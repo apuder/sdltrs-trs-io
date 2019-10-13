@@ -256,9 +256,8 @@ void trs_add_extension(char *filename, const char *ext)
 int trs_gui_get_key(void)
 {
    SDL_Event event;
-   int done = 0;
 
-   do {
+   while (1) {
      SDL_WaitEvent(&event);
      switch(event.type) {
        case SDL_QUIT:
@@ -275,14 +274,12 @@ int trs_gui_get_key(void)
        case SDL_KEYDOWN:
          if (event.key.keysym.mod & KMOD_ALT) {
            switch (event.key.keysym.sym) {
+#ifdef _WIN32
+             case SDLK_F4:
+#endif
              case SDLK_q:
                trs_exit(2);
                break;
-#ifdef _WIN32
-             case SDLK_F4:
-               trs_exit(2);
-               break;
-#endif
              default:
                break;
            }
@@ -351,8 +348,7 @@ int trs_gui_get_key(void)
          }
          break;
      }
-   } while(!done);
-   return(0);
+   }
 }
 
 void trs_gui_display_message(const char* title, const char *message)
