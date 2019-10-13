@@ -760,7 +760,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     }
 
     if (selection != -1) {
-      snprintf(filename, FILENAME_MAX - 1, "%s", current_dir);
+      snprintf(filename, FILENAME_MAX, "%s", current_dir);
       if (browse_dir) {
         new_dir = filenamelist[current_first + selection];
         if (new_dir[1] != '.' && new_dir[2] != '.') {
