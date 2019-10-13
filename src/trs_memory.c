@@ -336,7 +336,8 @@ void mem_write_rom(int address, int value)
 {
     address &= 0xffff;
 
-    rom[address] = value;
+    if (address <= MAX_ROM_SIZE)
+      rom[address] = value;
 }
 
 /* Called by load_hex */
