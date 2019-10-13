@@ -633,6 +633,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     } else {
       switch(key) {
         case SDLK_DOWN:
+        case SDLK_RIGHT:
           if (selection < drawcount-1) {
             selection ++;
           } else {
@@ -643,6 +644,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           }
           break;
         case SDLK_UP:
+        case SDLK_LEFT:
           if (selection > 0) {
             selection --;
           }
@@ -746,16 +748,16 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 #endif
             else
               done = 1;
-            break;
-            case SDLK_TAB:
-            if (browse_dir)
-              done = 1;
-            break;
-            case SDLK_ESCAPE:
+          break;
+        case SDLK_TAB:
+          if (browse_dir)
             done = 1;
-            selection = -1;
-            break;
-          }
+          break;
+        case SDLK_ESCAPE:
+          done = 1;
+          selection = -1;
+          break;
+        }
       }
     } while (!done);
 
@@ -942,12 +944,14 @@ int trs_gui_display_popup(const char* title, char **entry,
     trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
     switch(key) {
       case SDLK_DOWN:
+      case SDLK_RIGHT:
         if (selection < entry_count-1)
           selection ++;
         else
           selection = 0;
         break;
       case SDLK_UP:
+      case SDLK_LEFT:
         if (selection > 0)
           selection --;
         else
@@ -959,8 +963,9 @@ int trs_gui_display_popup(const char* title, char **entry,
       case SDLK_END:
         selection = entry_count-1;
         break;
-      case SDLK_SPACE:
       case SDLK_RETURN:
+      case SDLK_SPACE:
+      case SDLK_TAB:
         done = 1;
         break;
       case SDLK_ESCAPE:
@@ -1012,6 +1017,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
     } else
     switch(key) {
       case SDLK_DOWN:
+      case SDLK_RIGHT:
         do {
           if (selection < num)
             selection ++;
@@ -1020,6 +1026,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         } while(entry[selection].type == MENU_TITLE_TYPE);
         break;
       case SDLK_UP:
+      case SDLK_LEFT:
         do {
           if (selection > 0)
             selection --;
@@ -1057,7 +1064,9 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         }
         done = 1;
         break;
+      case SDLK_INSERT:
       case SDLK_RETURN:
+      case SDLK_TAB:
         if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
             (entry[selection].type == MENU_HARD_BROWSE_TYPE) ||
             (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
@@ -2885,7 +2894,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
     trs_x_flush();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection], first_x + column*(max_len + 1), first_y + row, 0);
-     switch (key) {
+    switch (key) {
       case SDLK_DOWN:
         if (row < rows - 1) row++; else row = 0;
         break;
