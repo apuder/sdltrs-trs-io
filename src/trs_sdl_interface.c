@@ -78,8 +78,6 @@
 
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 
-extern void trs_gui_load_single_state(void);
-extern void trs_gui_save_single_state(void);
 extern void trs_gui_keys_sdltrs(void);
 extern void trs_gui_model(void);
 extern int trs_timer_is_turbo(void);
@@ -1791,10 +1789,10 @@ void call_function(int function)
       trs_gui_get_virtual_key();
       break;
     case SAVE:
-      trs_gui_save_single_state();
+      trs_gui_save_state();
       break;
     case LOAD:
-      trs_gui_load_single_state();
+      trs_gui_load_state();
       break;
     case DISK:
       trs_gui_disk_management();
@@ -1807,12 +1805,6 @@ void call_function(int function)
       break;
     case TAPE:
       trs_gui_cassette_management();
-      break;
-    case SAVE_STATE:
-      trs_gui_save_state();
-      break;
-    case LOAD_STATE:
-      trs_gui_load_state();
       break;
     case WRITE:
       trs_gui_write_config();
@@ -2088,7 +2080,7 @@ void trs_get_event(int wait)
               trs_x_flush();
               break;
             case SDLK_l:
-              call_function(LOAD_STATE);
+              call_function(LOAD);
               trs_screen_init(1);
               trs_screen_refresh();
               trs_x_flush();
@@ -2112,7 +2104,7 @@ void trs_get_event(int wait)
               call_function(READ);
               break;
             case SDLK_s:
-              call_function(SAVE_STATE);
+              call_function(SAVE);
               break;
             case SDLK_t:
               call_function(TAPE);

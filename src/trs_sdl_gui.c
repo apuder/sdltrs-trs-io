@@ -2690,43 +2690,6 @@ int trs_gui_load_state(void)
   return 0;
 }
 
-void trs_gui_save_or_load_single_state(int save)
-{
-  char filename[FILENAME_MAX], *ptr, text[12];
-  FILE *file;
-
-  snprintf(filename, FILENAME_MAX, "%s", trs_config_file);
-  ptr = strrchr(filename, '.');
-  if (ptr != NULL)
-    *ptr = '\0';
-  trs_add_extension(filename, ".t8s");
-  file = fopen(filename, "r");
-  if (save)
-    snprintf(text, 12, "Save State?");
-  else {
-    if (file)
-      snprintf(text, 12, "Load State?");
-    else {
-      trs_gui_display_message("Error", "No Saved State");
-      return;
-    }
-  }
-  if (file)
-    fclose(file);
-  if (trs_gui_display_question(text) == 1)
-    save ? trs_state_save(filename) : trs_state_load(filename);
-}
-
-void trs_gui_save_single_state(void)
-{
-  trs_gui_save_or_load_single_state(1);
-}
-
-void trs_gui_load_single_state(void)
-{
-  trs_gui_save_or_load_single_state(0);
-}
-
 void trs_gui_new_machine(void)
 {
   trs_screen_var_reset();
@@ -2944,10 +2907,10 @@ void trs_gui_joy_gui(void)
       trs_gui_get_virtual_key();
       break;
     case SAVE:
-      trs_gui_save_single_state();
+      trs_gui_save_state();
       break;
     case LOAD:
-      trs_gui_load_single_state();
+      trs_gui_load_state();
       break;
     case RESET:
       trs_reset(1);

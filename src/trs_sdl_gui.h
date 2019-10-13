@@ -40,13 +40,11 @@
 #define HARD         (10)
 #define STRINGY      (11)
 #define TAPE         (12)
-#define SAVE_STATE   (13)
-#define LOAD_STATE   (14)
-#define READ         (15)
-#define WRITE        (16)
-#define EMULATOR     (17)
-#define INTERFACE    (18)
-#define OTHER        (19)
+#define READ         (13)
+#define WRITE        (14)
+#define EMULATOR     (15)
+#define INTERFACE    (16)
+#define OTHER        (17)
 
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;
