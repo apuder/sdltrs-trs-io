@@ -177,11 +177,10 @@ extern int  PasteManagerStartPaste(void);
 extern void PasteManagerStartCopy(char *string);
 extern int PasteManagerGetChar(unsigned short *character);
 
-#define COPY_OFF       0
-#define COPY_IDLE      1
-#define COPY_STARTED   2
-#define COPY_DEFINED   3
-#define COPY_CLEAR     4
+#define COPY_IDLE      0
+#define COPY_STARTED   1
+#define COPY_DEFINED   2
+#define COPY_CLEAR     3
 static int copyStatus = COPY_IDLE;
 static int selectionStartX = 0;
 static int selectionStartY = 0;
