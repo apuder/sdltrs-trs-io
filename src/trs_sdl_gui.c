@@ -650,12 +650,14 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           }
           break;
         case SDLK_PAGEUP:
+        case SDLK_BACKSPACE:
           current_first -= drawcount;
           if (current_first < 0)
             current_first = selection = 0;
           redraw = 1;
           break;
         case SDLK_PAGEDOWN:
+        case SDLK_SPACE:
           current_first += drawcount;
           if (current_first > filenamecount-drawcount) {
             current_first = filenamecount-drawcount;
@@ -673,6 +675,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           redraw = 1;
           break;
         case SDLK_RETURN:
+        case SDLK_INSERT:
           if (*filenamelist[current_first + selection] == '<') {
             new_dir = filenamelist[current_first + selection];
             selection = 0;
