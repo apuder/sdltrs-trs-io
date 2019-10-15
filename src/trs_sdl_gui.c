@@ -676,6 +676,10 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           break;
         case SDLK_RETURN:
         case SDLK_INSERT:
+        case SDLK_TAB:
+          if (key == SDLK_TAB && browse_dir)
+            done = 1;
+          else
           if (*filenamelist[current_first + selection] == '<') {
             new_dir = filenamelist[current_first + selection];
             selection = 0;
@@ -745,10 +749,6 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 #endif
             else
               done = 1;
-          break;
-        case SDLK_TAB:
-          if (browse_dir)
-            done = 1;
           break;
         case SDLK_ESCAPE:
           done = 1;
