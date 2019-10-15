@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "windows.h"
 
 extern int trs_paste_started();
