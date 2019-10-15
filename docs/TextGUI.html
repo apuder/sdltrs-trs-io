@@ -41,15 +41,14 @@
 <p><img alt="" src="images/TextGUIMainMenu.png"></p>
 
 <p>The main menu is the entry point for the Text GUI. You may move up and down
-through the menu items using the up and down arrow keys. The <b>Home</b> or
-the <b>End</b> keys moves to the first or last menu item. Typing the first
-letter of a menu item marks it for selection. Pressing a number key from
-<b>0</b> to <b>9</b> marks the corresponding menu item. A menu item may be
-selected by pressing <b>Enter</b> when the item is highlighted. Pressing
+through the menu items using the arrow keys. The Home and End keys moves to
+the first or last menu item. Typing the first letter of a menu item marks it
+for selection. Pressing a number key from <b>0</b> to <b>9</b> jumps to the
+line in the menu. A menu item may be selected by pressing the <b>Enter</b>,
+<b>Space</b> or <b>Tab</b> key when the item is highlighted. Pressing
 <b>ESC</b> moves up a menu level (or exits the GUI if you are at the top
-level). Besides entering the GUI using <b>F7</b> or <b>Alt-M</b>, submenus of
-the GUI may be entered by using the key shortcuts shown after the menu
-items.</p>
+level). Besides entering the GUI using <b>F7</b> or <b>Alt-M</b>, submenus may
+be entered by using the key shortcuts shown after the menu items.</p>
 
 <h2><a name="Floppy_Disk_Management"></a><u>Floppy Disk Management</u></h2>
 
@@ -62,10 +61,10 @@ new disk images, and set emulated disk drive options.</p>
 <p>For the first 8 options in the menu, there are three options:</p>
 
 <ul>
-  <li>Hitting <b>Enter</b> while the item is selected, will move to the image
-      selection screen, which is explained below.</li>
-  <li>Hitting <b>Backspace</b> will remove a disk image if there is one in the
-      drive.</li>
+  <li>Hitting <b>Enter</b> or <b>Tab</b> while the item is selected, will
+      move to the image selection screen, which is explained below.</li>
+  <li>Hitting <b>Backspace</b> or <b>Delete</b> will remove a disk image if
+      there is one in the drive.</li>
   <li>Hitting <b>Space</b> will toggle the write protect for the drive.
       The indicator for write protect is an asterisk "*" in front of the
       "Disk" in the menu item.</li>
@@ -90,14 +89,14 @@ to load multiple disk sets sequentially.</p>
 
 <p><img alt="" src="images/TextGUIFloppyLoad.png"></p>
 
-<p>When the user presses <b>Enter</b> in on a Drive item in the Floppy Disk
-Management screen, the file open menu is displayed. The up/down arrows and
-page up/down may be used to scroll through the list of files. Pressing
-<b>Enter</b> on the &lt;..&gt; item will take you to the parent directory. On
-Windows, the Drive letters are listed as the last items in the menu, and you
-can change drives by pressing <b>Enter</b> on those items. You may also go to
-a particular section of the file list my pressing the first letter of the
-file name.</p>
+<p>When the user presses <b>Enter</b> on a Drive item in the Floppy Disk
+Management screen, the file open menu is displayed. The arrow keys and page
+up/down may be used to scroll through the list of files. <b>Home</b> and
+<b>End</b> moves to beginnig or end of the list. Pressing <b>Enter</b> on the
+&lt;..&gt; item will take you to the parent directory. On Windows, the Drive
+letters are listed as the last items in the menu, and you can change drives by
+pressing <b>Enter</b> on those items. You may also go to a particular section
+of the file list by pressing the first letter of the file name.</p>
 
 <p><img alt="" src="images/TextGUIFloppyCreationMenu.png"></p>
 
@@ -146,13 +145,14 @@ create new disk images.</p>
 <p>For the first 4 options in the menu, there are three options:</p>
 
 <ul>
-  <li>Hitting <b>Enter</b> while the item is selected, will move to the image
-      selection screen, which is explained above in the floppy disk section.</li>
-  <li>Hitting <b>Backspace</b> will remove a disk image if there is one in the
-      drive.</li>
+  <li>Hitting <b>Enter</b> or <b>Tab</b> while the item is selected, will
+      move to the image selection screen, which is explained above in the
+      floppy disk section.</li>
+  <li>Hitting <b>Backspace</b> or <b>Delete</b> will remove a disk image if
+      there is one in the drive.</li>
   <li>Hitting <b>Space</b> will toggle the write protect for the drive.
-      The indicator for write protect is an asterisk "*" in front of the "Hard"
-      in the menu item.</li>
+      The indicator for write protect is an asterisk "*" in front of the
+      "Hard" in the menu item.</li>
 </ul>
 
 <h3>Save Disk Set:</h3>
@@ -188,13 +188,17 @@ none, the created image will be mounted on the specified hard drive.</p>
 <p>The cassette management menu allows you to insert and remove cassette
 images into the emulated drive, as well as create new cassette images.</p>
 
-<p>For the first options in the menu, there are two options:</p>
+<p>For the first option in the menu, there are three options:</p>
 
 <ul>
-  <li>Hitting <b>Enter</b> while the item is selected, will move to the image
-      selection screen, which is explained above in the floppy disk section.</li>
-  <li>Hitting <b>Backspace</b> will remove a cassette image if there is one in
-      the drive.</li>
+  <li>Hitting <b>Enter</b> or <b>Tab</b> while the item is selected, will
+      move to the image selection screen, which is explained above in the
+      floppy disk section.</li>
+  <li>Hitting <b>Backspace</b> or <b>Delete</b> will remove a cassette image
+      if there is one in the drive.</li>
+  <li>Hitting <b>Space</b> will toggle the write protect for the cassette.
+      The indicator for write protect is an asterisk "*" in front of the
+      "Cass" in the menu item.</li>
 </ul>
 
 <p>The second option allows you to set the position of the cassette tape by
@@ -222,10 +226,11 @@ create new wafer images with default parameters.</p>
 <p>For the first 8 options in the menu, there are three options:</p>
 
 <ul>
-  <li>Hitting <b>Enter</b> while the item is selected, will move to the image
-      selection screen, which is explained above in the floppy disk section.</li>
-  <li>Hitting <b>Backspace</b> will remove a disk image if there is one in the
-      drive.</li>
+  <li>Hitting <b>Enter</b> or <b>Tab</b> while the item is selected, will
+      move to the image selection screen, which is explained above in the
+      floppy disk section.</li>
+  <li>Hitting <b>Backspace</b> or <b>Delete</b> will remove a wafer image if
+      there is one in the drive.</li>
   <li>Hitting <b>Space</b> will toggle the write protect for the wafer.
       The indicator for write protect is an asterisk "*" in front of the
       "Wafer" in the menu item.</li>
@@ -320,12 +325,12 @@ printer output file.</p>
 <p>This menu allows the user to specify the default directories used for
 loading/saving various types of file used by the emulator. To choose the
 directory, press <b>Enter</b> when the appropriate entry is highlighted. That
-will bring up the Directory select screen. The up and down arrows, page
-up/down and <b>Home/End</b> keys may be used to scroll through the list of
-directories. Pressing <b>Enter</b> on the &lt;..&gt; item will take you to
-the parent directory. On Windows, the Drive letters are listed as the last
-items in the menu, and you can change drives by pressing <b>Enter</b> on
-those items. The directory is selected by pressing the <b>Tab</b> key.</p>
+will bring up the Directory select screen. The arrow keys, page up/down and
+Home/End may be used to scroll through the list of directories. Pressing
+<b>Enter</b> on the &lt;..&gt; item will take you to the parent directory. On
+Windows, the Drive letters are listed as the last items in the menu, and you
+can change drives by pressing <b>Enter</b> on those items. The directory is
+selected by pressing the <b>Tab</b> key.</p>
 
 <p><img alt="" src="images/TextGUIDirectorySelect.png"></p>
 
