@@ -650,14 +650,12 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           }
           break;
         case SDLK_PAGEUP:
-        case SDLK_BACKSPACE:
           current_first -= drawcount;
           if (current_first < 0)
             current_first = selection = 0;
           redraw = 1;
           break;
         case SDLK_PAGEDOWN:
-        case SDLK_SPACE:
           current_first += drawcount;
           if (current_first > filenamecount-drawcount) {
             current_first = filenamecount-drawcount;
@@ -675,7 +673,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           redraw = 1;
           break;
         case SDLK_RETURN:
-        case SDLK_INSERT:
+        case SDLK_SPACE:
         case SDLK_TAB:
           if (key == SDLK_TAB && browse_dir)
             done = 1;
@@ -1056,7 +1054,6 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         }
         return selection;
         break;
-      case SDLK_INSERT:
       case SDLK_RETURN:
       case SDLK_TAB:
         if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
