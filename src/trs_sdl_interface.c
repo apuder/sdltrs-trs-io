@@ -110,12 +110,12 @@ int resize3 = 1;
 int resize4 = 0;
 int scanlines = 0;
 int trs_paused = 0;
-char trs_disk_dir[FILENAME_MAX] = "disks";
-char trs_hard_dir[FILENAME_MAX] = "harddisks";
-char trs_cass_dir[FILENAME_MAX] = "cassettes";
-char trs_disk_set_dir[FILENAME_MAX] = "disksets";
-char trs_state_dir[FILENAME_MAX] = "savedstates";
-char trs_printer_dir[FILENAME_MAX] = "printer";
+char trs_disk_dir[FILENAME_MAX] = "";
+char trs_hard_dir[FILENAME_MAX] = "";
+char trs_cass_dir[FILENAME_MAX] = "";
+char trs_disk_set_dir[FILENAME_MAX] = "";
+char trs_state_dir[FILENAME_MAX] = "";
+char trs_printer_dir[FILENAME_MAX] = "";
 char trs_config_file[FILENAME_MAX];
 char init_state_file[FILENAME_MAX];
 char trs_printer_command[FILENAME_MAX];
@@ -610,12 +610,12 @@ void trs_set_to_defaults(void)
   strcpy(romfile,"level2.rom");
   strcpy(romfile3,"model3.rom");
   strcpy(romfile4p,"model4p.rom");
-  strcpy(trs_disk_dir,"disks");
-  strcpy(trs_hard_dir,"harddisks");
-  strcpy(trs_cass_dir,"cassettes");
-  strcpy(trs_disk_set_dir,"disksets");
-  strcpy(trs_state_dir,"savedstates");
-  strcpy(trs_printer_dir,"printer");
+  strcpy(trs_disk_dir,"");
+  strcpy(trs_hard_dir,"");
+  strcpy(trs_cass_dir,"");
+  strcpy(trs_disk_set_dir,"");
+  strcpy(trs_state_dir,"");
+  strcpy(trs_printer_dir,"");
 #ifdef _WIN32
   strcpy(trs_printer_command,"notepad %s");
 #else
