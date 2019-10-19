@@ -78,7 +78,6 @@ extern char trs_config_file[FILENAME_MAX];
 extern char init_state_file[FILENAME_MAX];
 
 extern int trs_model; /* 1, 3, 4, 5(=4p) */
-extern int trs_autodelay;
 extern unsigned int foreground;
 extern unsigned int background;
 extern unsigned int gui_foreground;

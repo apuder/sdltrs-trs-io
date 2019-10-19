@@ -327,8 +327,7 @@ void debug_print_registers()
 	   REG_H, REG_L, REG_SP, REG_HL_PRIME);
 
     printf("\nT-state counter: %" TSTATE_T_LEN "    ", z80_state.t_count);
-    printf("Delay setting: %d (%s)\n",
-	   z80_state.delay, trs_autodelay ? "auto" : "fixed");
+    printf("Delay setting: %d\n", z80_state.delay);
 }
 
 

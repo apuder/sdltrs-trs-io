@@ -60,7 +60,6 @@
 extern int fullscreen;
 
 int trs_model = 1;
-int trs_autodelay = 0;
 char *program_name;
 
 static void check_endian()
@@ -209,4 +208,3 @@ int SDLmain(int argc, char *argv[])
   printf("Quitting.\n");
   exit(0);
 }
-
