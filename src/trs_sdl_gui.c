@@ -2823,7 +2823,21 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
       case SDLK_LEFT:
         if (column > 0) column--; else column = columns - 1;
         break;
+      case SDLK_HOME:
+        column = 0;
+        break;
+      case SDLK_END:
+        column = columns - 1;
+        break;
+      case SDLK_PAGEUP:
+        row = 0;
+        break;
+      case SDLK_PAGEDOWN:
+        row = rows - 1;
+        break;
       case SDLK_RETURN:
+      case SDLK_SPACE:
+      case SDLK_TAB:
         done = 1;
         break;
       case SDLK_ESCAPE:
