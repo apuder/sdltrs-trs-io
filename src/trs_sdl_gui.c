@@ -2464,17 +2464,17 @@ void trs_gui_model(void)
 void trs_gui_default_dirs(void)
 {
   MENU_ENTRY default_menu[] =
-  {{"Default Floppy Disk Directory:",MENU_TITLE_TYPE},
+  {{"Floppy Disk Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Default Hard Disk Directory:",MENU_TITLE_TYPE},
+   {"Hard Disk Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Default Cassette Directory:",MENU_TITLE_TYPE},
+   {"Cassette Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Default Disk Set Directory:",MENU_TITLE_TYPE},
+   {"Disk Set Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Default State Directory:",MENU_TITLE_TYPE},
+   {"State Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Default Printer Output Directory:",MENU_TITLE_TYPE},
+   {"Printer Output Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
   int selection = 1;
