@@ -994,15 +994,14 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         selection = key;
     } else
     if (key >= 'A' && key <= 'z') {
-      for (i=0;i<num+1;i++) {
-        if (tolower((int)*entry[i].title) == tolower(key) && selection != i) {
-          selection = i;
-          while(entry[selection].type == MENU_TITLE_TYPE) {
-            if (selection < num)
-              selection ++;
-          }
-          break;
-        }
+      i = selection;
+      do {
+        if (++selection > num)
+          selection = 0;
+      } while (selection != i && (tolower((int)*entry[selection].title) != tolower(key)));
+      while(entry[selection].type == MENU_TITLE_TYPE) {
+        if (selection < num)
+          selection ++;
       }
     } else
     switch(key) {
