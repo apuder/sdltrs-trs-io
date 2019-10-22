@@ -603,6 +603,7 @@ void trs_set_to_defaults(void)
   resize4 = 0;
   fullscreen = 0;
   trs_model = 1;
+  lowercase = 1;
   trs_charset = 3;
   trs_charset1 = 3;
   trs_charset3 = 4;

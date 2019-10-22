@@ -93,7 +93,7 @@ int bank_offset[2];
 #define VIDEO_PAGE_0 0
 #define VIDEO_PAGE_1 1024
 int video_offset = (-VIDEO_START + VIDEO_PAGE_0);
-int lowercase;
+int lowercase = 1;
 int romin = 0; /* Model 4p */
 unsigned int bank_base = 0x10000;
 unsigned char mem_command = 0;
