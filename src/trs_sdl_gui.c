@@ -801,7 +801,9 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   unsigned int length;
   unsigned int first_disp;
 
-  snprintf(output, limit + 1, "%s", input);
+  if (input != output)
+    snprintf(output, limit + 1, "%s", input);
+
   pos = length = strlen(input);
   if (pos > 60)
     first_disp = pos - 59;
