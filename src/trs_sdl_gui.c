@@ -1074,8 +1074,8 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
           }
           trs_gui_clear_rect(2,selection+2,60,1);
           entry[selection].title[0]=' ';
+          return selection;
         }
-        return selection;
         break;
       case SDLK_RETURN:
       case SDLK_TAB:
