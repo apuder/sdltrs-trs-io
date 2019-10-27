@@ -919,7 +919,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
 int trs_gui_display_popup(const char* title, char **entry,
                           int entry_count, int selection)
 {
-  int num = 0,key;
+  int num = 0, i, key;
   int first_x, first_y;
   int saved_selection = selection;
   unsigned int max_len = 0;
@@ -941,11 +941,19 @@ int trs_gui_display_popup(const char* title, char **entry,
     trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
     trs_x_flush();
     key = trs_gui_get_key();
+    trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
     if (entry_count == 2) {
       if (tolower(key) == 'n') return 0;
       if (tolower(key) == 'y') return 1;
     }
-    trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
+    if (key >= '0' && key <= 'z') {
+      for (i = 0; i < num; i++) {
+        if (strchr(entry[i], toupper(key))) {
+          selection = i;
+          break;
+        }
+      }
+    }
     switch(key) {
       case SDLK_DOWN:
       case SDLK_RIGHT:
@@ -1779,16 +1787,16 @@ void trs_gui_display_management(void)
   char input[8];
   char *resize_choices[2] =   {"        No","       Yes"};
   char *disk_led_choices[2] = {" Hide"," Show"};
-  char *font1_choices[7] =    {"      early",
-                               "      stock",
-                               "      lcmod",
-                               "      wider",
-                               "      genie",
-                               "   ht-1080z",
-                               "video genie"};
-  char *font34_choices[3] =   {"     katakana",
-                               "international",
-                               "         bold"};
+  char *font1_choices[7] =    {"      Early",
+                               "      Stock",
+                               "      LCmod",
+                               "      Wider",
+                               "      Genie",
+                               "   HT-1080Z",
+                               "Video Genie"};
+  char *font34_choices[3] =   {"     Katakana",
+                               "International",
+                               "         Bold"};
   char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
   int selection = 0;
   int local_trs_charset1 = trs_charset1;
