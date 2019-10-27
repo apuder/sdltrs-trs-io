@@ -842,9 +842,11 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         }
         break;
       case SDLK_HOME:
+      case SDLK_PAGEUP:
         first_disp = pos = 0;
         break;
       case SDLK_END:
+      case SDLK_PAGEDOWN:
         pos = length;
         if (pos > 60)
           first_disp = pos - 59;
@@ -970,9 +972,11 @@ int trs_gui_display_popup(const char* title, char **entry,
           selection = entry_count-1;
         break;
       case SDLK_HOME:
+      case SDLK_PAGEUP:
         selection = 0;
         break;
       case SDLK_END:
+      case SDLK_PAGEDOWN:
         selection = entry_count-1;
         break;
       case SDLK_RETURN:
@@ -1042,6 +1046,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         } while(entry[selection].type == MENU_TITLE_TYPE);
         break;
       case SDLK_HOME:
+      case SDLK_PAGEUP:
         selection = 0;
         while(entry[selection].type == MENU_TITLE_TYPE) {
           if (selection < num)
@@ -1049,6 +1054,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         }
         break;
       case SDLK_END:
+      case SDLK_PAGEDOWN:
         selection = num;
         break;
       case SDLK_DELETE:
