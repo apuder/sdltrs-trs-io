@@ -796,6 +796,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   char directory_name[FILENAME_MAX];
   int key,ret=0;
   int done = 0;
+  int insert = 1;
   int invert;
   unsigned int i, pos;
   unsigned int length;
@@ -867,6 +868,9 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
           length--;
         }
         break;
+      case SDLK_INSERT:
+        insert = !insert;
+        break;
       case SDLK_RETURN:
         ret = 0;
         done = 1;
@@ -891,14 +895,18 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         }
         break;
       default:
-        if (key >= 0x20 && key <= 0xFF && length < limit)  {
-          for (i=length;i>pos;i--)
-            output[i] = output[i-1];
+        if (key >= 0x20 && key <= 0xFF && pos < limit)  {
+          if (insert && length < limit) {
+            for (i=length;i>pos;i--)
+              output[i] = output[i-1];
+            length++;
+          }
           output[pos] = (char) key;
           if (pos == first_disp + 59)
             first_disp ++;
           pos++;
-          length++;
+          if (pos > length)
+            length++;
         }
         break;
     }
