@@ -1,0 +1,48 @@
+#!/usr/bin/make -f
+
+PACKAGE := sdltrs
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+build: build-arch
+build-arch: build-stamp
+build-stamp:
+	dh_testdir
+	dh_autoreconf
+	./configure --prefix=/usr --enable-readline
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	[ ! -f Makefile ] || $(MAKE) distclean
+	dh_autoreconf_clean
+
+# Build architecture-dependent files here.
+binary-arch: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Add here commands to install the files into debian/$(PACKAGE)
+	$(MAKE) install prefix=`pwd`/debian/$(PACKAGE)/usr mandir='$${prefix}/share/man'
+
+	dh_installchangelogs
+	dh_installdocs docs/*
+	dh_installmenu
+
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-arch
+
+.PHONY: build clean binary-arch binary
