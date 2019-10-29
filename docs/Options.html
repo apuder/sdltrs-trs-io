@@ -36,24 +36,24 @@ and that state will be restored upon startup of the emulator.</p>
 
 <table align="center" border="1" cellpadding="10" cellspacing="0">
   <tr>
-    <td><code>-background color</code></td>
+    <td><code>-background 0xRRGGBB</code></td>
     <td>Specifies the background color of the SDLTRS emulator window.
-        Format is <code>0xRRGGBB</code>, where <code>RR</code>, <code>GG
-        </code> and <code>BB</code> are the hex values of the Red, Green,
-        and Blue components. Default is black (<code>0x000000</code>).</td>
+        <code>RR</code>, <code>GG</code> and <code>BB</code> are the hex
+        values of the Red, Green, and Blue components.
+        Default is black (<code>0x000000</code>).</td>
   </tr>
   <tr>
-    <td><code>-foreground color</code></td>
+    <td><code>-foreground 0xRRGGBB</code></td>
     <td>Specifies the foreground color of the SDLTRS emulator window.
         Default is white (<code>0xE0E0FF</code>).</td>
   </tr>
   <tr>
-    <td><code>-guibackground color</code></td>
+    <td><code>-guibackground 0xRRGGBB</code></td>
     <td>Specifies the background color of the SDLTRS text based GUI window.
         Default is dark green (<code>0x344843</code>).</td>
   </tr>
   <tr>
-    <td><code>-guiforeground color</code></td>
+    <td><code>-guiforeground 0xRRGGBB</code></td>
     <td>Specifies the foreground color of the SDLTRS text based GUI window.
         Default is white (<code>0xE0E0FF</code>).</td>
   </tr>
@@ -450,11 +450,12 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-lower</code></td>
-    <td>Emulate a "Lower Case Modification Kit" in the TRS-80 Model I mode.</td>
+    <td>Emulate a "Lower Case Modification Kit" in the TRS-80 Model I mode.
+        This is the default.</td>
   </tr>
   <tr>
     <td><code>-nolower</code></td>
-    <td>No lower case characters in TRS-80 Model I mode. This is the default.</td>
+    <td>No lower case characters in TRS-80 Model I mode.</td>
   </tr>
   <tr>
     <td><code>-le18</code></td>
