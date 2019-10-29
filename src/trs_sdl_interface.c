@@ -266,7 +266,6 @@ static void trs_opt_resize3(char *arg, int intarg, char *stringarg);
 static void trs_opt_resize4(char *arg, int intarg, char *stringarg);
 static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
 static void trs_opt_model(char *arg, int intarg, char *stringarg);
-static void trs_opt_model2(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset1(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset3(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset4(char *arg, int intarg, char *stringarg);
@@ -320,10 +319,6 @@ trs_opt options[] = {
 {"fullscreen",trs_opt_fullscreen,0,1,NULL},
 {"nofullscreen",trs_opt_fullscreen,0,0,NULL},
 {"model",trs_opt_model,1,0,NULL},
-{"model1",trs_opt_model2,0,1,NULL},
-{"model3",trs_opt_model2,0,3,NULL},
-{"model4",trs_opt_model2,0,4,NULL},
-{"model4p",trs_opt_model2,0,5,NULL},
 {"charset1",trs_opt_charset1,1,0,NULL},
 {"charset3",trs_opt_charset3,1,0,NULL},
 {"charset4",trs_opt_charset4,1,0,NULL},
@@ -690,11 +685,6 @@ static void trs_opt_model(char *arg, int intarg, char *stringarg)
     trs_model = 5;
   } else
     error("TRS-80 Model %s not supported", arg);
-}
-
-static void trs_opt_model2(char *arg, int intarg, char *stringarg)
-{
-  trs_model = intarg;
 }
 
 static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
