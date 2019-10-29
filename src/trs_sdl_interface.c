@@ -262,7 +262,6 @@ typedef struct trs_opt_struct {
 } trs_opt;
 
 static void trs_opt_scale(char *arg, int intarg, char *stringarg);
-static void trs_opt_scale2(char *arg, int intarg, char *stringarg);
 static void trs_opt_resize3(char *arg, int intarg, char *stringarg);
 static void trs_opt_resize4(char *arg, int intarg, char *stringarg);
 static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
@@ -314,10 +313,6 @@ static void trs_opt_scanlines(char *arg, int intarg, char *stringarg);
 
 trs_opt options[] = {
 {"scale",trs_opt_scale,1,0,NULL},
-{"scale1",trs_opt_scale2,0,1,NULL},
-{"scale2",trs_opt_scale2,0,2,NULL},
-{"scale3",trs_opt_scale2,0,3,NULL},
-{"scale4",trs_opt_scale2,0,4,NULL},
 {"resize3",trs_opt_resize3,0,1,NULL},
 {"resize4",trs_opt_resize4,0,1,NULL},
 {"noresize3",trs_opt_resize3,0,0,NULL},
@@ -661,12 +656,6 @@ static void trs_opt_scale(char *arg, int intarg, char *stringarg)
   scale_x = atoi(arg);
   if (scale_x <= 0) scale_x = 1;
   if (scale_x > MAX_SCALE) scale_x = MAX_SCALE;
-  scale_y = scale_x * 2;
-}
-
-static void trs_opt_scale2(char *arg, int intarg, char *stringarg)
-{
-  scale_x = intarg;
   scale_y = scale_x * 2;
 }
 
