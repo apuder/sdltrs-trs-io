@@ -37,24 +37,24 @@ and that state will be restored upon startup of the emulator.</p>
 <table align="center" border="1" cellpadding="10" cellspacing="0">
   <tr>
     <td><code>-background 0xRRGGBB</code></td>
-    <td>Specifies the background color of the SDLTRS emulator window.
+    <td>Specifies background color of the emulator window.
         <code>RR</code>, <code>GG</code> and <code>BB</code> are the hex
         values of the Red, Green, and Blue components.
         Default is black (<code>0x000000</code>).</td>
   </tr>
   <tr>
     <td><code>-foreground 0xRRGGBB</code></td>
-    <td>Specifies the foreground color of the SDLTRS emulator window.
+    <td>Specifies foreground color of the emulator window.
         Default is white (<code>0xE0E0FF</code>).</td>
   </tr>
   <tr>
     <td><code>-guibackground 0xRRGGBB</code></td>
-    <td>Specifies the background color of the SDLTRS text based GUI window.
+    <td>Specifies background color of the text based GUI window.
         Default is dark green (<code>0x344843</code>).</td>
   </tr>
   <tr>
     <td><code>-guiforeground 0xRRGGBB</code></td>
-    <td>Specifies the foreground color of the SDLTRS text based GUI window.
+    <td>Specifies foreground color of the text based GUI window.
         Default is white (<code>0xE0E0FF</code>).</td>
   </tr>
   <tr>
@@ -64,7 +64,7 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-scale factor</code></td>
-    <td>Scale the emulator window by factor times.
+    <td>Scale the emulator window by <code>factor</code> times.
         Valid values for factor are 1,2,3 and 4. Default is 1.</td>
   </tr>
   <tr>
@@ -79,7 +79,7 @@ and that state will be restored upon startup of the emulator.</p>
     <td><code>-noresize3<br>
               -noresize4</code></td>
     <td>In Model 3 (<code>-noresize3</code>) or 4/4P (<code>-noresize4)</code>,
-        always keep the X window large enough for 80x24 text or 640x240
+        always keep the emulator window large enough for 80x24 text or 640x240
         graphics, putting a blank margin around the outside when the emulated
         display mode is 64x16 text or 512x192 graphics.
         Default is <code>-resize3 -noresize4</code>.</td>
@@ -277,33 +277,33 @@ and that state will be restored upon startup of the emulator.</p>
   <tr>
     <td><code>-diskdir dir</code></td>
     <td>Specify the directory containing floppy disk images.
-        The default value is ".".</td>
+        Default is the current directory.</td>
   </tr>
   <tr>
     <td><code>-harddir dir</code></td>
     <td>Specify the directory containing hard disk images.
-        The default value is ".".</td>
+        Default is the current directory.</td>
   </tr>
   <tr>
     <td><code>-cassdir dir</code></td>
     <td>Specify the directory containing cassette and stringy wafer images.
-        The default value is ".".</td>
+        Default is the current directory.</td>
   </tr>
   <tr>
     <td><code>-disksetdir dir</code></td>
     <td>Specify the directory containing diskset files. (These files specify
         the contents of all of the floppy and harddrives, allowing you to load
-        them all at once). The default value is ".".</td>
+        them all at once). Default is the current directory.</td>
   </tr>
   <tr>
     <td><code>-statedir dir</code></td>
     <td>Specify the directory containing the saved emulator state files.
-        The default value is ".".</td>
+        Default is the current directory.</td>
   </tr>
   <tr>
     <td><code>-printerdir dir</code></td>
     <td>Specify the directory containing the saved printer output files.
-        The default value is ".".</td>
+        Default is the current directory.</td>
   </tr>
   <tr>
     <td><code>-printercmd "cmd"</code></td>
@@ -325,13 +325,13 @@ and that state will be restored upon startup of the emulator.</p>
   <tr>
     <td><code>-doublestep</code></td>
     <td>Make all real floppy drives double-step, allowing access to 35-track or
-        40-track media in an 80-track drive. Linux only. See the Floppy Disks
-        section of Features for limitations.</td>
+        40-track media in an 80-track drive. <b>Linux only</b>.
+        See the Floppy Disks section of Features for limitations.</td>
   </tr>
   <tr>
     <td><code>-nodoublestep</code></td>
-    <td>Turn off double-step mode for all real floppy drives. Linux only.
-        This is the default.</td>
+    <td>Turn off double-step mode for all real floppy drives. <b>Linux
+        only.</b> This is the default.</td>
   </tr>
   <tr>
     <td><code>-stepmap s0,s1,s2,s3,s4,s5,s6,s7</code></td>
@@ -340,7 +340,7 @@ and that state will be restored upon startup of the emulator.</p>
         drive will be double-stepped; if <code>sU</code> is 1, it will be
         single-stepped. You can omit values from the end of the list;
         those drives will get the default value set by <code>-doublestep
-        </code> or <code>-nodoublestep</code>.</td>
+        </code> or <code>-nodoublestep</code>. <b>Linux only</b></td>
   </tr>
   <tr>
     <td><code>-sizemap z0,z1,z2,z3,z4,z5,z6,z7</code></td>
@@ -446,7 +446,7 @@ and that state will be restored upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-nosound</code></td>
-    <td>Disable the Sound Output at startup of the Emulator.</td>
+    <td>Disable the Sound Output at startup of the emulator.</td>
   </tr>
   <tr>
     <td><code>-lower</code></td>
@@ -462,7 +462,7 @@ and that state will be restored upon startup of the emulator.</p>
     <td>Emulate the Lowe Electronics LE18 384x192 graphics adapter.</td>
   </tr>
   <tr>
-    <td><code>-lole18</code></td>
+    <td><code>-nole18</code></td>
     <td>No emulation of the LE18 graphic adapter. This is the default.</td>
   </tr>
   <tr>
