@@ -32,6 +32,7 @@ binary-arch: build
 
 	dh_installchangelogs
 	dh_installdocs docs/*
+	dh_installman
 	dh_installmenu
 
 	dh_strip
