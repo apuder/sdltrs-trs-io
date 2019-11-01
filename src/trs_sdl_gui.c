@@ -1020,7 +1020,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
       do {
         if (++selection > num)
           selection = 0;
-      } while (selection != i && (tolower((int)*entry[selection].title) != tolower(key)));
+      } while (selection != i && (int)*entry[selection].title != toupper(key));
       while(entry[selection].type == MENU_TITLE_TYPE) {
         if (selection < num)
           selection ++;
