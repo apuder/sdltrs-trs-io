@@ -884,7 +884,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
-          if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") != -1) {
+          if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") >= 0) {
             snprintf(output, limit + 1, "%s", directory_name);
             pos = length = strlen(output);
             if (pos > 60)
@@ -1085,24 +1085,20 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
             if (trs_gui_file_browse(trs_disk_dir, filename, NULL ,0,
-                  " Floppy Disk Image ") == -1)
-              return selection;
-            trs_disk_insert(selection, filename);
+                  " Floppy Disk Image ") >= 0)
+              trs_disk_insert(selection, filename);
           } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
             if (trs_gui_file_browse(trs_hard_dir, filename, NULL, 0,
-                  " Hard Disk Image ") == -1)
-              return selection;
-            trs_hard_attach(selection, filename);
+                  " Hard Disk Image ") >= 0)
+              trs_hard_attach(selection, filename);
           } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE)  {
             if (trs_gui_file_browse(trs_cass_dir, filename, NULL, 0,
-                  " Wafer Image ") == -1)
-              return selection;
-            stringy_insert(selection, filename);
+                  " Wafer Image ") >= 0)
+              stringy_insert(selection, filename);
           } else {
             if (trs_gui_file_browse(trs_cass_dir, filename, NULL, 0,
-                  " Cassette Image ") == -1)
-              return selection;
-            trs_cassette_insert(filename);
+                  " Cassette Image ") >= 0)
+              trs_cassette_insert(filename);
           }
           trs_gui_clear_rect(2,selection+2,60,1);
         }
