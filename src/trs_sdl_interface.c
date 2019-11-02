@@ -177,10 +177,11 @@ extern int  PasteManagerStartPaste(void);
 extern void PasteManagerStartCopy(char *string);
 extern int PasteManagerGetChar(unsigned short *character);
 
-#define COPY_IDLE      0
-#define COPY_STARTED   1
-#define COPY_DEFINED   2
-#define COPY_CLEAR     3
+#define COPY_OFF       0
+#define COPY_IDLE      1
+#define COPY_STARTED   2
+#define COPY_DEFINED   3
+#define COPY_CLEAR     4
 static int copyStatus = COPY_IDLE;
 static int selectionStartX = 0;
 static int selectionStartY = 0;
@@ -1583,7 +1584,7 @@ void trs_select_all()
 inline void trs_x_flush()
 {
 #if defined(SDL2) || !defined(NOX)
-  if (!trs_emu_mouse)
+  if (!trs_emu_mouse || copyStatus != COPY_OFF)
     ProcessCopySelection(requestSelectAll);
   requestSelectAll = FALSE;
 #endif
@@ -1749,6 +1750,9 @@ void call_function(int function)
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 #endif
     trs_pause_audio(1);
+#if defined(SDL2) || !defined(NOX)
+    copyStatus = COPY_OFF;
+#endif
     switch (function) {
     case GUI:
       trs_gui();
@@ -1798,6 +1802,9 @@ void call_function(int function)
       break;
     }
     trs_pause_audio(0);
+#if defined(SDL2) || !defined(NOX)
+    copyStatus = COPY_IDLE;
+#endif
 #ifndef SDL2
     SDL_EnableKeyRepeat(0,0);
 #endif

@@ -271,6 +271,28 @@ int trs_gui_get_key(void)
          trs_gui_refresh();
          trs_x_flush();
          break;
+       case SDL_MOUSEBUTTONDOWN:
+         if (event.button.button == SDL_BUTTON_LEFT)
+           return SDLK_RETURN;
+         else if (event.button.button == SDL_BUTTON_MIDDLE)
+           return SDLK_TAB;
+         else if (event.button.button == SDL_BUTTON_RIGHT)
+           return SDLK_ESCAPE;
+#ifndef SDL2
+         else if (event.button.button == 4) /* SDL_BUTTON_WHEELUP */
+           return SDLK_UP;
+         else if (event.button.button == 5) /* SDL_BUTTON_WHEELDOWN */
+           return SDLK_DOWN;
+#endif
+         break;
+#ifdef SDL2
+       case SDL_MOUSEWHEEL:
+         if (event.wheel.y > 0)
+           return SDLK_UP;
+         if (event.wheel.y < 0)
+           return SDLK_DOWN;
+         break;
+#endif
        case SDL_KEYDOWN:
          if (event.key.keysym.mod & KMOD_ALT) {
            switch (event.key.keysym.sym) {
