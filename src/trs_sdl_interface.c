@@ -1546,7 +1546,7 @@ void ProcessCopySelection(int selectAll)
       }
       break;
     case COPY_DEFINED:
-      if (mouse & SDL_BUTTON(1)) {
+      if (mouse & (SDL_BUTTON(1) | SDL_BUTTON(3))) {
         copyStatus = COPY_STARTED;
         DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
         orig_x = end_x = copy_x;
