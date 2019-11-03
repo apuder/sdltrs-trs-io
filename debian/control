@@ -2,13 +2,13 @@ Source: sdltrs
 Section: contrib/otherosfs
 Priority: optional
 Maintainer: Jens Guenther <Jenz.Guenther@T-Online.de>
-Build-Depends: debhelper(>= 5), dh-autoreconf, libreadline-dev, libsdl1.2-dev
+Build-Depends: debhelper(>= 5), libreadline-dev, libsdl1.2-dev
 Standards-Version: 3.9.6
 Homepage: https://gitlab.com/jengun/sdltrs/
 
 Package: sdltrs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}
 Description: TRS-80 Model I/III/4/4P emulator for SDL
  SDLTRS is an SDL-based emulator for the Tandy/Radio Shack line of Zilog
  Z80-based microcomputers popular in the late 1970s and early 1980s.  It
