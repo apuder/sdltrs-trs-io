@@ -1,11 +1,19 @@
+.\" The following macro definition come from groff's an-ext.tmac.
+.\" Copyright (C) 2007-2014  Free Software Foundation, Inc.
+.\"
+.\" Continuation line for .TP header.
+.de TQ
+.  br
+.  ns
+.  TP \\$1\" no doublequotes around argument!
+..
+.\"
 .TH sdltrs 1 "2019-10-31" "sdltrs 1.2.3"
 .SH NAME
 sdltrs \- TRS-80 Model I/III/4/4P emulator for SDL
 .SH SYNOPSIS
-.SY sdltrs
-.OP file.t8c
-.OP file.t8s
-.OP options
+.B sdltrs
+[\fIfile.t8c\fP] [\fIfile.t8s\fP] [\fIoptions\fP]
 .SH DESCRIPTION
 .B sdltrs
 is an SDL-based emulator for Tandy/Radio Shack line of Zilog
