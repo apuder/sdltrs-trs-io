@@ -1497,7 +1497,7 @@ void ProcessCopySelection(int selectAll)
   } else {
     mouse = SDL_GetMouseState(&copy_x, &copy_y);
     if ((copyStatus == COPY_IDLE) &&
-        ((mouse & SDL_BUTTON(1)) == 0)) {
+        ((mouse & SDL_BUTTON(SDL_BUTTON_LEFT)) == 0)) {
       return;
     }
   }
@@ -1515,7 +1515,7 @@ void ProcessCopySelection(int selectAll)
         DrawSelectionRectangle(orig_x, orig_y, copy_x, copy_y);
         drawnRectCount = MAX_RECTS;
       }
-      else if (mouse & SDL_BUTTON(1) ) {
+      else if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT) ) {
         copyStatus = COPY_STARTED;
         orig_x = copy_x;
         orig_y = copy_y;
@@ -1527,12 +1527,12 @@ void ProcessCopySelection(int selectAll)
       break;
     case COPY_STARTED:
       DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
-      if (mouse & SDL_BUTTON(1))
+      if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
         DrawSelectionRectangle(orig_x, orig_y, copy_x, copy_y);
       drawnRectCount = MAX_RECTS;
       end_x = copy_x;
       end_y = copy_y;
-      if ((mouse & SDL_BUTTON(1)) == 0) {
+      if ((mouse & SDL_BUTTON(SDL_BUTTON_LEFT)) == 0) {
         if (orig_x == copy_x && orig_y == copy_y) {
           copyStatus = COPY_IDLE;
         } else {
@@ -1546,7 +1546,7 @@ void ProcessCopySelection(int selectAll)
       }
       break;
     case COPY_DEFINED:
-      if (mouse & (SDL_BUTTON(1) | SDL_BUTTON(3))) {
+      if (mouse & (SDL_BUTTON(SDL_BUTTON_LEFT) | SDL_BUTTON(SDL_BUTTON_RIGHT))) {
         copyStatus = COPY_STARTED;
         DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
         orig_x = end_x = copy_x;
@@ -3656,9 +3656,9 @@ void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
       / (OrigHeight - 2*top_margin);
     mouse_last_buttons = 7;
     /* !!Note: assuming 3-button mouse */
-    if (mask & SDL_BUTTON(1)) mouse_last_buttons &= ~4;
-    if (mask & SDL_BUTTON(2)) mouse_last_buttons &= ~2;
-    if (mask & SDL_BUTTON(3)) mouse_last_buttons &= ~1;
+    if (mask & SDL_BUTTON(SDL_BUTTON_LEFT))   mouse_last_buttons &= ~4;
+    if (mask & SDL_BUTTON(SDL_BUTTON_MIDDLE)) mouse_last_buttons &= ~2;
+    if (mask & SDL_BUTTON(SDL_BUTTON_RIGHT))  mouse_last_buttons &= ~1;
   }
   *x = mouse_last_x;
   *y = mouse_last_y;
