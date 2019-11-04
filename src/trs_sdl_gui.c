@@ -2331,7 +2331,7 @@ void trs_gui_misc_management(void)
         break;
       case -1:
         trs_kb_bracket(trs_kb_bracket_state);
-        trs_screen_caption(timer_overclock, trs_sound);
+        trs_screen_caption(timer_overclock);
         return;
         break;
     }

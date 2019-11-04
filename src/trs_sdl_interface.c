@@ -1186,17 +1186,17 @@ void trs_screen_var_reset()
   col_chars = 16;
 }
 
-void trs_screen_caption(int turbo, int sound)
+void trs_screen_caption(int turbo)
 {
   char title[80];
 
   if (trs_model == 5) {
     snprintf(title, 79, "TRS-80 Model 4P %s%s%s", turbo ? "Turbo " : "",
-             trs_paused ? "PAUSED " : "", sound ? "" : "(Mute)");
+             trs_paused ? "PAUSED " : "", trs_sound ? "" : "(Mute)");
   }
   else {
     snprintf(title, 79, "TRS-80 Model %d %s%s%s",trs_model, turbo ? "Turbo " : "",
-             trs_paused ? "PAUSED " : "", sound ? "" : "(Mute)");
+             trs_paused ? "PAUSED " : "", trs_sound ? "" : "(Mute)");
   }
 #ifdef SDL2
   SDL_SetWindowTitle(window, title);
@@ -1289,7 +1289,7 @@ void trs_screen_init(int gui_init)
 #endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
-  trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+  trs_screen_caption(trs_timer_is_turbo());
 
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
   bright_red = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
@@ -1736,7 +1736,7 @@ void call_function(int function)
 {
   if (function == PAUSE) {
     trs_paused = !trs_paused;
-    trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+    trs_screen_caption(trs_timer_is_turbo());
     if (!trs_paused)
       trs_screen_refresh();
   }
@@ -1966,7 +1966,7 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F12:
-            trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+            trs_screen_caption(trs_timer_switch_turbo());
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -2068,7 +2068,7 @@ void trs_get_event(int wait)
               call_function(GUI);
               break;
             case SDLK_n:
-              trs_screen_caption(trs_timer_switch_turbo(), trs_sound);
+              trs_screen_caption(trs_timer_switch_turbo());
               break;
             case SDLK_o:
               call_function(OTHER);
@@ -2090,7 +2090,7 @@ void trs_get_event(int wait)
               break;
             case SDLK_u:
               trs_sound = !trs_sound;
-              trs_screen_caption(trs_timer_is_turbo(), trs_sound);
+              trs_screen_caption(trs_timer_is_turbo());
               break;
             case SDLK_w:
               call_function(WRITE);
