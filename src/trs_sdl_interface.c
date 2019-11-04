@@ -1191,10 +1191,12 @@ void trs_screen_caption(int turbo, int sound)
   char title[80];
 
   if (trs_model == 5) {
-    snprintf(title, 79, "TRS-80 Model 4P %s%s", turbo ? "Turbo " : "", sound ? "" : "(Mute)");
+    snprintf(title, 79, "TRS-80 Model 4P %s%s%s", turbo ? "Turbo " : "",
+             trs_paused ? "PAUSED " : "", sound ? "" : "(Mute)");
   }
   else {
-    snprintf(title, 79, "TRS-80 Model %d %s%s",trs_model, turbo ? "Turbo " : "", sound ? "" : "(Mute)");
+    snprintf(title, 79, "TRS-80 Model %d %s%s%s",trs_model, turbo ? "Turbo " : "",
+             trs_paused ? "PAUSED " : "", sound ? "" : "(Mute)");
   }
 #ifdef SDL2
   SDL_SetWindowTitle(window, title);
@@ -1734,6 +1736,7 @@ void call_function(int function)
 {
   if (function == PAUSE) {
     trs_paused = !trs_paused;
+    trs_screen_caption(trs_timer_is_turbo(), trs_sound);
     if (!trs_paused)
       trs_screen_refresh();
   }
@@ -2326,8 +2329,10 @@ void trs_get_event(int wait)
 #endif
         break;
     }
-    if (trs_paused)
-      trs_gui_display_pause();
+    if (trs_paused) {
+      if (fullscreen)
+        trs_gui_display_pause();
+    }
   } while (!wait);
 }
 
