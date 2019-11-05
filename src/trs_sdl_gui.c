@@ -495,13 +495,11 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
   char pathname[FILENAME_MAX];
   char *filename;
   char *filename_pos;
-  int pathlen;
   struct dirent *dir_entry;
   struct stat st;
 
   snprintf(pathname, FILENAME_MAX, "%s", path);
-  pathlen = strlen(path);
-  filename_pos = pathname + pathlen;
+  filename_pos = pathname + strlen(path);
 
   directory = opendir(path);
   if (directory) {
