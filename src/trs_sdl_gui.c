@@ -514,14 +514,10 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       strcpy(filename_pos, dir_entry->d_name);
       stat(pathname, &st);
       if ((st.st_mode & S_IFMT) == S_IFDIR) {
-        int dirname_len;
+        int dirname_len = strlen(dir_entry->d_name);
 
-        dirname_len = strlen(dir_entry->d_name);
         if ( (filename = (char *) malloc(dirname_len + 3)) ) {
-          filename[0] = '<';
-          strcpy(filename + 1, dir_entry->d_name);
-          filename[dirname_len + 1] = '>';
-          filename[dirname_len + 2] = 0;
+          snprintf(filename, dirname_len + 3, "<%s>", dir_entry->d_name);
         }
       } else if (browse_dir) {
         continue;
