@@ -805,24 +805,19 @@ static void trs_opt_led(char *arg, int intarg, char *stringarg)
 
 static void trs_opt_doubler(char *arg, int intarg, char *stringarg)
 {
-  switch (*arg) {
+  switch ((int)tolower(*arg)) {
     case 'p':
-    case 'P':
       trs_disk_doubler = TRSDISK_PERCOM;
       break;
     case 'r':
-    case 'R':
     case 't':
-    case 'T':
       trs_disk_doubler = TRSDISK_TANDY;
       break;
     case 'b':
-    case 'B':
     default:
       trs_disk_doubler = TRSDISK_BOTH;
       break;
     case 'n':
-    case 'N':
       trs_disk_doubler = TRSDISK_NODOUBLER;
       break;
     }
