@@ -834,7 +834,6 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   trs_gui_write_text(title, 3, 6, 0);
 
   while (!done) {
-    trs_gui_clear_rect(2,7,60,1);
     for (i=0;i<60;i++) {
       invert = (first_disp + i == pos);
       if (first_disp + i >= length)
