@@ -415,6 +415,7 @@ static const int num_options = sizeof(options)/sizeof(trs_opt);
 /* Private routines */
 static void bitmap_init();
 static void call_function(int function);
+static char *charset_name(int charset);
 
 extern char *program_name;
 
@@ -430,6 +431,36 @@ static void stripWhitespace (char *inputStr)
   while (*end && (*end == ' ' || *end == '\t' || *end == '\r' || *end == '\n'))
     end--;
   *(end + 1) = '\0';
+}
+
+static char *charset_name(int charset)
+{
+  switch(charset) {
+    case 0:
+      return "early";
+    case 1:
+      return "stock";
+    case 2:
+      return "lcmod";
+    case 3:
+    default:
+      return "wider";
+    case 4:
+    case 7:
+      return "katakana";
+    case 5:
+    case 8:
+      return "international";
+    case 6:
+    case 9:
+      return "bold";
+    case 10:
+      return "genie";
+    case 11:
+      return "ht-1080z";
+    case 12:
+      return "videogenie";
+  }
 }
 
 int trs_write_config_file(const char *filename)
@@ -459,9 +490,9 @@ int trs_write_config_file(const char *filename)
       fprintf(config_file,"4P\n");
       break;
   }
-  fprintf(config_file,"charset1=%d\n",trs_charset1);
-  fprintf(config_file,"charset3=%d\n",trs_charset3);
-  fprintf(config_file,"charset4=%d\n",trs_charset4);
+  fprintf(config_file,"charset1=%s\n",charset_name(trs_charset1));
+  fprintf(config_file,"charset3=%s\n",charset_name(trs_charset3));
+  fprintf(config_file,"charset4=%s\n",charset_name(trs_charset4));
   fprintf(config_file,"romfile=%s\n",romfile);
   fprintf(config_file,"romfile3=%s\n",romfile3);
   fprintf(config_file,"romfile4p=%s\n",romfile4p);
