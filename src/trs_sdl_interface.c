@@ -938,6 +938,8 @@ static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg)
 static void trs_opt_huffman(char *arg, int intarg, char *stringarg)
 {
   huffman_ram = intarg;
+  if (huffman_ram)
+    hypermem = 0;
 }
 
 static void trs_opt_hypermem(char *arg, int intarg, char *stringarg)
@@ -957,6 +959,8 @@ static void trs_opt_supermem(char *arg, int intarg, char *stringarg)
 static void trs_opt_selector(char *arg, int intarg, char *stringarg)
 {
   selector = intarg;
+  if (selector)
+    supermem = 0;
 }
 
 static void trs_opt_le18(char *arg, int intarg, char *stringarg)
