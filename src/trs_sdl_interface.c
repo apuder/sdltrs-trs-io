@@ -416,8 +416,8 @@ static const int num_options = sizeof(options)/sizeof(trs_opt);
 static void bitmap_init();
 static void call_function(int function);
 static char *charset_name(int charset);
-static void trs_gui_save_rect(int x, int y, int w, int h);
-static void trs_gui_restore_rect(int x, int y, int w, int h);
+static void trs_gui_save_gui(void);
+static void trs_gui_rest_gui(void);
 
 extern char *program_name;
 
@@ -1665,10 +1665,10 @@ void trs_exit(int confirm)
 
   if (confirm != 0) {
     if (confirm == 2)
-      trs_gui_save_rect(0, 0, 63, 15);
+      trs_gui_save_gui();
     if (!trs_gui_exit_sdltrs()) {
       if (confirm == 2)
-        trs_gui_restore_rect(0, 0, 63, 15);
+        trs_gui_rest_gui();
       else
         trs_screen_refresh();
       trs_x_flush();
@@ -3033,32 +3033,25 @@ void trs_gui_clear_screen(void)
     trs_gui_write_char(i,' ',0);
 }
 
-void trs_gui_save_rect(int x, int y, int w, int h)
+void trs_gui_save_gui(void)
 {
-  int i, j, position;
+  unsigned int i;
 
-  for (j = y; j < y + h; j++) {
-    for (i = x; i < x + w; i++) {
-      position = 64*j + i;
-      trs_gui_screen_copy[position] = trs_gui_screen[position];
-      trs_gui_screen_invert_copy[position] = trs_gui_screen_invert[position];
-    }
+  for (i=0;i<1024;i++) {
+    trs_gui_screen_copy[i] = trs_gui_screen[i];
+    trs_gui_screen_invert_copy[i] = trs_gui_screen_invert[i];
   }
 }
 
-void trs_gui_restore_rect(int x, int y, int w, int h)
+void trs_gui_rest_gui(void)
 {
-  int i, j, position;
+  unsigned int i;
 
-  for (j = y; j < y + h; j++) {
-    for (i = x; i < x + w; i++) {
-      position = 64*j + i;
-      trs_gui_screen[position] = trs_gui_screen_copy[position];
-      trs_gui_screen_invert[position] = trs_gui_screen_invert_copy[position];
-      trs_gui_write_char(position, trs_gui_screen[position], trs_gui_screen_invert[position]);
-    }
+  for (i=0;i<1024;i++) {
+    trs_gui_screen[i] = trs_gui_screen_copy[i];
+    trs_gui_screen_invert[i] = trs_gui_screen_invert_copy[i];
+    trs_gui_write_char(i, trs_gui_screen[i], trs_gui_screen_invert[i]);
   }
-  trs_x_flush();
 }
 
  /* Copy lines 1 through col_chars-1 to lines 0 through col_chars-2.
