@@ -727,22 +727,31 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
     trs_charset1 = atoi(arg);
     if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 < 10 || trs_charset1 > 12)))
       trs_charset1 = 3;
-  } else if (arg[0] == 'e'/*early*/) {
-    trs_charset1 = 0;
-  } else if (arg[0] == 's'/*stock*/) {
-    trs_charset1 = 1;
-  } else if (arg[0] == 'l'/*lcmod*/) {
-    trs_charset1 = 2;
-  } else if (arg[0] == 'w'/*wider*/) {
-    trs_charset1 = 3;
-  } else if (arg[0] == 'g'/*genie or german*/) {
-    trs_charset1 = 10;
-  } else if (arg[0] == 'h'/*ht-1080z*/) {
-    trs_charset1 = 11;
-  } else if (arg[0] == 'v'/*video genie*/) {
-    trs_charset1 = 12;
-  } else {
-    error("unknown charset name %s", arg);
+  } else
+    switch ((int)tolower(*arg)) {
+      case 'e': /*early*/
+        trs_charset1 = 0;
+        break;
+      case 's': /*stock*/
+        trs_charset1 = 1;
+        break;
+      case 'l': /*lcmod*/
+        trs_charset1 = 2;
+        break;
+      case 'w': /*wider*/
+        trs_charset1 = 3;
+        break;
+      case 'g': /*genie or german*/
+        trs_charset1 = 10;
+        break;
+      case 'h': /*ht-1080z*/
+        trs_charset1 = 11;
+        break;
+      case 'v': /*video genie*/
+        trs_charset1 = 12;
+        break;
+      default:
+        error("unknown charset1 name: %s", arg);
   }
 }
 
@@ -752,14 +761,19 @@ static void trs_opt_charset3(char *arg, int intarg, char *stringarg)
     trs_charset3 = atoi(arg);
     if (trs_charset3 < 4 || trs_charset3 > 6)
       trs_charset3 = 4;
-  } else if (arg[0] == 'k'/*katakana*/) {
-    trs_charset3 = 4;
-  } else if (arg[0] == 'i'/*international*/) {
-    trs_charset3 = 5;
-  } else if (arg[0] == 'b'/*bold*/) {
-    trs_charset3 = 6;
-  } else {
-    error("unknown charset name %s", arg);
+  } else
+    switch ((int)tolower(*arg)) {
+      case 'k': /*katakana*/
+        trs_charset3 = 4;
+        break;
+      case 'i': /*international*/
+        trs_charset3 = 5;
+        break;
+      case 'b': /*bold*/
+        trs_charset3 = 6;
+        break;
+      default:
+        error("unknown charset3 name: %s", arg);
   }
 }
 
@@ -769,14 +783,19 @@ static void trs_opt_charset4(char *arg, int intarg, char *stringarg)
     trs_charset4 = atoi(arg);
     if (trs_charset4 < 7 || trs_charset4 > 9)
       trs_charset4 = 8;
-  } else if (arg[0] == 'k'/*katakana*/) {
-    trs_charset4 = 7;
-  } else if (arg[0] == 'i'/*international*/) {
-    trs_charset4 = 8;
-  } else if (arg[0] == 'b'/*bold*/) {
-    trs_charset4 = 9;
-  } else {
-    error("unknown charset name %s", arg);
+  } else
+    switch ((int)tolower(*arg)) {
+      case 'k': /*katakana*/
+        trs_charset4 = 7;
+        break;
+      case 'i': /*international*/
+        trs_charset4 = 8;
+        break;
+      case 'b': /*bold*/
+        trs_charset4 = 9;
+        break;
+      default:
+        error("unknown charset4 name: %s", arg);
   }
 }
 
