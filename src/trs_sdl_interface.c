@@ -635,12 +635,12 @@ void trs_set_to_defaults(void)
   strcpy(romfile,"level2.rom");
   strcpy(romfile3,"model3.rom");
   strcpy(romfile4p,"model4p.rom");
-  strcpy(trs_disk_dir,"");
-  strcpy(trs_hard_dir,"");
-  strcpy(trs_cass_dir,"");
-  strcpy(trs_disk_set_dir,"");
-  strcpy(trs_state_dir,"");
-  strcpy(trs_printer_dir,"");
+  trs_disk_dir[0] = 0;
+  trs_hard_dir[0] = 0;
+  trs_cass_dir[0] = 0;
+  trs_disk_set_dir[0] = 0;
+  trs_state_dir[0] = 0;
+  trs_printer_dir[0] = 0;
 #ifdef _WIN32
   strcpy(trs_printer_command,"notepad %s");
 #else
