@@ -2832,7 +2832,6 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   width = columns*(max_len + 1) - 1;
   first_x = (64 - width)/2;
   first_y = (16 - rows)/2;
-  trs_gui_save_rect(first_x - 1, first_y - 1, width + 2, rows + 2);
 
   trs_gui_frame(first_x - 1, first_y - 1, width + 2, rows + 2);
   trs_gui_write_text(title, first_x + 1, first_y - 1, 0);
@@ -2883,7 +2882,6 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
         break;
     }
   }
-  trs_gui_restore_rect(first_x - 1, first_y - 1, width + 2, rows + 2);
 
   return selection;
 }

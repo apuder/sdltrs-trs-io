@@ -72,6 +72,3 @@ void trs_gui_write_char(int position, int char_index, int invert);
 
 void trs_gui_get_virtual_key(void);
 void trs_gui_joy_gui(void);
-
-extern void trs_gui_save_rect(int x, int y, int w, int h);
-extern void trs_gui_restore_rect(int x, int y, int w, int h);

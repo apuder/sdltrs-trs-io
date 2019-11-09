@@ -416,6 +416,8 @@ static const int num_options = sizeof(options)/sizeof(trs_opt);
 static void bitmap_init();
 static void call_function(int function);
 static char *charset_name(int charset);
+static void trs_gui_save_rect(int x, int y, int w, int h);
+static void trs_gui_restore_rect(int x, int y, int w, int h);
 
 extern char *program_name;
 
