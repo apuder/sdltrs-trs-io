@@ -841,6 +841,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       else
         trs_gui_write_text_char(output[first_disp+i],2+i,7,invert);
     }
+    trs_gui_write_text((insert ? " INS " : " OVR "), 58, 8, 1);
     trs_x_flush();
     key = trs_gui_get_key();
     switch(key) {
