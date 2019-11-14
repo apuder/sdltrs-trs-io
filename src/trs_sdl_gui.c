@@ -830,7 +830,6 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
     first_disp = 0;
 
   trs_gui_frame(1,6,62,3);
-  trs_gui_clear_rect(2,7,60,1);
   trs_gui_write_text(title, 3, 6, 0);
 
   while (!done) {
