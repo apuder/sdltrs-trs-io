@@ -620,6 +620,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
         for (j=strlen(filenamelist[current_first+i]);j<60;j++)
           trs_gui_write_text_char(' ',j+2,i+2,0);
       }
+      if (drawcount < 13)
+        trs_gui_clear_rect(2,drawcount+2,60,13-drawcount);
       redraw = 0;
     }
     trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,1);
@@ -721,7 +723,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 #endif
               }
 
-              trs_gui_clear_rect(1,1,62,14);
+              trs_gui_clear_rect(1,1,62,1);
               trs_gui_limit_string(current_dir, limited_dir, 58);
               trs_gui_center_text(limited_dir,1,0);
 
@@ -747,7 +749,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
               current_dir[2] = '\\';
               current_dir[3] = 0;
 
-              trs_gui_clear_rect(1,1,62,14);
+              trs_gui_clear_rect(1,1,62,1);
               trs_gui_limit_string(current_dir, limited_dir, 58);
               trs_gui_center_text(limited_dir,1,0);
 
