@@ -798,7 +798,6 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 #endif
           }
         }
-        trs_gui_clear_rect(1,14,62,1);
       }
       else
         strcat(filename, filenamelist[current_first + selection]);
