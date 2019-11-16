@@ -17,15 +17,17 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 
 ## Binaries
 
-  * [sdltrs.exe]    32 bit (needs  SDL.DLL 1.2.x)
-  * [sdl2trs.exe]   32 bit (needs SDL2.DLL 2.0.x)
-  * [sdl2trs64.exe] 64 bit (needs SDL2.DLL 2.0.x)
+  * [sdltrs.exe]    32-bit (needs  [SDL.DLL] 32-bit)
+  * [sdl2trs.exe]   32-bit (needs [SDL2.DLL] 32-bit)
+  * [sdl2trs64.exe] 64-bit (needs [SDL2.DLL] 64-bit)
 
 (Build with Mingw32 & Mingw-w64)
 
 [BUILDING]: BUILDING
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
 [FUZIX]: https://www.github.com/EtchedPixels/FUZIX
+[SDL.DLL]: https://www.libsdl.org/download-1.2.php
+[SDL2.DLL]: https://www.libsdl.org/download-2.0.php
 [SDLTRS]: http://sdltrs.sourceforge.net
 [sdltrs.exe]: bin/sdltrs.exe
 [sdl2trs.exe]: bin/sdl2trs.exe
