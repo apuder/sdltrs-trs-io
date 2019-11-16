@@ -608,10 +608,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return(-1);
 
-  if (filenamecount < 13)
-    drawcount = filenamecount;
-  else
-    drawcount = 13;
+  drawcount = filenamecount < 13 ? filenamecount : 13;
 
   while (!done) {
     if (redraw) {
@@ -731,11 +728,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
             if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
               return(-1);
 
-            if (filenamecount < 13)
-              drawcount = filenamecount;
-            else
-              drawcount = 13;
-
+            drawcount = filenamecount < 13 ? filenamecount : 13;
             redraw = 1;
           }
 #ifdef _WIN32
@@ -757,11 +750,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
             if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
               return(-1);
 
-            if (filenamecount < 13)
-              drawcount = filenamecount;
-            else
-              drawcount = 13;
-
+            drawcount = filenamecount < 13 ? filenamecount : 13;
             redraw = 1;
           }
 #endif
