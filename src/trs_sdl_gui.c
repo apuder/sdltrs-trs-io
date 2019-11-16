@@ -708,106 +708,106 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 #ifdef _WIN32
                 if (current_dir[i] == '\\') {
 #else
-                  if (current_dir[i] == '/') {
+                if (current_dir[i] == '/') {
 #endif
-                    current_dir[i+1]=0;
-                    break;
-                  }
+                  current_dir[i+1]=0;
+                  break;
                 }
-              } else {
-                strcat(current_dir, &new_dir[1]);
-#ifdef _WIN32
-                current_dir[strlen(current_dir)-1] = '\\';
-#else
-                current_dir[strlen(current_dir)-1] = '/';
-#endif
               }
-
-              trs_gui_clear_rect(1,1,62,1);
-              trs_gui_limit_string(current_dir, limited_dir, 58);
-              trs_gui_center_text(limited_dir,1,0);
-
-              trs_gui_delete_filename_list();
-              if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
-                return(-1);
-
-              if (filenamecount < 13)
-                drawcount = filenamecount;
-              else
-                drawcount = 13;
-
-              redraw = 1;
-            }
+            } else {
+              strcat(current_dir, &new_dir[1]);
 #ifdef _WIN32
-            /* Select a new drive */
-            else if (*filenamelist[current_first + selection] == '[') {
-              new_dir = filenamelist[current_first + selection];
-              selection = 0;
-              current_first = 0;
-              current_dir[0] = new_dir[1];
-              current_dir[1] = new_dir[2];
-              current_dir[2] = '\\';
-              current_dir[3] = 0;
-
-              trs_gui_clear_rect(1,1,62,1);
-              trs_gui_limit_string(current_dir, limited_dir, 58);
-              trs_gui_center_text(limited_dir,1,0);
-
-              trs_gui_delete_filename_list();
-              if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
-                return(-1);
-
-              if (filenamecount < 13)
-                drawcount = filenamecount;
-              else
-                drawcount = 13;
-
-              redraw = 1;
-            }
+              current_dir[strlen(current_dir)-1] = '\\';
+#else
+              current_dir[strlen(current_dir)-1] = '/';
 #endif
+            }
+
+            trs_gui_clear_rect(1,1,62,1);
+            trs_gui_limit_string(current_dir, limited_dir, 58);
+            trs_gui_center_text(limited_dir,1,0);
+
+            trs_gui_delete_filename_list();
+            if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+              return(-1);
+
+            if (filenamecount < 13)
+              drawcount = filenamecount;
             else
-              done = 1;
+              drawcount = 13;
+
+            redraw = 1;
+          }
+#ifdef _WIN32
+          /* Select a new drive */
+          else if (*filenamelist[current_first + selection] == '[') {
+            new_dir = filenamelist[current_first + selection];
+            selection = 0;
+            current_first = 0;
+            current_dir[0] = new_dir[1];
+            current_dir[1] = new_dir[2];
+            current_dir[2] = '\\';
+            current_dir[3] = 0;
+
+            trs_gui_clear_rect(1,1,62,1);
+            trs_gui_limit_string(current_dir, limited_dir, 58);
+            trs_gui_center_text(limited_dir,1,0);
+
+            trs_gui_delete_filename_list();
+            if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+              return(-1);
+
+            if (filenamecount < 13)
+              drawcount = filenamecount;
+            else
+              drawcount = 13;
+
+            redraw = 1;
+          }
+#endif
+          else
+            done = 1;
           break;
         case SDLK_ESCAPE:
           done = 1;
           selection = -1;
           break;
-        }
       }
     }
-
-    if (selection != -1) {
-      snprintf(filename, FILENAME_MAX, "%s", current_dir);
-      if (browse_dir) {
-        new_dir = filenamelist[current_first + selection];
-        if (new_dir[1] != '.' && new_dir[2] != '.') {
-#ifdef _WIN32
-          if (new_dir[0] == '[') {
-            filename[0] = new_dir[1];
-            filename[1] = new_dir[2];
-            filename[2] = '\\';
-            filename[3] = 0;
-          } else
-#endif
-          {
-            strcat(filename, &new_dir[1]);
-#ifdef _WIN32
-            filename[strlen(filename)-1] = '\\';
-#else
-            filename[strlen(filename)-1] = '/';
-#endif
-          }
-        }
-      }
-      else
-        strcat(filename, filenamelist[current_first + selection]);
-    }
-    trs_gui_delete_filename_list();
-    if (selection == -1)
-      return(selection);
-    else
-      return(current_first + selection);
   }
+
+  if (selection != -1) {
+    snprintf(filename, FILENAME_MAX, "%s", current_dir);
+    if (browse_dir) {
+      new_dir = filenamelist[current_first + selection];
+      if (new_dir[1] != '.' && new_dir[2] != '.') {
+#ifdef _WIN32
+        if (new_dir[0] == '[') {
+          filename[0] = new_dir[1];
+          filename[1] = new_dir[2];
+          filename[2] = '\\';
+          filename[3] = 0;
+        } else
+#endif
+        {
+          strcat(filename, &new_dir[1]);
+#ifdef _WIN32
+          filename[strlen(filename)-1] = '\\';
+#else
+          filename[strlen(filename)-1] = '/';
+#endif
+        }
+      }
+    }
+    else
+      strcat(filename, filenamelist[current_first + selection]);
+  }
+  trs_gui_delete_filename_list();
+  if (selection == -1)
+    return(selection);
+  else
+    return(current_first + selection);
+}
 
 int trs_gui_input_string(const char *title, const char* input, char* output,
                          unsigned int limit, int file)
