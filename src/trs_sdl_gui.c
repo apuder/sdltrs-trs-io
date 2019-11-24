@@ -2494,7 +2494,7 @@ void trs_gui_default_dirs(void)
    {"   ",MENU_NORMAL_TYPE},
    {"Hard Disk Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Cassette Directory:",MENU_TITLE_TYPE},
+   {"Cassette/Wafer Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"Disk Set Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
@@ -2526,7 +2526,7 @@ void trs_gui_default_dirs(void)
         trs_gui_file_browse(trs_hard_dir, trs_hard_dir, NULL, 1," Hard Disk ");
         break;
       case 5:
-        trs_gui_file_browse(trs_cass_dir, trs_cass_dir, NULL, 1," Cassette ");
+        trs_gui_file_browse(trs_cass_dir, trs_cass_dir, NULL, 1," Cassette/Wafer ");
         break;
       case 7:
         trs_gui_file_browse(trs_disk_set_dir, trs_disk_set_dir, NULL, 1," Disk Set ");
