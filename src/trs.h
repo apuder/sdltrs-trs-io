@@ -74,6 +74,7 @@ extern char trs_disk_set_dir[FILENAME_MAX];
 extern char trs_state_dir[FILENAME_MAX];
 extern char trs_printer_dir[FILENAME_MAX];
 extern char trs_printer_command[FILENAME_MAX];
+extern char trs_cmd_file[FILENAME_MAX];
 extern char trs_config_file[FILENAME_MAX];
 extern char init_state_file[FILENAME_MAX];
 
@@ -96,6 +97,7 @@ extern int trs_emtsafe;
 
 extern void trs_parse_command_line(int argc, char **argv, int *debug);
 extern int trs_write_config_file(const char *filename);
+extern int trs_load_cmd(const char *filename);
 extern int trs_load_config_file(void);
 
 extern void trs_screen_init(int gui_init);

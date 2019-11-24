@@ -71,6 +71,37 @@ static void check_endian()
     fatal("Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.");
 }
 
+int trs_load_cmd(const char *filename)
+{
+  FILE *program;
+  int entry, i;
+  Uchar ram[Z80_ADDRESS_LIMIT] = { 0 };
+
+  if((program = fopen(filename,"rb")) == NULL)
+  {
+    error("Failed to load CMD file %s: %s", filename, strerror(errno));
+    return(-1);
+  }
+  if (load_cmd(program, ram, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK)
+  {
+    debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
+    for (i = 0; i < Z80_ADDRESS_LIMIT; i++)
+      mem_write(i, ram[i]);
+    if (trs_model == 1) {
+      /* Hack ROM to execute CMD file: JP <entry> */
+      mem_write_rom(0x0693, 0xC3);
+      mem_write_rom(0x0694, entry & 0xFF);
+      mem_write_rom(0x0695, entry >> 8);
+    }
+  } else {
+    error("Unknown CMD format");
+    fclose(program);
+    return(-1);
+  }
+  fclose(program);
+  return(0);
+}
+
 int trs_load_rom(const char *filename)
 {
   FILE *program;

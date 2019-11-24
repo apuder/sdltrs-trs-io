@@ -116,6 +116,7 @@ char trs_cass_dir[FILENAME_MAX] = "";
 char trs_disk_set_dir[FILENAME_MAX] = "";
 char trs_state_dir[FILENAME_MAX] = "";
 char trs_printer_dir[FILENAME_MAX] = "";
+char trs_cmd_file[FILENAME_MAX];
 char trs_config_file[FILENAME_MAX];
 char init_state_file[FILENAME_MAX];
 char trs_printer_command[FILENAME_MAX];
@@ -1096,6 +1097,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
   /* Check for config or state files on the command line */
   trs_config_file[0] = 0;
   init_state_file[0] = 0;
+  trs_cmd_file[0] = 0;
   for (i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
       for (j=0;j<num_options;j++) {
@@ -1112,6 +1114,8 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
       snprintf(trs_config_file,FILENAME_MAX - 1,"%s",argv[i]);
     else if (strcmp(&argv[i][strlen(argv[i])-4],".t8s") == 0)
       snprintf(init_state_file,FILENAME_MAX - 1,"%s",argv[i]);
+    else if (strcasecmp(&argv[i][strlen(argv[i])-4],".cmd") == 0)
+      snprintf(trs_cmd_file,FILENAME_MAX - 1,"%s",argv[i]);
   }
 
   if (trs_load_config_file() == -1)
