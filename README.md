@@ -23,6 +23,15 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 
 (Build with Mingw32 & Mingw-w64)
 
+## Packages
+
+ * [sdltrs_1.2.4-1_i386.deb]    (32-bit, SDL)
+ * [sdl2trs_1.2.4-1_i386.deb]   (32-bit, SDL2)
+ * [sdltrs_1.2.4-1_amd64.deb]   (64-bit, SDL)
+ * [sdl2trs_1.2.4-1_amd64.deb]  (64-bit, SDL2)
+
+(Build on Debian 9/i386 and Ubuntu 18.04LTS/amd64)
+
 [BUILDING]: BUILDING
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
 [FUZIX]: https://www.github.com/EtchedPixels/FUZIX
@@ -32,3 +41,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 [sdltrs.exe]: bin/sdltrs.exe
 [sdl2trs.exe]: bin/sdl2trs.exe
 [sdl2trs64.exe]: bin/sdl2trs64.exe
+[sdltrs_1.2.4-1_i386.deb]: bin/sdltrs_1.2.4-1_i386.deb
+[sdl2trs_1.2.4-1_i386.deb]: bin/sdl2trs_1.2.4-1_i386.deb
+[sdltrs_1.2.4-1_amd64.deb]: bin/sdltrs_1.2.4-1_amd64.deb
+[sdl2trs_1.2.4-1_amd64.deb]: bin/sdl2trs_1.2.4-1_amd64.deb
