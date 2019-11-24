@@ -888,6 +888,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         ret = -1;
         done = 1;
         break;
+      case SDLK_DOWN:
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
