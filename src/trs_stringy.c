@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 
 #define STRINGYDEBUG_IN 0
