@@ -17,9 +17,9 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 
 ## Binaries
 
-  * [sdltrs.exe]    32-bit (needs  [SDL.DLL] 32-bit)
-  * [sdl2trs.exe]   32-bit (needs [SDL2.DLL] 32-bit)
-  * [sdl2trs64.exe] 64-bit (needs [SDL2.DLL] 64-bit)
+  * [sdltrs.exe]     (32-bit, needs [SDL.DLL])
+  * [sdl2trs.exe]    (32-bit, needs [SDL2.DLL])
+  * [sdl2trs64.exe]  (64-bit, needs [SDL2.DLL])
 
 (Build with Mingw32 & Mingw-w64)
 
@@ -30,7 +30,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
  * [sdltrs_1.2.4-1_amd64.deb]   (64-bit, SDL)
  * [sdl2trs_1.2.4-1_amd64.deb]  (64-bit, SDL2)
 
-(Build on Debian 9/i386 and Ubuntu 18.04LTS/amd64)
+(Build on Debian 9/i386 & Ubuntu 18.04LTS/amd64)
 
 [BUILDING]: BUILDING
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
