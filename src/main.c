@@ -87,7 +87,7 @@ int trs_load_cmd(const char *filename)
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
     for (i = 0; i < Z80_ADDRESS_LIMIT; i++)
       mem_write(i, ram[i]);
-    if (trs_model == 1) {
+    if (trs_model == 1 && entry >= 0) {
       /* Hack ROM to execute CMD file: JP <entry> */
       mem_write_rom(0x0693, 0xC3);
       mem_write_rom(0x0694, entry & 0xFF);
