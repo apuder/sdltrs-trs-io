@@ -292,9 +292,6 @@ void trs_reset(int poweron)
 	trs_reset_button_interrupt(1);
 	trs_schedule_event(trs_reset_button_interrupt, 0, 2000);
     }
-
-    if (trs_cmd_file[0] != 0)
-      trs_load_cmd(trs_cmd_file);
 }
 
 void mem_map(int which)

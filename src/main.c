@@ -87,12 +87,8 @@ int trs_load_cmd(const char *filename)
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
     for (i = 0; i < Z80_ADDRESS_LIMIT; i++)
       mem_write(i, ram[i]);
-    if (trs_model == 1 && entry >= 0) {
-      /* Hack ROM to execute CMD file: JP <entry> */
-      mem_write_rom(0x0693, 0xC3);
-      mem_write_rom(0x0694, entry & 0xFF);
-      mem_write_rom(0x0695, entry >> 8);
-    }
+    if (entry >= 0)
+      REG_PC = entry;
   } else {
     error("Unknown CMD format");
     fclose(program);
@@ -228,6 +224,8 @@ int SDLmain(int argc, char *argv[])
     trs_screen_init(1);
     trs_screen_refresh();
   }
+  if (trs_cmd_file[0] != 0)
+    trs_load_cmd(trs_cmd_file);
 
   if (!debug || fullscreen) {
     /* Run continuously until exit or request to enter debugger */
