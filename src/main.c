@@ -74,19 +74,17 @@ static void check_endian()
 int trs_load_cmd(const char *filename)
 {
   FILE *program;
-  int entry, i;
-  Uchar ram[Z80_ADDRESS_LIMIT] = { 0 };
+  extern Uchar memory;
+  int entry;
 
   if((program = fopen(filename,"rb")) == NULL)
   {
     error("Failed to load CMD file %s: %s", filename, strerror(errno));
     return(-1);
   }
-  if (load_cmd(program, ram, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK)
+  if (load_cmd(program, &memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK)
   {
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
-    for (i = 0; i < Z80_ADDRESS_LIMIT; i++)
-      mem_write(i, ram[i]);
     if (entry >= 0)
       REG_PC = entry;
   } else {
