@@ -2625,6 +2625,14 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_get_key();
 }
 
+void trs_gui_exec_cmd(void)
+{
+  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, " CMD (.cmd) ") == -1)
+    return;
+  if (trs_load_cmd(trs_cmd_file) == -1)
+    trs_gui_display_message("Error", "Failed to load CMD file");
+}
+
 int trs_gui_exit_sdltrs(void)
 {
   return trs_gui_display_question("Exit SDLTRS?");

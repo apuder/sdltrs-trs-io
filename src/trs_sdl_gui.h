@@ -46,11 +46,13 @@
 #define INTERFACE    (16)
 #define OTHER        (17)
 #define KEYS         (18)
+#define EXEC         (19)
 
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;
 
 void trs_gui_display_pause(void);
+void trs_gui_exec_cmd(void);
 int  trs_gui_file_browse(const char* path, char* filename, const char* mask,
                          int browse_dir, const char* type);
 void trs_gui_disk_management(void);

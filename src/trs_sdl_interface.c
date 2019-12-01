@@ -1858,6 +1858,9 @@ void call_function(int function)
     case KEYS:
       trs_gui_keys_sdltrs();
       break;
+    case EXEC:
+      trs_gui_exec_cmd();
+      break;
     }
     trs_pause_audio(0);
 #if defined(SDL2) || !defined(NOX)
@@ -2085,6 +2088,10 @@ void trs_get_event(int wait)
               trs_screen_refresh();
               trs_x_flush();
               break;
+            case SDLK_PERIOD:
+              mousepointer = !mousepointer;
+              SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
+              break;
             case SDLK_b:
               trs_show_led = !trs_show_led;
               trs_screen_init(1);
@@ -2151,8 +2158,7 @@ void trs_get_event(int wait)
               call_function(WRITE);
               break;
             case SDLK_x:
-              mousepointer = !mousepointer;
-              SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
+              call_function(EXEC);
               break;
             case SDLK_y:
               scanlines = !scanlines;
