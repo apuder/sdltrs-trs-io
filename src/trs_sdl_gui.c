@@ -247,7 +247,7 @@ void trs_add_extension(char *filename, const char *ext)
   int const elen = strlen(ext);
 
   if (flen > elen)
-    if (strcmp(&filename[flen - elen],ext) == 0)
+    if (strcasecmp(&filename[flen - elen],ext) == 0)
       return;
 
   snprintf(filename + flen, FILENAME_MAX - 1, "%s", ext);
@@ -522,7 +522,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       } else {
         if (mask != NULL) {
           if (strlen(dir_entry->d_name) >= 4)
-            if (strcmp(&dir_entry->d_name[strlen(dir_entry->d_name) - 4],mask) != 0)
+            if (strcasecmp(&dir_entry->d_name[strlen(dir_entry->d_name) - 4],mask) != 0)
           continue;
         }
         filename = (char *) strdup(dir_entry->d_name);

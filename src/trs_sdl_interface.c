@@ -1110,9 +1110,9 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     }
     else if (strlen(argv[i]) < 4) {
     }
-    else if (strcmp(&argv[i][strlen(argv[i])-4],".t8c") == 0)
+    else if (strcasecmp(&argv[i][strlen(argv[i])-4],".t8c") == 0)
       snprintf(trs_config_file,FILENAME_MAX - 1,"%s",argv[i]);
-    else if (strcmp(&argv[i][strlen(argv[i])-4],".t8s") == 0)
+    else if (strcasecmp(&argv[i][strlen(argv[i])-4],".t8s") == 0)
       snprintf(init_state_file,FILENAME_MAX - 1,"%s",argv[i]);
     else if (strcasecmp(&argv[i][strlen(argv[i])-4],".cmd") == 0)
       snprintf(trs_cmd_file,FILENAME_MAX - 1,"%s",argv[i]);
