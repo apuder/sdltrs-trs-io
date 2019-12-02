@@ -520,8 +520,11 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       } else if (browse_dir) {
         continue;
       } else {
-        if (mask != NULL && strstr(dir_entry->d_name, mask) == NULL)
+        if (mask != NULL) {
+          if (strlen(dir_entry->d_name) >= 4)
+            if (strcmp(&dir_entry->d_name[strlen(dir_entry->d_name) - 4],mask) != 0)
           continue;
+        }
         filename = (char *) strdup(dir_entry->d_name);
       }
       if (!filename)
