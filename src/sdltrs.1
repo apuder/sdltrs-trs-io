@@ -13,7 +13,7 @@
 sdltrs \- TRS-80 Model I/III/4/4P emulator for SDL
 .SH SYNOPSIS
 .B sdltrs
-[\fIfile.t8c\fP] [\fIfile.t8s\fP] [\fIoptions\fP]
+[\fIfile.t8c\fP] [\fIfile.t8s\fP] [\fIfile.cmd\fP] [\fIoptions\fP]
 .SH DESCRIPTION
 .B sdltrs
 is an SDL-based emulator for Tandy/Radio Shack line of Zilog
@@ -393,6 +393,9 @@ Scale window to next higher size
 \fBAlt-'-'\fP | \fBAlt-Page Up\fP
 Scale window to next lower size
 .TQ
+.B Alt-'.'
+Show/hide mouse pointer in Emulator window
+.TQ
 \fBAlt-0\fP...\fB7\fP
 Insert Floppy disk into drive \fBN\fP
 .TQ
@@ -466,7 +469,7 @@ Paste from clipboard to TRS-80 Emulator
 Write Configuration File
 .TQ
 .B Alt-X
-Show/hide mouse pointer in Emulator window
+Execute selected CMD file
 .TQ
 .B Alt-Y
 Switch Scanlines in Emulator window on/off
@@ -483,6 +486,9 @@ Configuration file
 .TQ
 .I file.t8s
 Emulator State file
+.TQ
+.I file.cmd
+CMD file to execute
 .SH AUTHORS
 .TP
 Tim Mann (xtrs)
