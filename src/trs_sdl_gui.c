@@ -715,6 +715,15 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
                   break;
                 }
               }
+              if (i < 0) {
+                if (getcwd(current_dir, FILENAME_MAX) == NULL)
+                  error("getcwd: %s", current_dir);
+#ifdef _WIN32
+                strcat(current_dir, "\\");
+#else
+                strcat(current_dir, "/");
+#endif
+              }
             } else {
               strcat(current_dir, &new_dir[1]);
 #ifdef _WIN32
