@@ -715,7 +715,12 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
                   break;
                 }
               }
-              if (i < 0) {
+              if (i < 0 &&
+#ifdef _WIN32
+                current_dir[2] != '\\') {
+#else
+                current_dir[0] != '/') {
+#endif
                 if (getcwd(current_dir, FILENAME_MAX) == NULL)
                   error("getcwd: %s", current_dir);
 #ifdef _WIN32
