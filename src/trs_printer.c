@@ -42,7 +42,6 @@
 
 /* $Id: trs_printer.c,v 1.3 2008/06/26 04:39:56 mann Exp $ */
 
-#include "z80.h"
 #include "trs.h"
 #include <stdlib.h>
 #include <sys/stat.h>
