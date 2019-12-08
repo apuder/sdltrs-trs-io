@@ -82,13 +82,14 @@ int trs_printer_reset(void)
 void trs_printer_open(void)
 {
   int file_num;
+  int len = strlen(trs_printer_dir);
   struct stat st;
 
   for (file_num = 0; file_num < 10000; file_num++) {
 #ifdef _WIN32
-    snprintf(printer_filename, FILENAME_MAX - 1, "%s\\trsprn%04d.txt", trs_printer_dir, file_num);
+    snprintf(printer_filename, FILENAME_MAX - 16 - len, "%s\\trsprn%04d.txt", trs_printer_dir, file_num);
 #else
-    snprintf(printer_filename, FILENAME_MAX - 1, "%s/trsprn%04d.txt", trs_printer_dir, file_num);
+    snprintf(printer_filename, FILENAME_MAX - 16 - len, "%s/trsprn%04d.txt", trs_printer_dir, file_num);
 #endif
     if (stat(printer_filename, &st) < 0) {
       printer_open = TRUE;
