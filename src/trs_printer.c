@@ -44,6 +44,7 @@
 
 #include "trs.h"
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 
 static FILE *printer = NULL;

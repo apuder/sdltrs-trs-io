@@ -807,7 +807,7 @@ static void trs_opt_printer(char *arg, int intarg, char *stringarg)
 {
   if (isdigit((int)*arg)) {
     trs_printer = atoi(arg);
-    if (trs_printer < 0 || trs_printer > 2)
+    if (trs_printer < 0 || trs_printer > 1)
       trs_printer = 0;
   } else
     switch ((int)tolower(*arg)) {
@@ -816,9 +816,6 @@ static void trs_opt_printer(char *arg, int intarg, char *stringarg)
         break;
       case 't': /*text*/
         trs_printer = 1;
-        break;
-      case 'p': /*postscript*/
-        trs_printer = 2;
         break;
       default:
         error("unknown printer type: %s", arg);
