@@ -271,6 +271,7 @@ static void trs_opt_model(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset1(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset3(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset4(char *arg, int intarg, char *stringarg);
+static void trs_opt_printer(char *arg, int intarg, char *stringarg);
 static void trs_opt_string(char *arg, int intarg, char *stringarg);
 static void trs_opt_disk(char *arg, int intarg, char *stringarg);
 static void trs_opt_hard(char *arg, int intarg, char *stringarg);
@@ -356,6 +357,7 @@ trs_opt options[] = {
 {"cassdir",trs_opt_string,1,0,trs_cass_dir},
 {"disksetdir",trs_opt_string,1,0,trs_disk_set_dir},
 {"statedir",trs_opt_string,1,0,trs_state_dir},
+{"printer",trs_opt_printer,1,0,NULL},
 {"printerdir",trs_opt_string,1,0,trs_printer_dir},
 {"printercmd",trs_opt_string,1,0,trs_printer_command},
 {"keystretch",trs_opt_keystretch,1,0,NULL},
@@ -504,6 +506,7 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file,"cassdir=%s\n",trs_cass_dir);
   fprintf(config_file,"disksetdir=%s\n",trs_disk_set_dir);
   fprintf(config_file,"statedir=%s\n",trs_state_dir);
+  fprintf(config_file,"printer=%d\n",trs_printer);
   fprintf(config_file,"printerdir=%s\n",trs_printer_dir);
   fprintf(config_file,"printercmd=%s\n",trs_printer_command);
   fprintf(config_file,"keystretch=%d\n",stretch_amount);
@@ -798,6 +801,28 @@ static void trs_opt_charset4(char *arg, int intarg, char *stringarg)
       default:
         error("unknown charset4 name: %s", arg);
   }
+}
+
+static void trs_opt_printer(char *arg, int intarg, char *stringarg)
+{
+  if (isdigit((int)*arg)) {
+    trs_printer = atoi(arg);
+    if (trs_printer < 0 || trs_printer > 2)
+      trs_printer = 0;
+  } else
+    switch ((int)tolower(*arg)) {
+      case 'n': /*none*/
+        trs_printer = 0;
+        break;
+      case 't': /*text*/
+        trs_printer = 1;
+        break;
+      case 'p': /*postscript*/
+        trs_printer = 2;
+        break;
+      default:
+        error("unknown printer type: %s", arg);
+    }
 }
 
 static void trs_opt_string(char *arg, int intarg, char *stringarg)
