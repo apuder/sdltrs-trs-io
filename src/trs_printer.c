@@ -58,9 +58,11 @@ int trs_printer_reset(void)
   if (printer_open) {
     fclose(printer);
     printer_open = FALSE;
-    snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
-    if (system(command) == -1)
-      return(-1);
+    if (trs_printer_command[0] != 0) {
+      snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
+      if (system(command) == -1)
+        return(-1);
+    }
     return(0);
   } else
     return(-1);
@@ -77,7 +79,7 @@ void trs_printer_open(void)
       printer_open = TRUE;
       printer = fopen(printer_filename,"w");
       return;
-	}
+    }
   }
 }
 
@@ -88,10 +90,10 @@ void trs_printer_write(int value)
       trs_printer_open();
 
     if (printer_open) {
-      if(value == 0x0D){
-	    fputc('\n',printer);
+      if(value == 0x0D) {
+        fputc('\n',printer);
       } else {
-  	  fputc(value,printer);
+        fputc(value,printer);
       }
     }
   }
