@@ -58,7 +58,7 @@
 
 #define NO_PRINTER   0
 #define TEXT_PRINTER 1
-
+#define TEXT_AND_PS  2
 
 #define MAX_SCALE 4
 #define STRETCH_AMOUNT 4000

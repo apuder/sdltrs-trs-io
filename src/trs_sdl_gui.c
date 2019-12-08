@@ -2351,7 +2351,7 @@ void trs_gui_printer_management(void)
    {"Printer Command:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
-  char *printer_choices[2] = {"     None","     Text"};
+  char *printer_choices[3] = {"     None","     Text","Text & PS"};
   char input[FILENAME_MAX];
   int selection = 0;
 
@@ -2364,7 +2364,7 @@ void trs_gui_printer_management(void)
 
     switch(selection) {
       case 0:
-        trs_printer = trs_gui_display_popup("Printer",printer_choices,2,
+        trs_printer = trs_gui_display_popup("Printer",printer_choices,3,
             trs_printer);
         break;
       case 1:

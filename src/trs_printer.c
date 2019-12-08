@@ -44,7 +44,10 @@
 
 #include "trs.h"
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+
+extern int epsonps(const char *inputfile, const char *outputfile);
 
 static FILE *printer = NULL;
 static char printer_filename[FILENAME_MAX];
@@ -53,12 +56,20 @@ int trs_printer = NO_PRINTER;
 
 int trs_printer_reset(void)
 {
-  char command[256 + FILENAME_MAX]; /* 256 for print_command + FILENAME_MAX for spool_file */
-
   if (printer_open) {
     fclose(printer);
     printer_open = FALSE;
+    if (trs_printer == TEXT_AND_PS) {
+      char output_filename[FILENAME_MAX];
+
+      snprintf(output_filename, FILENAME_MAX, "%s", printer_filename);
+      strcpy(&output_filename[strlen(output_filename) - 3], "ps");
+      if (epsonps(printer_filename, output_filename) < 0)
+        return(-1);
+    }
     if (trs_printer_command[0] != 0) {
+      char command[256 + FILENAME_MAX]; /* 256 for print_command + FILENAME_MAX for spool_file */
+
       snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
       if (system(command) == -1)
         return(-1);
@@ -89,13 +100,15 @@ void trs_printer_open(void)
 
 void trs_printer_write(int value)
 {
-  if (trs_printer == TEXT_PRINTER) {
+  if (trs_printer != NO_PRINTER) {
     if (!printer_open)
       trs_printer_open();
 
     if (printer_open) {
       if(value == 0x0D) {
         fputc('\n',printer);
+        if (trs_printer == TEXT_AND_PS)
+          fputc('\r',printer);
       } else {
         fputc(value,printer);
       }

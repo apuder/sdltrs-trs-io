@@ -8,6 +8,7 @@ dist_man_MANS=	src/sdltrs.1
 sdltrs_SOURCES=	src/blit.c \
 		src/debug.c \
 		src/dis.c \
+		src/epsonps.c \
 		src/error.c \
 		src/load_cmd.c \
 		src/load_hex.c \

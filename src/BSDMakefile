@@ -3,6 +3,7 @@ PROG	 = sdltrs
 SRCS	+= blit.c
 SRCS	+= debug.c
 SRCS	+= dis.c
+SRCS	+= epsonps.c
 SRCS	+= error.c
 SRCS	+= load_cmd.c
 SRCS	+= load_hex.c
