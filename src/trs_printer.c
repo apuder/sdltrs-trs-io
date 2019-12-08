@@ -74,7 +74,11 @@ void trs_printer_open(void)
   struct stat st;
 
   for (file_num = 0; file_num < 10000; file_num++) {
-    snprintf(printer_filename, FILENAME_MAX - 1, "trsprn%04d.txt", file_num);
+#ifdef _WIN32
+    snprintf(printer_filename, FILENAME_MAX - 1, "%s\\trsprn%04d.txt", trs_printer_dir, file_num);
+#else
+    snprintf(printer_filename, FILENAME_MAX - 1, "%s/trsprn%04d.txt", trs_printer_dir, file_num);
+#endif
     if (stat(printer_filename, &st) < 0) {
       printer_open = TRUE;
       printer = fopen(printer_filename,"w");
