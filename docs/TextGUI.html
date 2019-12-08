@@ -298,11 +298,19 @@ previous saved with the Save Configuration command.</p>
 <p><img alt="" src="images/TextGUIPrinterMenu.png"></p>
 
 <p>The Printer Management menu controls the type of printer emulation that is
-used for outputting to the printer TRS-80.</p>
+used for outputting to the TRS-80 printer.</p>
 
-<p>The are two choices for printer emulation: None and Text Printer The Text
-printer simply sends the printer output to a text file with optional script
-processing.</p>
+<p>The are three choices for printer emulation: <b>None</b>, <b>Text</b> and
+<b>Text & PS</b>.</p>
+
+<p><b>Text</b> simply sends the printer output to a text file (automatically
+created from <code>trsprn0000.txt</code> to <code>trsprn9999.txt</code>)
+with optional script processing.</p>
+
+<p><b>Text &  PS</b> converts the output file (after selecting the next menu
+option "<b>Close and Reopen Printer Output File</b>") to PostScript. "Epson
+ESC/P-Codes" will be translated. The generated files have the <code>.ps</code>
+extension.</p>
 
 <h3>Close and Reopen Printer Output File:</h3>
 

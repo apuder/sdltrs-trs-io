@@ -106,7 +106,7 @@ will be executed upon startup of the emulator.</p>
   <tr>
     <td><code>-mousepointer</code></td>
     <td>Show mouse pointer in the emulator window.
-        This is the default, but can be toggled with <b>Alt-X</b>.</td>
+        This is the default, but can be toggled with <b>Alt-'.'</b>.</td>
   </tr>
   <tr>
     <td><code>-nomousepointer</code></td>
@@ -246,9 +246,16 @@ will be executed upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-model m</code></td>
-    <td>Specifies which TRS-80 model to emulate. Values accepted are 1 or I
-        (Model I), 3 or III (Model III), 4 or IV (Model 4), and 4P or IVP
-        (Model 4P). Model I is the default.</td>
+    <td>Specifies which TRS-80 model to emulate. Values accepted are <code>1
+        </code> or <code>I</code> (Model I), <code>3</code> or <code>III</code>
+        (Model III), <code>4</code> or <code>IV</code> (Model 4), and <code>4P
+        </code> or <code>IVP</code> (Model 4P). Model I is the default.</td>
+  </tr>
+  <tr>
+    <td><code>-printer type</code></td>
+    <td>Specifies the printer type. Values accepted are <code>0</code> or <code>
+        none</code>, <code>1</code> or <code>text</code>, <code>2</code> or
+        <code>postscript</code>. The default is <code>none</code>.</td>
   </tr>
   <tr>
     <td><code>-keystretch cycles</code></td>
@@ -469,7 +476,8 @@ will be executed upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-huffman</code></td>
-    <td>Enable emulation of the Dave Huffman (and other) memory expansion.</td>
+    <td>Enable emulation of the Dave Huffman (and other) memory expansion.
+        (<b>Disables "Alpha Technologies HyperMem"</b>)</td>
   </tr>
   <tr>
     <td><code>-nohuffman</code></td>
@@ -477,7 +485,8 @@ will be executed upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-hypermem</code></td>
-    <td>Enable emulation of the Alpha Technologies HyperMem memory expansion.</td>
+    <td>Enable emulation of the Alpha Technologies HyperMem memory expansion.
+        (<b>Disables "Dave Huffmann (and other)"</b>)</td>
   </tr>
   <tr>
     <td><code>-nohypermem</code></td>
@@ -485,8 +494,8 @@ will be executed upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-supermem</code></td>
-    <td>Enable emulation of the Alpha Technologies SuperMem memory expansion
-        (Disables "TRS80 Users Society Selector").</td>
+    <td>Enable emulation of the Alpha Technologies SuperMem memory expansion.
+        (<b>Disables "TRS80 Users Society Selector"</b>)</td>
   </tr>
   <tr>
     <td><code>-nosupermem</code></td>
@@ -494,8 +503,8 @@ will be executed upon startup of the emulator.</p>
   </tr>
   <tr>
     <td><code>-selector</code></td>
-    <td>Enable emulation of the TRS80 Users Society Selector memory expansion
-        (Disables "Alpha Technologies SuperMem").</td>
+    <td>Enable emulation of the TRS80 Users Society Selector memory expansion.
+        (<b>Disables "Alpha Technologies SuperMem"</b>)</td>
   </tr>
   <tr>
     <td><code>-noselector</code></td>
