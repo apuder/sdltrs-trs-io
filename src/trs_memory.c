@@ -52,7 +52,6 @@
  */
 
 #include "error.h"
-#include "z80.h"
 #include "trs.h"
 #include <stdlib.h>
 #include "trs_disk.h"

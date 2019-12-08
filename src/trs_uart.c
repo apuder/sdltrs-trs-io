@@ -51,7 +51,6 @@
 #include "trs.h"
 #include "trs_uart.h"
 #include "trs_state_save.h"
-#include "z80.h"
 
 #ifndef FNONBLOCK
 #define FNONBLOCK O_NONBLOCK

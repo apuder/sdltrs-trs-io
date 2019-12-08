@@ -33,7 +33,6 @@
  * Emulate interrupts
  */
 
-#include "z80.h"
 #include "trs.h"
 #include "trs_state_save.h"
 #include <stdio.h>
