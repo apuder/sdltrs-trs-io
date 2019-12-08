@@ -381,6 +381,7 @@ void trs_gui_display_message(const char* title, const char *message)
   trs_gui_clear_rect(2,7,60,1);
   trs_gui_write_text(title, 3, 6, 0);
   trs_gui_write_text(message, 5, 7, 0);
+  trs_gui_write_text(" Press ENTER to continue ", 38, 8, 1);
   trs_x_flush();
 
   while (1) {
