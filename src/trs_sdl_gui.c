@@ -2368,7 +2368,7 @@ void trs_gui_printer_management(void)
             trs_printer);
         break;
       case 1:
-        if (trs_printer_reset() != -1)
+        if (trs_printer_reset() == 0)
           trs_gui_display_message("Status","Printer file closed, printer command ran");
         else
           trs_gui_display_message("Warning","No Printer Output in File");
