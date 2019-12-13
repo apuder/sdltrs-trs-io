@@ -2749,11 +2749,11 @@ void trs_gui_new_machine(void)
   trs_screen_var_reset();
   romin = 0;
   mem_init();
-  trs_disk_init(0);
-  trs_rom_init();
-  trs_screen_init(1);
   screen_init();
+  trs_screen_init(1);
+  trs_disk_init(0);
   trs_timer_init();
+  trs_rom_init();
   trs_reset(1);
 }
 
