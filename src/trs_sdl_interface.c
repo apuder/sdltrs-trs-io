@@ -3867,12 +3867,9 @@ void trs_main_load(FILE *file)
 }
 
 #ifdef SDL2
-/* XXX At the moment this is really "ugly": width SDL 2 there is no
- * "unicode" field in "SDL_Keysym", so we have to convert to upper-
- * case manually or figure out how to deal with SDL_TEXTINPUT... */
 int trs_sdl_sym2upper(int sym)
 {
-  if (sym == '7') return '/';
+       if (sym == '7') return '/';
   else if (sym >= '1' && sym <= '9') return (sym - 0x10);
   else if (sym == 0xDF) return '?';
   else if (sym >= 'A' && sym <= 0xFF) return (sym - 0x20);
