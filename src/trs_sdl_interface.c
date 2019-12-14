@@ -1883,6 +1883,9 @@ void call_function(int function)
     case EXEC:
       trs_gui_exec_cmd();
       break;
+    case SAVE_BMP:
+      trs_gui_save_bmp();
+      break;
     }
     trs_pause_audio(0);
 #if defined(SDL2) || !defined(NOX)
@@ -2039,7 +2042,10 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F11:
-            call_function(KEYS);
+            if (keysym.mod & KMOD_SHIFT)
+              call_function(SAVE_BMP);
+            else
+              call_function(KEYS);
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -2054,6 +2060,17 @@ void trs_get_event(int wait)
             break;
           case SDLK_PAUSE:
             call_function(PAUSE);
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
+#ifndef SDL2
+          case SDLK_PRINT:
+#else
+          case SDLK_PRINTSCREEN:
+#endif
+            call_function(SAVE_BMP);
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -3864,6 +3881,11 @@ void trs_main_load(FILE *file)
   trs_load_int(file,&lowe_le18,1);
   trs_load_int(file,&lowercase,1);
   trs_load_int(file,&stringy,1);
+}
+
+int trs_sdl_savebmp(const char *filename)
+{
+  return SDL_SaveBMP(screen, filename);
 }
 
 #ifdef SDL2

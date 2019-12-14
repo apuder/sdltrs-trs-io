@@ -47,6 +47,7 @@
 #define OTHER        (17)
 #define KEYS         (18)
 #define EXEC         (19)
+#define SAVE_BMP     (20)
 
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;
@@ -65,6 +66,7 @@ void trs_gui_save_state(void);
 int  trs_gui_load_state(void);
 void trs_gui_write_config(void);
 int  trs_gui_read_config(void);
+void trs_gui_save_bmp(void);
 void trs_gui_new_machine(void);
 void trs_gui(void);
 

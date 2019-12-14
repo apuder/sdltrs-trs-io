@@ -126,6 +126,7 @@ extern void trs_gui_write_char(int position, int char_index, int invert);
 #ifdef SDL2
 extern int trs_sdl_sym2upper(int sym);
 #endif
+extern int trs_sdl_savebmp(const char *filename);
 static void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_write_text_char(const char text, int x, int y, int invert);
@@ -2655,6 +2656,20 @@ void trs_gui_exec_cmd(void)
 int trs_gui_exit_sdltrs(void)
 {
   return trs_gui_display_question("Exit SDLTRS?");
+}
+
+void trs_gui_save_bmp(void)
+{
+  char filename[FILENAME_MAX];
+
+  if (trs_gui_input_string("Save Screenshot, TAB selects directory",
+                           trs_printer_dir,filename,FILENAME_MAX-5,1) == 0) {
+    trs_add_extension(filename,".bmp");
+    trs_screen_refresh();
+    trs_x_flush();
+    if (trs_sdl_savebmp(filename) != 0)
+      trs_gui_display_message("Error", "Failed to save Screenshot");
+  }
 }
 
 void trs_gui_write_config(void)
