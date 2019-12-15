@@ -2521,7 +2521,7 @@ void trs_gui_default_dirs(void)
    {"   ",MENU_NORMAL_TYPE},
    {"State Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
-   {"Printer Output Directory:",MENU_TITLE_TYPE},
+   {"Printer Output/Screenshot Directory:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
   int selection = 1;
