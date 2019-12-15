@@ -177,7 +177,7 @@ int SDLmain(int argc, char *argv[])
 #endif
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
-    fatal("Failed to initialize SDL library");
+    fatal("Failed to initialize SDL: %s", SDL_GetError());
 
 #ifndef SDL2
   /* Enable Unicode key translations */
