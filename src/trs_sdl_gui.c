@@ -85,7 +85,7 @@ static const char *function_choices[8] = {
   "     Pause      ", "  Joystick GUI  "
 };
 
-int function_codes[8] = {
+static int function_codes[8] = {
   GUI,    KEYBRD,
   SAVE,   LOAD,
   RESET,  EXIT,
