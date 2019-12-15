@@ -237,7 +237,8 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
     pos_second_part = strlen(orig) - (limit - len_first_part - 3);
     strncpy(limited, orig, len_first_part);
     limited[len_first_part] = '\0';
-    snprintf(limited + len_first_part, limit, "...%s", orig + pos_second_part);
+    snprintf(limited + len_first_part, limit - len_first_part + 1,
+        "...%s", orig + pos_second_part);
   } else
     snprintf(limited, limit + 1, "%s", orig);
 }
@@ -251,7 +252,7 @@ void trs_add_extension(char *filename, const char *ext)
     if (strcasecmp(&filename[flen - elen],ext) == 0)
       return;
 
-  snprintf(filename + flen, FILENAME_MAX - 1, "%s", ext);
+  snprintf(filename + flen, FILENAME_MAX - flen, "%s", ext);
 }
 
 int trs_gui_get_key(void)
