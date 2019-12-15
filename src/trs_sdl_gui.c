@@ -595,10 +595,10 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   }
 #ifdef _WIN32
   if (current_dir[strlen(current_dir)-1] != '\\')
-    strcat(current_dir,"\\");
+    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), "\\");
 #else
   if (current_dir[strlen(current_dir)-1] != '/')
-    strcat(current_dir,"/");
+    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), "/");
 #endif
 
   trs_gui_clear_screen();
@@ -727,13 +727,16 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
                 if (getcwd(current_dir, FILENAME_MAX) == NULL)
                   error("getcwd: %s", current_dir);
 #ifdef _WIN32
-                strcat(current_dir, "\\");
+                snprintf(current_dir + strlen(current_dir),
+                    FILENAME_MAX - strlen(current_dir), "\\");
 #else
-                strcat(current_dir, "/");
+                snprintf(current_dir + strlen(current_dir),
+                    FILENAME_MAX - strlen(current_dir), "/");
 #endif
               }
             } else {
-              strcat(current_dir, &new_dir[1]);
+              snprintf(current_dir + strlen(current_dir),
+                  FILENAME_MAX - strlen(current_dir), "%s", &new_dir[1]);
 #ifdef _WIN32
               current_dir[strlen(current_dir)-1] = '\\';
 #else
@@ -800,7 +803,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
         } else
 #endif
         {
-          strcat(filename, &new_dir[1]);
+          snprintf(filename + strlen(filename), FILENAME_MAX - strlen(filename),
+              "%s", &new_dir[1]);
 #ifdef _WIN32
           filename[strlen(filename)-1] = '\\';
 #else
@@ -810,7 +814,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
       }
     }
     else
-      strcat(filename, filenamelist[current_first + selection]);
+      snprintf(filename + strlen(filename), FILENAME_MAX - strlen(filename),
+          "%s", filenamelist[current_first + selection]);
   }
   trs_gui_delete_filename_list();
   if (selection == -1)
