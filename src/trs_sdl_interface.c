@@ -2105,6 +2105,14 @@ void trs_get_event(int wait)
               trs_screen_refresh();
               trs_x_flush();
               break;
+            case SDLK_HOME:
+              fullscreen = 0;
+              scale_x = 1;
+              scale_y = 2;
+              trs_screen_init(1);
+              trs_screen_refresh();
+              trs_x_flush();
+              break;
             case SDLK_PLUS:
             case SDLK_PAGEDOWN:
               fullscreen = 0;
