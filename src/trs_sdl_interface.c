@@ -2094,12 +2094,14 @@ void trs_get_event(int wait)
               requestSelectAll = TRUE;
               break;
 #endif
-
 #ifdef _WIN32
             case SDLK_F4:
               trs_exit(1);
               break;
 #endif
+            case SDLK_DELETE:
+              trs_reset(0);
+              break;
             case SDLK_RETURN:
               trs_flip_fullscreen();
               trs_screen_refresh();
