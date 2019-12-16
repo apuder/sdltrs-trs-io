@@ -304,6 +304,10 @@ int trs_gui_get_key(void)
              case SDLK_q:
                trs_exit(2);
                break;
+             case SDLK_BACKSPACE:
+               return SDLK_F9;
+             case SDLK_DELETE:
+               return SDLK_F10;
              default:
                break;
            }
@@ -929,6 +933,14 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
           trs_gui_frame(1,6,62,3);
           trs_gui_write_text(title, 3, 6, 0);
         }
+        break;
+      case SDLK_F9:
+        first_disp = length = pos = 0;
+        output[0] = 0;
+        break;
+      case SDLK_F10:
+        length = pos;
+        output[pos] = 0;
         break;
       default:
         if (key >= 0x20 && key <= 0xFF && pos < limit)  {
