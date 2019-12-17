@@ -164,6 +164,7 @@ extern int trs_printer_reset(void);
 extern void trs_cassette_motor(int value);
 extern void trs_cassette_out(int value);
 extern int trs_cassette_in(void);
+extern void trs_cassette_select(int value);
 extern void trs_sound_out(int value);
 
 extern int trs_joystick_in(void);
