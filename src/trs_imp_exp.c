@@ -89,7 +89,7 @@ void do_emt_system()
 {
   int res;
   if (trs_emtsafe) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_system: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
@@ -177,7 +177,7 @@ void do_emt_getddir()
 void do_emt_setddir()
 {
   if (trs_emtsafe) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_setddir: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
@@ -224,7 +224,7 @@ void do_emt_open()
   if (eoflag & EO_APPEND) oflag |= O_APPEND;
 
   if (trs_emtsafe && oflag != O_RDONLY) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_open: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
@@ -284,7 +284,7 @@ void do_emt_write()
   int i;
 
   if (trs_emtsafe) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_write: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
@@ -501,7 +501,7 @@ void do_emt_chdir()
 {
   int ok = chdir((char *)mem_pointer(REG_HL, 0));
   if (trs_emtsafe) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_chdir: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
@@ -625,7 +625,7 @@ void do_emt_ftruncate()
   int i, result;
   off_t offset;
   if (trs_emtsafe) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_ftruncate: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
@@ -679,7 +679,7 @@ void do_emt_opendisk()
   if (eoflag & EO_APPEND) oflag |= O_APPEND;
 
   if (trs_emtsafe && oflag != O_RDONLY) {
-    error("potentially dangerous emulator trap blocked");
+    error("emt_opendisk: potentially dangerous emulator trap blocked");
     REG_A = EACCES;
     REG_F &= ~ZERO_MASK;
     return;
