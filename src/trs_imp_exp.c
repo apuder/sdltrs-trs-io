@@ -519,7 +519,6 @@ void do_emt_getcwd()
 {
   char *result;
   if (REG_HL + REG_BC > 0x10000) {
-    printf("Here 1\n");
     REG_A = EFAULT;
     REG_F &= ~ZERO_MASK;
     REG_BC = 0xFFFF;
@@ -527,7 +526,6 @@ void do_emt_getcwd()
   }
   result = getcwd((char *)mem_pointer(REG_HL, 1), REG_BC);
   if (result == NULL) {
-    printf("Here 3\n");
     REG_A = errno;
     REG_F &= ~ZERO_MASK;
     REG_BC = 0xFFFF;
