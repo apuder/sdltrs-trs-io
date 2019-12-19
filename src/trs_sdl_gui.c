@@ -85,7 +85,7 @@ static const char *function_choices[8] = {
   "     Pause      ", "  Joystick GUI  "
 };
 
-static int function_codes[8] = {
+static int const function_codes[8] = {
   GUI,    KEYBRD,
   SAVE,   LOAD,
   RESET,  EXIT,
@@ -98,7 +98,7 @@ static const char *key_names[N_KEYS] = {
   "DWN", " a ", " s ", " d ", " f ", " g ", " h ", " j ", " k ", " l ", " ; ", "ENT", "CLR",
   "SHF", " z ", " x ", " c ", " v ", " b ", " n ", " m ", " , ", " . ", " / ", " @ ", "SPC"
 };
-static int key_syms[N_KEYS] = {
+static int const key_syms[N_KEYS] = {
   SDLK_1,    SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,     SDLK_0,      SDLK_COLON,     SDLK_MINUS,  SDLK_ESCAPE,
   SDLK_UP,   SDLK_q, SDLK_w, SDLK_e, SDLK_r, SDLK_t, SDLK_y, SDLK_u, SDLK_i,     SDLK_o,      SDLK_p,         SDLK_LEFT,   SDLK_RIGHT,
   SDLK_DOWN, SDLK_a, SDLK_s, SDLK_d, SDLK_f, SDLK_g, SDLK_h, SDLK_j, SDLK_k,     SDLK_l,      SDLK_SEMICOLON, SDLK_RETURN, SDLK_HOME,
@@ -110,7 +110,7 @@ static const char *key_names_shifted[N_KEYS] = {
   " ^ ", " A ",  " S ", " D ", " F ", " G ", " H ", " J ", " K ", " L ", " + ", " { ", " } ",
   "SHF", " Z ",  " X ", " C ", " V ", " B ", " N ", " M ", " < ", " > ", " ? ", " \\ ", " | "
 };
-static int key_syms_shifted[N_KEYS] = {
+static int const key_syms_shifted[N_KEYS] = {
   SDLK_EXCLAIM, SDLK_QUOTEDBL, SDLK_HASH, SDLK_DOLLAR, 0x25, SDLK_AMPERSAND, SDLK_QUOTE, SDLK_LEFTPAREN, SDLK_RIGHTPAREN, SDLK_UNDERSCORE, SDLK_ASTERISK, SDLK_EQUALS, SDLK_CARET,
   SDLK_TAB, 0x51, 0x57, 0x45, 0x52, 0x54, 0x59, 0x55, 0x49,      0x4f,         0x50,          0xc4, 0xdc,
   0x7e,     0x41, 0x53, 0x44, 0x46, 0x47, 0x48, 0x4a, 0x4b,      0x4c,         SDLK_PLUS,     0xe4, 0xfc,
@@ -328,7 +328,7 @@ int trs_gui_get_key(void)
          break;
        case SDL_JOYBUTTONDOWN:
          if (event.jbutton.button < N_JOYBUTTONS) {
-           int key = jbutton_map[event.jbutton.button];
+           int const key = jbutton_map[event.jbutton.button];
 
            if (key >= 0)
              return key;
@@ -519,7 +519,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       snprintf(filename_pos, FILENAME_MAX, "%s", dir_entry->d_name);
       stat(pathname, &st);
       if ((st.st_mode & S_IFMT) == S_IFDIR) {
-        int dirname_len = strlen(dir_entry->d_name);
+        int const dirname_len = strlen(dir_entry->d_name);
 
         if ( (filename = (char *) malloc(dirname_len + 3)) ) {
           snprintf(filename, dirname_len + 3, "<%s>", dir_entry->d_name);
