@@ -690,14 +690,13 @@ void do_emt_opendisk()
 #endif
     qname = strdup(name);
   } else {
-    qname = (char *)malloc(strlen(trs_disk_dir) + 1 + strlen(name) + 1);
-    strcpy(qname, trs_disk_dir);
+    int const len = strlen(trs_disk_dir) + strlen(name) + 2;
+    qname = (char *)malloc(len);
 #ifdef _WIN32
-    strcat(qname, "\\");
+    snprintf(qname, len, "%s\\%s", trs_disk_dir, name);
 #else
-    strcat(qname, "/");
+    snprintf(qname, len, "%s/%s", trs_disk_dir, name);
 #endif
-    strcat(qname, name);
   }
   for (i = 0; i < MAX_OPENDISK; i++) {
     if (!od[i].inuse) break;
