@@ -312,10 +312,10 @@ void trs_save_float(FILE *file, float *buffer, int count)
   char float_buff[21];
 
   for (i=0;i<count;i++)
-    {
+  {
     snprintf(float_buff,21,"%20f",*buffer++);
     trs_save_uchar(file, (unsigned char *)float_buff, 20);
-    }
+  }
 }
 
 void trs_load_float(FILE *file, float *buffer, int count)
@@ -324,10 +324,10 @@ void trs_load_float(FILE *file, float *buffer, int count)
   char float_buff[21];
 
   for (i=0;i<count;i++)
-    {
+  {
     trs_load_uchar(file, (unsigned char *)float_buff, 20);
     sscanf(float_buff,"%f",buffer++);
-    }
+  }
 }
 
 void trs_save_filename(FILE *file, char *filename)
@@ -335,10 +335,10 @@ void trs_save_filename(FILE *file, char *filename)
   char dirname[FILENAME_MAX];
   unsigned short length;
 
-  getcwd(dirname, FILENAME_MAX);
-
-  if (strncmp(filename, dirname, strlen(dirname)) == 0)
-    filename = &filename[strlen(dirname)+1];
+  if (getcwd(dirname, FILENAME_MAX) != NULL) {
+    if (strncmp(filename, dirname, strlen(dirname)) == 0)
+      filename = &filename[strlen(dirname)+1];
+  }
   length = strlen(filename);
 
   trs_save_uint16(file, &length, 1);
