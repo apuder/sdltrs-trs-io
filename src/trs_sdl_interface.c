@@ -473,8 +473,7 @@ int trs_write_config_file(const char *filename)
   FILE *config_file;
   int i;
 
-  config_file = fopen(filename,"w");
-  if (config_file == NULL)
+  if ((config_file = fopen(filename,"w")) == NULL)
     return -1;
 
   fprintf(config_file,"scale=%d\n",scale_x);
