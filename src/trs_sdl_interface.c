@@ -526,7 +526,7 @@ int trs_write_config_file(const char *filename)
       fprintf(config_file,"both\n");
       break;
     case TRSDISK_NODOUBLER:
-      fprintf(config_file,"nodoubler\n");
+      fprintf(config_file,"none\n");
       break;
   }
   fprintf(config_file, "sizemap=%d,%d,%d,%d,%d,%d,%d,%d\n",
