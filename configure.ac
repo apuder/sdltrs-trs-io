@@ -1,5 +1,5 @@
 AC_PREREQ([2.61])
-AC_INIT([sdltrs], [1.2.4], [dbotw@gmx.net])
+AC_INIT([sdltrs], [1.2.5], [dbotw@gmx.net])
 AC_CONFIG_SRCDIR([src/trs.h])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_CC
