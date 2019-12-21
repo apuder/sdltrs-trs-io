@@ -2593,6 +2593,8 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
   mydata = (unsigned int *)malloc(width * height *
       scale_x * scale_y * sizeof(unsigned int));
   mypixels= (unsigned char *)malloc(width * height * 8);
+  if (mydata == NULL || mypixels == NULL)
+    fatal("CreateSurfaceFromDataScale: failed to allocate memory");
 
   /* Read the character data */
   for (j= 0; (unsigned)j< width * height; j += 8)

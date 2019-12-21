@@ -9,6 +9,8 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 
+#include "error.h"
+
 /* forward declarations */
 static int init_scrap(void);
 static int lost_scrap(void);
@@ -104,7 +106,8 @@ static void put_scrap(int srclen, char *src)
   char *dst;
 
   dstlen = srclen;
-  dst = (char *)malloc(dstlen) + 1;
+  if ((dst = (char *)malloc(dstlen) + 1) == NULL)
+    fatal("put_scrap: failed to allocate memory");
   snprintf(dst, dstlen, "%s", src);
   if (clipboard)
     free(clipboard);

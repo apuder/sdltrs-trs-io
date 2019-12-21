@@ -691,7 +691,8 @@ void do_emt_opendisk()
     qname = strdup(name);
   } else {
     int const len = strlen(trs_disk_dir) + strlen(name) + 2;
-    qname = (char *)malloc(len);
+    if ((qname = (char *)malloc(len)) == NULL)
+      fatal("emt_opendisk: failed to allocate memory");
 #ifdef _WIN32
     snprintf(qname, len, "%s\\%s", trs_disk_dir, name);
 #else
