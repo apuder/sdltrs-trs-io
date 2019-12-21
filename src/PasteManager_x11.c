@@ -106,9 +106,9 @@ static void put_scrap(int srclen, char *src)
   char *dst;
 
   dstlen = srclen;
-  if ((dst = (char *)malloc(dstlen) + 1) == NULL)
+  if ((dst = (char *)malloc(dstlen)) == NULL)
     fatal("put_scrap: failed to allocate memory");
-  snprintf(dst, dstlen, "%s", src);
+  strcpy(dst, src);
   if (clipboard)
     free(clipboard);
   clipboard = dst;
