@@ -102,11 +102,9 @@ static int lost_scrap(void)
 
 static void put_scrap(int srclen, char *src)
 {
-  int dstlen;
   char *dst;
 
-  dstlen = srclen;
-  if ((dst = (char *)malloc(dstlen)) == NULL)
+  if ((dst = (char *)malloc(srclen)) == NULL)
     fatal("put_scrap: failed to allocate memory");
   strcpy(dst, src);
   if (clipboard)
@@ -115,7 +113,7 @@ static void put_scrap(int srclen, char *src)
   Lock_Display();
 
   XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
-      _atom_CLIPBOARD, XA_STRING, 8, PropModeReplace, (unsigned char *)dst, dstlen);
+      _atom_CLIPBOARD, XA_STRING, 8, PropModeReplace, (unsigned char *)dst, srclen);
 
   XSync (SDL_Display, False);
   if ( lost_scrap() ) {
