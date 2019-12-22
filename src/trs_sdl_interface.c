@@ -132,6 +132,7 @@ static unsigned char trs_gui_screen[1024];
 static unsigned char trs_gui_screen_invert[1024];
 static unsigned char trs_gui_screen_copy[1024];
 static unsigned char trs_gui_screen_invert_copy[1024];
+static int debugger = 0;
 static int screen_chars = 1024;
 static int row_chars = 64;
 static int col_chars = 16;
@@ -267,6 +268,7 @@ static void trs_opt_scale(char *arg, int intarg, char *stringarg);
 static void trs_opt_resize3(char *arg, int intarg, char *stringarg);
 static void trs_opt_resize4(char *arg, int intarg, char *stringarg);
 static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
+static void trs_opt_debug(char *arg, int intarg, char *stringarg);
 static void trs_opt_model(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset1(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset3(char *arg, int intarg, char *stringarg);
@@ -321,6 +323,7 @@ trs_opt options[] = {
 {"noresize4",trs_opt_resize4,0,0,NULL},
 {"fullscreen",trs_opt_fullscreen,0,1,NULL},
 {"nofullscreen",trs_opt_fullscreen,0,0,NULL},
+{"debug",trs_opt_debug,0,1,NULL},
 {"model",trs_opt_model,1,0,NULL},
 {"charset1",trs_opt_charset1,1,0,NULL},
 {"charset3",trs_opt_charset3,1,0,NULL},
@@ -704,6 +707,11 @@ static void trs_opt_resize4(char *arg, int intarg, char *stringarg)
 static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg)
 {
   fullscreen = intarg;
+}
+
+static void trs_opt_debug(char *arg, int intarg, char *stringarg)
+{
+  debugger = intarg;
 }
 
 static void trs_opt_model(char *arg, int intarg, char *stringarg)
@@ -1160,7 +1168,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     if (j == num_options && argv[i][0] == '-')
       error("unrecognized option %s", argv[i]);
   }
-
+  *debug = debugger;
   trs_disk_setsizes();
   trs_disk_setsteps();
 }
