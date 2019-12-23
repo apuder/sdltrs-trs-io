@@ -1888,7 +1888,7 @@ void trs_gui_display_management(void)
           local_background = strtol(input, NULL, 16);
           if (local_background != background) {
             background = local_background;
-            trs_screen_init(0);
+            trs_screen_init();
             trs_screen_refresh();
           }
         }
@@ -1899,7 +1899,7 @@ void trs_gui_display_management(void)
           local_foreground = strtol(input, NULL, 16);
           if (local_foreground != foreground) {
             foreground = local_foreground;
-            trs_screen_init(0);
+            trs_screen_init();
             trs_screen_refresh();
           }
         }
@@ -1910,7 +1910,7 @@ void trs_gui_display_management(void)
           local_gui_background = strtol(input, NULL, 16);
           if (local_gui_background != gui_background) {
             gui_background = local_gui_background;
-            trs_screen_init(0);
+            trs_screen_init();
             trs_screen_refresh();
           }
         }
@@ -1921,7 +1921,7 @@ void trs_gui_display_management(void)
           local_gui_foreground = strtol(input, NULL, 16);
           if (local_gui_foreground != gui_foreground) {
             gui_foreground = local_gui_foreground;
-            trs_screen_init(0);
+            trs_screen_init();
             trs_screen_refresh();
           }
         }
@@ -1992,7 +1992,7 @@ void trs_gui_display_management(void)
           }
           scanlines = gui_scanlines;
           window_border_width = gui_border_width;
-          trs_screen_init(0);
+          trs_screen_init();
           trs_gui_clear_screen();
           trs_screen_refresh();
         }
@@ -2783,7 +2783,7 @@ void trs_gui_new_machine(void)
   romin = 0;
   mem_init();
   screen_init();
-  trs_screen_init(1);
+  trs_screen_init();
   trs_disk_init(0);
   trs_timer_init();
   trs_rom_init();

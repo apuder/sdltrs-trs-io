@@ -1218,7 +1218,7 @@ void trs_flip_fullscreen(void)
     }
   }
 
-  trs_screen_init(0);
+  trs_screen_init();
 }
 
 void trs_rom_init(void)
@@ -1290,10 +1290,9 @@ void trs_screen_caption(int turbo)
   trs_turbo_led(turbo);
 }
 
-void trs_screen_init(int gui_init)
+void trs_screen_init(void)
 {
   SDL_Color colors[2];
-  unsigned int i;
 
 #if defined(SDL2) || !defined(NOX)
   copyStatus = COPY_IDLE;
@@ -1404,15 +1403,6 @@ void trs_screen_init(int gui_init)
   trs_disk_led(-1,0);
   trs_hard_led(-1,0);
   trs_turbo_led(trs_timer_is_turbo());
-
-  if (gui_init) {
-    for (i = 0; i < 1024; i++) {
-      trs_gui_screen[i] = ' ';
-      trs_gui_screen_invert[i] = 0;
-      trs_gui_screen_copy[i] = ' ';
-      trs_gui_screen_invert_copy[i] = 0;
-    }
-  }
 
   grafyx_redraw();
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
@@ -1873,7 +1863,7 @@ void call_function(int function)
       break;
     case READ:
       if (trs_gui_read_config() == 0)
-        trs_screen_init(1);
+        trs_screen_init();
       break;
     case EMULATOR:
       trs_gui_model();
@@ -2118,7 +2108,7 @@ void trs_get_event(int wait)
               fullscreen = 0;
               scale_x = 1;
               scale_y = 2;
-              trs_screen_init(1);
+              trs_screen_init();
               trs_screen_refresh();
               trs_x_flush();
               break;
@@ -2129,7 +2119,7 @@ void trs_get_event(int wait)
               if (scale_x > MAX_SCALE)
                 scale_x = 1;
               scale_y = scale_x * 2;
-              trs_screen_init(1);
+              trs_screen_init();
               trs_screen_refresh();
               trs_x_flush();
               break;
@@ -2140,7 +2130,7 @@ void trs_get_event(int wait)
               if (scale_x < 1)
                 scale_x = MAX_SCALE;
               scale_y = scale_x * 2;
-              trs_screen_init(1);
+              trs_screen_init();
               trs_screen_refresh();
               trs_x_flush();
               break;
@@ -2150,7 +2140,7 @@ void trs_get_event(int wait)
               break;
             case SDLK_b:
               trs_show_led = !trs_show_led;
-              trs_screen_init(1);
+              trs_screen_init();
               trs_screen_refresh();
               trs_x_flush();
               break;
@@ -2178,7 +2168,7 @@ void trs_get_event(int wait)
               break;
             case SDLK_l:
               call_function(LOAD);
-              trs_screen_init(1);
+              trs_screen_init();
               trs_screen_refresh();
               trs_x_flush();
               break;
@@ -2507,7 +2497,7 @@ void trs_screen_640x240(int flag)
   }
   screen_chars = row_chars * col_chars;
   if (resize)
-    trs_screen_init(1);
+    trs_screen_init();
   else {
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
     top_margin = (TRS_CHAR_HEIGHT4 * scale_y * 24 -
@@ -2532,6 +2522,13 @@ void screen_init()
   /* initially, screen is blank (i.e. full of spaces) */
   for (i = 0; i < sizeof(trs_screen); i++)
     trs_screen[i] = ' ';
+
+  for (i = 0; i < 1024; i++) {
+    trs_gui_screen[i] = ' ';
+    trs_gui_screen_invert[i] = 0;
+    trs_gui_screen_copy[i] = ' ';
+    trs_gui_screen_invert_copy[i] = 0;
+  }
 }
 
 void
