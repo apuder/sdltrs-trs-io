@@ -810,21 +810,13 @@ static int kb_mem_value(int address)
 int trs_kb_mem_read(int address)
 {
     int key = -1;
-    int i, wait;
-    static int recursion = 0;
-    static int timesseen;
-
-    /* Prevent endless recursive calls to this routine (by mem_read_word
-       below) if REG_SP happens to point to keyboard memory. */
-    if (recursion) return 0;
 
     /* Avoid delaying key state changes in queue for too long */
     if (key_heartbeat > 2) {
       do {
-	key = trs_next_key(0);
+	key = dequeue_key();
 	if (key >= 0) {
 	  change_keystate(key);
-	  timesseen = 1;
 	}
       } while (key >= 0);
     }
@@ -834,39 +826,13 @@ int trs_kb_mem_read(int address)
        and so that we don't tickle the bugs in some common TRS-80 keyboard
        drivers that strike if two keys change simultaneously */
     if (key_stretch_timeout - z80_state.t_count > TSTATE_T_MID) {
-
-	/* Check if we are in the system keyboard driver, called from
-	   the wait-for-input routine.  If so, and there are no
-	   keystrokes queued, and the current state has been seen by
-	   at least 16 such reads, then trs_next_key will pause the
-	   process to avoid burning host CPU needlessly.
-
-	   The test below works on both Model I and III and is
-	   insensitive to what keyboard driver is being used, as long
-	   as it is called through the wait-for-key routine at ROM
-	   address 0x0049 and has not pushed too much on the stack yet
-	   when it first reads from the key matrix.  The search is
-	   needed (at least) for NEWDOS80, which pushes 2 extra bytes
-	   on the stack.  */
-	wait = 0;
-	if (timesseen++ >= 16) {
-	  recursion = 1;
-	  for (i=0; i<=4; i+=2) {
-	    if (mem_read_word(REG_SP + 2 + i) == 0x4015) {
-	      wait = mem_read_word(REG_SP + 10 + i) == 0x004c;
-	      break;
-	    }
-	  }
-	  recursion = 0;
-	}
 	/* Get the next key */
-	key = trs_next_key(wait);
+	key = dequeue_key();
 	key_stretch_timeout = z80_state.t_count + stretch_amount;
     }
 
     if (key >= 0) {
       change_keystate(key);
-      timesseen = 1;
     }
     key_heartbeat = 0;
     return kb_mem_value(address);
@@ -910,10 +876,4 @@ int dequeue_key()
 #endif
     }
   return rval;
-}
-
-int trs_next_key(int wait)
-{
-  return dequeue_key();
-
 }
