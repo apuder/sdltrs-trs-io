@@ -1276,8 +1276,8 @@ void trs_screen_caption(int turbo)
   char title[80];
 
   if (cpu_panel) {
-    snprintf(title, 79, "BC:%04X DE:%04X HL:%04X AF:%04X IX/IY:%04X/%04X SP/PC:%04X/%04X",
-             REG_BC, REG_DE, REG_HL, REG_AF, REG_IX, REG_IY, REG_SP, REG_PC);
+    snprintf(title, 79, "AF:%04X BC:%04X DE:%04X HL:%04X IX/IY:%04X/%04X PC/SP:%04X/%04X",
+             REG_AF, REG_BC, REG_DE, REG_HL, REG_IX, REG_IY, REG_PC, REG_SP);
   }
   else if (trs_model == 5) {
     snprintf(title, 79, "TRS-80 Model 4P %s%s%s", turbo ? "Turbo " : "",
