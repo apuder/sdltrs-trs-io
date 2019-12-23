@@ -132,6 +132,7 @@ static unsigned char trs_gui_screen[1024];
 static unsigned char trs_gui_screen_invert[1024];
 static unsigned char trs_gui_screen_copy[1024];
 static unsigned char trs_gui_screen_invert_copy[1024];
+static int cpu_panel = 0;
 static int debugger = 0;
 static int screen_chars = 1024;
 static int row_chars = 64;
@@ -1274,7 +1275,11 @@ void trs_screen_caption(int turbo)
 {
   char title[80];
 
-  if (trs_model == 5) {
+  if (cpu_panel) {
+    snprintf(title, 79, "BC:%04X DE:%04X HL:%04X AF:%04X IX/IY:%04X/%04X SP/PC:%04X/%04X",
+             REG_BC, REG_DE, REG_HL, REG_AF, REG_IX, REG_IY, REG_SP, REG_PC);
+  }
+  else if (trs_model == 5) {
     snprintf(title, 79, "TRS-80 Model 4P %s%s%s", turbo ? "Turbo " : "",
              trs_paused ? "PAUSED " : "", trs_sound ? "" : "(Mute)");
   }
@@ -1918,6 +1923,9 @@ void trs_get_event(int wait)
 
   trs_x_flush();
 
+  if (cpu_panel)
+    trs_screen_caption(trs_timer_is_turbo());
+
   do {
 #if defined(SDL2) || !defined(NOX)
     if (paste_state != PASTE_IDLE) {
@@ -2098,6 +2106,10 @@ void trs_get_event(int wait)
 #endif
             case SDLK_DELETE:
               trs_reset(0);
+              break;
+            case SDLK_INSERT:
+              cpu_panel = !cpu_panel;
+              trs_screen_caption(trs_timer_is_turbo());
               break;
             case SDLK_RETURN:
               trs_flip_fullscreen();
