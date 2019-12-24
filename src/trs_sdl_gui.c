@@ -123,9 +123,6 @@ int jaxis_mapped = 0;
 
 extern int scanlines;
 extern void trs_gui_write_char(int position, int char_index, int invert);
-#ifdef SDL2
-extern int trs_sdl_sym2upper(int sym);
-#endif
 extern int trs_sdl_savebmp(const char *filename);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_write_text_char(const char text, int x, int y, int invert);
@@ -251,6 +248,12 @@ int trs_gui_get_key(void)
 {
    SDL_Event event;
 
+#ifdef SDL2
+   /* Stop Text input first to prevent double chars */
+   SDL_StopTextInput();
+   SDL_StartTextInput();
+#endif
+
    while (1) {
      SDL_WaitEvent(&event);
      switch(event.type) {
@@ -287,6 +290,11 @@ int trs_gui_get_key(void)
            return SDLK_DOWN;
          break;
 #endif
+#ifdef SDL2
+       case SDL_TEXTINPUT:
+         SDL_StopTextInput();
+         return event.text.text[0];
+#endif
        case SDL_KEYDOWN:
          if (event.key.keysym.mod & KMOD_ALT) {
            switch (event.key.keysym.sym) {
@@ -307,15 +315,15 @@ int trs_gui_get_key(void)
          else if (event.key.keysym.sym == SDLK_F8)
            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
 #ifdef SDL2
-         else if (event.key.keysym.mod & KMOD_SHIFT)
-           return trs_sdl_sym2upper(event.key.keysym.sym);
+         else if (event.key.keysym.sym < 0x20 ||
+                  event.key.keysym.sym > 0x7E)
 #else
          else if (event.key.keysym.sym < 0x100 &&
              event.key.keysym.unicode >= 0x20 &&
              event.key.keysym.unicode <= 0x7E)
            return(event.key.keysym.unicode);
-#endif
          else
+#endif
            return(event.key.keysym.sym);
          break;
        case SDL_JOYBUTTONDOWN:
