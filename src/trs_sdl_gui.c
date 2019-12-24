@@ -127,7 +127,6 @@ extern void trs_gui_write_char(int position, int char_index, int invert);
 extern int trs_sdl_sym2upper(int sym);
 #endif
 extern int trs_sdl_savebmp(const char *filename);
-static void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_write_text_char(const char text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
@@ -169,21 +168,14 @@ void trs_gui_keys_sdltrs(void);
 void trs_gui_model(void);
 int trs_gui_exit_sdltrs(void);
 
-void trs_gui_write_text_len(const char *text, int len, int x, int y, int invert)
+void trs_gui_write_text(const char *text, int x, int y, int invert)
 {
   int const position = x + y * 64;
+  int const len = strlen(text) <= 60 ? strlen(text) : 60;
   int i;
-
-  if (len > 60)
-    len = 60;
 
   for (i=0;i<len;i++)
     trs_gui_write_char(position+i,text[i],invert);
-}
-
-void trs_gui_write_text(const char *text, int x, int y, int invert)
-{
-  trs_gui_write_text_len(text, strlen(text), x, y, invert);
 }
 
 void trs_gui_write_text_char(const char text, int x, int y, int invert)
