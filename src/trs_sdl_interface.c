@@ -83,10 +83,6 @@ extern void trs_gui_model(void);
 extern int trs_timer_is_turbo(void);
 extern int trs_timer_switch_turbo(void);
 
-#ifdef SDL2
-int trs_sdl_sym2upper(int);
-#endif
-
 #define MAX_RECTS 2048
 #define WHITE 0xe0e0ff
 #define BLACK 0
@@ -1913,6 +1909,9 @@ void trs_get_event(int wait)
   SDL_Event event;
 #ifdef SDL2
   SDL_Keysym keysym;
+  int text_char = 0;
+
+  SDL_StartTextInput();
 #else
   SDL_keysym keysym;
 #endif
@@ -2316,20 +2315,19 @@ void trs_get_event(int wait)
         else if (keysym.sym == SDLK_RSHIFT)   keysym.sym = 0x12f;
         else if (keysym.sym == SDLK_LSHIFT)   keysym.sym = 0x130;
         else if (keysym.sym == SDLK_LCTRL)    keysym.sym = 0x132;
-
-        if (keysym.sym >= 0x20 && keysym.sym <= 0xFF) {
-          if (keysym.mod & KMOD_SHIFT)
-            keysym.sym = trs_sdl_sym2upper(keysym.sym);
-          last_key[keysym.scancode] = keysym.sym;
-          trs_xlate_keysym(keysym.sym);
+        else if (keysym.mod & KMOD_SHIFT) {
+          if (keysym.sym >= 0x20 && keysym.sym <= 0xDF) {
+            text_char = 1;
+            break;
+          }
         }
 #else
         if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
           last_key[keysym.scancode] = keysym.unicode;
           trs_xlate_keysym(keysym.unicode);
-        }
+        } else
 #endif
-        else if (keysym.sym != 0) {
+        if (keysym.sym != 0) {
           last_key[keysym.scancode] = keysym.sym;
           trs_xlate_keysym(keysym.sym);
         }
@@ -2442,6 +2440,17 @@ void trs_get_event(int wait)
           trs_joy_button_down();
         break;
 
+#ifdef SDL2
+      case SDL_TEXTINPUT:
+        if (text_char) {
+          text_char = event.text.text[0];
+          trs_xlate_keysym(text_char);
+          last_key[keysym.scancode] = text_char;
+          text_char = 0;
+        }
+        break;
+#endif
+
       default:
 #if XDEBUG
       /* debug("Unhandled event: type %d\n", event.type); */
@@ -2453,6 +2462,9 @@ void trs_get_event(int wait)
         trs_gui_display_pause();
     }
   } while (!wait);
+#ifdef SDL2
+  SDL_StopTextInput();
+#endif
 }
 
 void trs_screen_expanded(int flag)
@@ -3915,21 +3927,3 @@ int trs_sdl_savebmp(const char *filename)
 {
   return SDL_SaveBMP(screen, filename);
 }
-
-#ifdef SDL2
-int trs_sdl_sym2upper(int sym)
-{
-       if (sym == '7') return '/';
-  else if (sym >= '1' && sym <= '9') return (sym - 0x10);
-  else if (sym == 0xDF) return '?';
-  else if (sym >= 'A' && sym <= 0xFF) return (sym - 0x20);
-  else if (sym == '#') return '\'';
-  else if (sym == '+') return '*';
-  else if (sym == ',') return ';';
-  else if (sym == '.') return ':';
-  else if (sym == '-') return '_';
-  else if (sym == '0') return '=';
-  else if (sym == '<') return '>';
-  return sym;
-}
-#endif
