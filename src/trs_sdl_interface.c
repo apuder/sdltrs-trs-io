@@ -2297,24 +2297,25 @@ void trs_get_event(int wait)
         if ((keysym.mod & KMOD_RALT) && keysym.sym == SDLK_q)
           keysym.sym = 0x11e;
         /* Convert arrow/control/function/shift keys */
-        else if (keysym.sym == SDLK_UP)       keysym.sym = 0x111;
-        else if (keysym.sym == SDLK_DOWN)     keysym.sym = 0x112;
-        else if (keysym.sym == SDLK_RIGHT)    keysym.sym = 0x113;
-        else if (keysym.sym == SDLK_LEFT)     keysym.sym = 0x114;
-        else if (keysym.sym == SDLK_INSERT)   keysym.sym = 0x115;
-        else if (keysym.sym == SDLK_HOME)     keysym.sym = 0x116;
-        else if (keysym.sym == SDLK_END)      keysym.sym = 0x117;
-        else if (keysym.sym == SDLK_PAGEUP)   keysym.sym = 0x118;
-        else if (keysym.sym == SDLK_PAGEDOWN) keysym.sym = 0x119;
-        else if (keysym.sym == SDLK_F1)       keysym.sym = 0x11a;
-        else if (keysym.sym == SDLK_F2)       keysym.sym = 0x11b;
-        else if (keysym.sym == SDLK_F3)       keysym.sym = 0x11c;
-        else if (keysym.sym == SDLK_F4)       keysym.sym = 0x11d;
-        else if (keysym.sym == SDLK_F5)       keysym.sym = 0x11e;
-        else if (keysym.sym == SDLK_F6)       keysym.sym = 0x11f;
-        else if (keysym.sym == SDLK_RSHIFT)   keysym.sym = 0x12f;
-        else if (keysym.sym == SDLK_LSHIFT)   keysym.sym = 0x130;
-        else if (keysym.sym == SDLK_LCTRL)    keysym.sym = 0x132;
+        else if (keysym.sym == SDLK_UP)         keysym.sym = 0x111;
+        else if (keysym.sym == SDLK_DOWN)       keysym.sym = 0x112;
+        else if (keysym.sym == SDLK_RIGHT)      keysym.sym = 0x113;
+        else if (keysym.sym == SDLK_LEFT)       keysym.sym = 0x114;
+        else if (keysym.sym == SDLK_INSERT)     keysym.sym = 0x115;
+        else if (keysym.sym == SDLK_HOME)       keysym.sym = 0x116;
+        else if (keysym.sym == SDLK_END)        keysym.sym = 0x117;
+        else if (keysym.sym == SDLK_PAGEUP)     keysym.sym = 0x118;
+        else if (keysym.sym == SDLK_PAGEDOWN  ) keysym.sym = 0x119;
+        else if (keysym.sym == SDLK_SCROLLLOCK) keysym.sym = 0x11e;
+        else if (keysym.sym == SDLK_F1)         keysym.sym = 0x11a;
+        else if (keysym.sym == SDLK_F2)         keysym.sym = 0x11b;
+        else if (keysym.sym == SDLK_F3)         keysym.sym = 0x11c;
+        else if (keysym.sym == SDLK_F4)         keysym.sym = 0x11d;
+        else if (keysym.sym == SDLK_F5)         keysym.sym = 0x11e;
+        else if (keysym.sym == SDLK_F6)         keysym.sym = 0x11f;
+        else if (keysym.sym == SDLK_RSHIFT)     keysym.sym = 0x12f;
+        else if (keysym.sym == SDLK_LSHIFT)     keysym.sym = 0x130;
+        else if (keysym.sym == SDLK_LCTRL)      keysym.sym = 0x132;
         else if (keysym.mod & KMOD_SHIFT) {
           if (keysym.sym >= 0x20 && keysym.sym <= 0xDF) {
             text_char = 1;
