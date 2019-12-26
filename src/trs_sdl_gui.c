@@ -125,7 +125,6 @@ extern int scanlines;
 extern void trs_gui_write_char(int position, int char_index, int invert);
 extern int trs_sdl_savebmp(const char *filename);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
-static void trs_gui_write_text_char(const char text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
@@ -175,11 +174,6 @@ void trs_gui_write_text(const char *text, int x, int y, int invert)
     trs_gui_write_char(position+i,text[i],invert);
 }
 
-void trs_gui_write_text_char(const char text, int x, int y, int invert)
-{
-  trs_gui_write_char(x + y * 64,text,invert);
-}
-
 void trs_gui_center_text(const char *text, int y, int invert)
 {
   int const position = (64-strlen(text))/2 + y * 64;
@@ -211,9 +205,9 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
 {
   int i,j;
 
-  for (i=0;i<h;i++)
-    for (j=0;j<w;j++)
-      trs_gui_write_text_char(' ', x+j, y+i, 0);
+  for (i=y*64+x;i<(y+h)*64+x;i+=64)
+    for (j=i;j<i+w;j++)
+      trs_gui_write_char(j, ' ', 0);
 }
 
 void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
@@ -625,8 +619,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     if (redraw) {
       for (i=0;i<drawcount;i++) {
         trs_gui_write_text(filenamelist[current_first+i],2,i+2,0);
-        for (j=strlen(filenamelist[current_first+i]);j<60;j++)
-          trs_gui_write_text_char(' ',j+2,i+2,0);
+        for (j=130+(i*64)+strlen(filenamelist[current_first+i]);j<190+(i*64);j++)
+          trs_gui_write_char(j,' ',0);
       }
       if (drawcount < 13)
         trs_gui_clear_rect(2,drawcount+2,60,13-drawcount);
@@ -856,9 +850,9 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
     for (i=0;i<60;i++) {
       invert = (first_disp + i == pos);
       if (first_disp + i >= length)
-        trs_gui_write_text_char(' ',2+i,7,invert);
+        trs_gui_write_char(450+i,' ',invert);
       else
-        trs_gui_write_text_char(output[first_disp+i],2+i,7,invert);
+        trs_gui_write_char(450+i,output[first_disp+i],invert);
     }
     trs_gui_write_text((insert ? " INS " : " OVR "), 58, 8, 1);
     trs_x_flush();
