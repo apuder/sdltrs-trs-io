@@ -167,10 +167,9 @@ int trs_gui_exit_sdltrs(void);
 void trs_gui_write_text(const char *text, int x, int y, int invert)
 {
   int const position = x + y * 64;
-  int const len = strlen(text) <= 60 ? strlen(text) : 60;
   int i;
 
-  for (i=0;i<len;i++)
+  for (i=0;i<(strlen(text) <= 60 ? strlen(text) : 60);i++)
     trs_gui_write_char(position+i,text[i],invert);
 }
 
