@@ -239,137 +239,137 @@ void trs_add_extension(char *filename, const char *ext)
 
 int trs_gui_get_key(void)
 {
-   SDL_Event event;
+  SDL_Event event;
 
 #ifdef SDL2
-   /* Stop Text input first to prevent double chars */
-   SDL_StopTextInput();
-   SDL_StartTextInput();
+  /* Stop Text input first to prevent double chars */
+  SDL_StopTextInput();
+  SDL_StartTextInput();
 #endif
 
-   while (1) {
-     SDL_WaitEvent(&event);
-     switch(event.type) {
-       case SDL_QUIT:
-         trs_exit(0);
-         break;
+  while (1) {
+    SDL_WaitEvent(&event);
+    switch(event.type) {
+      case SDL_QUIT:
+        trs_exit(0);
+        break;
 #ifdef SDL2
-       case SDL_WINDOWEVENT:
+      case SDL_WINDOWEVENT:
 #else
-       case SDL_ACTIVEEVENT:
+      case SDL_ACTIVEEVENT:
 #endif
-         trs_gui_refresh();
-         trs_x_flush();
-         break;
-       case SDL_MOUSEBUTTONDOWN:
-         if (event.button.button == SDL_BUTTON_LEFT)
-           return SDLK_RETURN;
-         else if (event.button.button == SDL_BUTTON_MIDDLE)
-           return SDLK_TAB;
-         else if (event.button.button == SDL_BUTTON_RIGHT)
-           return SDLK_ESCAPE;
+        trs_gui_refresh();
+        trs_x_flush();
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.button.button == SDL_BUTTON_LEFT)
+          return SDLK_RETURN;
+        else if (event.button.button == SDL_BUTTON_MIDDLE)
+          return SDLK_TAB;
+        else if (event.button.button == SDL_BUTTON_RIGHT)
+          return SDLK_ESCAPE;
 #ifndef SDL2
-         else if (event.button.button == 4) /* SDL_BUTTON_WHEELUP */
-           return SDLK_UP;
-         else if (event.button.button == 5) /* SDL_BUTTON_WHEELDOWN */
-           return SDLK_DOWN;
+        else if (event.button.button == 4) /* SDL_BUTTON_WHEELUP */
+          return SDLK_UP;
+        else if (event.button.button == 5) /* SDL_BUTTON_WHEELDOWN */
+          return SDLK_DOWN;
 #endif
-         break;
+        break;
 #ifdef SDL2
-       case SDL_MOUSEWHEEL:
-         if (event.wheel.y > 0)
-           return SDLK_UP;
-         if (event.wheel.y < 0)
-           return SDLK_DOWN;
-         break;
+      case SDL_MOUSEWHEEL:
+        if (event.wheel.y > 0)
+          return SDLK_UP;
+        if (event.wheel.y < 0)
+          return SDLK_DOWN;
+        break;
 #endif
 #ifdef SDL2
-       case SDL_TEXTINPUT:
-         SDL_StopTextInput();
-         return event.text.text[0];
+      case SDL_TEXTINPUT:
+        SDL_StopTextInput();
+        return event.text.text[0];
 #endif
-       case SDL_KEYDOWN:
-         if (event.key.keysym.mod & KMOD_ALT) {
-           switch (event.key.keysym.sym) {
+      case SDL_KEYDOWN:
+        if (event.key.keysym.mod & KMOD_ALT) {
+          switch (event.key.keysym.sym) {
 #ifdef _WIN32
-             case SDLK_F4:
+            case SDLK_F4:
 #endif
-             case SDLK_q:
-               trs_exit(2);
-               break;
-             case SDLK_BACKSPACE:
-               return SDLK_F9;
-             case SDLK_DELETE:
-               return SDLK_F10;
-             default:
-               break;
-           }
-         }
-         else if (event.key.keysym.sym == SDLK_F8)
-           trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
+            case SDLK_q:
+              trs_exit(2);
+              break;
+            case SDLK_BACKSPACE:
+              return SDLK_F9;
+            case SDLK_DELETE:
+              return SDLK_F10;
+            default:
+              break;
+          }
+        }
+        else if (event.key.keysym.sym == SDLK_F8)
+          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
 #ifdef SDL2
-         else if (event.key.keysym.sym < 0x20 ||
-                  event.key.keysym.sym > 0x7E)
+        else if (event.key.keysym.sym < 0x20 ||
+                 event.key.keysym.sym > 0x7E)
 #else
-         else if (event.key.keysym.sym < 0x100 &&
-             event.key.keysym.unicode >= 0x20 &&
-             event.key.keysym.unicode <= 0x7E)
-           return(event.key.keysym.unicode);
-         else
+        else if (event.key.keysym.sym < 0x100 &&
+            event.key.keysym.unicode >= 0x20 &&
+            event.key.keysym.unicode <= 0x7E)
+          return(event.key.keysym.unicode);
+        else
 #endif
-           return(event.key.keysym.sym);
-         break;
-       case SDL_JOYBUTTONDOWN:
-         if (event.jbutton.button < N_JOYBUTTONS) {
-           int const key = jbutton_map[event.jbutton.button];
+          return(event.key.keysym.sym);
+        break;
+      case SDL_JOYBUTTONDOWN:
+        if (event.jbutton.button < N_JOYBUTTONS) {
+          int const key = jbutton_map[event.jbutton.button];
 
-           if (key >= 0)
-             return key;
-           else if (key == KEYBRD || key == JOYGUI)
-             return trs_gui_virtual_keyboard();
-         }
-         break;
-       case SDL_JOYAXISMOTION:
-         if (event.jaxis.axis == 0 || event.jaxis.axis == 1) {
-           static int hor_value = 0, ver_value = 0;
-           int value = 0, trigger_keydown = 0, key = -1;
+          if (key >= 0)
+            return key;
+          else if (key == KEYBRD || key == JOYGUI)
+            return trs_gui_virtual_keyboard();
+        }
+        break;
+      case SDL_JOYAXISMOTION:
+        if (event.jaxis.axis == 0 || event.jaxis.axis == 1) {
+          static int hor_value = 0, ver_value = 0;
+          int value = 0, trigger_keydown = 0, key = -1;
 
-           if (event.jaxis.axis == 0)
-             value = hor_value;
-           else
-             value = ver_value;
+          if (event.jaxis.axis == 0)
+            value = hor_value;
+          else
+            value = ver_value;
 
-           if (event.jaxis.value < -JOY_BOUNCE) {
-             if (value != -1)
-               trigger_keydown = 1;
-             value = -1;
-           }
-           else if (event.jaxis.value > JOY_BOUNCE) {
-             if (value != 1)
-               trigger_keydown = 1;
-             value = 1;
-           }
-           else if (abs(event.jaxis.value) < JOY_BOUNCE/8)
-             value = 0;
+          if (event.jaxis.value < -JOY_BOUNCE) {
+            if (value != -1)
+              trigger_keydown = 1;
+            value = -1;
+          }
+          else if (event.jaxis.value > JOY_BOUNCE) {
+            if (value != 1)
+              trigger_keydown = 1;
+            value = 1;
+          }
+          else if (abs(event.jaxis.value) < JOY_BOUNCE/8)
+            value = 0;
 
-           if (trigger_keydown) {
-             if (event.jaxis.axis == 0)
-               key = (value == -1 ? SDLK_LEFT : SDLK_RIGHT);
-             else
-               key = (value == -1 ? SDLK_UP : SDLK_DOWN);
-           }
+          if (trigger_keydown) {
+            if (event.jaxis.axis == 0)
+              key = (value == -1 ? SDLK_LEFT : SDLK_RIGHT);
+            else
+              key = (value == -1 ? SDLK_UP : SDLK_DOWN);
+          }
 
-           if (event.jaxis.axis == 0)
-             hor_value = value;
-           else
-             ver_value = value;
+          if (event.jaxis.axis == 0)
+            hor_value = value;
+          else
+            ver_value = value;
 
-           if (key != -1)
-             return key;
-         }
-         break;
-     }
-   }
+          if (key != -1)
+            return key;
+        }
+        break;
+    }
+  }
 }
 
 void trs_gui_display_message(const char* title, const char *message)
