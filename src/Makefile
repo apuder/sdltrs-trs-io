@@ -33,10 +33,10 @@ SRCS	+= PasteManager.c
 
 OBJS	 = ${SRCS:.c=.o}
 
-.PHONY: all bsd clean clean-win32 linux nox sdl2 win32
+.PHONY: all bsd clean clean-win linux nox sdl2 win32 win64
 
 all:
-	@echo "make (bsd | clean | clean-win32 | depend | linux | nox | sdl2 | win32)"
+	@echo "make (bsd | clean | clean-win | depend | linux | nox | sdl2 | win32 | win64)"
 
 bsd:
 	${MAKE} -f BSDMakefile
@@ -44,8 +44,8 @@ bsd:
 clean:
 	rm -f ${OBJS} ${PROG} sdl2trs
 
-clean-win32:
-	del *.o sdltrs.exe
+clean-win:
+	del *.o sdltrs.exe sdl2trs.exe sdl2trs64.exe
 
 depend:
 	makedepend -Y -- ${CFLAGS} -- ${SRCS} 2>&1 | \
@@ -78,8 +78,15 @@ win32:	CC	 = ${MINGW}\bin\gcc.exe
 win32:	PROG	 = sdltrs.exe
 win32:	${PROG}
 
+win64:	MINGW64	 = C:\MinGW64
+win64:	LIBS	 = -L${MINGW64}\lib -lmingw32 -lSDL2main -lSDL2
+win64:	INCS	 = -I${MINGW64}\include\SDL2
+win64:	MACROS	 = -DWIN32 -DSDL2
+win64:	CC       = ${MINGW64}\bin\gcc.exe
+win64:	PROG	 = sdl2trs64.exe
+win64:	${PROG}
+
 CFLAGS		 = -g -Wall -O2 ${INCS} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
-
