@@ -2487,9 +2487,7 @@ void trs_get_event(int wait)
 #ifdef SDL2
       case SDL_TEXTINPUT:
         if (text_char) {
-          text_char = event.text.text[0];
-          trs_xlate_keysym(text_char);
-          last_key[keysym.scancode] = text_char;
+          trs_xlate_keysym(event.text.text[0]);
           text_char = 0;
         }
         break;
