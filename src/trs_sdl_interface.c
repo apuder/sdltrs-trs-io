@@ -2294,8 +2294,6 @@ void trs_get_event(int wait)
         }
 
 #ifdef SDL2
-        if ((keysym.mod & KMOD_RALT) && keysym.sym == SDLK_q)
-          keysym.sym = 0x11e;
         /* Convert arrow/control/function/shift keys */
         switch (keysym.sym) {
           case SDLK_UP:
@@ -2359,7 +2357,7 @@ void trs_get_event(int wait)
             break;
         }
 
-        if (keysym.mod & KMOD_SHIFT) {
+        if (keysym.mod & (KMOD_SHIFT|KMOD_RALT)) {
           if (keysym.sym >= 0x20 && keysym.sym <= 0xDF) {
             text_char = 1;
             break;
