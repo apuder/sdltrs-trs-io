@@ -3196,9 +3196,7 @@ void trs_gui_rest_gui(void)
   unsigned int i;
 
   for (i=0;i<1024;i++) {
-    trs_gui_screen[i] = trs_gui_screen_copy[i];
-    trs_gui_screen_invert[i] = trs_gui_screen_invert_copy[i];
-    trs_gui_write_char(i, trs_gui_screen[i], trs_gui_screen_invert[i]);
+    trs_gui_write_char(i, trs_gui_screen_copy[i], trs_gui_screen_invert_copy[i]);
   }
 }
 
