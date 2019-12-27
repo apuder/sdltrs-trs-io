@@ -33,10 +33,10 @@ SRCS	+= PasteManager.c
 
 OBJS	 = ${SRCS:.c=.o}
 
-.PHONY: all bsd clean clean-win linux nox sdl2 win32 win64
+.PHONY: all bsd clean clean-win linux nox sdl2 win32 win64 wsdl2
 
 all:
-	@echo "make (bsd | clean | clean-win | depend | linux | nox | sdl2 | win32 | win64)"
+	@echo "make (bsd|clean|clean-win|depend|linux|nox|sdl2|win32|win64|wsdl2)"
 
 bsd:
 	${MAKE} -f BSDMakefile
@@ -85,6 +85,14 @@ win64:	MACROS	 = -DWIN32 -DSDL2
 win64:	CC       = ${MINGW64}\bin\gcc.exe
 win64:	PROG	 = sdl2trs64.exe
 win64:	${PROG}
+
+wsdl2:	MINGW	 = C:\MinGW
+wsdl2:	LIBS	 = -L${MINGW}\lib -lmingw32 -lSDL2main -lSDL2
+wsdl2:	INCS	 = -I${MINGW}\include\SDL2
+wsdl2:	MACROS	 = -DSDL2 -DWIN32
+wsdl2:	CC	 = ${MINGW}\bin\gcc.exe
+wsdl2:	PROG	 = sdl2trs.exe
+wsdl2:	${PROG}
 
 CFLAGS		 = -g -Wall -O2 ${INCS} ${ENDIAN} ${MACROS}
 
