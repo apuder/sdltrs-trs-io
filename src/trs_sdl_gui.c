@@ -786,10 +786,11 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     }
   }
 
-  if (selection != -1) {
+  if (selection >= 0) {
+    selection += current_first;
     snprintf(filename, FILENAME_MAX, "%s", current_dir);
     if (browse_dir) {
-      new_dir = filenamelist[current_first + selection];
+      new_dir = filenamelist[selection];
       if (new_dir[1] != '.' && new_dir[2] != '.') {
 #ifdef _WIN32
         if (new_dir[0] == '[') {
@@ -812,21 +813,17 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     }
     else
       snprintf(filename + strlen(filename), FILENAME_MAX - strlen(filename),
-          "%s", filenamelist[current_first + selection]);
+          "%s", filenamelist[selection]);
   }
   trs_gui_delete_filename_list();
-  if (selection == -1)
-    return(selection);
-  else
-    return(current_first + selection);
+  return(selection);
 }
 
 int trs_gui_input_string(const char *title, const char* input, char* output,
                          unsigned int limit, int file)
 {
   char directory_name[FILENAME_MAX];
-  int key,ret=0;
-  int done = 0;
+  int key;
   int insert = 1;
   int invert;
   unsigned int i, pos;
@@ -845,7 +842,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   trs_gui_frame(1,6,62,3);
   trs_gui_write_text(title, 3, 6, 0);
 
-  while (!done) {
+  while (1) {
     for (i=0;i<60;i++) {
       invert = (first_disp + i == pos);
       if (first_disp + i >= length)
@@ -904,12 +901,11 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         insert = !insert;
         break;
       case SDLK_RETURN:
-        ret = 0;
-        done = 1;
+        output[length] = 0;
+        return 0;
         break;
       case SDLK_ESCAPE:
-        ret = -1;
-        done = 1;
+        return -1;
         break;
       case SDLK_DOWN:
       case SDLK_TAB:
@@ -952,9 +948,6 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         break;
     }
   }
-
-  output[length] = 0;
-  return(ret);
 }
 
 int trs_gui_display_popup(const char* title, char **entry,
@@ -2122,9 +2115,9 @@ void trs_gui_joystick_map_joystick(void)
     {"",0}
   };
   char *on_off_choices[2] = {"   Off","    On"};
-  int selection = 0, done = 0, checking = 0, counter;
+  int selection = 0, checking = 0, counter;
 
-  while (!done) {
+  while (1) {
     trs_gui_clear_screen();
     trs_gui_joystick_display_map(0);
     snprintf(&display_menu[5].title[54],7,"%s", on_off_choices[jaxis_mapped]);
@@ -2149,7 +2142,7 @@ void trs_gui_joystick_map_joystick(void)
         jaxis_mapped = trs_gui_display_popup("Stick", on_off_choices, 2, jaxis_mapped);
         break;
       case -1:
-        done = 1;
+        return;
         break;
     }
     counter = CHECK_TIMEOUT;
@@ -2855,13 +2848,12 @@ void trs_gui(void)
 }
 
 int trs_gui_display_popup_matrix(const char* title, const char **entry,
-  int rows, int columns, int selection)
+                                 int rows, int columns, int selection)
 {
   int row, column;
   int entry_count = rows*columns;
   int num, i, j, key;
   int width, first_x, first_y;
-  int done = 0;
   unsigned int max_len = 0;
 
   if (selection < 0)
@@ -2884,7 +2876,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
     for (j = 0; j < columns; j++)
       trs_gui_write_text(entry[i*columns + j], first_x + j*(max_len + 1), first_y + i, 0);
 
-  while (!done) {
+  while (1) {
     selection = row*columns + column;
     trs_gui_write_text(entry[selection], first_x + column*(max_len + 1), first_y + row, 1);
     trs_x_flush();
@@ -2918,16 +2910,13 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
       case SDLK_RETURN:
       case SDLK_SPACE:
       case SDLK_TAB:
-        done = 1;
+        return selection;
         break;
       case SDLK_ESCAPE:
-        selection = -1;
-        done = 1;
+        return -1;
         break;
     }
   }
-
-  return selection;
 }
 
 const char *trs_gui_get_key_name(int key)
