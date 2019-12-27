@@ -2638,7 +2638,7 @@ void trs_gui_keys_sdltrs(void)
 
   trs_gui_write_text("F1-F3: Functions Keys F1/F2/F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
   trs_gui_write_text("F4: F4/CapsLock on TRS-80 4/4P  Insert: TRS-80 Underscore   ", 2, 2, 0);
-  trs_gui_write_text("F5/ScrollLock/End: TRS-80 @     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
+  trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Alt PgUp/PgDn: Scale Window ", 2, 4, 0);
   trs_gui_write_text("F7/Alt M: Main Menu of SDLTRS   Alt Enter: Toggle Fullscreen", 2, 5, 0);
   trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt A/C/V: Select/Copy/Paste", 2, 6, 0);
@@ -2648,8 +2648,8 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F12/Alt N: Switch Turbo On/Off  Alt L/S: Load / Save State  ", 2, 10, 0);
   trs_gui_write_text("ESC: TRS-80 Break Key           Alt R/W: Read / Write Config", 2, 11, 0);
   trs_gui_write_text("Home/Clear: TRS-80 Clear Key    Alt P/Pause: Pause Emulator ", 2, 12, 0);
-  trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Alt 0-7: Insert Disk Drive  ", 2, 13, 0);
-  trs_gui_write_text("RightAlt: TRS-80 Shifted Down   Shift Alt 0-7: Remove Disk  ", 2, 14, 0);
+  trs_gui_write_text("End: TRS-80 Shifted Down Arrow  Alt 0-7: Insert Disk Drive  ", 2, 13, 0);
+  trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Shift Alt 0-7: Remove Disk  ", 2, 14, 0);
   trs_gui_center_text("Press Any Key To Return", 15, 1);
   trs_x_flush();
 
