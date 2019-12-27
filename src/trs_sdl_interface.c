@@ -126,8 +126,6 @@ int trs_emu_mouse = FALSE;
 static unsigned char trs_screen[2048];
 static unsigned char trs_gui_screen[1024];
 static unsigned char trs_gui_screen_invert[1024];
-static unsigned char trs_gui_screen_copy[1024];
-static unsigned char trs_gui_screen_invert_copy[1024];
 static int cpu_panel = 0;
 static int debugger = 0;
 static int screen_chars = 1024;
@@ -419,8 +417,6 @@ static const int num_options = sizeof(options)/sizeof(trs_opt);
 static void bitmap_init();
 static void call_function(int function);
 static char *charset_name(int charset);
-static void trs_gui_save_gui(void);
-static void trs_gui_rest_gui(void);
 
 extern char *program_name;
 
@@ -1702,16 +1698,20 @@ void trs_exit(int confirm)
   extern int trs_gui_exit_sdltrs();
   static int recursion = 0;
   unsigned int i, ch;
+  SDL_Surface *buffer = NULL;
 
   if (recursion) return;
   recursion = 1;
 
   if (confirm != 0) {
     if (confirm == 2)
-      trs_gui_save_gui();
+      buffer = SDL_ConvertSurface(screen, screen->format, SDL_SWSURFACE);
     if (!trs_gui_exit_sdltrs()) {
-      if (confirm == 2)
-        trs_gui_rest_gui();
+      if (confirm == 2) {
+        SDL_BlitSurface(buffer,NULL,screen,NULL);
+        SDL_FreeSurface(buffer);
+        trs_gui_refresh();
+      }
       else
         trs_screen_refresh();
       trs_x_flush();
@@ -2590,8 +2590,6 @@ void screen_init()
   for (i = 0; i < 1024; i++) {
     trs_gui_screen[i] = ' ';
     trs_gui_screen_invert[i] = 0;
-    trs_gui_screen_copy[i] = ' ';
-    trs_gui_screen_invert_copy[i] = 0;
   }
 }
 
@@ -3179,25 +3177,6 @@ void trs_gui_clear_screen(void)
 
   for (i=0;i<1024;i++)
     trs_gui_write_char(i,' ',0);
-}
-
-void trs_gui_save_gui(void)
-{
-  unsigned int i;
-
-  for (i=0;i<1024;i++) {
-    trs_gui_screen_copy[i] = trs_gui_screen[i];
-    trs_gui_screen_invert_copy[i] = trs_gui_screen_invert[i];
-  }
-}
-
-void trs_gui_rest_gui(void)
-{
-  unsigned int i;
-
-  for (i=0;i<1024;i++) {
-    trs_gui_write_char(i, trs_gui_screen_copy[i], trs_gui_screen_invert_copy[i]);
-  }
 }
 
  /* Copy lines 1 through col_chars-1 to lines 0 through col_chars-2.
