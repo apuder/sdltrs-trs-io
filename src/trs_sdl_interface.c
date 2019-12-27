@@ -736,7 +736,7 @@ static void trs_opt_charset1(char *arg, int intarg, char *stringarg)
     if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 < 10 || trs_charset1 > 12)))
       trs_charset1 = 3;
   } else
-    switch ((int)tolower(*arg)) {
+    switch (tolower((int)*arg)) {
       case 'e': /*early*/
         trs_charset1 = 0;
         break;
@@ -770,7 +770,7 @@ static void trs_opt_charset3(char *arg, int intarg, char *stringarg)
     if (trs_charset3 < 4 || trs_charset3 > 6)
       trs_charset3 = 4;
   } else
-    switch ((int)tolower(*arg)) {
+    switch (tolower((int)*arg)) {
       case 'k': /*katakana*/
         trs_charset3 = 4;
         break;
@@ -792,7 +792,7 @@ static void trs_opt_charset4(char *arg, int intarg, char *stringarg)
     if (trs_charset4 < 7 || trs_charset4 > 9)
       trs_charset4 = 8;
   } else
-    switch ((int)tolower(*arg)) {
+    switch (tolower((int)*arg)) {
       case 'k': /*katakana*/
         trs_charset4 = 7;
         break;
@@ -814,7 +814,7 @@ static void trs_opt_printer(char *arg, int intarg, char *stringarg)
     if (trs_printer < 0 || trs_printer > 1)
       trs_printer = 0;
   } else
-    switch ((int)tolower(*arg)) {
+    switch (tolower((int)*arg)) {
       case 'n': /*none*/
         trs_printer = 0;
         break;
@@ -884,7 +884,7 @@ static void trs_opt_led(char *arg, int intarg, char *stringarg)
 
 static void trs_opt_doubler(char *arg, int intarg, char *stringarg)
 {
-  switch ((int)tolower(*arg)) {
+  switch (tolower((int)*arg)) {
     case 'p':
       trs_disk_doubler = TRSDISK_PERCOM;
       break;
