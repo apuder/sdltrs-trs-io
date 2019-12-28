@@ -568,7 +568,6 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   int i,j,key;
   int selection = 0;
   int current_first = 0;
-  int done = 0;
   int drawcount;
   int redraw = 1;
 
@@ -614,7 +613,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 
   drawcount = filenamecount < 13 ? filenamecount : 13;
 
-  while (!done) {
+  while (1) {
     if (redraw) {
       for (i=0;i<drawcount;i++) {
         trs_gui_write_text(filenamelist[current_first+i],2,i+2,0);
@@ -697,7 +696,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
         case SDLK_SPACE:
         case SDLK_TAB:
           if (key == SDLK_TAB && browse_dir)
-            done = 1;
+            goto done;
           else
           if (*filenamelist[current_first + selection] == '<') {
             new_dir = filenamelist[current_first + selection];
@@ -776,16 +775,17 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
           }
 #endif
           else
-            done = 1;
+            goto done;
           break;
         case SDLK_ESCAPE:
-          done = 1;
           selection = -1;
+          goto done;
           break;
       }
     }
   }
 
+done:
   if (selection >= 0) {
     selection += current_first;
     snprintf(filename, FILENAME_MAX, "%s", current_dir);
