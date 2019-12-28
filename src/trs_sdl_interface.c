@@ -1700,7 +1700,7 @@ void trs_exit(int confirm)
   unsigned int i, ch;
   SDL_Surface *buffer = NULL;
 
-  if (recursion) return;
+  if (recursion && confirm != 0) return;
   recursion = 1;
 
   if (confirm != 0) {
