@@ -306,7 +306,7 @@ int trs_gui_get_key(void)
           }
         }
         else if (event.key.keysym.sym == SDLK_F8)
-          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
+          trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
 #ifdef SDL2
         else if (event.key.keysym.sym < 0x20 ||
                  event.key.keysym.sym > 0x7E)
@@ -2004,7 +2004,7 @@ int trs_gui_joystick_get_button(void)
         break;
       case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_F8)
-          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
+          trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
         else if (event.key.keysym.sym == SDLK_ESCAPE)
           return -1;
         break;
@@ -2164,7 +2164,7 @@ void trs_gui_joystick_map_joystick(void)
           break;
         case SDL_KEYDOWN:
           if (event.key.keysym.sym == SDLK_F8)
-            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT) + 1);
+            trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
           else if (event.key.keysym.sym == SDLK_ESCAPE)
             checking = 0;
           break;
