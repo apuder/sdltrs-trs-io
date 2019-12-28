@@ -2003,7 +2003,19 @@ int trs_gui_joystick_get_button(void)
         trs_exit(0);
         break;
       case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_F8)
+        if (event.key.keysym.mod & KMOD_ALT) {
+          switch (event.key.keysym.sym) {
+#ifdef _WIN32
+            case SDLK_F4:
+#endif
+            case SDLK_q:
+              trs_exit(2);
+              break;
+            default:
+              break;
+          }
+        }
+        else if (event.key.keysym.sym == SDLK_F8)
           trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
         else if (event.key.keysym.sym == SDLK_ESCAPE)
           return -1;
@@ -2163,7 +2175,19 @@ void trs_gui_joystick_map_joystick(void)
           trs_exit(0);
           break;
         case SDL_KEYDOWN:
-          if (event.key.keysym.sym == SDLK_F8)
+          if (event.key.keysym.mod & KMOD_ALT) {
+            switch (event.key.keysym.sym) {
+#ifdef _WIN32
+              case SDLK_F4:
+#endif
+              case SDLK_q:
+                trs_exit(2);
+                break;
+              default:
+                break;
+            }
+          }
+          else if (event.key.keysym.sym == SDLK_F8)
             trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
           else if (event.key.keysym.sym == SDLK_ESCAPE)
             checking = 0;
