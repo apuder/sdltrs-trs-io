@@ -42,17 +42,18 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
-#include "error.h"
-#include "trs.h"
-
-#include <stdlib.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifdef READLINE
 #include <readline/readline.h>
 #include <readline/history.h>
 #endif
+
+#include "error.h"
+#include "trs.h"
 
 /*SUPPRESS 112*/
 

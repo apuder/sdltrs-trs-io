@@ -41,12 +41,12 @@
  */
 
 #include <stdio.h>
-#include <unistd.h>
-#include <time.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <string.h>
+#include <time.h>
+#include <unistd.h>
 #include "trs_cassette.h"
 #include "trs_disk.h"
 #include "trs_hard.h"

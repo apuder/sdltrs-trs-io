@@ -41,19 +41,19 @@
  *  easier.
  */
 
-#include <stdio.h>
+#include <dirent.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <dirent.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include "trs_imp_exp.h"
 #include "error.h"
 #include "trs.h"
 #include "trs_disk.h"
 #include "trs_hard.h"
+#include "trs_imp_exp.h"
 #include "trs_state_save.h"
 
 /*

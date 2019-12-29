@@ -52,34 +52,33 @@
 #define TSTATEREV 1       /* Index holes timed by T-states, not real time */
 #define SIZERETRY 1       /* Retry in different sizes on real_read */
 #define DMK_MARK_IAM 0    /* Mark IAMs in track header; poor idea */
+#define NDRIVES 8
 
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <unistd.h>
+
+#if __linux
+#include <fcntl.h>
+#include <linux/fd.h>
+#include <linux/fdreg.h>
+#include <signal.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#endif
+
+#include "crc.c"
 #include "error.h"
 #include "trs.h"
 #include "trs_disk.h"
 #include "trs_hard.h"
 #include "trs_stringy.h"
 #include "trs_state_save.h"
-#include <stdio.h>
-#include <sys/time.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
-
-#include "crc.c"
-
-#if __linux
-#include <signal.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <linux/fd.h>
-#include <linux/fdreg.h>
-#include <sys/ioctl.h>
-#endif
-
-#define NDRIVES 8
 
 int trs_disk_nocontroller = 0;
 int trs_disk_doubler = TRSDISK_BOTH;

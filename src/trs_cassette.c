@@ -57,16 +57,17 @@
 #define CASSDEBUG3 0
 #define CASSDEBUG4 0
 
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include <SDL.h>
+
 #include "error.h"
 #include "trs.h"
 #include "trs_state_save.h"
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-
-#include <SDL.h>
 
 #define CLOSE		0
 #define READ		1

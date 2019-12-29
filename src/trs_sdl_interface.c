@@ -52,16 +52,16 @@
  * SDL interface for TRS-80 Emulator
  */
 
-#include <stdio.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/file.h>
-#include <string.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
 #include <SDL.h>
 
 #include "blit.h"
@@ -76,6 +76,7 @@
 #include "trs_cassette.h"
 #include "trs_sdl_keyboard.h"
 
+extern char *program_name;
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 
 extern void trs_gui_keys_sdltrs(void);
@@ -418,8 +419,6 @@ static const int num_options = sizeof(options)/sizeof(trs_opt);
 static void bitmap_init();
 static void call_function(int function);
 static char *charset_name(int charset);
-
-extern char *program_name;
 
 static void stripWhitespace (char *inputStr)
 {

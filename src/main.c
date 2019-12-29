@@ -44,15 +44,16 @@
 */
 
 #include <errno.h>
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <SDL.h>
 
 #include "error.h"
+#include "load_cmd.h"
 #include "trs.h"
 #include "trs_disk.h"
-#include "load_cmd.h"
 #include "trs_sdl_keyboard.h"
 #include "trs_state_save.h"
 

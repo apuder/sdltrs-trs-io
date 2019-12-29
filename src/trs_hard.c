@@ -45,8 +45,9 @@
 #include "error.h"
 #include "trs.h"
 #include "trs_hard.h"
-#include "trs_state_save.h"
 #include "trs_imp_exp.h"
+#include "trs_state_save.h"
+
 #include "reed.h"
 
 /*#define HARDDEBUG1 1*/  /* show detail on all port i/o */

@@ -65,13 +65,13 @@
  * have not implemented.
  */
 
-#include "z80.h"
+#include <stdlib.h>  /* for rand() */
+#include <time.h>    /* for time() */
 #include "error.h"
 #include "trs.h"
 #include "trs_imp_exp.h"
 #include "trs_state_save.h"
-#include <stdlib.h>  /* for rand() */
-#include <time.h>    /* for time() */
+#include "z80.h"
 
 /*
  * Keep Saber quiet.

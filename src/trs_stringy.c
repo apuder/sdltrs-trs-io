@@ -18,17 +18,17 @@
 
 #define _XOPEN_SOURCE 500 /* string.h: strdup() */
 
+#include <assert.h>
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "error.h"
 #include "trs.h"
 #include "trs_state_save.h"
 #include "trs_stringy.h"
-#include <errno.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
 
 #define STRINGYDEBUG_IN 0
 #define STRINGYDEBUG_OUT 0

@@ -33,13 +33,13 @@
  * Emulate interrupts
  */
 
-#include "trs.h"
-#include "trs_state_save.h"
 #include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 #include <SDL.h>
+#include "trs.h"
+#include "trs_state_save.h"
 
 /*#define IDEBUG 1*/
 /*#define IDEBUG2 1*/

@@ -38,15 +38,15 @@
  * Emulation of the Radio Shack TRS-80 Model I/III/4/4P serial port.
  */
 #include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/file.h>
 #ifndef _WIN32
 #include <termios.h>
 #endif
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <fcntl.h>
-#include <string.h>
 #include "error.h"
 #include "trs.h"
 #include "trs_uart.h"

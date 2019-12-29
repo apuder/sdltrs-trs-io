@@ -51,13 +51,13 @@
  * as the screen and keyboard.
  */
 
+#include <stdlib.h>
 #include "error.h"
 #include "trs.h"
-#include <stdlib.h>
 #include "trs_disk.h"
 #include "trs_hard.h"
-#include "trs_state_save.h"
 #include "trs_imp_exp.h"
+#include "trs_state_save.h"
 
 #define MAX_ROM_SIZE	(0x3800)
 #define MAX_VIDEO_SIZE	(0x0800)

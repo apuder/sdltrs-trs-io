@@ -42,10 +42,10 @@
 
 /* $Id: trs_printer.c,v 1.3 2008/06/26 04:39:56 mann Exp $ */
 
-#include "trs.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include "trs.h"
 
 static FILE *printer = NULL;
 static char printer_filename[FILENAME_MAX];
