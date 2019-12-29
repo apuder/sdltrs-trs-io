@@ -2336,7 +2336,7 @@ void trs_gui_misc_management(void)
       case 3:
         snprintf(input,11,"%d",timer_overclock_rate);
         if (trs_gui_input_string("Enter Turbo Rate Multiplier",input,input,10,0) == 0) {
-          timer_overclock_rate =  atoi(input);
+          timer_overclock_rate = atoi(input);
           if (timer_overclock_rate <= 0)
             timer_overclock_rate = 1;
         }

@@ -1987,7 +1987,7 @@ void trs_get_event(int wait)
         break;
 
       case SDL_KEYDOWN:
-        keysym  = event.key.keysym;
+        keysym = event.key.keysym;
 #if XDEBUG
         debug("KeyDown: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
             keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
@@ -2371,7 +2371,7 @@ void trs_get_event(int wait)
         break;
 
       case SDL_KEYUP:
-        keysym  = event.key.keysym;
+        keysym = event.key.keysym;
 #if XDEBUG
         debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
             keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
@@ -2600,7 +2600,7 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
    */
   bits[0].x = bits[2].x = bits[4].x = 0;
   bits[0].w = bits[2].w = bits[4].w =
-    bits[1].x = bits[3].x = bits[5].x =  width / 2;
+    bits[1].x = bits[3].x = bits[5].x = width / 2;
   bits[1].w = bits[3].w = bits[5].w = width - bits[1].x;
 
   bits[0].y = bits[1].y = 0;
