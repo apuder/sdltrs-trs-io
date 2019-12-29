@@ -319,6 +319,7 @@ trs_opt options[] = {
 {"fullscreen",trs_opt_fullscreen,0,1,NULL},
 {"nofullscreen",trs_opt_fullscreen,0,0,NULL},
 {"debug",trs_opt_debug,0,1,NULL},
+{"nodebug",trs_opt_debug,0,0,NULL},
 {"model",trs_opt_model,1,0,NULL},
 {"charset1",trs_opt_charset1,1,0,NULL},
 {"charset3",trs_opt_charset3,1,0,NULL},
