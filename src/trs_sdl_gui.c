@@ -295,7 +295,7 @@ int trs_gui_get_key(void)
             case SDLK_F4:
 #endif
             case SDLK_q:
-              trs_exit(2);
+              trs_exit(1);
               break;
             case SDLK_BACKSPACE:
               return SDLK_F9;
@@ -306,7 +306,7 @@ int trs_gui_get_key(void)
           }
         }
         else if (event.key.keysym.sym == SDLK_F8)
-          trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
+          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
 #ifdef SDL2
         else if (event.key.keysym.sym < 0x20 ||
                  event.key.keysym.sym > 0x7E)
@@ -2009,14 +2009,14 @@ int trs_gui_joystick_get_button(void)
             case SDLK_F4:
 #endif
             case SDLK_q:
-              trs_exit(2);
+              trs_exit(1);
               break;
             default:
               break;
           }
         }
         else if (event.key.keysym.sym == SDLK_F8)
-          trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
+          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
         else if (event.key.keysym.sym == SDLK_ESCAPE)
           return -1;
         break;
@@ -2181,14 +2181,14 @@ void trs_gui_joystick_map_joystick(void)
               case SDLK_F4:
 #endif
               case SDLK_q:
-                trs_exit(2);
+                trs_exit(1);
                 break;
               default:
                 break;
             }
           }
           else if (event.key.keysym.sym == SDLK_F8)
-            trs_exit((event.key.keysym.mod & KMOD_SHIFT) ? 0 : 2);
+            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
           else if (event.key.keysym.sym == SDLK_ESCAPE)
             checking = 0;
           break;
@@ -3023,7 +3023,7 @@ void trs_gui_joy_gui(void)
       trs_hard_led(-1, 0);
       break;
     case EXIT:
-      trs_exit(2);
+      trs_exit(1);
       break;
   }
 }

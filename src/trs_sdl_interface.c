@@ -1700,20 +1700,15 @@ void trs_exit(int confirm)
   unsigned int i, ch;
   SDL_Surface *buffer = NULL;
 
-  if (recursion && confirm != 0) return;
+  if (recursion && confirm) return;
   recursion = 1;
 
   if (confirm != 0) {
-    if (confirm == 2)
-      buffer = SDL_ConvertSurface(screen, screen->format, SDL_SWSURFACE);
+    buffer = SDL_ConvertSurface(screen, screen->format, SDL_SWSURFACE);
     if (!trs_gui_exit_sdltrs()) {
-      if (confirm == 2) {
-        SDL_BlitSurface(buffer,NULL,screen,NULL);
-        SDL_FreeSurface(buffer);
-        trs_gui_refresh();
-      }
-      else
-        trs_screen_refresh();
+      SDL_BlitSurface(buffer,NULL,screen,NULL);
+      SDL_FreeSurface(buffer);
+      trs_gui_refresh();
       trs_x_flush();
       recursion = 0;
       return;
