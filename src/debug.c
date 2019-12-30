@@ -489,7 +489,7 @@ void debug_shell()
     char history_file[MAXLINE];
     char *home = (char *)getenv ("HOME");
     if (!home) home = ".";
-    sprintf (history_file, "%s/.zbx-history", home);
+    snprintf(history_file, MAXLINE - 1, "%s/.zbx-history", home);
     read_history(history_file);
 #endif
 
