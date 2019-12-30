@@ -327,6 +327,15 @@ put_sample(Uchar sample, int convert, FILE* f)
 	  sound_ring_count++;
 	  SDL_UnlockAudio();
       break;
+#ifdef big_endian
+    case AUDIO_S16MSB:
+   	  two_byte = (sample << 8) - 0x8000;
+	  SDL_LockAudio();
+	  *sound_ring_write_ptr++ =  two_byte >> 8;
+	  if (sound_ring_write_ptr >= sound_ring_end)
+		sound_ring_write_ptr = sound_ring;
+	  *sound_ring_write_ptr++ = two_byte & 0xFF;
+#else
     case AUDIO_S16:
    	  two_byte = (sample << 8) - 0x8000;
 	  SDL_LockAudio();
@@ -334,6 +343,7 @@ put_sample(Uchar sample, int convert, FILE* f)
 	  if (sound_ring_write_ptr >= sound_ring_end)
 		sound_ring_write_ptr = sound_ring;
 	  *sound_ring_write_ptr++ = two_byte >> 8;
+#endif
 	  if (sound_ring_write_ptr >= sound_ring_end)
 		sound_ring_write_ptr = sound_ring;
 	  sound_ring_count+=2;
@@ -509,7 +519,12 @@ set_audio_format(int state)
 	return -1;
   }
   soundDeviceOpen = TRUE;
-  if (obtained.format != AUDIO_U8 && obtained.format != AUDIO_S16) {
+  if (obtained.format != AUDIO_U8 &&
+#ifdef big_endian
+      obtained.format != AUDIO_S16MSB) {
+#else
+      obtained.format != AUDIO_S16) {
+#endif
       error("requested audio format 0x%x, got 0x%x",
 	        desired.format, obtained.format);
       errno = EINVAL;
