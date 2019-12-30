@@ -861,11 +861,15 @@ static void trs_opt_diskset(char *arg, int intarg, char *stringarg)
 static void trs_opt_keystretch(char *arg, int intarg, char *stringarg)
 {
   stretch_amount = strtol(arg, NULL, 0);
+  if (stretch_amount < 0)
+    stretch_amount = STRETCH_AMOUNT;
 }
 
 static void trs_opt_borderwidth(char *arg, int intarg, char *stringarg)
 {
   window_border_width = strtol(arg, NULL, 0);
+  if (window_border_width < 0)
+    window_border_width = 2;
 }
 
 static void trs_opt_microlabs(char *arg, int intarg, char *stringarg)
@@ -922,6 +926,8 @@ static void trs_opt_truedam(char *arg, int intarg, char *stringarg)
 static void trs_opt_samplerate(char *arg, int intarg, char *stringarg)
 {
   cassette_default_sample_rate = strtol(arg, NULL, 0);
+  if (cassette_default_sample_rate < 0)
+    cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
 }
 
 static void trs_opt_switches(char *arg, int intarg, char *stringarg)
