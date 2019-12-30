@@ -111,7 +111,6 @@ extern void trs_screen_expanded(int flag);
 extern void trs_screen_alternate(int flag);
 extern void trs_screen_80x24(int flag);
 extern void trs_screen_inverse(int flag);
-extern void trs_screen_scroll(void);
 extern void trs_screen_refresh(void);
 extern void trs_screen_var_reset(void);
 extern void trs_screen_caption(int turbo);

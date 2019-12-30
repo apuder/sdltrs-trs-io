@@ -3174,35 +3174,6 @@ void trs_gui_clear_screen(void)
     trs_gui_write_char(i,' ',0);
 }
 
- /* Copy lines 1 through col_chars-1 to lines 0 through col_chars-2.
-    Doesn't need to clear line col_chars-1. */
-void trs_screen_scroll()
-{
-  int i = 0;
-  SDL_Rect srcRect, destRect;
-
-  for (i = row_chars; i < screen_chars; i++)
-    trs_screen[i-row_chars] = trs_screen[i];
-
-  if (grafyx_enable) {
-    if (grafyx_overlay)
-      trs_screen_refresh();
-  } else if (hrg_enable)
-    trs_screen_refresh();
-  else {
-    srcRect.x = left_margin;
-    srcRect.y = cur_char_height+top_margin;
-    srcRect.w = cur_char_width*row_chars;
-    srcRect.h = cur_char_height*(col_chars-1);
-    destRect.x = left_margin;
-    destRect.y = top_margin;
-    destRect.w = srcRect.w;
-    destRect.h = srcRect.h;
-    SDL_BlitSurface(screen, &srcRect, screen, &destRect);
-    addToDrawList(&destRect);
-  }
-}
-
 void grafyx_write_byte(int x, int y, char byte)
 {
   char exp[MAX_SCALE];
