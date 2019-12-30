@@ -16,8 +16,6 @@
  * TRS32 that I don't need to duplicate.
  */
 
-#define _XOPEN_SOURCE 500 /* string.h: strdup() */
-
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
