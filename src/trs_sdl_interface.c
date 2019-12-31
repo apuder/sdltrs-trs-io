@@ -1828,7 +1828,7 @@ void call_function(int function)
 #ifndef SDL2
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 #endif
-    trs_pause_audio(1);
+    SDL_PauseAudio(1);
 #if defined(SDL2) || !defined(NOX)
     copyStatus = COPY_OFF;
 #endif
@@ -1886,7 +1886,7 @@ void call_function(int function)
       trs_gui_save_bmp();
       break;
     }
-    trs_pause_audio(0);
+    SDL_PauseAudio(0);
 #if defined(SDL2) || !defined(NOX)
     copyStatus = COPY_IDLE;
 #endif

@@ -1353,11 +1353,6 @@ trs_cassette_reset()
   assert_state(CLOSE);
 }
 
-void trs_pause_audio(int pause)
-{
-    SDL_PauseAudio(pause);
-}
-
 void
 trs_cassette_save(FILE *file)
 {

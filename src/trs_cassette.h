@@ -61,4 +61,3 @@ void trs_orch90_out(int channels, int value);
 void trs_cassette_update(int dummy);
 int trs_cassette_in();
 void trs_cassette_reset();
-void trs_pause_audio(int pause);
