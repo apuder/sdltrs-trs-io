@@ -67,7 +67,6 @@
 #include <fcntl.h>
 #include <linux/fd.h>
 #include <linux/fdreg.h>
-#include <signal.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #endif
