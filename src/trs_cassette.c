@@ -507,7 +507,11 @@ set_audio_format(int state)
   soundDeviceOpen = FALSE;
 
   desired.freq = cassette_sample_rate;
-  desired.format = AUDIO_U8;
+#ifdef big_endian
+  desired.format = AUDIO_S16MSB;
+#else
+  desired.format = AUDIO_S16;
+#endif
   desired.samples = 1 << FRAGSIZE;
   desired.callback = trs_sdl_sound_update;
   desired.userdata = NULL;
