@@ -1377,10 +1377,17 @@ void trs_screen_init(void)
 
   trs_screen_caption(trs_timer_is_turbo());
 
+#if defined(big_endian) || !defined(__linux)
+  light_red = SDL_MapRGB(screen->format, 0x00,0x00,0x40);
+  bright_red = SDL_MapRGB(screen->format, 0x00,0x00,0xff);
+  light_orange = SDL_MapRGB(screen->format, 0x40,0x28,0x40);
+  bright_orange = SDL_MapRGB(screen->format, 0x00,0xa0,0xff);
+#else
   light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
   bright_red = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
   light_orange = SDL_MapRGB(screen->format, 0x40,0x28,0x00);
   bright_orange = SDL_MapRGB(screen->format, 0xff,0xa0,0x00);
+#endif
 
   if (image)
     SDL_FreeSurface(image);
@@ -2626,7 +2633,11 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
       SDL_FreeSurface(trs_box[expanded][graphics_char]);
     trs_box[expanded][graphics_char] =
       SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
+#if defined(big_endian) || !defined(__linux)
+                           0x000000ff, 0x0000ff00,0x00ff0000,0);
+#else
                            0x00ff0000, 0x0000ff00,0x000000ff,0);
+#endif
 
     /* Clear everything */
     SDL_FillRect(trs_box[expanded][graphics_char], &fullrect, background);
@@ -2688,7 +2699,11 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
   free(mypixels);
 
   return(SDL_CreateRGBSurfaceFrom(mydata, width*scale_x, height*scale_y, 32, width*scale_x*4,
+#if defined(big_endian) || !defined(__linux)
+         0x000000ff, 0x0000ff00, 0x00ff0000,0));
+#else
          0x00ff0000, 0x0000ff00, 0x000000ff,0));
+#endif
 }
 
 void bitmap_init(unsigned long foreground, unsigned long background)
