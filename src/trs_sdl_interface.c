@@ -1198,22 +1198,20 @@ void trs_disk_setsteps(void)
 
 void trs_flip_fullscreen(void)
 {
-  static unsigned int window_scale_x = 1;
-  static unsigned int window_scale_y = 2;
+  static unsigned int window_scale = 1;
 
   fullscreen = !fullscreen;
   if (fullscreen) {
-    window_scale_x = scale_x;
-    window_scale_y = scale_y;
+    window_scale = scale_x;
     if (scale_x != 1) {
       scale_x = 1;
       scale_y = 2;
     }
   }
   else {
-    if (window_scale_x != 1) {
-      scale_x = window_scale_x;
-      scale_y = window_scale_y;
+    if (window_scale != 1) {
+      scale_x = window_scale;
+      scale_y = scale_x * 2;
     }
   }
 
