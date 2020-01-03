@@ -259,7 +259,6 @@ int trs_gui_get_key(void)
       case SDL_ACTIVEEVENT:
 #endif
         trs_gui_refresh();
-        trs_x_flush();
         break;
       case SDL_MOUSEBUTTONDOWN:
         if (event.button.button == SDL_BUTTON_LEFT)
@@ -381,7 +380,7 @@ void trs_gui_display_message(const char* title, const char *message)
   trs_gui_write_text(title, 3, 6, 0);
   trs_gui_write_text(message, 5, 7, 0);
   trs_gui_write_text(" Press ENTER to continue ", 38, 8, 1);
-  trs_x_flush();
+  trs_gui_refresh();
 
   while (1) {
     key = trs_gui_get_key();
@@ -398,7 +397,7 @@ void trs_gui_display_pause()
   trs_gui_frame(1,6,62,3);
   trs_gui_clear_rect(2,7,60,1);
   trs_gui_center_text("Emulation Paused", 7, 0);
-  trs_x_flush();
+  trs_gui_refresh();
 }
 
 void trs_gui_create_filename_list()
@@ -629,7 +628,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
       redraw = 0;
     }
     trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,1);
-    trs_x_flush();
+    trs_gui_refresh();
     key = trs_gui_get_key();
     trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,0);
     if (key >= '0' && key <= 'z') {
@@ -855,7 +854,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         trs_gui_write_char(450+i,output[first_disp+i],invert);
     }
     trs_gui_write_text((insert ? " INS " : " OVR "), 58, 8, 1);
-    trs_x_flush();
+    trs_gui_refresh();
     key = trs_gui_get_key();
     switch(key) {
       case SDLK_LEFT:
@@ -977,7 +976,7 @@ int trs_gui_display_popup(const char* title, char **entry,
 
   while (1) {
     trs_gui_write_text(entry[selection], first_x, selection+first_y,1);
-    trs_x_flush();
+    trs_gui_refresh();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection], first_x, selection+first_y,0);
     if (entry_count == 2) {
@@ -1043,7 +1042,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
 
   while (1) {
     trs_gui_write_text(entry[selection].title, 2, selection+2,1);
-    trs_x_flush();
+    trs_gui_refresh();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection].title, 2, selection+2,0);
     if (key >= '0' && key <= '9') {
@@ -1998,7 +1997,7 @@ int trs_gui_joystick_get_button(void)
 
   trs_gui_frame(20, 1, 23, 3);
   trs_gui_write_text("Press Joystick Button", 21, 2, 0);
-  trs_x_flush();
+  trs_gui_refresh();
 
   while (1) {
     SDL_WaitEvent(&event);
@@ -2042,7 +2041,7 @@ void trs_gui_joystick_map_button_to_key(void)
 
   trs_gui_frame(20, 1, 23, 3);
   trs_gui_write_text("     Select Key      ", 21, 2, 0);
-  trs_x_flush();
+  trs_gui_refresh();
   if ((key = trs_gui_virtual_keyboard()) == -1)
     return;
   if ((button = trs_gui_joystick_get_button()) != -1)
@@ -2055,7 +2054,7 @@ void trs_gui_joystick_map_button_to_function(void)
 
   trs_gui_frame(20, 1, 23, 3);
   trs_gui_write_text("   Select Function   ", 21, 2, 0);
-  trs_x_flush();
+  trs_gui_refresh();
   if ((selection = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0)) == -1)
     return;
   if ((button = trs_gui_joystick_get_button()) != -1)
@@ -2172,7 +2171,7 @@ void trs_gui_joystick_map_joystick(void)
       first_x = (64 - len)/2;
       trs_gui_frame(first_x - 1, 1, len + 2, 3);
       trs_gui_write_text(text, first_x, 2, 0);
-      trs_x_flush();
+      trs_gui_refresh();
       if (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
@@ -2646,7 +2645,7 @@ void trs_gui_about_sdltrs(void)
   trs_gui_center_text("Based on xtrs 4.9d by Tim Mann", 11, 0);
   trs_gui_center_text("xtrs 1.0 Copyright (C) 1992 Clarendon Hill Software", 12, 0);
   trs_gui_center_text("Press Any Key To Return", 15, 1);
-  trs_x_flush();
+  trs_gui_refresh();
 
   trs_gui_get_key();
 }
@@ -2672,7 +2671,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("End: TRS-80 Shifted Down Arrow  Alt 0-7: Insert Disk Drive  ", 2, 13, 0);
   trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Shift Alt 0-7: Remove Disk  ", 2, 14, 0);
   trs_gui_center_text("Press Any Key To Return", 15, 1);
-  trs_x_flush();
+  trs_gui_refresh();
 
   trs_gui_get_key();
 }
@@ -2907,7 +2906,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   while (1) {
     selection = row*columns + column;
     trs_gui_write_text(entry[selection], first_x + column*(max_len + 1), first_y + row, 1);
-    trs_x_flush();
+    trs_gui_refresh();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection], first_x + column*(max_len + 1), first_y + row, 0);
     switch (key) {

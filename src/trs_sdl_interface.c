@@ -1719,7 +1719,6 @@ void trs_exit(int confirm)
       SDL_BlitSurface(buffer,NULL,screen,NULL);
       SDL_FreeSurface(buffer);
       trs_gui_refresh();
-      trs_x_flush();
       recursion = 0;
       return;
     }
@@ -3124,10 +3123,12 @@ void trs_screen_write_char(int position, int char_index)
 
 void trs_gui_refresh()
 {
-#if defined(SDL2)
+#ifdef SDL2
+  SDL_UpdateWindowSurface(window);
   screen = SDL_GetWindowSurface(window);
+#else
+  SDL_UpdateRect(screen,0,0,0,0);
 #endif
-  drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
 void trs_gui_write_char(int position, int char_index, int invert)
@@ -3168,7 +3169,6 @@ void trs_gui_write_char(int position, int char_index, int invert)
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
     SDL_BlitSurface(trs_box[2][char_index-0x80], &srcRect, screen, &destRect);
-    addToDrawList(&destRect);
   } else {
     /* Draw character using a builtin bitmap */
     if (trs_model > 1 && char_index >= 0xc0 &&
@@ -3186,7 +3186,6 @@ void trs_gui_write_char(int position, int char_index, int invert)
       SDL_BlitSurface(trs_char[5][char_index], &srcRect, screen, &destRect);
     else
       SDL_BlitSurface(trs_char[4][char_index], &srcRect, screen, &destRect);
-    addToDrawList(&destRect);
   }
 }
 
