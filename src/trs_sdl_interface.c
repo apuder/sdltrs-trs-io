@@ -1708,7 +1708,6 @@ void trs_exit(int confirm)
 {
   extern int trs_gui_exit_sdltrs();
   static int recursion = 0;
-  unsigned int i, ch;
   SDL_Surface *buffer = NULL;
 
   if (recursion && confirm) return;
@@ -1725,6 +1724,13 @@ void trs_exit(int confirm)
       return;
     }
   }
+  trs_sdl_cleanup();
+  exit(0);
+}
+
+void trs_sdl_cleanup(void)
+{
+  unsigned int i, ch;
 
   /* SDL cleanup */
   for (i = 0; i < 6; i++)
@@ -1736,13 +1742,10 @@ void trs_exit(int confirm)
     for (ch = 0; ch < 64; ch++)
       SDL_FreeSurface(trs_box[i][ch]);
   SDL_FreeSurface(image);
-
 #ifdef SDL2
   SDL_DestroyWindow(window);
 #endif
   SDL_Quit(); /* Will free screen */
-
-  exit(0);
 }
 
 #if defined(SDL2) || !defined(NOX)
@@ -2665,13 +2668,15 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
    * Allocate a bit more room than necessary - There shouldn't be
    * any proportional characters, but just in case...
    * The memory allocated for "mydata" will be released in the
-   * "bitmap_init" and "trs_exit" function.
+   * "bitmap_init" and "trs_sdl_cleanup" functions.
    */
   mydata = (unsigned int *)malloc(width * height *
       scale_x * scale_y * sizeof(unsigned int));
   mypixels= (unsigned char *)malloc(width * height * 8);
-  if (mydata == NULL || mypixels == NULL)
+  if (mydata == NULL || mypixels == NULL) {
+    trs_sdl_cleanup();
     fatal("CreateSurfaceFromDataScale: failed to allocate memory");
+  }
 
   /* Read the character data */
   for (j= 0; (unsigned)j< width * height; j += 8)

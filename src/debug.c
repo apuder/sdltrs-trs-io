@@ -343,8 +343,10 @@ void debug_init()
     int i;
 
     traps = (Uchar *) malloc(ADDRESS_SPACE * sizeof(Uchar));
-    if (traps == NULL)
+    if (traps == NULL) {
+      trs_sdl_cleanup();
       fatal("debug_init: failed to allocate traps");
+    }
     memset(traps, 0, ADDRESS_SPACE * sizeof(Uchar));
 
     for(i = 0; i < MAX_TRAPS; ++i) trap_table[i].valid = 0;
