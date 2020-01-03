@@ -373,8 +373,6 @@ int trs_gui_get_key(void)
 
 void trs_gui_display_message(const char* title, const char *message)
 {
-  int key;
-
   trs_gui_frame(1,6,62,3);
   trs_gui_clear_rect(2,7,60,1);
   trs_gui_write_text(title, 3, 6, 0);
@@ -383,8 +381,7 @@ void trs_gui_display_message(const char* title, const char *message)
   trs_gui_refresh();
 
   while (1) {
-    key = trs_gui_get_key();
-    switch(key) {
+    switch(trs_gui_get_key()) {
       case SDLK_ESCAPE:
       case SDLK_RETURN:
         return;
