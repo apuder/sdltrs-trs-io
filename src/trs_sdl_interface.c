@@ -2658,8 +2658,8 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
     unsigned int scale_x,
     unsigned int scale_y)
 {
-  static unsigned int *mydata, *currdata;
-  static unsigned char *mypixels, *currpixel;
+  unsigned int *mydata, *currdata;
+  unsigned char *mypixels, *currpixel;
   unsigned int w;
   int i, j;
 
