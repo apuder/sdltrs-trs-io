@@ -2664,8 +2664,8 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
   /*
    * Allocate a bit more room than necessary - There shouldn't be
    * any proportional characters, but just in case...
-   * These arrays never get released, but they are really not
-   * too big, so we should be OK.
+   * The memory allocated for "mydata" will be released in the
+   * "bitmap_init" and "trs_exit" function.
    */
   mydata = (unsigned int *)malloc(width * height *
       scale_x * scale_y * sizeof(unsigned int));
