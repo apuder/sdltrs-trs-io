@@ -86,8 +86,6 @@ extern unsigned int gui_background;
 extern int fullscreen;
 extern int trs_emu_mouse;
 
-void trs_suspend_delay(void);
-void trs_restore_delay(void);
 extern int trs_continuous; /* 1= run continuously,
 			      0= enter debugger after instruction,
 			     -1= suppress interrupt and enter debugger */
@@ -156,6 +154,11 @@ extern void trs_x_flush(void);
 extern void trs_printer_write(int value);
 extern int trs_printer_read(void);
 extern int trs_printer_reset(void);
+
+#ifdef SUSPEND_DELAY
+void trs_suspend_delay(void);
+void trs_restore_delay(void);
+#endif
 
 extern void trs_cassette_motor(int value);
 extern void trs_cassette_out(int value);

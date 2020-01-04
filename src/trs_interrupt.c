@@ -370,9 +370,6 @@ trs_restore_delay()
     saved_delay = 0;
   }
 }
-#else
-void trs_suspend_delay() { }
-void trs_restore_delay() { }
 #endif
 
 #define UP_F   1.50

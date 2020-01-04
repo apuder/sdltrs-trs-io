@@ -819,7 +819,9 @@ transition_out(int value)
     }
     if (value == FLUSH) {
       value = cassette_value;
+#ifdef SUSPEND_DELAY
       trs_restore_delay();
+#endif
     }
     break;
 
@@ -1174,7 +1176,9 @@ void trs_cassette_out(int value)
   if (trs_sound && cassette_motor == 0 ) {
     if (cassette_state != SOUND && value == 0) return;
     if (assert_state(SOUND) < 0) return;
+#ifdef SUSPEND_DELAY
     trs_suspend_delay();
+#endif
     transition_out(value);
   }
 }
@@ -1195,7 +1199,9 @@ trs_sound_out(int value)
 {
   if (trs_sound && cassette_motor == 0) {
     if (assert_state(SOUND) < 0) return;
+#ifdef SUSPEND_DELAY
     trs_suspend_delay();
+#endif
     transition_out(value ? 1 : 2);
   }
 }
@@ -1222,7 +1228,9 @@ trs_orch90_out(int channels, int value)
 
   if (cassette_motor != 0) return;
   if (assert_state(ORCH90) < 0) return;
+#ifdef SUSPEND_DELAY
   trs_suspend_delay();
+#endif
   if (channels & 1) {
     new_left = v;
   } else {
