@@ -251,7 +251,6 @@ void grafyx_write_overlay(int value);
 void grafyx_set_microlabs(int on_off);
 int grafyx_get_microlabs(void);
 void grafyx_m3_reset();
-int grafyx_m3_active(); /* true if currently intercepting video i/o */
 void grafyx_m3_write_mode(int value);
 unsigned char grafyx_m3_read_byte(int position);
 int grafyx_m3_write_byte(int position, int value);

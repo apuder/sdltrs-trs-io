@@ -3453,11 +3453,6 @@ unsigned char grafyx_m3_read_byte(int position)
     return trs_screen[position];
 }
 
-int grafyx_m3_active()
-{
-  return (trs_model == 3 && grafyx_microlabs && (grafyx_mode & G3_COORD));
-}
-
 /*
  *     The Lowe Electronics LE18 is yet another fairly simple
  *     I/O based 384x192 graphics adapter writing 6bits per
