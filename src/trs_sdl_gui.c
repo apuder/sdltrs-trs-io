@@ -613,13 +613,9 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 
   while (1) {
     if (redraw) {
-      for (i=0;i<drawcount;i++) {
+      trs_gui_clear_rect(2,2,60,13);
+      for (i=0;i<drawcount;i++)
         trs_gui_write_text(filenamelist[current_first+i],2,i+2,0);
-        for (j=130+(i*64)+strlen(filenamelist[current_first+i]);j<190+(i*64);j++)
-          trs_gui_write_char(j,' ',0);
-      }
-      if (drawcount < 13)
-        trs_gui_clear_rect(2,drawcount+2,60,13-drawcount);
       redraw = 0;
     }
     trs_gui_write_text(filenamelist[current_first+selection],2,selection+2,1);
