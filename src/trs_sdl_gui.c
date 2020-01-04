@@ -211,12 +211,10 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
 
 void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
 {
-  int len_first_part;
-  int pos_second_part;
-
   if (strlen(orig) > limit) {
-    len_first_part = (limit-3)/2;
-    pos_second_part = strlen(orig) - (limit - len_first_part - 3);
+    int const len_first_part = (limit-3)/2;
+    int const pos_second_part = strlen(orig) - (limit - len_first_part - 3);
+
     strncpy(limited, orig, len_first_part);
     limited[len_first_part] = '\0';
     snprintf(limited + len_first_part, limit - len_first_part + 1,
@@ -955,7 +953,7 @@ int trs_gui_display_popup(const char* title, char **entry,
 {
   int num = 0, i, key;
   int first_x, first_y;
-  int saved_selection = selection;
+  int const saved_selection = selection;
   unsigned int max_len = 0;
 
   for (num=0;num<entry_count;num++) {
