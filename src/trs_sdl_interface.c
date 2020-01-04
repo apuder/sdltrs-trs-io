@@ -417,8 +417,7 @@ static const int num_options = sizeof(options)/sizeof(trs_opt);
 
 /* Private routines */
 static void bitmap_init();
-static void call_function(int function);
-static char *charset_name(int charset);
+static void grafyx_redraw(void);
 
 static void stripWhitespace (char *inputStr)
 {
@@ -608,7 +607,7 @@ int trs_write_config_file(const char *filename)
   return 0;
 }
 
-void trs_set_to_defaults(void)
+static void trs_set_to_defaults(void)
 {
   int i;
 
@@ -1064,6 +1063,30 @@ static void trs_opt_scanlines(char *arg, int intarg, char *stringarg)
   scanlines = intarg;
 }
 
+static void trs_disk_setsizes(void)
+{
+  unsigned int j;
+
+  for (j=0; j<=7; j++) {
+    if (disksizes[j] == 5 || disksizes[j] == 8)
+      trs_disk_setsize(j, disksizes[j]);
+    else
+      error("bad value %d for disk %d size", disksizes[j], j);
+  }
+}
+
+static void trs_disk_setsteps(void)
+{            /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
+  unsigned int j;
+
+  for (j=0; j<=7; j++) {
+    if (disksteps[j] == 1 || disksteps[j] == 2)
+      trs_disk_setstep(j, disksteps[j]);
+    else
+      error("bad value %d for disk %d single/double step", disksteps[j], j);
+  }
+}
+
 int trs_load_config_file()
 {
   char line[FILENAME_MAX];
@@ -1172,31 +1195,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
   trs_disk_setsteps();
 }
 
-void trs_disk_setsizes(void)
-{
-  unsigned int j;
-
-  for (j=0; j<=7; j++) {
-    if (disksizes[j] == 5 || disksizes[j] == 8)
-      trs_disk_setsize(j, disksizes[j]);
-    else
-      error("bad value %d for disk %d size", disksizes[j], j);
-  }
-}
-
-void trs_disk_setsteps(void)
-{            /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
-  unsigned int j;
-
-  for (j=0; j<=7; j++) {
-    if (disksteps[j] == 1 || disksteps[j] == 2)
-      trs_disk_setstep(j, disksteps[j]);
-    else
-      error("bad value %d for disk %d single/double step", disksteps[j], j);
-  }
-}
-
-void trs_flip_fullscreen(void)
+static void trs_flip_fullscreen(void)
 {
   static unsigned int window_scale = 1;
 
@@ -1416,13 +1415,13 @@ void trs_screen_init(void)
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
 
-void addToDrawList(SDL_Rect *rect)
+static void addToDrawList(SDL_Rect *rect)
 {
   if (drawnRectCount < MAX_RECTS)
     drawnRects[drawnRectCount++] = *rect;
 }
 
-void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
+static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 {
   int i,y;
 
@@ -1552,7 +1551,7 @@ void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 }
 
 #if defined(SDL2) || !defined(NOX)
-void ProcessCopySelection(int selectAll)
+static void ProcessCopySelection(int selectAll)
 {
   static int orig_x = 0;
   static int orig_y = 0;
@@ -1748,7 +1747,7 @@ void trs_sdl_cleanup(void)
 }
 
 #if defined(SDL2) || !defined(NOX)
-char *trs_get_copy_data()
+static char *trs_get_copy_data()
 {
   static char copy_data[2500];
   char data;
@@ -1815,7 +1814,7 @@ char *trs_get_copy_data()
 }
 #endif
 
-void call_function(int function)
+static void call_function(int function)
 {
   if (function == PAUSE) {
     trs_paused = !trs_paused;
@@ -2554,7 +2553,7 @@ void trs_screen_alternate(int flag)
   }
 }
 
-void trs_screen_640x240(int flag)
+static void trs_screen_640x240(int flag)
 {
   if (flag == screen640x240) return;
   screen640x240 = flag;
@@ -2601,7 +2600,7 @@ void screen_init()
   }
 }
 
-void
+static void
 boxes_init(int foreground, int background, int width, int height, int expanded)
 {
   int graphics_char, bit;
@@ -2650,7 +2649,7 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
   }
 }
 
-SDL_Surface *CreateSurfaceFromDataScale(char *data,
+static SDL_Surface *CreateSurfaceFromDataScale(char *data,
     unsigned int foreground,
     unsigned int background,
     unsigned int width,
@@ -2708,7 +2707,7 @@ SDL_Surface *CreateSurfaceFromDataScale(char *data,
 #endif
 }
 
-void bitmap_init(unsigned long foreground, unsigned long background)
+static void bitmap_init(unsigned long foreground, unsigned long background)
 {
   /* Initialize from built-in font bitmaps. */
   unsigned int i;
@@ -3197,7 +3196,7 @@ void trs_gui_clear_screen(void)
     trs_gui_write_char(i,' ',0);
 }
 
-void grafyx_write_byte(int x, int y, char byte)
+static void grafyx_write_byte(int x, int y, char byte)
 {
   char exp[MAX_SCALE];
   int i, j;
@@ -3270,7 +3269,7 @@ void grafyx_write_byte(int x, int y, char byte)
   }
 }
 
-void grafyx_redraw(void)
+static void grafyx_redraw(void)
 {
   char byte;
   char exp[MAX_SCALE];

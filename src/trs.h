@@ -102,10 +102,7 @@ extern int trs_load_config_file(void);
 
 extern void trs_screen_init(void);
 extern void screen_init(void);
-extern void trs_flip_fullscreen(void);
 extern void trs_rom_init(void);
-extern void trs_disk_setsizes(void);
-extern void trs_disk_setsteps(void);
 extern void trs_screen_write_char(int position, int char_index);
 extern void trs_screen_expanded(int flag);
 extern void trs_screen_alternate(int flag);
@@ -243,7 +240,6 @@ void trs_do_event(void);
 void trs_cancel_event(void);
 trs_event_func trs_event_scheduled(void);
 
-void grafyx_redraw(void);
 void grafyx_write_x(int value);
 void grafyx_write_y(int value);
 void grafyx_write_data(int value);
