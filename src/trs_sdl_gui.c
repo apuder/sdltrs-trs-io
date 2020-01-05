@@ -2227,7 +2227,7 @@ void trs_gui_joystick_management(void)
     if (gui_joystick_num == -1)
       snprintf(&display_menu[1].title[48],13,"        None");
     else
-      snprintf(&display_menu[1].title[48],13,"Joystick %1d",gui_joystick_num);
+      snprintf(&display_menu[1].title[50],13,"Joystick %1d",gui_joystick_num);
     selection = trs_gui_display_menu("SDLTRS Joystick Setting Menu",
         display_menu, selection);
     switch(selection) {
