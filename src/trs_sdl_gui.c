@@ -140,7 +140,7 @@ static void trs_gui_delete_filename_list(void);
 static int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir);
 static int trs_gui_input_string(const char *title, const char *input, char* output,
                                 unsigned int limit, int file);
-static int trs_gui_display_popup(const char* title, char **entry,
+static int trs_gui_display_popup(const char* title, const char **entry,
                                  int entry_count, int selection);
 static int trs_gui_display_popup_matrix(const char* title, const char **entry,
                                         int rows, int columns, int selection);
@@ -938,7 +938,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   }
 }
 
-int trs_gui_display_popup(const char* title, char **entry,
+int trs_gui_display_popup(const char* title, const char **entry,
                           int entry_count, int selection)
 {
   int num = 0, i, key;
@@ -1166,14 +1166,14 @@ void trs_gui_disk_creation(void)
    {"Insert Created Disk Into This Drive                         ",MENU_NORMAL_TYPE},
    {"Create Disk Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
-  char *image_type_choices[3] = {"   JV1","   JV3","   DMK"};
-  char *num_sides_choices[2] =  {"     1","     2"};
-  char *density_choices[2] =    {"Single","Double"};
-  char *size_choices[2] =       {"5 Inch","8 Inch"};
-  char *ignore_choices[2] =     {"    No","   Yes"};
-  char *drive_choices[9] =      {"  None","Disk 0","Disk 1","Disk 2",
-                                 "Disk 3","Disk 4","Disk 5","Disk 6",
-                                 "Disk 7"};
+  const char *image_type_choices[3] = {"   JV1","   JV3","   DMK"};
+  const char *num_sides_choices[2] =  {"     1","     2"};
+  const char *density_choices[2] =    {"Single","Double"};
+  const char *size_choices[2] =       {"5 Inch","8 Inch"};
+  const char *ignore_choices[2] =     {"    No","   Yes"};
+  const char *drive_choices[9] =      {"  None","Disk 0","Disk 1","Disk 2",
+                                       "Disk 3","Disk 4","Disk 5","Disk 6",
+                                       "Disk 7"};
   char filename[FILENAME_MAX];
   int selection = 6;
   int ret;
@@ -1255,7 +1255,7 @@ void trs_gui_disk_sizes(void)
    {"",MENU_NORMAL_TYPE},
    {"",MENU_NORMAL_TYPE},
    {"",0,}};
-  char *size_choices[2] = {"5 Inch","8 Inch"};
+  const char *size_choices[2] = {"5 Inch","8 Inch"};
   int selection = 0;
   int gui_disk_sizes[8];
   int i, choice, size;
@@ -1303,7 +1303,7 @@ void trs_gui_disk_steps(void)
    {"",MENU_NORMAL_TYPE},
    {"",MENU_NORMAL_TYPE},
    {"",0}};
-  char *step_choices[2] = {"Single","Double"};
+  const char *step_choices[2] = {"Single","Double"};
   int selection = 0;
   int gui_disk_steps[8];
   int i, choice, step;
@@ -1349,8 +1349,8 @@ void trs_gui_disk_options(void)
    {"Set Drive Steps",MENU_NORMAL_TYPE},
 #endif
    {"",0,}};
-  char *on_off_choices[2] =  {"       Off","        On"};
-  char *doubler_choices[4] = {"      None","    Percom","     Tandy","      Both"};
+  const char *on_off_choices[2] =  {"       Off","        On"};
+  const char *doubler_choices[4] = {"      None","    Percom","     Tandy","      Both"};
   int selection = 0;
 
   while (1) {
@@ -1466,7 +1466,7 @@ void trs_gui_hard_management(void)
   static int granularity = 8;
   static int dir_sector = 1;
   static int drive_insert = 0;
-  char *drive_choices[5] = {"  None","Hard 0","Hard 1","Hard 2","Hard 3"};
+  const char *drive_choices[5] = {"  None","Hard 0","Hard 1","Hard 2","Hard 3"};
   char filename[FILENAME_MAX];
   char input[4];
   int selection = 0;
@@ -1615,8 +1615,8 @@ void trs_gui_stringy_management(void)
    {"Insert Created Image Into This Wafer                       ",MENU_NORMAL_TYPE},
    {"Create Blank Floppy Wafer",MENU_NORMAL_TYPE},
    {"",0}};
-  char *wafer_choices[9] = {"   None","Wafer 0","Wafer 1","Wafer 2","Wafer 3",
-                            "Wafer 4","Wafer 5","Wafer 6","Wafer 7"};
+  const char *wafer_choices[9] = {"   None","Wafer 0","Wafer 1","Wafer 2","Wafer 3",
+                                  "Wafer 4","Wafer 5","Wafer 6","Wafer 7"};
   char filename[FILENAME_MAX];
   int selection = 0;
   int i;
@@ -1685,9 +1685,9 @@ void trs_gui_cassette_management(void)
    {"Insert Created Cassette Into Drive                          ",MENU_NORMAL_TYPE},
    {"Create Blank Cassette Image with Above Parameters",MENU_NORMAL_TYPE},
    {"",0}};
+  const char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
+  const char *drive_choices[2]  =     {"      No","     Yes"};
   char input[12];
-  char *image_type_choices[3] = {"   CAS","   CPT","   WAV"};
-  char *drive_choices[2]  =     {"      No","     Yes"};
   char filename[FILENAME_MAX];
   static int image_type = 0;
   static int drive_insert = 1;
@@ -1807,19 +1807,19 @@ void trs_gui_display_management(void)
    {"Display Scanlines to simulate old CRT                       ",MENU_NORMAL_TYPE},
    {"",0,}};
   char input[8];
-  char *resize_choices[2] =   {"        No","       Yes"};
-  char *disk_led_choices[2] = {" Hide"," Show"};
-  char *font1_choices[7] =    {"      Early",
-                               "      Stock",
-                               "      LCmod",
-                               "      Wider",
-                               "      Genie",
-                               "   HT-1080Z",
-                               "Video Genie"};
-  char *font34_choices[3] =   {"     Katakana",
-                               "International",
-                               "         Bold"};
-  char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
+  const char *resize_choices[2] =   {"        No","       Yes"};
+  const char *disk_led_choices[2] = {" Hide"," Show"};
+  const char *font1_choices[7] =    {"      Early",
+                                     "      Stock",
+                                     "      LCmod",
+                                     "      Wider",
+                                     "      Genie",
+                                     "   HT-1080Z",
+                                     "Video Genie"};
+  const char *font34_choices[3] =   {"     Katakana",
+                                     "International",
+                                     "         Bold"};
+  const char *scale_choices[4] =    {"  None","   2 x","   3 x","   4 x"};
   int selection = 0;
   int local_trs_charset1 = trs_charset1;
   int local_trs_charset3 = trs_charset3 - 4;
@@ -2095,7 +2095,7 @@ void trs_gui_joystick_display_map(int show_active)
 
 int trs_gui_display_question(const char *text)
 {
-  char *answer_choices[] = {
+  const char *answer_choices[] = {
     "          No           ",
     "          Yes          "
   };
@@ -2114,7 +2114,7 @@ void trs_gui_joystick_map_joystick(void)
     {"Map Analog Stick to Arrow Keys                              ",MENU_NORMAL_TYPE},
     {"",0}
   };
-  char *on_off_choices[2] = {"   Off","    On"};
+  const char *on_off_choices[2] = {"   Off","    On"};
   int selection = 0, checking = 0, counter;
 
   while (1) {
@@ -2210,7 +2210,7 @@ void trs_gui_joystick_management(void)
    {"USB Joystick/Gamepad                                        ",MENU_NORMAL_TYPE},
    {"Map Joystick to Keys/Functions",MENU_NORMAL_TYPE},
    {"",0}};
-  char *keypad_choices[2] =     {"      No","     Yes"};
+  const char *keypad_choices[2] =     {"      No","     Yes"};
   char *joystick_choices[MAX_JOYSTICKS+1];
   char joystick_strings[MAX_JOYSTICKS+1][64];
   int selection = 0;
@@ -2252,7 +2252,7 @@ void trs_gui_joystick_management(void)
           joy_index = 0;
         else
           joy_index = gui_joystick_num+1;
-        joy_index = trs_gui_display_popup("Joystick",joystick_choices,
+        joy_index = trs_gui_display_popup("Joystick",(const char**)joystick_choices,
             num_joysticks+1,
             joy_index);
         if (joy_index == 0)
@@ -2291,7 +2291,7 @@ void trs_gui_misc_management(void)
    {"Serial Port Name:                                           ",MENU_TITLE_TYPE},
    {"                                                            ",MENU_NORMAL_TYPE},
    {"",0}};
-  char *on_off_choices[2] = {"      Off","       On"};
+  const char *on_off_choices[2] = {"      Off","       On"};
   char input[FILENAME_MAX];
   int selection = 0;
 
@@ -2368,7 +2368,7 @@ void trs_gui_printer_management(void)
    {"Printer Command:",MENU_TITLE_TYPE},
    {"   ",MENU_NORMAL_TYPE},
    {"",0}};
-  char *printer_choices[2] = {"     None","     Text"};
+  const char *printer_choices[2] = {"     None","     Text"};
   char input[FILENAME_MAX];
   int selection = 0;
 
@@ -2418,11 +2418,11 @@ void trs_gui_model(void)
    {"Alpha Technologies SuperMem Memory Expansion                ",MENU_NORMAL_TYPE},
    {"TRS80 Users Society Selector Memory Expansion               ",MENU_NORMAL_TYPE},
    {"",0}};
-  char *model_choices[4] =  {"  TRS-80 Model I",
-                             "TRS-80 Model III",
-                             "  TRS-80 Model 4",
-                             " TRS-80 Model 4P"};
-  char *on_off_choices[2] = {"        Off","         On"};
+  const char *model_choices[4] =  {"  TRS-80 Model I",
+                                   "TRS-80 Model III",
+                                   "  TRS-80 Model 4",
+                                   " TRS-80 Model 4P"};
+  const char *on_off_choices[2] = {"        Off","         On"};
   int selection = 0;
   int model_selection = 0;
   int state;
