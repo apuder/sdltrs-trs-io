@@ -1183,15 +1183,6 @@ void trs_cassette_out(int value)
   }
 }
 
-/* Cassette #-1 vs. #-2 selection port */
-void
-trs_cassette_select(int value)
-{
-  value &= 1;
-  if (value != 0) {
-    error("XXX cassette 2 not implemented yet");
-  }
-}
 
 /* Model 4 sound port */
 void

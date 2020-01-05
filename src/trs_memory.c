@@ -74,7 +74,6 @@
 #define MORE_IO_START	(0x3c00)
 #define VIDEO_START	(0x3c00)
 #define RAM_START	(0x4000)
-#define CASSETTE_SELECT	(0x37E4)
 #define PRINTER_ADDRESS	(0x37E8)
 
 /* Interrupt latch register in EI (Model 1) */
@@ -554,8 +553,6 @@ void trs80_model1_write_mmio(int address, int value)
     }
   } else if (address == PRINTER_ADDRESS) {
     trs_printer_write(value);
-  } else if (address == CASSETTE_SELECT) {
-    trs_cassette_select(value);
   } else if (address == TRSDISK_DATA) {
     trs_disk_data_write(value);
   } else if (address == TRSDISK_STATUS) {
