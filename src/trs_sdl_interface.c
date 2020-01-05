@@ -125,8 +125,6 @@ int trs_emu_mouse = FALSE;
 
 /* Private data */
 static unsigned char trs_screen[2048];
-static unsigned char trs_gui_screen[1024];
-static unsigned char trs_gui_screen_invert[1024];
 static int cpu_panel = 0;
 static int debugger = 0;
 static int screen_chars = 1024;
@@ -2593,11 +2591,6 @@ void screen_init()
   /* initially, screen is blank (i.e. full of spaces) */
   for (i = 0; i < sizeof(trs_screen); i++)
     trs_screen[i] = ' ';
-
-  for (i = 0; i < 1024; i++) {
-    trs_gui_screen[i] = ' ';
-    trs_gui_screen_invert[i] = 0;
-  }
 }
 
 static void
@@ -3137,9 +3130,6 @@ void trs_gui_write_char(int position, int char_index, int invert)
 
   if (position >= screen_chars)
     return;
-
-  trs_gui_screen[position] = char_index;
-  trs_gui_screen_invert[position] = invert;
 
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
