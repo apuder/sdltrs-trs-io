@@ -594,6 +594,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   if (current_dir[strlen(current_dir)-1] != '/')
     snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), "/");
 #endif
+  if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+    return(-1);
 
   trs_gui_clear_screen();
   trs_gui_frame(0,0,64,16);
@@ -605,15 +607,13 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     snprintf(title,63,"Select%sFile To Load",type);
   trs_gui_write_text(title, 2, 0, 0);
   trs_gui_limit_string(current_dir, limited_dir, 58);
-  trs_gui_center_text(limited_dir,1,0);
-  if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
-    return(-1);
 
   drawcount = filenamecount < 13 ? filenamecount : 13;
 
   while (1) {
     if (redraw) {
-      trs_gui_clear_rect(2,2,60,13);
+      trs_gui_clear_rect(2,1,60,14);
+      trs_gui_center_text(limited_dir,1,0);
       for (i=0;i<drawcount;i++)
         trs_gui_write_text(filenamelist[current_first+i],2,i+2,0);
       redraw = 0;
@@ -734,14 +734,11 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 #endif
             }
 
-            trs_gui_clear_rect(1,1,62,1);
-            trs_gui_limit_string(current_dir, limited_dir, 58);
-            trs_gui_center_text(limited_dir,1,0);
-
             trs_gui_delete_filename_list();
             if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
               return(-1);
 
+            trs_gui_limit_string(current_dir, limited_dir, 58);
             drawcount = filenamecount < 13 ? filenamecount : 13;
             redraw = 1;
           }
@@ -756,14 +753,11 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
             current_dir[2] = '\\';
             current_dir[3] = 0;
 
-            trs_gui_clear_rect(1,1,62,1);
-            trs_gui_limit_string(current_dir, limited_dir, 58);
-            trs_gui_center_text(limited_dir,1,0);
-
             trs_gui_delete_filename_list();
             if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
               return(-1);
 
+            trs_gui_limit_string(current_dir, limited_dir, 58);
             drawcount = filenamecount < 13 ? filenamecount : 13;
             redraw = 1;
           }
