@@ -75,7 +75,7 @@ static int filenamelistsize = 0;
 
 typedef struct menu_entry_type {
   char title[64];
-  int type;
+  int const type;
 } MENU_ENTRY;
 
 static const char *function_choices[8] = {
