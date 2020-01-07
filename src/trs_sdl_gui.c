@@ -2663,10 +2663,10 @@ void trs_gui_keys_sdltrs(void)
 
 void trs_gui_exec_cmd(void)
 {
-  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, " CMD (.cmd) ") == -1)
-    return;
-  if (trs_load_cmd(trs_cmd_file) == -1)
-    trs_gui_display_message("Error", "Failed to load CMD file");
+  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, " CMD (.cmd) ") >= 0) {
+    if (trs_load_cmd(trs_cmd_file) == -1)
+      trs_gui_display_message("Error", "Failed to load CMD file");
+  }
 }
 
 int trs_gui_exit_sdltrs(void)
@@ -2702,14 +2702,14 @@ void trs_gui_write_config(void)
 
 int trs_gui_read_config(void)
 {
-  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0," Configuration (.t8c) ") == -1)
-    return -1;
-  if (trs_load_config_file() == -1) {
+  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0," Configuration (.t8c) ") >= 0) {
+    if (trs_load_config_file() == 0) {
+      trs_gui_new_machine();
+      return 0;
+    }
     trs_gui_display_message("Error", "Failed to read Configuration");
-    return -1;
   }
-  trs_gui_new_machine();
-  return 0;
+  return -1;
 }
 
 static int trs_gui_config_management(void)
@@ -2766,13 +2766,12 @@ int trs_gui_load_state(void)
 {
   char filename[FILENAME_MAX];
 
-  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0," Saved State (.t8s) ") == -1)
-    return -1;
-  if (trs_state_load(filename) == -1) {
+  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0," Saved State (.t8s) ") >= 0) {
+    if (trs_state_load(filename) == 0)
+      return 0;
     trs_gui_display_message("Error", "Failed to load State");
-    return -1;
   }
-  return 0;
+  return -1;
 }
 
 void trs_gui_new_machine(void)
