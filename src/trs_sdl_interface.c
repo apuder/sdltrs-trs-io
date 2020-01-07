@@ -1438,11 +1438,11 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
     orig_y = swap_y;
   }
 
+  SDL_LockSurface(screen);
+
   if (screen->format->BitsPerPixel == 8) {
     const int pitch = screen->pitch;
     Uint8 *start8;
-
-    SDL_LockSurface(screen);
 
     for (y=orig_y;y < orig_y+scale_x;y++) {
       start8 = (Uint8 *) screen->pixels +
@@ -1472,13 +1472,10 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
           *start8++ ^= 0xFF;
       }
     }
-    SDL_UnlockSurface(screen);
   }
   else if (screen->format->BitsPerPixel == 16) {
     const int pitch2 = screen->pitch / 2;
     Uint16 *start16;
-
-    SDL_LockSurface(screen);
 
     for (y=orig_y;y < orig_y+scale_x;y++) {
       start16 = (Uint16 *) screen->pixels +
@@ -1508,13 +1505,10 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
           *start16++ ^= 0xFFFF;
       }
     }
-    SDL_UnlockSurface(screen);
   }
   else if (screen->format->BitsPerPixel == 32) {
     const int pitch4 = screen->pitch / 4;
     Uint32 *start32;
-
-    SDL_LockSurface(screen);
 
     for (y=orig_y;y<orig_y+scale_x;y++) {
       start32 = (Uint32 *) screen->pixels +
@@ -1544,8 +1538,8 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
           *start32++ ^= 0xFFFFFFFF;
       }
     }
-    SDL_UnlockSurface(screen);
   }
+  SDL_UnlockSurface(screen);
 }
 
 #if defined(SDL2) || !defined(NOX)
