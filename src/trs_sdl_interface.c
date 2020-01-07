@@ -3178,14 +3178,6 @@ void trs_gui_write_char(int position, int char_index, int invert)
   }
 }
 
-void trs_gui_clear_screen(void)
-{
-  unsigned int i;
-
-  for (i=0;i<1024;i++)
-    trs_gui_write_char(i,' ',0);
-}
-
 static void grafyx_write_byte(int x, int y, char byte)
 {
   char exp[MAX_SCALE];

@@ -128,6 +128,7 @@ static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
+static void trs_gui_clear_screen(void);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
 static void trs_add_extension(char *filename, const char *ext);
 static int trs_gui_get_key(void);
@@ -207,6 +208,14 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
   for (i=y*64+x;i<(y+h)*64+x;i+=64)
     for (j=i;j<i+w;j++)
       trs_gui_write_char(j, ' ', 0);
+}
+
+void trs_gui_clear_screen(void)
+{
+  unsigned int i;
+
+  for (i=0;i<1024;i++)
+    trs_gui_write_char(i,' ',0);
 }
 
 void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)

@@ -71,7 +71,6 @@ void trs_gui_new_machine(void);
 void trs_gui(void);
 
 void trs_gui_refresh();
-void trs_gui_clear_screen(void);
 void trs_gui_write_char(int position, int char_index, int invert);
 
 void trs_gui_get_virtual_key(void);
