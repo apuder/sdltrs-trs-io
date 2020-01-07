@@ -24,7 +24,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
   * [sdl2trs.exe]    (32-bit, needs [SDL2.DLL])
   * [sdl2trs64.exe]  (64-bit, needs [SDL2.DLL])
 
-(Build with Mingw32 & Mingw-w64)
+(Build with MinGW & MinGW-w64)
 
 ## Packages
 
