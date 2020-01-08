@@ -606,6 +606,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return(-1);
 
+  drawcount = filenamecount < 13 ? filenamecount : 13;
+  trs_gui_limit_string(current_dir, limited_dir, 58);
   trs_gui_clear_screen();
   trs_gui_frame(0,0,64,16);
   if (browse_dir) {
@@ -615,9 +617,6 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   else
     snprintf(title,63,"Select%sFile To Load",type);
   trs_gui_write_text(title, 2, 0, 0);
-  trs_gui_limit_string(current_dir, limited_dir, 58);
-
-  drawcount = filenamecount < 13 ? filenamecount : 13;
 
   while (1) {
     if (redraw) {
