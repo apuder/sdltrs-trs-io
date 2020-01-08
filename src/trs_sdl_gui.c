@@ -1923,8 +1923,11 @@ void trs_gui_display_management(void)
         break;
       case 7:
         snprintf(input,3,"%d",gui_border_width);
-        if (trs_gui_input_string("Enter Window border width in pixels",input,input,2,0) == 0)
+        if (trs_gui_input_string("Enter Window border width in pixels",input,input,2,0) == 0) {
           gui_border_width = atol(input);
+          if (gui_border_width < 0)
+            gui_border_width = 2;
+        }
         break;
       case 8:
         gui_resize3 = trs_gui_display_popup("Resize 3",resize_choices,2,
@@ -2340,8 +2343,11 @@ void trs_gui_misc_management(void)
         break;
       case 4:
         snprintf(input,11,"%d",stretch_amount);
-        if (trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0) == 0)
+        if (trs_gui_input_string("Enter Keystretch in Cycles",input,input,10,0) == 0) {
           stretch_amount = atoi(input);
+          if (stretch_amount < 0)
+            stretch_amount = STRETCH_AMOUNT;
+        }
         break;
       case 5:
         trs_emtsafe = trs_gui_display_popup("Emtsafe",on_off_choices,2,
