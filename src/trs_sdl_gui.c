@@ -1733,9 +1733,8 @@ void trs_gui_cassette_management(void)
         if (trs_gui_input_string("Enter Cassette Default Sample Rate",
               input,input, 10, 0) == 0) {
           value = atoi(input);
-          if (value < 0 || value > DEFAULT_SAMPLE_RATE)
-            value = DEFAULT_SAMPLE_RATE;
-          cassette_default_sample_rate = value;
+          if (value >= 0 && value <= DEFAULT_SAMPLE_RATE)
+            cassette_default_sample_rate = value;
         }
         break;
       case 5:
