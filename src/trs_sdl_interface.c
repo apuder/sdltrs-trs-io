@@ -923,7 +923,8 @@ static void trs_opt_truedam(char *arg, int intarg, char *stringarg)
 static void trs_opt_samplerate(char *arg, int intarg, char *stringarg)
 {
   cassette_default_sample_rate = strtol(arg, NULL, 0);
-  if (cassette_default_sample_rate < 0)
+  if (cassette_default_sample_rate < 0 ||
+      cassette_default_sample_rate > DEFAULT_SAMPLE_RATE)
     cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
 }
 
