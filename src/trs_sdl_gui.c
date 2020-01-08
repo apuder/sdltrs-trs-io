@@ -1101,7 +1101,6 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
           } else {
             trs_cassette_remove();
           }
-          trs_gui_clear_rect(2,selection+2,60,1);
           entry[selection].title[0]=' ';
           return selection;
         }
@@ -1129,7 +1128,6 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
                   " Cassette Image ") >= 0)
               trs_cassette_insert(filename);
           }
-          trs_gui_clear_rect(2,selection+2,60,1);
         }
         return selection;
         break;
