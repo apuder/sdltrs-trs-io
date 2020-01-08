@@ -1750,13 +1750,13 @@ void trs_gui_cassette_management(void)
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
               trs_cass_dir,filename,FILENAME_MAX-1,1) == 0) {
+          ret = 0;
           if (image_type == 0) {
             trs_add_extension(filename,".cas");
             cassette_file = fopen(filename, "wb");
             if (cassette_file == NULL)
               ret = -1;
             else {
-              ret = 0;
               fclose(cassette_file);
             }
           }
@@ -1766,7 +1766,6 @@ void trs_gui_cassette_management(void)
             if (cassette_file == NULL)
               ret = -1;
             else {
-              ret = 0;
               fclose(cassette_file);
             }
           }
