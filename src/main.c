@@ -79,7 +79,7 @@ int trs_load_cmd(const char *filename)
 
   if((program = fopen(filename,"rb")) == NULL)
   {
-    error("Failed to load CMD file %s: %s", filename, strerror(errno));
+    error("failed to load CMD file %s: %s", filename, strerror(errno));
     return(-1);
   }
   if (load_cmd(program, &memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK)
@@ -88,7 +88,7 @@ int trs_load_cmd(const char *filename)
     if (entry >= 0)
       REG_PC = entry;
   } else {
-    error("Unknown CMD format");
+    error("unknown CMD format");
     fclose(program);
     return(-1);
   }
@@ -103,7 +103,7 @@ int trs_load_rom(const char *filename)
 
   if((program = fopen(filename, "rb")) == NULL)
   {
-    error("Failed to load ROM file %s: %s", filename, strerror(errno));
+    error("failed to load ROM file %s: %s", filename, strerror(errno));
     return(-1);
   }
   c = getc(program);
@@ -178,7 +178,7 @@ int SDLmain(int argc, char *argv[])
 #endif
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
-    fatal("Failed to initialize SDL: %s", SDL_GetError());
+    fatal("failed to initialize SDL: %s", SDL_GetError());
 
 #ifndef SDL2
   /* Enable Unicode key translations */

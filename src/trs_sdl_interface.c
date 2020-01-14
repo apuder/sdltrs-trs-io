@@ -852,7 +852,7 @@ static void trs_opt_cass(char *arg, int intarg, char *stringarg)
 static void trs_opt_diskset(char *arg, int intarg, char *stringarg)
 {
   if (trs_diskset_load(arg) == -1)
-    error("Failed to load Diskset %s: %s", arg, strerror(errno));
+    error("failed to load Diskset %s: %s", arg, strerror(errno));
 }
 
 static void trs_opt_keystretch(char *arg, int intarg, char *stringarg)
@@ -1109,7 +1109,7 @@ int trs_load_config_file()
 
   if ((config_file = fopen(trs_config_file,"r")) == NULL) {
     if (trs_write_config_file(trs_config_file) == -1)
-      error("Failed to write %s: %s", trs_config_file, strerror(errno));
+      error("failed to write %s: %s", trs_config_file, strerror(errno));
     return -1;
   }
 
@@ -1169,7 +1169,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
   }
 
   if (trs_load_config_file() == -1)
-    error("Failed to load %s: %s", trs_config_file, strerror(errno));
+    error("failed to load %s: %s", trs_config_file, strerror(errno));
 
   for (i = 1; i < argc; i++) {
     int argAvail = ((i + 1) < argc); /* is argument available? */
