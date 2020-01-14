@@ -470,7 +470,7 @@ parse_wav_header(FILE *f)
 static void trs_sdl_sound_update(void *userdata, Uint8 * stream, int len)
 {
   if (sound_ring_count == 0) {
-    memset (stream, cassette_silence, len);
+    SDL_memset (stream, cassette_silence, len);
   } else {
 	int num_to_read;
 
@@ -482,13 +482,13 @@ static void trs_sdl_sound_update(void *userdata, Uint8 * stream, int len)
     if (sound_ring_read_ptr + num_to_read > sound_ring_end) {
 	  int len_to_end = sound_ring_end - sound_ring_read_ptr;
 
-      memcpy(stream, sound_ring_read_ptr, len_to_end);
-	  memcpy(stream + len_to_end, sound_ring,  num_to_read - len_to_end);
-  	  memset(stream, cassette_silence, len - num_to_read);
+      SDL_memcpy(stream, sound_ring_read_ptr, len_to_end);
+	  SDL_memcpy(stream + len_to_end, sound_ring,  num_to_read - len_to_end);
+  	  SDL_memset(stream, cassette_silence, len - num_to_read);
       sound_ring_read_ptr = sound_ring + num_to_read - len_to_end;
 	} else {
-      memcpy(stream, sound_ring_read_ptr, num_to_read);
-  	  memset(stream, cassette_silence, len - num_to_read);
+      SDL_memcpy(stream, sound_ring_read_ptr, num_to_read);
+  	  SDL_memset(stream, cassette_silence, len - num_to_read);
 	  sound_ring_read_ptr += num_to_read;
 	  if (sound_ring_read_ptr == sound_ring_end)
 	     sound_ring_read_ptr = sound_ring;
