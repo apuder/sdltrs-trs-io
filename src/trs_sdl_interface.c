@@ -1390,12 +1390,21 @@ void trs_screen_init(void)
   memset(grafyx,0,(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE));
   image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1,
                                    imageSize.bytes_per_line, 1, 1, 1, 0);
+#if defined(big_endian) && !defined(__linux)
+  colors[0].r = (background) & 0xFF;
+  colors[0].g = (background >> 8) & 0xFF;
+  colors[0].b = (background >> 16) & 0xFF;
+  colors[1].r = (foreground) & 0xFF;
+  colors[1].g = (foreground >> 8) & 0xFF;
+  colors[1].b = (foreground >> 16) & 0xFF;
+#else
   colors[0].r = (background >> 16) & 0xFF;
   colors[0].g = (background >> 8) & 0xFF;
   colors[0].b = (background) & 0xFF;
   colors[1].r = (foreground >> 16) & 0xFF;
   colors[1].g = (foreground >> 8) & 0xFF;
   colors[1].b = (foreground) & 0xFF;
+#endif
 #ifdef SDL2
   SDL_SetPaletteColors(image->format->palette, colors,0,2);
 #else
