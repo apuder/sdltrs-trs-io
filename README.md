@@ -20,7 +20,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 
 ## Binaries
 
-  * [sdltrs.exe]     (32-bit, needs [SDL.DLL])
+  * [sdltrs.exe]     (32-bit, needs [SDL.DLL] of [SDL-1.2.14] for Win9X)
   * [sdl2trs.exe]    (32-bit, needs [SDL2.DLL])
   * [sdl2trs64.exe]  (64-bit, needs [SDL2.DLL])
 
@@ -40,6 +40,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 [FUZIX]: https://www.github.com/EtchedPixels/FUZIX
 [SDL.DLL]: https://www.libsdl.org/download-1.2.php
 [SDL2.DLL]: https://www.libsdl.org/download-2.0.php
+[SDL-1.2.14]: https://www.libsdl.org/release/SDL-1.2.14-win32.zip
 [SDLTRS]: http://sdltrs.sourceforge.net
 [sdltrs.exe]: bin/sdltrs.exe
 [sdl2trs.exe]: bin/sdl2trs.exe
