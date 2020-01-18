@@ -235,3 +235,9 @@ int SDLmain(int argc, char *argv[])
   printf("Quitting.\n");
   exit(0);
 }
+
+int main(int argc, char *argv[])
+{
+  SDLmain(argc, argv);
+  return 0;
+}

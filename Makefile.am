@@ -33,5 +33,4 @@ sdltrs_SOURCES=	src/blit.c \
 		src/trs_stringy.c \
 		src/trs_uart.c \
 		src/z80.c \
-		src/sdltrs_main.c \
 		src/PasteManager.c

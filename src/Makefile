@@ -28,7 +28,6 @@ SRCS	+= trs_state_save.c
 SRCS	+= trs_stringy.c
 SRCS	+= trs_uart.c
 SRCS	+= z80.c
-SRCS	+= sdltrs_main.c
 SRCS	+= PasteManager.c
 
 OBJS	 = ${SRCS:.c=.o}
