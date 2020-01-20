@@ -1263,36 +1263,21 @@ void trs_gui_disk_sizes(void)
    {"",0,}};
   const char *size_choices[2] = {"5 Inch","8 Inch"};
   int selection = 0;
-  int gui_disk_sizes[8];
-  int i, choice, size;
-
-  for (i=0;i<8;i++)
-    gui_disk_sizes[i] = trs_disk_getsize(i);
+  int i, size;
 
   while (1) {
     for (i=0;i<8;i++) {
-      if (gui_disk_sizes[i] == 5)
-        choice = 0;
-      else
-        choice = 1;
       snprintf(disk_sizes_menu[i].title,63,
           "Disk Drive Number %d Size                              %s",
-          i,size_choices[choice]);
+          i,size_choices[trs_disk_getsize(i) == 5 ? 0 : 1]);
     }
     trs_gui_clear_screen();
-    selection = trs_gui_display_menu("SDLTRS Floppy Disk Size Menu",
-        disk_sizes_menu, selection);
-    if (selection == -1)
+    if ((selection = trs_gui_display_menu("SDLTRS Floppy Disk Size Menu",
+         disk_sizes_menu, selection)) == -1)
       return;
-    else {
-      size = trs_gui_display_popup("Size",size_choices,2,
-          gui_disk_sizes[selection]==8);
-      if (size == 0)
-        gui_disk_sizes[selection] = 5;
-      else
-        gui_disk_sizes[selection] = 8;
-      trs_disk_setsize(selection, gui_disk_sizes[selection]);
-    }
+    size = trs_gui_display_popup("Size",size_choices,2,
+        trs_disk_getsize(selection) == 8);
+    trs_disk_setsize(selection, size == 0 ? 5 : 8);
   }
 }
 
@@ -1311,36 +1296,21 @@ void trs_gui_disk_steps(void)
    {"",0}};
   const char *step_choices[2] = {"Single","Double"};
   int selection = 0;
-  int gui_disk_steps[8];
-  int i, choice, step;
-
-  for (i=0;i<8;i++)
-    gui_disk_steps[i] = trs_disk_getstep(i);
+  int i, step;
 
   while (1) {
     for (i=0;i<8;i++) {
-      if (gui_disk_steps[i] == 1)
-        choice = 0;
-      else
-        choice = 1;
       snprintf(disk_steps_menu[i].title,63,
           "Disk Drive Number %d Step                              %s",
-          i,step_choices[choice]);
+          i,step_choices[trs_disk_getstep(i) == 1 ? 0 : 1]);
     }
     trs_gui_clear_screen();
-    selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",
-        disk_steps_menu, selection);
-    if (selection == -1)
+    if ((selection = trs_gui_display_menu("SDLTRS Floppy Disk Step Menu",
+         disk_steps_menu, selection)) == -1)
       return;
-    else {
-      step = trs_gui_display_popup("Step",step_choices,2,
-          gui_disk_steps[selection]==2);
-      if (step == 0)
-        gui_disk_steps[selection] = 1;
-      else
-        gui_disk_steps[selection] = 2;
-      trs_disk_setstep(selection, gui_disk_steps[selection]);
-    }
+    step = trs_gui_display_popup("Step",step_choices,2,
+        trs_disk_getstep(selection) == 2);
+    trs_disk_setstep(selection, step == 0 ? 1 : 2);
   }
 }
 #endif
