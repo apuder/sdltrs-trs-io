@@ -1111,20 +1111,24 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
-            if (trs_gui_file_browse(trs_disk_dir, filename, NULL ,0,
-                  " Floppy Disk Image ") >= 0)
+            if (trs_gui_file_browse(trs_disk_getfilename(selection)[0] == 0 ?
+                trs_disk_dir : trs_disk_getfilename(selection), filename, NULL,
+                0," Floppy Disk Image ") >= 0)
               trs_disk_insert(selection, filename);
           } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
-            if (trs_gui_file_browse(trs_hard_dir, filename, NULL, 0,
-                  " Hard Disk Image ") >= 0)
+            if (trs_gui_file_browse(trs_hard_getfilename(selection)[0] == 0 ?
+                trs_hard_dir : trs_hard_getfilename(selection), filename, NULL,
+                0," Hard Disk Image ") >= 0)
               trs_hard_attach(selection, filename);
           } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE)  {
-            if (trs_gui_file_browse(trs_cass_dir, filename, NULL, 0,
-                  " Wafer Image ") >= 0)
+            if (trs_gui_file_browse(stringy_get_name(selection)[0] == 0 ?
+                trs_cass_dir : stringy_get_name(selection), filename, NULL,
+                0," Wafer Image ") >= 0)
               stringy_insert(selection, filename);
           } else {
-            if (trs_gui_file_browse(trs_cass_dir, filename, NULL, 0,
-                  " Cassette Image ") >= 0)
+            if (trs_gui_file_browse(trs_cassette_getfilename()[0] == 0 ?
+                trs_cass_dir : trs_cassette_getfilename(), filename, NULL,
+                0," Cassette Image ") >= 0)
               trs_cassette_insert(filename);
           }
         }
