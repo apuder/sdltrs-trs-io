@@ -1040,7 +1040,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
     trs_gui_write_text(entry[selection].title, 2, selection+2,0);
     if (key >= '0' && key <= '9') {
       key -= '0';
-      if (key < num && entry[key].type != MENU_TITLE_TYPE)
+      if (key <= num && entry[key].type != MENU_TITLE_TYPE)
         selection = key;
     } else
     if (key >= 'A' && key <= 'z') {
