@@ -928,7 +928,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         output[pos] = 0;
         break;
       default:
-        if (key >= 0x20 && key <= 0xFF && pos < limit)  {
+        if (key >= 0x20 && key <= 0xFF && pos < limit) {
           if (insert && length < limit) {
             for (i=length;i>pos;i--)
               output[i] = output[i-1];
@@ -1093,7 +1093,7 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
             (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
           if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
             trs_disk_remove(selection);
-          } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
+          } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE) {
             trs_hard_remove(selection);
           } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
             stringy_remove(selection);
@@ -1115,12 +1115,12 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
                 trs_disk_dir : trs_disk_getfilename(selection), filename, NULL,
                 0," Floppy Disk Image ") >= 0)
               trs_disk_insert(selection, filename);
-          } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE)  {
+          } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE) {
             if (trs_gui_file_browse(trs_hard_getfilename(selection)[0] == 0 ?
                 trs_hard_dir : trs_hard_getfilename(selection), filename, NULL,
                 0," Hard Disk Image ") >= 0)
               trs_hard_attach(selection, filename);
-          } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE)  {
+          } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
             if (trs_gui_file_browse(stringy_get_name(selection)[0] == 0 ?
                 trs_cass_dir : stringy_get_name(selection), filename, NULL,
                 0," Wafer Image ") >= 0)
@@ -1204,6 +1204,7 @@ void trs_gui_disk_creation(void)
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Creation Menu",
         disk_creation_menu, selection);
+
     switch(selection) {
       case 0:
         image_type = trs_gui_display_popup("Type",image_type_choices,3,
@@ -1232,7 +1233,7 @@ void trs_gui_disk_creation(void)
       case 6:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Image, TAB selects directory",
-              trs_disk_dir,filename,FILENAME_MAX-1,1) == 0) {
+            trs_disk_dir,filename,FILENAME_MAX-1,1) == 0) {
           if (image_type == 0)
             ret = trs_create_blank_jv1(filename);
           else if (image_type == 1)
@@ -1264,7 +1265,7 @@ void trs_gui_disk_sizes(void)
    {"",MENU_NORMAL_TYPE},
    {"",MENU_NORMAL_TYPE},
    {"",MENU_NORMAL_TYPE},
-   {"",0,}};
+   {"",0}};
   const char *size_choices[2] = {"5 Inch","8 Inch"};
   int selection = 0;
   int i, size;
@@ -1277,7 +1278,7 @@ void trs_gui_disk_sizes(void)
     }
     trs_gui_clear_screen();
     if ((selection = trs_gui_display_menu("SDLTRS Floppy Disk Size Menu",
-         disk_sizes_menu, selection)) == -1)
+        disk_sizes_menu, selection)) == -1)
       return;
     size = trs_gui_display_popup("Size",size_choices,2,
         trs_disk_getsize(selection) == 8);
@@ -1310,7 +1311,7 @@ void trs_gui_disk_steps(void)
     }
     trs_gui_clear_screen();
     if ((selection = trs_gui_display_menu("SDLTRS Floppy Disk Step Menu",
-         disk_steps_menu, selection)) == -1)
+        disk_steps_menu, selection)) == -1)
       return;
     step = trs_gui_display_popup("Step",step_choices,2,
         trs_disk_getstep(selection) == 2);
@@ -1328,7 +1329,7 @@ void trs_gui_disk_options(void)
 #ifdef __linux
    {"Set Drive Steps",MENU_NORMAL_TYPE},
 #endif
-   {"",0,}};
+   {"",0}};
   const char *on_off_choices[2] =  {"       Off","        On"};
   const char *doubler_choices[4] = {"      None","    Percom","     Tandy","      Both"};
   int selection = 0;
@@ -1338,6 +1339,7 @@ void trs_gui_disk_options(void)
     snprintf(&disk_menu[1].title[50],11,"%s",on_off_choices[trs_disk_truedam]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Options Menu",disk_menu, selection);
+
     switch(selection) {
       case 0:
         trs_disk_doubler = trs_gui_display_popup("Doubler",doubler_choices,4,
@@ -1395,11 +1397,12 @@ void trs_gui_disk_management(void)
     }
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu",disk_menu, selection);
+
     switch(selection) {
       case 9:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-              trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
+            trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
           trs_add_extension(filename,".set");
           if (trs_diskset_save(filename) == -1)
             trs_gui_display_message("Error", "Failed to save Disk Set");
@@ -1470,11 +1473,12 @@ void trs_gui_hard_management(void)
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Hard Disk Menu",
         hard_menu, selection);
+
     switch(selection) {
       case 5:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-              trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
+            trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
           trs_add_extension(filename,".set");
           if (trs_diskset_save(filename) == -1)
             trs_gui_display_message("Error", "Failed to save Disk Set");
@@ -1615,11 +1619,12 @@ void trs_gui_stringy_management(void)
     snprintf(&stringy_menu[11].title[52],10,"%8s",wafer_choices[wafer_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Stringy Wafer Menu",stringy_menu,selection);
+
     switch(selection) {
       case 9:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-              trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
+            trs_disk_set_dir,filename,FILENAME_MAX-5,1) == 0) {
           trs_add_extension(filename,".set");
           if (trs_diskset_save(filename) == -1)
             trs_gui_display_message("Error", "Failed to save Disk Set");
@@ -1638,7 +1643,7 @@ void trs_gui_stringy_management(void)
       case 12:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Wafer Image, TAB selects directory",
-              trs_cass_dir,filename,FILENAME_MAX-1,1) == 0) {
+            trs_cass_dir,filename,FILENAME_MAX-1,1) == 0) {
           if (stringy_create(filename))
             trs_gui_display_message("Error","Error creating Stringy Wafer Image");
           else if (wafer_insert)
@@ -1691,11 +1696,12 @@ void trs_gui_cassette_management(void)
     snprintf(&cass_menu[6].title[52],9,"%s",drive_choices[drive_insert]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Cassette Menu",cass_menu, selection);
+
     switch(selection) {
       case 2:
         snprintf(input,11,"%d",trs_get_cassette_position());
         if (trs_gui_input_string("Enter Cassette Position in Bytes",
-              input,input, 10, 0) == 0) {
+            input,input, 10, 0) == 0) {
           value = atoi(input);
           if (value >= 0 && value <= trs_get_cassette_length())
             trs_set_cassette_position(value);
@@ -1704,7 +1710,7 @@ void trs_gui_cassette_management(void)
       case 3:
         snprintf(input,11,"%d",cassette_default_sample_rate);
         if (trs_gui_input_string("Enter Cassette Default Sample Rate",
-              input,input, 10, 0) == 0) {
+            input,input, 10, 0) == 0) {
           value = atoi(input);
           if (value >= 0 && value <= DEFAULT_SAMPLE_RATE)
             cassette_default_sample_rate = value;
@@ -1721,7 +1727,7 @@ void trs_gui_cassette_management(void)
       case 7:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
-              trs_cass_dir,filename,FILENAME_MAX-1,1) == 0) {
+            trs_cass_dir,filename,FILENAME_MAX-1,1) == 0) {
           ret = 0;
           if (image_type == 0) {
             trs_add_extension(filename,".cas");
@@ -1783,7 +1789,7 @@ void trs_gui_display_management(void)
    {"Scale Factor for Window                                     ",MENU_NORMAL_TYPE},
    {"LED Display for Disks and Turbo Mode                        ",MENU_NORMAL_TYPE},
    {"Display Scanlines to simulate old CRT                       ",MENU_NORMAL_TYPE},
-   {"",0,}};
+   {"",0}};
   char input[8];
   const char *resize_choices[2] =   {"        No","       Yes"};
   const char *disk_led_choices[2] = {" Hide"," Show"};
@@ -1833,6 +1839,7 @@ void trs_gui_display_management(void)
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu",
         display_menu, selection);
+
     switch(selection) {
       case 0:
         snprintf(input,7,"%06X",local_background);
@@ -2086,15 +2093,14 @@ int trs_gui_display_question(const char *text)
 
 void trs_gui_joystick_map_joystick(void)
 {
-  MENU_ENTRY display_menu[] = {
-    {"Map Button to Key",MENU_NORMAL_TYPE},
-    {"Map Button to Function",MENU_NORMAL_TYPE},
-    {"Unmap Button",MENU_NORMAL_TYPE},
-    {"Unmap All Buttons",MENU_NORMAL_TYPE},
-    {"Check Button Mapping",MENU_NORMAL_TYPE},
-    {"Map Analog Stick to Arrow Keys                              ",MENU_NORMAL_TYPE},
-    {"",0}
-  };
+  MENU_ENTRY display_menu[] =
+  {{"Map Button to Key",MENU_NORMAL_TYPE},
+   {"Map Button to Function",MENU_NORMAL_TYPE},
+   {"Unmap Button",MENU_NORMAL_TYPE},
+   {"Unmap All Buttons",MENU_NORMAL_TYPE},
+   {"Check Button Mapping",MENU_NORMAL_TYPE},
+   {"Map Analog Stick to Arrow Keys                              ",MENU_NORMAL_TYPE},
+   {"",0}};
   const char *on_off_choices[2] = {"   Off","    On"};
   int selection = 0, checking = 0, counter;
 
@@ -2103,6 +2109,7 @@ void trs_gui_joystick_map_joystick(void)
     trs_gui_clear_screen();
     trs_gui_joystick_display_map(0);
     selection = trs_gui_display_menu("SDLTRS Map Joystick to Keys/Functions Menu", display_menu, selection);
+
     switch(selection) {
       case 0:
         trs_gui_joystick_map_button_to_key();
@@ -2211,6 +2218,7 @@ void trs_gui_joystick_management(void)
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Joystick Setting Menu",
         display_menu, selection);
+
     switch(selection) {
       case 0:
         gui_keypad_joystick = trs_gui_display_popup("Keypad",keypad_choices,2,
@@ -2436,6 +2444,7 @@ void trs_gui_model(void)
     snprintf(&model_menu[12].title[49],12,"%s",on_off_choices[selector]);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu",model_menu, selection);
+
     switch(selection) {
       case -1:
         if (trs_model != local_trs_model) {
@@ -2535,6 +2544,7 @@ void trs_gui_default_dirs(void)
     trs_gui_clear_screen();
     /* print current defaults */
     selection = trs_gui_display_menu("SDLTRS Default Directory Menu",default_menu, selection);
+
     switch(selection) {
       case -1:
         return;
@@ -2581,6 +2591,7 @@ void trs_gui_rom_files(void)
     trs_gui_limit_string(romfile4p,&romfile_menu[7].title[2],58);
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS ROM File Selection Menu",romfile_menu, selection);
+
     switch(selection) {
       case -1:
         return;
@@ -2792,6 +2803,7 @@ void trs_gui(void)
   while (1) {
     trs_gui_clear_screen();
     selection = trs_gui_display_menu("SDLTRS Main Menu",main_menu, selection);
+
     switch(selection) {
       case -1:
         return;

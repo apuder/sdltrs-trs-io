@@ -77,13 +77,11 @@ int trs_load_cmd(const char *filename)
   extern Uchar memory;
   int entry;
 
-  if((program = fopen(filename,"rb")) == NULL)
-  {
+  if((program = fopen(filename,"rb")) == NULL) {
     error("failed to load CMD file %s: %s", filename, strerror(errno));
     return(-1);
   }
-  if (load_cmd(program, &memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK)
-  {
+  if (load_cmd(program, &memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK) {
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
     if (entry >= 0)
       REG_PC = entry;
@@ -152,9 +150,7 @@ void trs_load_compiled_rom(int size, unsigned char rom[])
 
   trs_rom_size = size;
   for(i = 0; i < size; ++i)
-  {
     mem_write_rom(i, rom[i]);
-  }
 }
 
 int SDLmain(int argc, char *argv[])
@@ -186,28 +182,21 @@ int SDLmain(int argc, char *argv[])
 #endif
 
   trs_parse_command_line(argc, argv, &debug);
-
   trs_set_keypad_joystick();
   trs_open_joystick();
 
-  if (stat(trs_disk_dir, &st) < 0) {
+  if (stat(trs_disk_dir, &st) < 0)
     trs_disk_dir[0] = 0;
-  }
-  if (stat(trs_hard_dir, &st) < 0) {
+  if (stat(trs_hard_dir, &st) < 0)
     trs_hard_dir[0] = 0;
-  }
-  if (stat(trs_cass_dir, &st) < 0) {
+  if (stat(trs_cass_dir, &st) < 0)
     trs_cass_dir[0] = 0;
-  }
-  if (stat(trs_state_dir, &st) < 0) {
+  if (stat(trs_state_dir, &st) < 0)
     trs_state_dir[0] = 0;
-  }
-  if (stat(trs_disk_set_dir, &st) < 0) {
+  if (stat(trs_disk_set_dir, &st) < 0)
     trs_disk_set_dir[0] = 0;
-  }
-  if (stat(trs_printer_dir, &st) < 0) {
+  if (stat(trs_printer_dir, &st) < 0)
     trs_printer_dir[0] = 0;
-  }
 
   mem_init();
   screen_init();
@@ -215,8 +204,8 @@ int SDLmain(int argc, char *argv[])
   trs_disk_init(0);
   trs_timer_init();
   trs_rom_init();
-
   trs_reset(1);
+
   if (init_state_file[0] != 0) {
     trs_state_load(init_state_file);
     trs_screen_init();
