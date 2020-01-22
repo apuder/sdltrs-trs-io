@@ -12,7 +12,6 @@ sdltrs_SOURCES=	src/blit.c \
 		src/load_cmd.c \
 		src/load_hex.c \
 		src/main.c \
-		src/trs_mkdisk.c \
 		src/trs_cassette.c \
 		src/trs_chars.c \
 		src/trs_disk.c \
@@ -21,6 +20,7 @@ sdltrs_SOURCES=	src/blit.c \
 		src/trs_interrupt.c \
 		src/trs_io.c \
 		src/trs_memory.c \
+		src/trs_mkdisk.c \
 		src/trs_printer.c \
 		src/trs_rom1.c \
 		src/trs_rom3.c \
