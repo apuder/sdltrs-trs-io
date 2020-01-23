@@ -221,6 +221,8 @@ int SDLmain(int argc, char *argv[])
   printf("Entering debugger.\n");
   debug_init();
   debug_shell();
+
+  trs_sdl_cleanup();
   printf("Quitting.\n");
   exit(0);
 }
