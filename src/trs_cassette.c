@@ -77,20 +77,20 @@
 #define CLOSE		0
 #define READ		1
 #define WRITE		2
-#define SOUND           3  /* used for OSS_SOUND only */
-#define ORCH90          4  /* used for OSS_SOUND only */
-#define FAILED          5
+#define SOUND		3
+#define ORCH90		4
+#define FAILED		5
 
-#define CAS_FORMAT         1  /* recovered bit/byte stream */
-#define CPT_FORMAT         2  /* cassette pulse train w/ exact timing */
-#define WAV_FORMAT         3  /* wave file */
-#define DIRECT_FORMAT      4  /* direct to sound card */
-#define DEBUG_FORMAT       5  /* like cpt but in ASCII */
+#define CAS_FORMAT	1  /* recovered bit/byte stream */
+#define CPT_FORMAT	2  /* cassette pulse train w/ exact timing */
+#define WAV_FORMAT	3  /* wave file */
+#define DIRECT_FORMAT	4  /* direct to sound card */
+#define DEBUG_FORMAT	5  /* like cpt but in ASCII */
 static char *format_name[] = {
   NULL, "cas", "cpt", "wav", "direct", "debug" };
-#define NOISE_FLOOR 64
+#define NOISE_FLOOR	64
 
-#define DEFAULT_FORMAT		CAS_FORMAT
+#define DEFAULT_FORMAT	CAS_FORMAT
 
 #define FLUSH -500  /* special fake signal value used when turning off motor */
 
