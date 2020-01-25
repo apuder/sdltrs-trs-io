@@ -69,6 +69,11 @@
 #include "trs.h"
 #include "trs_state_save.h"
 
+#ifndef SDL_memcpy
+#define SDL_memcpy	memcpy
+#define SDL_memset	memset
+#endif
+
 #define CLOSE		0
 #define READ		1
 #define WRITE		2
