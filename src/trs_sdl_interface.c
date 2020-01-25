@@ -431,7 +431,7 @@ static void stripWhitespace (char *inputStr)
   *(end + 1) = '\0';
 }
 
-static char *charset_name(int charset)
+static const char *charset_name(int charset)
 {
   switch(charset) {
     case 0:
