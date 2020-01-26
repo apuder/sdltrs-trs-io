@@ -1269,18 +1269,15 @@ void trs_screen_caption(int turbo)
 {
   char title[80];
 
-  if (cpu_panel) {
+  if (cpu_panel)
     snprintf(title, 79, "AF:%04X BC:%04X DE:%04X HL:%04X IX/IY:%04X/%04X PC/SP:%04X/%04X",
              REG_AF, REG_BC, REG_DE, REG_HL, REG_IX, REG_IY, REG_PC, REG_SP);
-  }
-  else if (trs_model == 5) {
-    snprintf(title, 79, "TRS-80 Model 4P %s%s%s", turbo ? "Turbo " : "",
-             trs_paused ? "PAUSED " : "", trs_sound ? "" : "(Mute)");
-  }
-  else {
-    snprintf(title, 79, "TRS-80 Model %d %s%s%s",trs_model, turbo ? "Turbo " : "",
-             trs_paused ? "PAUSED " : "", trs_sound ? "" : "(Mute)");
-  }
+  else
+    snprintf(title, 79, "TRS-80 Model %d%s %s%s%s", trs_model == 5 ? 4 : trs_model,
+             trs_model == 5 ? "P" : "",
+             turbo ? "Turbo " : "",
+             trs_paused ? "PAUSED " : "",
+             trs_sound ? "" : "(Mute)");
 #ifdef SDL2
   SDL_SetWindowTitle(window, title);
 #else
