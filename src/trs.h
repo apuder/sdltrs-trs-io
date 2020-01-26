@@ -149,7 +149,7 @@ extern int trs_printer;
 extern int trs_sound;
 
 extern void trs_get_event(int wait);
-extern void trs_x_flush(void);
+extern void trs_sdl_flush(void);
 
 extern void trs_printer_write(int value);
 extern int trs_printer_read(void);

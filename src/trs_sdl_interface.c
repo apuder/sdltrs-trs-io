@@ -1661,9 +1661,9 @@ void trs_select_all()
 #endif
 
 /*
- * Flush output to X server
+ * Flush SDL output
  */
-inline void trs_x_flush()
+inline void trs_sdl_flush()
 {
 #if defined(SDL2) || !defined(NOX)
   if (!trs_emu_mouse || copyStatus != COPY_OFF)
@@ -1899,7 +1899,7 @@ static void call_function(int function)
     SDL_EnableKeyRepeat(0,0);
 #endif
     trs_screen_refresh();
-    trs_x_flush();
+    trs_sdl_flush();
   }
 }
 
@@ -1926,7 +1926,7 @@ void trs_get_event(int wait)
   if (trs_model > 1)
     (void)trs_uart_check_avail();
 
-  trs_x_flush();
+  trs_sdl_flush();
 
   if (cpu_panel)
     trs_screen_caption(trs_timer_is_turbo());
@@ -2007,7 +2007,7 @@ void trs_get_event(int wait)
         if (keysym.sym != SDLK_LALT) {
           if (copyStatus != COPY_IDLE) {
             copyStatus = COPY_CLEAR;
-            trs_x_flush();
+            trs_sdl_flush();
           }
         }
 #endif
@@ -2119,7 +2119,7 @@ void trs_get_event(int wait)
             case SDLK_RETURN:
               trs_flip_fullscreen();
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_HOME:
               fullscreen = 0;
@@ -2127,7 +2127,7 @@ void trs_get_event(int wait)
               scale_y = 2;
               trs_screen_init();
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_PLUS:
             case SDLK_PAGEDOWN:
@@ -2138,7 +2138,7 @@ void trs_get_event(int wait)
               scale_y = scale_x * 2;
               trs_screen_init();
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_MINUS:
             case SDLK_PAGEUP:
@@ -2149,7 +2149,7 @@ void trs_get_event(int wait)
               scale_y = scale_x * 2;
               trs_screen_init();
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_PERIOD:
               mousepointer = !mousepointer;
@@ -2159,7 +2159,7 @@ void trs_get_event(int wait)
               trs_show_led = !trs_show_led;
               trs_screen_init();
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_d:
             case SDLK_f:
@@ -2187,7 +2187,7 @@ void trs_get_event(int wait)
               call_function(LOAD);
               trs_screen_init();
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_m:
               call_function(GUI);
@@ -2226,7 +2226,7 @@ void trs_get_event(int wait)
             case SDLK_y:
               scanlines = !scanlines;
               trs_screen_refresh();
-              trs_x_flush();
+              trs_sdl_flush();
               break;
             case SDLK_z:
               if (!fullscreen)
@@ -2257,7 +2257,7 @@ void trs_get_event(int wait)
                   SDL_EnableKeyRepeat(0,0);
 #endif
                   trs_screen_refresh();
-                  trs_x_flush();
+                  trs_sdl_flush();
                 }
               }
               break;

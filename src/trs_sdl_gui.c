@@ -2676,7 +2676,7 @@ void trs_gui_save_bmp(void)
                            trs_printer_dir,filename,FILENAME_MAX-5,1) == 0) {
     trs_add_extension(filename,".bmp");
     trs_screen_refresh();
-    trs_x_flush();
+    trs_sdl_flush();
     if (trs_sdl_savebmp(filename) != 0)
       trs_gui_display_message("Error", "Failed to save Screenshot");
   }
