@@ -2393,7 +2393,6 @@ void trs_get_event(int wait)
         last_key[event.key.keysym.scancode] = 0;
         if (keyup != 0)
           trs_xlate_keysym(0x10000 | keyup);
-        keysym.sym = 0;
         break;
 
       case SDL_JOYAXISMOTION:
