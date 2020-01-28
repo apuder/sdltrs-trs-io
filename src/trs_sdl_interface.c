@@ -2389,8 +2389,8 @@ void trs_get_event(int wait)
 #endif
         if (keysym.mod & KMOD_LALT)
           break;
-        keyup = last_key[event.key.keysym.scancode];
-        last_key[event.key.keysym.scancode] = 0;
+        keyup = last_key[keysym.scancode];
+        last_key[keysym.scancode] = 0;
         trs_xlate_keysym(0x10000 | keyup);
         break;
 
