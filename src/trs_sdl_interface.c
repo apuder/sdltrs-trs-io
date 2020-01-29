@@ -1830,9 +1830,6 @@ static void call_function(int function)
   else if (function == EXIT)
     trs_exit(0);
   else {
-#ifndef SDL2
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-#endif
     SDL_PauseAudio(1);
 #if defined(SDL2) || !defined(NOX)
     copyStatus = COPY_OFF;
@@ -1894,9 +1891,6 @@ static void call_function(int function)
     SDL_PauseAudio(0);
 #if defined(SDL2) || !defined(NOX)
     copyStatus = COPY_IDLE;
-#endif
-#ifndef SDL2
-    SDL_EnableKeyRepeat(0,0);
 #endif
     trs_screen_refresh();
     trs_sdl_flush();
@@ -2246,16 +2240,9 @@ void trs_get_event(int wait)
                 if (keysym.mod & KMOD_SHIFT) {
                   trs_disk_remove(keysym.sym-SDLK_0);
                 } else {
-#ifndef SDL2
-                  SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
-                      SDL_DEFAULT_REPEAT_INTERVAL);
-#endif
                   if (trs_gui_file_browse(trs_disk_dir, filename, NULL,0,
                         " Floppy Disk Image ") != -1)
                     trs_disk_insert(keysym.sym-SDLK_0, filename);
-#ifndef SDL2
-                  SDL_EnableKeyRepeat(0,0);
-#endif
                   trs_screen_refresh();
                   trs_sdl_flush();
                 }
@@ -2270,11 +2257,13 @@ void trs_get_event(int wait)
           keysym.sym = 0;
           break;
         }
-
-#ifdef SDL2
-        if (event.key.repeat)
+        if (last_key[keysym.scancode] != 0)
+        /*
+         * We think this hardware key is already pressed.
+         * Assume we are getting key repeat and ignore it.
+         */
           break;
-#endif
+
         /* Make Shift + CapsLock give lower case */
         if (((keysym.mod & (KMOD_CAPS|KMOD_LSHIFT))
               == (KMOD_CAPS|KMOD_LSHIFT) ||
@@ -2289,8 +2278,6 @@ void trs_get_event(int wait)
 #endif
         if (keysym.sym == SDLK_RSHIFT && trs_model == 1)
           keysym.sym = SDLK_LSHIFT;
-        if (last_key[keysym.scancode] != 0)
-          trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
 
         if (trs_model == 1) {
                if (keysym.sym == SDLK_F1) keysym.sym = 0x115;
