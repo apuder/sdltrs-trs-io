@@ -41,7 +41,6 @@
  */
 
 #include <errno.h>
-#include <string.h>
 #include "error.h"
 #include "trs.h"
 #include "trs_hard.h"
