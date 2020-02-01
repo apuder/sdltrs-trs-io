@@ -3231,10 +3231,7 @@ static void grafyx_write_byte(int x, int y, char byte)
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
     addToDrawList(&destRect);
-    if (grafyx_overlay)
-      TrsSoftBlit(image, &srcRect, screen, &destRect,1);
-    else
-      TrsSoftBlit(image, &srcRect, screen, &destRect,0);
+    TrsSoftBlit(image, &srcRect, screen, &destRect, grafyx_overlay);
   }
 }
 
