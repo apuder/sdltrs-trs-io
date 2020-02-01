@@ -2148,13 +2148,13 @@ int disassemble(unsigned short pc)
 	break;
       case A_0:  /* No args */
       case A_0B: /* No args, backskip over last opcode byte */
-	printf ("%s", code->name);
+	fputs (code->name, stdout);
 	break;
       case A_8R: /* One 8-bit relative address */
 	printf (code->name, (pc + 1 + (signed char) mem_read(pc)) & 0xffff);
 	break;
     }
-    printf ("\n");
+    putchar ('\n');
     pc += arglen(code->args);
     return pc;  /* return the location of the next instruction */
 }
