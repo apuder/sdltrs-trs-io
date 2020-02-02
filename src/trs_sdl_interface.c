@@ -1283,7 +1283,8 @@ void trs_screen_caption(int turbo)
 #else
   SDL_WM_SetCaption(title,NULL);
 #endif
-  trs_turbo_led(turbo);
+  if (trs_show_led)
+    trs_turbo_led(turbo);
 }
 
 void trs_screen_init(void)
@@ -1412,9 +1413,11 @@ void trs_screen_init(void)
 
   bitmap_init(foreground, background);
 
-  trs_disk_led(-1,0);
-  trs_hard_led(-1,0);
-  trs_turbo_led(trs_timer_is_turbo());
+  if (trs_show_led) {
+    trs_disk_led(-1,0);
+    trs_hard_led(-1,0);
+    trs_turbo_led(trs_timer_is_turbo());
+  }
 
   grafyx_redraw();
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
@@ -1823,9 +1826,11 @@ static void call_function(int function)
   }
   else if (function == RESET) {
     trs_reset(1);
-    trs_disk_led(-1, 0);
-    trs_hard_led(-1, 0);
-    trs_turbo_led(trs_timer_is_turbo());
+    if (trs_show_led) {
+      trs_disk_led(-1, 0);
+      trs_hard_led(-1, 0);
+      trs_turbo_led(trs_timer_is_turbo());
+    }
   }
   else if (function == EXIT)
     trs_exit(0);
@@ -2034,9 +2039,11 @@ void trs_get_event(int wait)
             if (keysym.mod & KMOD_SHIFT)
             {
               trs_reset(1);
-              trs_disk_led(-1,0);
-              trs_hard_led(-1,0);
-              trs_turbo_led(trs_timer_is_turbo());
+              if (trs_show_led) {
+                trs_disk_led(-1,0);
+                trs_hard_led(-1,0);
+                trs_turbo_led(trs_timer_is_turbo());
+              }
             }
             else
               trs_reset(0);
@@ -2851,40 +2858,37 @@ void trs_screen_refresh()
 void trs_disk_led(int drive, int on_off)
 {
   static int countdown[8] = {0,0,0,0,0,0,0,0};
+  int const drive0_led_x = border_width;
+  unsigned int i;
+  SDL_Rect rect;
 
-  if (trs_show_led) {
-    int const drive0_led_x = border_width;
-    unsigned int i;
-    SDL_Rect rect;
+  rect.w = 16*scale_x;
+  rect.h = 2*scale_y;
+  rect.y = OrigHeight - led_width/2;
 
-    rect.w = 16*scale_x;
-    rect.h = 2*scale_y;
-    rect.y = OrigHeight - led_width/2;
-
-    if (drive == -1) {
-      for (i=0;i<8;i++) {
-        rect.x = drive0_led_x + 24*scale_x*i;
-        SDL_FillRect(screen, &rect, light_red);
-        addToDrawList(&rect);
-      }
+  if (drive == -1) {
+    for (i=0;i<8;i++) {
+      rect.x = drive0_led_x + 24*scale_x*i;
+      SDL_FillRect(screen, &rect, light_red);
+      addToDrawList(&rect);
     }
-    else if (on_off) {
-      if (countdown[drive] == 0) {
-        rect.x = drive0_led_x + 24*scale_x*drive;
-        SDL_FillRect(screen, &rect, bright_red);
-        addToDrawList(&rect);
-      }
-      countdown[drive] = 2*timer_hz;
+  }
+  else if (on_off) {
+    if (countdown[drive] == 0) {
+      rect.x = drive0_led_x + 24*scale_x*drive;
+      SDL_FillRect(screen, &rect, bright_red);
+      addToDrawList(&rect);
     }
-    else {
-      for (i=0;i<8;i++) {
-        if (countdown[i]) {
-          countdown[i]--;
-          if (countdown[i] == 0) {
-            rect.x = drive0_led_x + 24*scale_x*i;
-            SDL_FillRect(screen, &rect, light_red);
-            addToDrawList(&rect);
-          }
+    countdown[drive] = 2*timer_hz;
+  }
+  else {
+    for (i=0;i<8;i++) {
+      if (countdown[i]) {
+        countdown[i]--;
+        if (countdown[i] == 0) {
+          rect.x = drive0_led_x + 24*scale_x*i;
+          SDL_FillRect(screen, &rect, light_red);
+          addToDrawList(&rect);
         }
       }
     }
@@ -2894,40 +2898,37 @@ void trs_disk_led(int drive, int on_off)
 void trs_hard_led(int drive, int on_off)
 {
   static int countdown[4] = {0,0,0,0};
+  int const drive0_led_x = OrigWidth - border_width - 88*scale_x;
+  unsigned int i;
+  SDL_Rect rect;
 
-  if (trs_show_led) {
-    int const drive0_led_x = OrigWidth - border_width - 88*scale_x;
-    unsigned int i;
-    SDL_Rect rect;
+  rect.w = 16*scale_x;
+  rect.h = 2*scale_y;
+  rect.y = OrigHeight - led_width/2;
 
-    rect.w = 16*scale_x;
-    rect.h = 2*scale_y;
-    rect.y = OrigHeight - led_width/2;
-
-    if (drive == -1) {
-      for (i=0;i<4;i++) {
-        rect.x = drive0_led_x + 24*scale_x*i;
-        SDL_FillRect(screen, &rect, light_red);
-        addToDrawList(&rect);
-      }
+  if (drive == -1) {
+    for (i=0;i<4;i++) {
+      rect.x = drive0_led_x + 24*scale_x*i;
+      SDL_FillRect(screen, &rect, light_red);
+      addToDrawList(&rect);
     }
-    else if (on_off) {
-      if (countdown[drive] == 0) {
-        rect.x = drive0_led_x + 24*scale_x*drive;
-        SDL_FillRect(screen, &rect, bright_red);
-        addToDrawList(&rect);
-      }
-      countdown[drive] = timer_hz/2;
+  }
+  else if (on_off) {
+    if (countdown[drive] == 0) {
+      rect.x = drive0_led_x + 24*scale_x*drive;
+      SDL_FillRect(screen, &rect, bright_red);
+      addToDrawList(&rect);
     }
-    else {
-      for (i=0;i<4;i++) {
-        if (countdown[i]) {
-          countdown[i]--;
-          if (countdown[i] == 0) {
-            rect.x = drive0_led_x + 24*scale_x*i;
-            SDL_FillRect(screen, &rect, light_red);
-            addToDrawList(&rect);
-          }
+    countdown[drive] = timer_hz/2;
+  }
+  else {
+    for (i=0;i<4;i++) {
+      if (countdown[i]) {
+        countdown[i]--;
+        if (countdown[i] == 0) {
+          rect.x = drive0_led_x + 24*scale_x*i;
+          SDL_FillRect(screen, &rect, light_red);
+          addToDrawList(&rect);
         }
       }
     }
@@ -2936,20 +2937,18 @@ void trs_hard_led(int drive, int on_off)
 
 void trs_turbo_led(int turbo)
 {
-  if (trs_show_led) {
-    SDL_Rect rect;
+  SDL_Rect rect;
 
-    rect.w = 16*scale_x;
-    rect.h = 2*scale_y;
-    rect.x = (OrigWidth - border_width) / 2 - 8 * scale_x;
-    rect.y = OrigHeight - led_width / 2;
+  rect.w = 16*scale_x;
+  rect.h = 2*scale_y;
+  rect.x = (OrigWidth - border_width) / 2 - 8 * scale_x;
+  rect.y = OrigHeight - led_width / 2;
 
-    if (turbo)
-      SDL_FillRect(screen, &rect, bright_orange);
-    else
-      SDL_FillRect(screen, &rect, light_orange);
-    addToDrawList(&rect);
-  }
+  if (turbo)
+    SDL_FillRect(screen, &rect, bright_orange);
+  else
+    SDL_FillRect(screen, &rect, light_orange);
+  addToDrawList(&rect);
 }
 
 void trs_screen_write_char(int position, int char_index)

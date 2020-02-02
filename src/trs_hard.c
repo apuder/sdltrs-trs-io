@@ -502,7 +502,8 @@ static int find_sector(int newstatus)
 static int hard_data_in()
 {
   Drive *d = &state.d[state.drive];
-  trs_hard_led(state.drive,1);
+  if (trs_show_led)
+    trs_hard_led(state.drive,1);
   if ((state.command & TRS_HARD_CMDMASK) == TRS_HARD_READ &&
       (state.status & TRS_HARD_ERR) == 0) {
     if (state.bytesdone < TRS_HARD_SECSIZE) {
@@ -517,7 +518,8 @@ static void hard_data_out(int value)
 {
   Drive *d = &state.d[state.drive];
   int res = 0;
-  trs_hard_led(state.drive,1);
+  if (trs_show_led)
+    trs_hard_led(state.drive,1);
   state.data = value;
   if ((state.command & TRS_HARD_CMDMASK) == TRS_HARD_WRITE &&
       (state.status & TRS_HARD_ERR) == 0) {

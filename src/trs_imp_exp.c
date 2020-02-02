@@ -262,9 +262,11 @@ void do_emt_read()
     REG_BC = 0xFFFF;
     return;
   }
-  for (i=0;i<3;i++) {
-    if (REG_DE == xtrshard_fd[i])
-      trs_hard_led(i,1);
+  if (trs_show_led) {
+    for (i=0;i<3;i++) {
+      if (REG_DE == xtrshard_fd[i])
+        trs_hard_led(i,1);
+    }
   }
   size = read(REG_DE, mem_pointer(REG_HL, 1), REG_BC);
   if (size >= 0) {
@@ -295,9 +297,11 @@ void do_emt_write()
     REG_BC = 0xFFFF;
     return;
   }
-  for (i=0;i<3;i++) {
-    if (REG_DE == xtrshard_fd[i])
-      trs_hard_led(i,1);
+  if (trs_show_led) {
+    for (i=0;i<3;i++) {
+      if (REG_DE == xtrshard_fd[i])
+        trs_hard_led(i,1);
+    }
   }
   size = write(REG_DE, mem_pointer(REG_HL, 0), REG_BC);
   if (size >= 0) {

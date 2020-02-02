@@ -1476,7 +1476,8 @@ trs_disk_data_read(void)
   DiskState *d = &disk[state.curdrive];
   SectorId *sid;
 
-  trs_disk_led(state.curdrive,1);
+  if (trs_show_led)
+    trs_disk_led(state.curdrive,1);
 
   switch (state.currcommand & TRSDISK_CMDMASK) {
 
@@ -1651,7 +1652,8 @@ trs_disk_data_write(unsigned char data)
   DiskState *d = &disk[state.curdrive];
   int c;
 
-  trs_disk_led(state.curdrive,1);
+  if (trs_show_led)
+    trs_disk_led(state.curdrive,1);
 
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
     debug("data_write(0x%02x) pc 0x%04x\n", data, REG_PC);
@@ -2272,7 +2274,8 @@ trs_disk_command_write(unsigned char cmd)
   DiskState *d = &disk[state.curdrive];
   trs_event_func event;
 
-  trs_disk_led(state.curdrive,1);
+  if (trs_show_led)
+    trs_disk_led(state.curdrive,1);
 
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
     debug("command_write(0x%02x) pc 0x%04x\n", cmd, REG_PC);

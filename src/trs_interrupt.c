@@ -408,9 +408,11 @@ void trs_timer_sync_with_host(void)
 	if ((lasttime + deltatime) < curtime)
 		lasttime = curtime;
 
+  if (trs_show_led) {
     trs_disk_led(0,0);
     trs_hard_led(0,0);
-    trs_timer_event();
+  }
+  trs_timer_event();
 }
 
 void
