@@ -1426,6 +1426,7 @@ static void addToDrawList(SDL_Rect *rect)
     drawnRects[drawnRectCount++] = *rect;
 }
 
+#if defined(SDL2) || !defined(NOX)
 static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 {
   int i,y;
@@ -1549,7 +1550,6 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
   SDL_UnlockSurface(screen);
 }
 
-#if defined(SDL2) || !defined(NOX)
 static void ProcessCopySelection(int selectAll)
 {
   static int orig_x = 0;
