@@ -2851,11 +2851,12 @@ void trs_screen_refresh()
 void trs_disk_led(int drive, int on_off)
 {
   static int countdown[8] = {0,0,0,0,0,0,0,0};
-  unsigned int i;
-  SDL_Rect rect;
 
   if (trs_show_led) {
-    int drive0_led_x = border_width;
+    int const drive0_led_x = border_width;
+    unsigned int i;
+    SDL_Rect rect;
+
     rect.w = 16*scale_x;
     rect.h = 2*scale_y;
     rect.y = OrigHeight - led_width/2;
@@ -2893,11 +2894,12 @@ void trs_disk_led(int drive, int on_off)
 void trs_hard_led(int drive, int on_off)
 {
   static int countdown[4] = {0,0,0,0};
-  unsigned int i;
-  SDL_Rect rect;
 
   if (trs_show_led) {
-    int drive0_led_x = OrigWidth - border_width - 88*scale_x;
+    int const drive0_led_x = OrigWidth - border_width - 88*scale_x;
+    unsigned int i;
+    SDL_Rect rect;
+
     rect.w = 16*scale_x;
     rect.h = 2*scale_y;
     rect.y = OrigHeight - led_width/2;
