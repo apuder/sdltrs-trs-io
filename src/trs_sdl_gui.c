@@ -2417,7 +2417,7 @@ void trs_gui_model(void)
   const char *on_off_choices[2] = {"        Off","         On"};
   int selection = 0;
   int model_selection = 0;
-  int state;
+  int grafyx;
   int local_trs_model = trs_model;
 
   while (1) {
@@ -2484,9 +2484,9 @@ void trs_gui_model(void)
             lowe_le18);
         break;
       case 7:
-        state = trs_gui_display_popup("Grafyx",on_off_choices,2,
+        grafyx = trs_gui_display_popup("Grafyx",on_off_choices,2,
             grafyx_get_microlabs());
-        grafyx_set_microlabs(state);
+        grafyx_set_microlabs(grafyx);
         break;
       case 9:
         huffman_ram = trs_gui_display_popup("Huffman",on_off_choices,2,
