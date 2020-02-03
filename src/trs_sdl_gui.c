@@ -592,7 +592,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   }
 
   stat(current_dir, &st);
-  if ((st.st_mode & S_IFMT) != S_IFDIR) {
+  if (strcmp(current_dir, ".") == 0 || (st.st_mode & S_IFMT) != S_IFDIR) {
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
       error("getcwd: %s", current_dir);
   }
