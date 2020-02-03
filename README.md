@@ -1,15 +1,11 @@
-Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
-[EtchedPixels] for running [FUZIX]
-
-![screenshot](fuzix.png)
-![screenshot](fuzix2.png)
+Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches ...
 
 ## Changes
 
-  * Included all patches by Alan Cox: support for banked memory, Lowe LE18 ...
+  * Included all patches by [EtchedPixels]: support for banked memory, Lowe LE18 ...
   * Fixed various SegFaults: ROM Selection Menu, Scaling in Fullscreen ...
   * Reworked the Interface: new shortcuts and key bindings, help screen ...
-  * Ctrl-A, Ctrl-C & Ctrl-V can now be used in the Emulator (CP/M & WordStar)
+  * Ctrl-A, Ctrl-C & Ctrl-V can now be used in the Emulator (CP/M & WordStar) ...
   * Access to real floppy disks works now on Linux ...
   * Tried to fix reported bugs to the original version ...
   * Port to SDL2 (see [BUILDING]) ...
@@ -35,9 +31,15 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches by
 
 (Build on Debian 9/i386 & Ubuntu 18.04LTS/amd64)
 
+## Screenshots
+
+![screenshot](sdltrs01.png)
+![screenshot](sdltrs02.png)
+![screenshot](sdltrs03.png)
+![screenshot](sdltrs04.png)
+
 [BUILDING]: BUILDING
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
-[FUZIX]: https://www.github.com/EtchedPixels/FUZIX
 [SDL.DLL]: https://www.libsdl.org/download-1.2.php
 [SDL2.DLL]: https://www.libsdl.org/download-2.0.php
 [SDL-1.2.14]: https://www.libsdl.org/release/SDL-1.2.14-win32.zip
