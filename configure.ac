@@ -27,13 +27,13 @@ AC_ARG_ENABLE([readline],
    AC_SEARCH_LIBS([readline], [readline], AC_DEFINE([READLINE]),
    AC_MSG_ERROR([Unable to find readline function]))])
 
-AC_ARG_ENABLE([sdl2],
-  [AS_HELP_STRING([--enable-sdl2], [SDL2 version])],
+AC_ARG_ENABLE([sdl1],
+  [AS_HELP_STRING([--enable-sdl1], [SDL1 version])],
+  [SDL_VERS=SDL
+   SDL_CONF=sdl-config],
   [AC_DEFINE([SDL2])
    SDL_VERS=SDL2
-   SDL_CONF=sdl2-config],
-  [SDL_VERS=SDL
-   SDL_CONF=sdl-config])
+   SDL_CONF=sdl2-config])
 
 CFLAGS="$CFLAGS $( $SDL_CONF --cflags )"
 LIBS="$LIBS $( $SDL_CONF --libs)"

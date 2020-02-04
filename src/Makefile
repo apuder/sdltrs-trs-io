@@ -32,10 +32,10 @@ SRCS	+= PasteManager.c
 
 OBJS	 = ${SRCS:.c=.o}
 
-.PHONY: all bsd clean clean-win linux nox sdl2 win32 win64 wsdl2
+.PHONY: all bsd clean clean-win nox sdl sdl2 win32 win64 wsdl2
 
 all:
-	@echo "make (bsd|clean|clean-win|depend|linux|nox|sdl2|win32|win64|wsdl2)"
+	@echo "make (bsd|clean|clean-win|depend|nox|sdl|sdl2|win32|win64|wsdl2)"
 
 bsd:
 	make -f BSDMakefile
@@ -50,17 +50,17 @@ depend:
 	makedepend -Y -- ${CFLAGS} -- ${SRCS} 2>&1 | \
 		(egrep -v 'cannot find|not in' || true)
 
-linux:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
-linux:	LIBS	 = $(shell sdl-config --libs) -lX11 -lreadline
-linux:	INCS	 = $(shell sdl-config --cflags)
-linux:	MACROS	 = -DREADLINE
-linux:	${PROG}
-
 nox:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 nox:	LIBS	 = $(shell sdl-config --libs) -lreadline
 nox:	INCS	 = $(shell sdl-config --cflags)
 nox:	MACROS	 = -DNOX -DREADLINE
 nox:	${PROG}
+
+sdl:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
+sdl:	LIBS	 = $(shell sdl-config --libs) -lX11 -lreadline
+sdl:	INCS	 = $(shell sdl-config --cflags)
+sdl:	MACROS	 = -DREADLINE
+sdl:	${PROG}
 
 sdl2:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 sdl2:	LIBS	 = $(shell sdl2-config --libs) -lreadline
