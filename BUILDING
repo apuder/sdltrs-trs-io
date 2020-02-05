@@ -87,6 +87,17 @@ to build the SDL2 version, or
 for the old SDL 1.2 version.
 
 
-To build for macOS X:
----------------------
-Install libSDL2 via "MacPorts" or "Homebrew" and build SDL2 port above.
+To build for macOS:
+-------------------
+Download and install "Homebrew" for macOS from <https://brew.sh> first.
+
+  brew install autoconf automake libtool llvm readline sdl2
+
+should now download and install the required packages to build SDL2TRS.
+In the main directory of SDLTRS source, execute the following commands:
+
+  ./autogen
+  ./configure --enable-readline
+  make
+
+This will build the executable binary file called "sdltrs".
