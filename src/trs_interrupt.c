@@ -158,19 +158,6 @@ trs_cassette_interrupts_enabled()
   return interrupt_mask & (M3_CASSRISE_BIT|M3_CASSFALL_BIT);
 }
 
-int
-trs_timer_is_turbo()
-{
-    return(timer_overclock);
-}
-
-int
-trs_timer_switch_turbo()
-{
-    timer_overclock = !timer_overclock;
-    return(timer_overclock);
-}
-
 void
 trs_timer_interrupt(int state)
 {

@@ -81,8 +81,6 @@ extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 
 extern void trs_gui_keys_sdltrs(void);
 extern void trs_gui_model(void);
-extern int trs_timer_is_turbo(void);
-extern int trs_timer_switch_turbo(void);
 
 #define MAX_RECTS 2048
 #define WHITE 0xe0e0ff
@@ -1266,7 +1264,7 @@ void trs_screen_var_reset()
   col_chars = 16;
 }
 
-void trs_screen_caption(int turbo)
+void trs_screen_caption(void)
 {
   char title[80];
 
@@ -1276,7 +1274,7 @@ void trs_screen_caption(int turbo)
   else
     snprintf(title, 79, "TRS-80 Model %d%s %s%s%s", trs_model == 5 ? 4 : trs_model,
              trs_model == 5 ? "P" : "",
-             turbo ? "Turbo " : "",
+             timer_overclock ? "Turbo " : "",
              trs_paused ? "PAUSED " : "",
              trs_sound ? "" : "(Mute)");
 #ifdef SDL2
@@ -1285,7 +1283,7 @@ void trs_screen_caption(int turbo)
   SDL_WM_SetCaption(title,NULL);
 #endif
   if (trs_show_led)
-    trs_turbo_led(turbo);
+    trs_turbo_led();
 }
 
 void trs_screen_init(void)
@@ -1408,12 +1406,12 @@ void trs_screen_init(void)
 
   TrsBlitMap(image->format->palette, screen->format);
   bitmap_init(foreground, background);
-  trs_screen_caption(trs_timer_is_turbo());
+  trs_screen_caption();
 
   if (trs_show_led) {
     trs_disk_led(-1,0);
     trs_hard_led(-1,0);
-    trs_turbo_led(trs_timer_is_turbo());
+    trs_turbo_led();
   }
 
   grafyx_redraw();
@@ -1817,7 +1815,7 @@ static void call_function(int function)
 {
   if (function == PAUSE) {
     trs_paused = !trs_paused;
-    trs_screen_caption(trs_timer_is_turbo());
+    trs_screen_caption();
     if (!trs_paused)
       trs_screen_refresh();
   }
@@ -1826,7 +1824,7 @@ static void call_function(int function)
     if (trs_show_led) {
       trs_disk_led(-1, 0);
       trs_hard_led(-1, 0);
-      trs_turbo_led(trs_timer_is_turbo());
+      trs_turbo_led();
     }
   }
   else if (function == EXIT)
@@ -1925,7 +1923,7 @@ void trs_get_event(int wait)
   trs_sdl_flush();
 
   if (cpu_panel)
-    trs_screen_caption(trs_timer_is_turbo());
+    trs_screen_caption();
 
   do {
 #if defined(SDL2) || !defined(NOX)
@@ -2039,7 +2037,7 @@ void trs_get_event(int wait)
               if (trs_show_led) {
                 trs_disk_led(-1,0);
                 trs_hard_led(-1,0);
-                trs_turbo_led(trs_timer_is_turbo());
+                trs_turbo_led();
               }
             }
             else
@@ -2060,7 +2058,8 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F12:
-            trs_screen_caption(trs_timer_switch_turbo());
+            timer_overclock = !timer_overclock;
+            trs_screen_caption();
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -2112,7 +2111,7 @@ void trs_get_event(int wait)
               break;
             case SDLK_INSERT:
               cpu_panel = !cpu_panel;
-              trs_screen_caption(trs_timer_is_turbo());
+              trs_screen_caption();
               break;
             case SDLK_RETURN:
               trs_flip_fullscreen();
@@ -2191,7 +2190,8 @@ void trs_get_event(int wait)
               call_function(GUI);
               break;
             case SDLK_n:
-              trs_screen_caption(trs_timer_switch_turbo());
+              timer_overclock = !timer_overclock;
+              trs_screen_caption();
               break;
             case SDLK_o:
               call_function(OTHER);
@@ -2213,7 +2213,7 @@ void trs_get_event(int wait)
               break;
             case SDLK_u:
               trs_sound = !trs_sound;
-              trs_screen_caption(trs_timer_is_turbo());
+              trs_screen_caption();
               break;
             case SDLK_w:
               call_function(WRITE);
@@ -2846,7 +2846,7 @@ void trs_screen_refresh()
   if (trs_show_led) {
     trs_disk_led(-1,0);
     trs_hard_led(-1,0);
-    trs_turbo_led(trs_timer_is_turbo());
+    trs_turbo_led();
   }
 
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
@@ -2932,7 +2932,7 @@ void trs_hard_led(int drive, int on_off)
   }
 }
 
-void trs_turbo_led(int turbo)
+void trs_turbo_led(void)
 {
   SDL_Rect rect;
 
@@ -2941,7 +2941,7 @@ void trs_turbo_led(int turbo)
   rect.x = (OrigWidth - border_width) / 2 - 8 * scale_x;
   rect.y = OrigHeight - led_width / 2;
 
-  if (turbo)
+  if (timer_overclock)
     SDL_FillRect(screen, &rect, bright_orange);
   else
     SDL_FillRect(screen, &rect, light_orange);
