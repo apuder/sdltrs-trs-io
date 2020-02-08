@@ -1370,49 +1370,45 @@ void trs_screen_init(void)
 #endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
-  trs_screen_caption(trs_timer_is_turbo());
-
-#if defined(big_endian) && !defined(__linux)
-  light_red = SDL_MapRGB(screen->format, 0x00,0x00,0x40);
-  bright_red = SDL_MapRGB(screen->format, 0x00,0x00,0xff);
-  light_orange = SDL_MapRGB(screen->format, 0x40,0x28,0x40);
-  bright_orange = SDL_MapRGB(screen->format, 0x00,0xa0,0xff);
-#else
-  light_red = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
-  bright_red = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
-  light_orange = SDL_MapRGB(screen->format, 0x40,0x28,0x00);
-  bright_orange = SDL_MapRGB(screen->format, 0xff,0xa0,0x00);
-#endif
-
   if (image)
     SDL_FreeSurface(image);
   memset(grafyx,0,(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE));
   image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1,
                                    imageSize.bytes_per_line, 1, 1, 1, 0);
+
 #if defined(big_endian) && !defined(__linux)
-  colors[0].r = (background) & 0xFF;
-  colors[0].g = (background >> 8) & 0xFF;
-  colors[0].b = (background >> 16) & 0xFF;
-  colors[1].r = (foreground) & 0xFF;
-  colors[1].g = (foreground >> 8) & 0xFF;
-  colors[1].b = (foreground >> 16) & 0xFF;
+  colors[0].r   = (background) & 0xFF;
+  colors[0].g   = (background >> 8) & 0xFF;
+  colors[0].b   = (background >> 16) & 0xFF;
+  colors[1].r   = (foreground) & 0xFF;
+  colors[1].g   = (foreground >> 8) & 0xFF;
+  colors[1].b   = (foreground >> 16) & 0xFF;
+  light_red     = SDL_MapRGB(screen->format, 0x00,0x00,0x40);
+  bright_red    = SDL_MapRGB(screen->format, 0x00,0x00,0xff);
+  light_orange  = SDL_MapRGB(screen->format, 0x40,0x28,0x40);
+  bright_orange = SDL_MapRGB(screen->format, 0x00,0xa0,0xff);
 #else
-  colors[0].r = (background >> 16) & 0xFF;
-  colors[0].g = (background >> 8) & 0xFF;
-  colors[0].b = (background) & 0xFF;
-  colors[1].r = (foreground >> 16) & 0xFF;
-  colors[1].g = (foreground >> 8) & 0xFF;
-  colors[1].b = (foreground) & 0xFF;
+  colors[0].r   = (background >> 16) & 0xFF;
+  colors[0].g   = (background >> 8) & 0xFF;
+  colors[0].b   = (background) & 0xFF;
+  colors[1].r   = (foreground >> 16) & 0xFF;
+  colors[1].g   = (foreground >> 8) & 0xFF;
+  colors[1].b   = (foreground) & 0xFF;
+  light_red     = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
+  bright_red    = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
+  light_orange  = SDL_MapRGB(screen->format, 0x40,0x28,0x00);
+  bright_orange = SDL_MapRGB(screen->format, 0xff,0xa0,0x00);
 #endif
+
 #ifdef SDL2
-  SDL_SetPaletteColors(image->format->palette, colors,0,2);
+  SDL_SetPaletteColors(image->format->palette,colors,0,2);
 #else
-  SDL_SetPalette(image,SDL_LOGPAL, colors,0,2);
+  SDL_SetPalette(image,SDL_LOGPAL,colors,0,2);
 #endif
 
   TrsBlitMap(image->format->palette, screen->format);
-
   bitmap_init(foreground, background);
+  trs_screen_caption(trs_timer_is_turbo());
 
   if (trs_show_led) {
     trs_disk_led(-1,0);
