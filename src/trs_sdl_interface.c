@@ -2023,8 +2023,13 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F9:
-            if (!fullscreen)
-              trs_debug();
+            if (keysym.mod & KMOD_SHIFT) {
+              cpu_panel = !cpu_panel;
+              trs_screen_caption();
+            }
+            else
+              if (!fullscreen)
+                trs_debug();
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -2108,10 +2113,6 @@ void trs_get_event(int wait)
 #endif
             case SDLK_DELETE:
               trs_reset(0);
-              break;
-            case SDLK_INSERT:
-              cpu_panel = !cpu_panel;
-              trs_screen_caption();
               break;
             case SDLK_RETURN:
               trs_flip_fullscreen();
