@@ -42,12 +42,18 @@ make sdl2
 
 ---
 
-To build on FreeBSD/NetBSD/OpenBSD with SDL 1.2:
-------------------------------------------------
+To build with SDL 1.2:
+----------------------
 
+**SDLTRS** needs the development files of `libSDL 1.2`, `X11` and `GNU
+readline` for the debugger. On *Debian* or *Ubuntu* these can be
+installed with:
+```sh
+sudo apt install libsdl1.2-dev libreadline-dev
+```
 From the `src` directory, execute:
 ```sh
-make bsd
+make sdl
 ```
 
 ---
@@ -65,19 +71,32 @@ and from the Emulator screen), but works on operating systems with no
 
 ---
 
-To build with SDL 1.2:
-----------------------
+To build on FreeBSD/NetBSD/OpenBSD with SDL 1.2:
+------------------------------------------------
 
-**SDLTRS** needs the development files of `libSDL 1.2`, `X11` and `GNU
-readline` for the debugger. On *Debian* or *Ubuntu* these can be
-installed with:
-```sh
-sudo apt install libsdl1.2-dev libreadline-dev
-```
 From the `src` directory, execute:
 ```sh
-make sdl
+make bsd
 ```
+
+---
+
+To build on macOS:
+------------------
+
+Download and install [Homebrew] for macOS first.
+```sh
+brew install autoconf automake libtool llvm readline sdl2
+```
+should download and install the required packages to build **SDL2TRS**.
+In the main directory of the source, execute the following commands:
+```sh
+./autogen
+./configure --enable-readline
+make
+```
+
+This will build the executable binary file called `sdltrs`.
 
 ---
 
@@ -102,25 +121,6 @@ to build the SDL2 version, or
 mingw32-make win32
 ```
 for the old SDL 1.2 version.
-
----
-
-To build on macOS:
-------------------
-
-Download and install [Homebrew] for macOS first.
-```sh
-brew install autoconf automake libtool llvm readline sdl2
-```
-should download and install the required packages to build **SDL2TRS**.
-In the main directory of the source, execute the following commands:
-```sh
-./autogen
-./configure --enable-readline
-make
-```
-
-This will build the executable binary file called `sdltrs`.
 
 [Homebrew]: https://brew.sh
 [MinGW]: http://www.mingw.org
