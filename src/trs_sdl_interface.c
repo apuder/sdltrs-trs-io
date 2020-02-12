@@ -1349,6 +1349,10 @@ void trs_screen_init(void)
                               SDL_WINDOWPOS_CENTERED,
                               OrigWidth, OrigHeight,
                               SDL_WINDOW_SHOWN);
+    if (window == NULL) {
+      trs_sdl_cleanup();
+      fatal("failed to create window: %s", SDL_GetError());
+    }
   }
   SDL_RaiseWindow(window);
   SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
@@ -1357,6 +1361,10 @@ void trs_screen_init(void)
 #else
   screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, fullscreen ?
                             SDL_ANYFORMAT | SDL_FULLSCREEN : SDL_ANYFORMAT);
+  if (screen == NULL) {
+    trs_sdl_cleanup();
+    fatal("failed to set video mode: %s", SDL_GetError());
+  }
   SDL_WarpMouse(OrigWidth / 2, OrigHeight / 2);
 #endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
