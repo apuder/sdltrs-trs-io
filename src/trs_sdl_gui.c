@@ -1815,7 +1815,7 @@ void trs_gui_display_management(void)
   int gui_show_led = trs_show_led;
   int gui_resize3 = resize3;
   int gui_resize4 = resize4;
-  int gui_scale = scale_x;
+  int gui_scale = scale;
   int gui_scanlines = scanlines;
   int gui_border_width = window_border_width;
 
@@ -1938,7 +1938,7 @@ void trs_gui_display_management(void)
             (gui_show_led != trs_show_led) ||
             (gui_resize3 != resize3) ||
             (gui_resize4 != resize4) ||
-            (gui_scale != scale_x) ||
+            (gui_scale != scale) ||
             (gui_scanlines != scanlines) ||
             (gui_border_width != window_border_width)) {
           trs_charset1 = local_trs_charset1;
@@ -1947,10 +1947,9 @@ void trs_gui_display_management(void)
           trs_show_led = gui_show_led;
           resize3 = gui_resize3;
           resize4 = gui_resize4;
-          if (gui_scale != scale_x) {
+          if (gui_scale != scale) {
             fullscreen = 0;
-            scale_x = gui_scale;
-            scale_y = scale_x*2;
+            scale = gui_scale;
           }
           scanlines = gui_scanlines;
           window_border_width = gui_border_width;
