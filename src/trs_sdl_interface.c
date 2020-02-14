@@ -411,7 +411,7 @@ trs_opt options[] = {
 static const int num_options = sizeof(options)/sizeof(trs_opt);
 
 /* Private routines */
-static void bitmap_init();
+static void bitmap_init(void);
 static void grafyx_redraw(void);
 
 static void stripWhitespace (char *inputStr)
@@ -1406,7 +1406,7 @@ void trs_screen_init(void)
 #endif
 
   TrsBlitMap(image->format->palette, screen->format);
-  bitmap_init(foreground, background);
+  bitmap_init();
   trs_screen_caption();
 
   if (trs_show_led) {
@@ -2688,7 +2688,7 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 #endif
 }
 
-static void bitmap_init(unsigned long foreground, unsigned long background)
+static void bitmap_init(void)
 {
   /* Initialize from built-in font bitmaps. */
   unsigned int i;
