@@ -2584,7 +2584,7 @@ void screen_init()
 }
 
 static void
-boxes_init(int foreground, int background, int width, int height, int expanded)
+boxes_init(int fg_color, int bg_color, int width, int height, int expanded)
 {
   int graphics_char, bit;
   SDL_Rect fullrect;
@@ -2622,20 +2622,20 @@ boxes_init(int foreground, int background, int width, int height, int expanded)
 #endif
 
     /* Clear everything */
-    SDL_FillRect(trs_box[expanded][graphics_char], &fullrect, background);
+    SDL_FillRect(trs_box[expanded][graphics_char], &fullrect, bg_color);
 
     for (bit = 0 ; bit < 6; ++bit) {
       if (graphics_char & (1 << bit)) {
-        SDL_FillRect(trs_box[expanded][graphics_char], &bits[bit], foreground);
+        SDL_FillRect(trs_box[expanded][graphics_char], &bits[bit], fg_color);
       }
     }
   }
 }
 
 static SDL_Surface *CreateSurfaceFromDataScale(char *data,
-    unsigned int foreground,
-    unsigned int background,
-    unsigned int scale)
+    unsigned int fg_color,
+    unsigned int bg_color,
+    unsigned int scale_f)
 {
   unsigned int *mydata, *currdata;
   unsigned char *mypixels, *currpixel;
@@ -2649,7 +2649,7 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
    * "bitmap_init" and "trs_sdl_cleanup" functions.
    */
   mydata = (unsigned int *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT *
-      scale * (scale * 2) * sizeof(unsigned int));
+      scale_f * (scale_f * 2) * sizeof(unsigned int));
   mypixels= (unsigned char *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT * 8);
   if (mydata == NULL || mypixels == NULL) {
     trs_sdl_cleanup();
@@ -2663,16 +2663,16 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 
   currdata = mydata;
   /* And prepare our rescaled character. */
-  for (j= 0; (unsigned)j< TRS_CHAR_HEIGHT * (scale * 2); j++) {
-    currpixel = mypixels + ((j/(scale * 2)) * TRS_CHAR_WIDTH);
+  for (j= 0; (unsigned)j< TRS_CHAR_HEIGHT * (scale_f * 2); j++) {
+    currpixel = mypixels + ((j/(scale_f * 2)) * TRS_CHAR_WIDTH);
     for (w= 0; w< TRS_CHAR_WIDTH ; w++) {
       if (*currpixel++ == 0) {
-        for (i=0;(unsigned)i<scale;i++)
-          *currdata++ = background;
+        for (i=0;(unsigned)i<scale_f;i++)
+          *currdata++ = bg_color;
       }
       else {
-        for (i=0;(unsigned)i<scale;i++)
-          *currdata++ = foreground;
+        for (i=0;(unsigned)i<scale_f;i++)
+          *currdata++ = fg_color;
       }
     }
   }
