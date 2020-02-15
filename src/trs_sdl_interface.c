@@ -1689,13 +1689,11 @@ inline void trs_sdl_flush()
   if (drawnRectCount == MAX_RECTS)
 #ifdef SDL2
     SDL_UpdateWindowSurface(window);
-#else
-    SDL_UpdateRect(screen,0,0,0,0);
-#endif
   else
-#ifdef SDL2
     SDL_UpdateWindowSurfaceRects(window,drawnRects,drawnRectCount);
 #else
+    SDL_UpdateRect(screen,0,0,0,0);
+  else
     SDL_UpdateRects(screen,drawnRectCount,drawnRects);
 #endif
   drawnRectCount = 0;
