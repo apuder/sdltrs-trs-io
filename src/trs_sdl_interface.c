@@ -1297,7 +1297,7 @@ void trs_screen_init(void)
   else
     trs_charset = trs_charset4;
 
-  if (trs_model == 4)
+  if (trs_model >= 4)
     resize = resize4;
   else
     resize = resize3;
