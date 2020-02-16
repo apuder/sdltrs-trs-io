@@ -2633,7 +2633,8 @@ boxes_init(int fg_color, int bg_color, int width, int height, int expanded)
 static SDL_Surface *CreateSurfaceFromDataScale(char *data,
     unsigned int fg_color,
     unsigned int bg_color,
-    unsigned int scale_f)
+    unsigned int scale_x,
+    unsigned int scale_y)
 {
   unsigned int *mydata, *currdata;
   unsigned char *mypixels, *currpixel;
@@ -2647,7 +2648,7 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
    * "bitmap_init" and "trs_sdl_cleanup" functions.
    */
   mydata = (unsigned int *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT *
-      scale_f * (scale_f * 2) * sizeof(unsigned int));
+      scale_x * scale_y * sizeof(unsigned int));
   mypixels= (unsigned char *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT * 8);
   if (mydata == NULL || mypixels == NULL) {
     trs_sdl_cleanup();
@@ -2661,15 +2662,15 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 
   currdata = mydata;
   /* And prepare our rescaled character. */
-  for (j= 0; (unsigned)j< TRS_CHAR_HEIGHT * (scale_f * 2); j++) {
-    currpixel = mypixels + ((j/(scale_f * 2)) * TRS_CHAR_WIDTH);
+  for (j= 0; (unsigned)j< TRS_CHAR_HEIGHT * scale_y; j++) {
+    currpixel = mypixels + ((j/scale_y) * TRS_CHAR_WIDTH);
     for (w= 0; w< TRS_CHAR_WIDTH ; w++) {
       if (*currpixel++ == 0) {
-        for (i=0;(unsigned)i<scale_f;i++)
+        for (i=0;(unsigned)i<scale_x;i++)
           *currdata++ = bg_color;
       }
       else {
-        for (i=0;(unsigned)i<scale_f;i++)
+        for (i=0;(unsigned)i<scale_x;i++)
           *currdata++ = fg_color;
       }
     }
@@ -2677,8 +2678,8 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 
   free(mypixels);
 
-  return(SDL_CreateRGBSurfaceFrom(mydata, TRS_CHAR_WIDTH*scale,
-         TRS_CHAR_HEIGHT*(scale * 2), 32, TRS_CHAR_WIDTH*scale*4,
+  return(SDL_CreateRGBSurfaceFrom(mydata, TRS_CHAR_WIDTH*scale_x,
+         TRS_CHAR_HEIGHT*scale_y, 32, TRS_CHAR_WIDTH*scale_x * 4,
 #if defined(big_endian) && !defined(__linux)
          0x000000ff, 0x0000ff00, 0x00ff0000,0));
 #else
@@ -2698,28 +2699,28 @@ static void bitmap_init(void)
     }
     trs_char[0][i] =
       CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          foreground, background, scale);
+          foreground, background, scale, scale * 2);
     if (trs_char[1][i]) {
       free(trs_char[1][i]->pixels);
       SDL_FreeSurface(trs_char[1][i]);
     }
     trs_char[1][i] =
       CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          foreground, background, scale*2);
+          foreground, background, scale * 2, scale * 2);
     if (trs_char[2][i]) {
       free(trs_char[2][i]->pixels);
       SDL_FreeSurface(trs_char[2][i]);
     }
     trs_char[2][i] =
       CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          background, foreground, scale);
+          background, foreground, scale, scale * 2);
     if (trs_char[3][i]) {
       free(trs_char[3][i]->pixels);
       SDL_FreeSurface(trs_char[3][i]);
     }
     trs_char[3][i] =
       CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          background, foreground, scale*2);
+          background, foreground, scale * 2, scale * 2);
     if (trs_char[4][i]) {
       free(trs_char[4][i]->pixels);
       SDL_FreeSurface(trs_char[4][i]);
@@ -2728,11 +2729,11 @@ static void bitmap_init(void)
     if ((i>='[' && i<=']') || i>=128)
       trs_char[4][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
-            gui_foreground, gui_background, scale);
+            gui_foreground, gui_background, scale, scale * 2);
     else
       trs_char[4][i] =
         CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-            gui_foreground, gui_background, scale);
+            gui_foreground, gui_background, scale, scale * 2);
     if (trs_char[5][i]) {
       free(trs_char[5][i]->pixels);
       SDL_FreeSurface(trs_char[5][i]);
@@ -2740,11 +2741,11 @@ static void bitmap_init(void)
     if ((i>='[' && i<=']') || i>=128)
       trs_char[5][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
-            gui_background, gui_foreground, scale);
+            gui_background, gui_foreground, scale, scale * 2);
     else
       trs_char[5][i] =
         CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-            gui_background, gui_foreground, scale);
+            gui_background, gui_foreground, scale, scale * 2);
   }
   boxes_init(foreground, background,
       cur_char_width, TRS_CHAR_HEIGHT * (scale * 2), 0);
