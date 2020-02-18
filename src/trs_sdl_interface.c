@@ -1333,13 +1333,13 @@ void trs_screen_init(void)
   if (trs_model >= 3  && !resize) {
     OrigWidth = cur_char_width * 80 + 2 * border_width;
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
-    OrigHeight = TRS_CHAR_HEIGHT4 * (scale * 2) * 24 + 2 * border_width + led_width;
+    OrigHeight = TRS_CHAR_HEIGHT4 * (scale * 2) * 24 + 2 * border_width + (led_width * scale);
     top_margin = (TRS_CHAR_HEIGHT4 * (scale * 2) * 24 -
                  cur_char_height * col_chars)/2 + border_width;
   } else {
     OrigWidth = cur_char_width * row_chars + 2 * border_width;
     left_margin = border_width;
-    OrigHeight = cur_char_height * col_chars + 2 * border_width + led_width;
+    OrigHeight = cur_char_height * col_chars + 2 * border_width + (led_width * scale);
     top_margin = border_width;
   }
 #ifdef SDL2
@@ -1680,7 +1680,7 @@ inline void trs_sdl_flush()
     rect.w = OrigWidth;
     rect.h = scale;
 
-    for (y = 0; y < OrigHeight - (led_width / 2); y += (scale * 2)) {
+    for (y = 0; y < OrigHeight - (led_width * scale); y += (scale * 2)) {
       rect.y = y;
       SDL_FillRect(screen, &rect, background);
     }
@@ -2841,7 +2841,7 @@ void trs_disk_led(int drive, int on_off)
 
   rect.w = 16*scale;
   rect.h = 2*(scale * 2);
-  rect.y = OrigHeight - led_width/2;
+  rect.y = OrigHeight - rect.h;
 
   if (drive == -1) {
     for (i=0;i<8;i++) {
@@ -2881,7 +2881,7 @@ void trs_hard_led(int drive, int on_off)
 
   rect.w = 16*scale;
   rect.h = 2*(scale * 2);
-  rect.y = OrigHeight - led_width/2;
+  rect.y = OrigHeight - rect.h;
 
   if (drive == -1) {
     for (i=0;i<4;i++) {
@@ -2919,7 +2919,7 @@ void trs_turbo_led(void)
   rect.w = 16*scale;
   rect.h = 2*(scale * 2);
   rect.x = (OrigWidth - border_width) / 2 - 8 * scale;
-  rect.y = OrigHeight - led_width / 2;
+  rect.y = OrigHeight - rect.h;
 
   if (timer_overclock)
     SDL_FillRect(screen, &rect, bright_orange);
