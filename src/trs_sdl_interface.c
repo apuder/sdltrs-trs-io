@@ -133,6 +133,7 @@ static int drawnRectCount = 0;
 static int top_margin = 0;
 static int left_margin = 0;
 static int led_width = 0;
+static int led_height = 0;
 static int currentmode = NORMAL;
 static int OrigHeight,OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
@@ -1330,16 +1331,18 @@ void trs_screen_init(void)
   else
     led_width = 0;
 
+  led_height = led_width * scale;
+
   if (trs_model >= 3  && !resize) {
     OrigWidth = cur_char_width * 80 + 2 * border_width;
     left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
-    OrigHeight = TRS_CHAR_HEIGHT4 * (scale * 2) * 24 + 2 * border_width + (led_width * scale);
+    OrigHeight = TRS_CHAR_HEIGHT4 * (scale * 2) * 24 + 2 * border_width + led_height;
     top_margin = (TRS_CHAR_HEIGHT4 * (scale * 2) * 24 -
                  cur_char_height * col_chars)/2 + border_width;
   } else {
     OrigWidth = cur_char_width * row_chars + 2 * border_width;
     left_margin = border_width;
-    OrigHeight = cur_char_height * col_chars + 2 * border_width + (led_width * scale);
+    OrigHeight = cur_char_height * col_chars + 2 * border_width + led_height;
     top_margin = border_width;
   }
 #ifdef SDL2
@@ -1680,7 +1683,7 @@ inline void trs_sdl_flush()
     rect.w = OrigWidth;
     rect.h = scale;
 
-    for (y = 0; y < OrigHeight - (led_width * scale); y += (scale * 2)) {
+    for (y = 0; y < OrigHeight - led_height; y += (scale * 2)) {
       rect.y = y;
       SDL_FillRect(screen, &rect, background);
     }
