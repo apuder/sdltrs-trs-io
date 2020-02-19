@@ -132,8 +132,7 @@ static int text80x24 = 0, screen640x240 = 0;
 static int drawnRectCount = 0;
 static int top_margin = 0;
 static int left_margin = 0;
-static int led_width = 0;
-static int led_height = 0;
+static int screen_height = 0;
 static int currentmode = NORMAL;
 static int OrigHeight,OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
@@ -1282,6 +1281,7 @@ void trs_screen_caption(void)
 
 void trs_screen_init(void)
 {
+  int led_height, led_width;
   SDL_Color colors[2];
 
 #if defined(SDL2) || !defined(NOX)
@@ -1345,6 +1345,8 @@ void trs_screen_init(void)
     OrigHeight = cur_char_height * col_chars + 2 * border_width + led_height;
     top_margin = border_width;
   }
+  screen_height = OrigHeight - led_height;
+
 #ifdef SDL2
   if (window == NULL) {
     window = SDL_CreateWindow(program_name,
@@ -1683,7 +1685,7 @@ inline void trs_sdl_flush()
     rect.w = OrigWidth;
     rect.h = scale;
 
-    for (y = 0; y < OrigHeight - led_height; y += (scale * 2)) {
+    for (y = 0; y < screen_height; y += (scale * 2)) {
       rect.y = y;
       SDL_FillRect(screen, &rect, background);
     }
