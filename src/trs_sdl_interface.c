@@ -1664,7 +1664,7 @@ void trs_select_all()
 /*
  * Flush SDL output
  */
-inline void trs_sdl_flush()
+void trs_sdl_flush()
 {
 #if defined(SDL2) || !defined(NOX)
   if (!trs_emu_mouse || copyStatus != COPY_OFF)
