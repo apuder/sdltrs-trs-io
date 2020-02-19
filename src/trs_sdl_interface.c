@@ -243,9 +243,6 @@ static int key_queue[KEY_QUEUE_SIZE];
 static int key_queue_head;
 static int key_queue_entries;
 
-/* dummy buffer for stat() call */
-struct stat statbuf;
-
 /* Option handling */
 typedef struct trs_opt_struct {
   char *name;
