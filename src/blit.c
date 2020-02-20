@@ -1,8 +1,4 @@
-#include <stdlib.h>
-
 #include <SDL_video.h>
-#include <SDL_endian.h>
-#include "blit.h"
 
 static Uint8 *blitMap = NULL;
 
