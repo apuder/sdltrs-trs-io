@@ -20,7 +20,7 @@ static void CopyBlitImageTo1Byte(int width, int height, Uint8 *src,
       }
       bit = (byte&0x80)>>7;
       if ( bit )
-         *dst = map[1];
+        *dst = map[1];
       else
         *dst = map[0];
       dst++;
@@ -30,6 +30,7 @@ static void CopyBlitImageTo1Byte(int width, int height, Uint8 *src,
     dst += dstskip;
   }
 }
+
 static void CopyBlitImageTo2Byte(int width, int height, Uint8 *src,
     int srcskip, Uint16 *dst, int dstskip,
     Uint16 *map)
@@ -85,6 +86,7 @@ static void CopyBlitImageTo3Byte(int width, int height, Uint8 *src,
     dst += dstskip;
   }
 }
+
 static void CopyBlitImageTo4Byte(int width, int height, Uint8 *src,
     int srcskip, Uint32 *dst, int dstskip,
     Uint32 *map)
@@ -109,6 +111,7 @@ static void CopyBlitImageTo4Byte(int width, int height, Uint8 *src,
     dst += dstskip;
   }
 }
+
 static void XorBlitImageTo1Byte(int width, int height, Uint8 *src,
     int srcskip, Uint8 *dst, int dstskip,
     Uint8 *map)
@@ -135,6 +138,7 @@ static void XorBlitImageTo1Byte(int width, int height, Uint8 *src,
     dst += dstskip;
   }
 }
+
 static void XorBlitImageTo2Byte(int width, int height, Uint8 *src,
     int srcskip, Uint16 *dst, int dstskip,
     Uint16 *map)
@@ -194,6 +198,7 @@ static void XorBlitImageTo3Byte(int width, int height, Uint8 *src,
     dst += dstskip;
   }
 }
+
 static void XorBlitImageTo4Byte(int width, int height, Uint8 *src,
     int srcskip, Uint32 *dst, int dstskip,
     Uint32 *map)
@@ -266,8 +271,8 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
 
 
 /* The general purpose software blit routine */
-int TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
-    SDL_Surface *dst, SDL_Rect *dstrect, int xor)
+void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
+                 SDL_Surface *dst, SDL_Rect *dstrect, int xor)
 {
   int dst_locked;
   Uint8 *srcpix, *dstpix, *map;
@@ -277,7 +282,7 @@ int TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
   dst_locked = 0;
   if ( SDL_MUSTLOCK(dst) ) {
     if ( SDL_LockSurface(dst) < 0 ) {
-      return(-1);
+      return;
     } else {
       dst_locked = 1;
     }
@@ -331,13 +336,10 @@ int TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
             (Uint32 *) dstpix, dstskip/4, (Uint32 *) map);
       break;
     default:
-      return(-1);
       break;
   }
 
   if ( dst_locked ) {
     SDL_UnlockSurface(dst);
   }
-
-  return(0);
 }
