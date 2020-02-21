@@ -2765,9 +2765,6 @@ void trs_screen_refresh()
 #if XDEBUG
   debug("trs_screen_refresh\n");
 #endif
-#if defined(SDL2)
-  screen = SDL_GetWindowSurface(window);
-#endif
   if (grafyx_enable && !grafyx_overlay) {
     srcx = cur_char_width * grafyx_xoffset;
     srcy = (scale * 2) * grafyx_yoffset;
@@ -3084,7 +3081,6 @@ void trs_gui_refresh()
 {
 #ifdef SDL2
   SDL_UpdateWindowSurface(window);
-  screen = SDL_GetWindowSurface(window);
 #else
   SDL_UpdateRect(screen,0,0,0,0);
 #endif
