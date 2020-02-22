@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <SDL_video.h>
 
 static Uint8 *blitMap = NULL;
