@@ -1,5 +1,3 @@
-int stringy;
-
 void stringy_init(void);
 const char *stringy_get_name(int unit);
 int stringy_get_writeprotect(int unit);

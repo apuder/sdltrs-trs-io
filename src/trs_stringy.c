@@ -55,6 +55,7 @@
 
 #define STRINGY_FMT_DEFAULT STRINGY_FMT_ESF
 
+int stringy;
 
 typedef long stringy_pos_t;
 

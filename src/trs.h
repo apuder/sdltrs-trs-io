@@ -225,6 +225,8 @@ extern void selector_out(unsigned char);
 
 extern int lowercase;
 
+extern int stringy;
+
 extern void mem_video_page(int which);
 extern void mem_bank(int which);
 extern void mem_map(int which);
@@ -259,7 +261,7 @@ void hrg_onoff(int enable);
 void hrg_write_addr(int addr, int mask);
 void hrg_write_data(int data);
 int hrg_read_data(void);
-int lowe_le18;
+extern int lowe_le18;
 void lowe_le18_reset(void);
 void lowe_le18_write_x(int);
 void lowe_le18_write_y(int);
