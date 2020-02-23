@@ -8,7 +8,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
   * Ctrl-A, Ctrl-C & Ctrl-V can now be used in the Emulator (CP/M & WordStar) ...
   * Access to real floppy disks works now on Linux ...
   * Tried to fix reported bugs to the original version ...
-  * Port to SDL2 (see [BUILDING.md]) ...
+  * Port to SDL2 (see [BUILDING.md] and [SDL2]) ...
   * Support for Exatron Stringy Floppy ...
   * Select and execute CMD files directly in the Emulator ...
   * Save screenshot of the Emulator window as BMP file ...
@@ -31,6 +31,12 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 (Build on Debian 9/i386 & Ubuntu 18.04LTS/amd64)
 
+## SDL2
+
+The [SDL2] branch contains only the SDL2 version with texture rendering support.
+This version should be stable but is also considered as *experimental*, so the
+SDL2 binaries and packages above are build on the *master* branch ...
+
 ## Screenshots
 
 ![screenshot](sdltrs01.png)
@@ -40,6 +46,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 [BUILDING.md]: BUILDING.md
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
+[SDL2]: https://gitlab.com/jengun/sdltrs/-/tree/sdl2
 [SDL.DLL]: https://www.libsdl.org/download-1.2.php
 [SDL2.DLL]: https://www.libsdl.org/download-2.0.php
 [SDL-1.2.14]: https://www.libsdl.org/release/SDL-1.2.14-win32.zip
