@@ -1,7 +1,5 @@
 Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
-## Changes
-
   * Included all patches by [EtchedPixels]: support for banked memory, Lowe LE18 ...
   * Fixed various SegFaults: ROM Selection Menu, Scaling in Fullscreen ...
   * Reworked the Interface: new shortcuts and key bindings, help screen ...
@@ -34,8 +32,8 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 ## SDL2
 
 The [SDL2] branch contains only the SDL2 version with texture rendering support.
-This version should be stable but is also considered as *experimental*, so the
-SDL2 binaries and packages above are build on the *master* branch ...
+It should be considered as *experimental*, so the SDL2 binaries and packages above
+are build on the *master* branch ...
 
 ## Screenshots
 
