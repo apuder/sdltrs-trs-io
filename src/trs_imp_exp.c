@@ -189,13 +189,17 @@ void do_emt_setddir()
 #else
       (trs_disk_dir[1] == '/' || trs_disk_dir[1] == '\0')) {
 #endif
-    char* home = getenv("HOME");
+    const char* home = getenv("HOME");
+
     if (home) {
+      char dirname[FILENAME_MAX];
+
 #ifdef _WIN32
-      snprintf(trs_disk_dir, FILENAME_MAX - 1, "%s\\%s", home, trs_disk_dir+1);
+      snprintf(dirname, FILENAME_MAX, "%s\\%s", home, trs_disk_dir+1);
 #else
-      snprintf(trs_disk_dir, FILENAME_MAX - 1, "%s/%s", home, trs_disk_dir+1);
+      snprintf(dirname, FILENAME_MAX, "%s/%s", home, trs_disk_dir+1);
 #endif
+      snprintf(trs_disk_dir, FILENAME_MAX, "%s", dirname);
     }
   }
   REG_A = 0;
