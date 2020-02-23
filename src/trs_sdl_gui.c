@@ -288,8 +288,7 @@ int trs_gui_get_key(void)
         if (event.wheel.y < 0)
           return SDLK_DOWN;
         break;
-#endif
-#ifdef SDL2
+
       case SDL_TEXTINPUT:
         SDL_StopTextInput();
         return event.text.text[0];
