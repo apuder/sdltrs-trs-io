@@ -1350,15 +1350,16 @@ void trs_screen_init(void)
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
                               OrigWidth, OrigHeight,
-                              SDL_WINDOW_SHOWN);
+                              SDL_WINDOW_HIDDEN);
     if (window == NULL) {
       trs_sdl_cleanup();
       fatal("failed to create window: %s", SDL_GetError());
     }
   }
-  SDL_RaiseWindow(window);
   SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
   SDL_SetWindowSize(window, OrigWidth, OrigHeight);
+  SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+  SDL_ShowWindow(window);
   screen = SDL_GetWindowSurface(window);
 #else
   screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, fullscreen ?
