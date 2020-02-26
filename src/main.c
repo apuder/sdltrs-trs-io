@@ -181,7 +181,7 @@ int SDLmain(int argc, char *argv[])
     fatal("failed to initialize SDL: %s", SDL_GetError());
 
 #ifndef SDL2
-  SDL_putenv("SDL_VIDEO_CENTERED=center");
+  putenv("SDL_VIDEO_CENTERED=center");
 
   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
   /* Enable Unicode key translations */
