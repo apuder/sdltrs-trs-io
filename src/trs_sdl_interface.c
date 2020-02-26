@@ -1921,7 +1921,6 @@ void trs_get_event(int wait)
 #else
   SDL_keysym keysym;
 #endif
-  Uint32 keyup;
 
   if (trs_model > 1)
     (void)trs_uart_check_avail();
@@ -2384,9 +2383,8 @@ void trs_get_event(int wait)
 #endif
         if (keysym.mod & KMOD_LALT)
           break;
-        keyup = last_key[keysym.scancode];
+        trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
         last_key[keysym.scancode] = 0;
-        trs_xlate_keysym(0x10000 | keyup);
         break;
 
       case SDL_JOYAXISMOTION:
