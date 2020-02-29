@@ -385,7 +385,7 @@ KeyTable ascii_key_table[] = {
 /* 0xdc */    { TK_RightBracket, TK_ForceShift },/* UE */
 /* 0xdd */    { TK_NULL, TK_Neutral },
 /* 0xde */    { TK_NULL, TK_Neutral },
-/* 0xdf */    { TK_Caret, TK_ForceNoShift },     /* SZ */
+/* 0xdf */    { TK_Slash, TK_Neutral },
 /* 0xe0 */    { TK_NULL, TK_Neutral },
 /* 0xe1 */    { TK_NULL, TK_Neutral },
 /* 0xe2 */    { TK_NULL, TK_Neutral },
