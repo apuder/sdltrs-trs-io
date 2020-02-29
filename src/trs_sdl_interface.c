@@ -170,11 +170,10 @@ extern int  PasteManagerStartPaste(void);
 extern void PasteManagerStartCopy(char *string);
 extern int PasteManagerGetChar(unsigned short *character);
 
-#define COPY_OFF       0
-#define COPY_IDLE      1
-#define COPY_STARTED   2
-#define COPY_DEFINED   3
-#define COPY_CLEAR     4
+#define COPY_IDLE      0
+#define COPY_STARTED   1
+#define COPY_DEFINED   2
+#define COPY_CLEAR     3
 static int copyStatus = COPY_IDLE;
 static int selectionStartX = 0;
 static int selectionStartY = 0;
@@ -1668,7 +1667,7 @@ void trs_sdl_flush()
 {
 #if defined(SDL2) || !defined(NOX)
   if (mousepointer) {
-    if (!trs_emu_mouse || copyStatus != COPY_OFF)
+    if (!trs_emu_mouse)
       ProcessCopySelection(requestSelectAll);
     requestSelectAll = FALSE;
   }
@@ -1834,9 +1833,6 @@ static void call_function(int function)
     trs_exit(0);
   else {
     SDL_PauseAudio(1);
-#if defined(SDL2) || !defined(NOX)
-    copyStatus = COPY_OFF;
-#endif
     switch (function) {
     case GUI:
       trs_gui();
@@ -1892,9 +1888,6 @@ static void call_function(int function)
       break;
     }
     SDL_PauseAudio(0);
-#if defined(SDL2) || !defined(NOX)
-    copyStatus = COPY_IDLE;
-#endif
     trs_screen_refresh();
     trs_sdl_flush();
   }
