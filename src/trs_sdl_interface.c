@@ -2348,10 +2348,11 @@ void trs_get_event(int wait)
             break;
         }
 
-        if (keysym.sym >= 0x20 && keysym.sym <= 0x7F) {
-          last_key[keysym.sym] = keysym.sym;
-          text_char = keysym.sym;
-          break;
+        if (keysym.mod & (KMOD_SHIFT|KMOD_RALT)) {
+          if (keysym.sym >= 0x20 && keysym.sym <= 0xDF) {
+            text_char = 1;
+            break;
+          }
         }
 #else
         if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
@@ -2472,9 +2473,10 @@ void trs_get_event(int wait)
 
 #ifdef SDL2
       case SDL_TEXTINPUT:
-        if (text_char >= 0x20 && text_char <= 0x7F)
+        if (text_char) {
           trs_xlate_keysym(event.text.text[0]);
-        text_char = 0;
+          text_char = 0;
+        }
         break;
 #endif
 
