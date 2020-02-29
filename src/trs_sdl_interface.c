@@ -1659,11 +1659,6 @@ void trs_paste_started()
 {
   paste_state = PASTE_GETNEXT;
 }
-
-void trs_select_all()
-{
-  requestSelectAll = TRUE;
-}
 #endif
 
 /*
