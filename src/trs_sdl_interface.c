@@ -1672,9 +1672,11 @@ void trs_select_all()
 void trs_sdl_flush()
 {
 #if defined(SDL2) || !defined(NOX)
-  if (!trs_emu_mouse || copyStatus != COPY_OFF)
-    ProcessCopySelection(requestSelectAll);
-  requestSelectAll = FALSE;
+  if (mousepointer) {
+    if (!trs_emu_mouse || copyStatus != COPY_OFF)
+      ProcessCopySelection(requestSelectAll);
+    requestSelectAll = FALSE;
+  }
 #endif
   if (drawnRectCount == 0)
     return;
@@ -2108,7 +2110,8 @@ void trs_get_event(int wait)
               PasteManagerStartPaste();
               break;
             case SDLK_a:
-              requestSelectAll = TRUE;
+              requestSelectAll = mousepointer = TRUE;
+              SDL_ShowCursor(SDL_ENABLE);
               break;
 #endif
 #ifdef _WIN32
