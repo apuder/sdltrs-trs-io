@@ -1905,7 +1905,7 @@ void trs_get_event(int wait)
   SDL_Event event;
 #ifdef SDL2
   SDL_Keysym keysym;
-  int text_char = 0;
+  Uint32 scancode = 0;
 
   SDL_StartTextInput();
 #else
@@ -2348,19 +2348,17 @@ void trs_get_event(int wait)
             break;
         }
 
-        if (keysym.mod & (KMOD_SHIFT|KMOD_RALT)) {
-          if (keysym.sym >= 0x20 && keysym.sym <= 0xDF) {
-            text_char = 1;
-            break;
-          }
+        if (keysym.sym >= 0x21 && keysym.sym <= 0xDF) {
+          scancode = keysym.scancode;
+          break;
         }
 #else
         if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
           last_key[keysym.scancode] = keysym.unicode;
           trs_xlate_keysym(keysym.unicode);
-        } else
+        }
 #endif
-        if (keysym.sym != 0) {
+        else if (keysym.sym != 0) {
           last_key[keysym.scancode] = keysym.sym;
           trs_xlate_keysym(keysym.sym);
         }
@@ -2374,7 +2372,8 @@ void trs_get_event(int wait)
 #endif
         if (keysym.mod & KMOD_LALT)
           break;
-        trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
+        if (last_key[keysym.scancode] != 0)
+          trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
         last_key[keysym.scancode] = 0;
         break;
 
@@ -2473,9 +2472,10 @@ void trs_get_event(int wait)
 
 #ifdef SDL2
       case SDL_TEXTINPUT:
-        if (text_char) {
+        if (scancode) {
+          last_key[scancode] = event.text.text[0];
           trs_xlate_keysym(event.text.text[0]);
-          text_char = 0;
+          scancode = 0;
         }
         break;
 #endif
