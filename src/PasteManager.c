@@ -10,7 +10,7 @@ static char *pasteString;
 static int pasteStringLength = 0;
 
 /* Extern emulator routines */
-extern int trs_paste_started();
+extern void trs_paste_started();
 extern void trs_end_copy();
 
 int PasteManagerGetChar(unsigned short *character)
@@ -56,7 +56,7 @@ void PasteManagerStartCopy(char *string)
 #include <stdio.h>
 #include "windows.h"
 
-extern int trs_paste_started();
+extern void trs_paste_started();
 extern void trs_end_copy();
 
 static int charCount = 0;
@@ -170,7 +170,7 @@ static int pasteStringLength = 0;
 static int firstTime = 1;
 
 /* Extern emulator routines */
-extern int trs_paste_started();
+extern void trs_paste_started();
 extern void trs_end_copy();
 
 static int init_scrap(void)
