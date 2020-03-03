@@ -134,7 +134,7 @@ static int top_margin = 0;
 static int left_margin = 0;
 static int screen_height = 0;
 static int currentmode = NORMAL;
-static int OrigHeight,OrigWidth;
+static int OrigHeight, OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
 static int cur_char_height = TRS_CHAR_HEIGHT * 2;
 static int disksizes[8] = {5,5,5,5,8,8,8,8};
@@ -1217,7 +1217,7 @@ void trs_rom_init(void)
       break;
     case 3:
     case 4:
-      if (romfile3[0] != 0){
+      if (romfile3[0] != 0) {
         if (trs_load_rom(romfile3) == 0)
           break;
       }
@@ -1225,7 +1225,7 @@ void trs_rom_init(void)
         trs_load_compiled_rom(trs_rom3_size, trs_rom3);
       break;
     case 5:
-      if (romfile4p[0] != 0){
+      if (romfile4p[0] != 0) {
         if (trs_load_rom(romfile4p) == 0)
           break;
       }
