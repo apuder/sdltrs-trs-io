@@ -3082,7 +3082,7 @@ void trs_gui_refresh()
 
 void trs_gui_write_char(int position, int char_index, int invert)
 {
-  int row,col,destx,desty;
+  int row,col;
   SDL_Rect srcRect, destRect;
 
   if (position >= screen_chars)
@@ -3090,44 +3090,33 @@ void trs_gui_write_char(int position, int char_index, int invert)
 
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
-    row = position / 64;
-    col = position - (row * 64);
-    position = (row + (col_chars-16)/2) * row_chars +
-      col + (row_chars-64)/2;
+    row = (position / 64) + 4;
+    col = (position - ((position / 64) * 64)) + 8;
+  } else {
+    row = position / row_chars;
+    col = position - (row * row_chars);
   }
 
-  row = position / row_chars;
-  col = position - (row * row_chars);
-  destx = col * cur_char_width + left_margin;
-  desty = row * cur_char_height + top_margin;
+  srcRect.x = 0;
+  srcRect.y = 0;
+  srcRect.w = cur_char_width;
+  srcRect.h = cur_char_height;
+  destRect.x = col * cur_char_width + left_margin;
+  destRect.y = row * cur_char_height + top_margin;
+  destRect.w = srcRect.w;
+  destRect.h = srcRect.h;
 
   if (trs_model == 1 && char_index >= 0xc0)
     /* On Model I, 0xc0-0xff is another copy of 0x80-0xbf */
     char_index -= 0x40;
   if (char_index >= 0x80 && char_index <= 0xbf && !(currentmode & INVERSE)) {
     /* Use graphics character bitmap instead of font */
-    srcRect.x = 0;
-    srcRect.y = 0;
-    srcRect.w = cur_char_width;
-    srcRect.h = cur_char_height;
-    destRect.x = destx;
-    destRect.y = desty;
-    destRect.w = srcRect.w;
-    destRect.h = srcRect.h;
     SDL_BlitSurface(trs_box[2][char_index-0x80], &srcRect, screen, &destRect);
   } else {
     /* Draw character using a builtin bitmap */
     if (trs_model > 1 && char_index >= 0xc0 &&
         (currentmode & (ALTERNATE+INVERSE)) == 0)
       char_index -= 0x40;
-    srcRect.x = 0;
-    srcRect.y = 0;
-    srcRect.w = cur_char_width;
-    srcRect.h = cur_char_height;
-    destRect.x = destx;
-    destRect.y = desty;
-    destRect.w = srcRect.w;
-    destRect.h = srcRect.h;
     if (invert)
       SDL_BlitSurface(trs_char[5][char_index], &srcRect, screen, &destRect);
     else
