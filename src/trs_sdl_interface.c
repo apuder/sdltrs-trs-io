@@ -2923,7 +2923,7 @@ void trs_turbo_led(void)
 
 void trs_screen_write_char(int position, int char_index)
 {
-  int row,col,destx,desty;
+  int row, col, destx, desty, expanded, width, height;
   SDL_Rect srcRect, destRect;
 
   trs_screen[position] = char_index;
@@ -2938,133 +2938,78 @@ void trs_screen_write_char(int position, int char_index)
   col = position - (row * row_chars);
   destx = col * cur_char_width + left_margin;
   desty = row * cur_char_height + top_margin;
+  expanded = (currentmode & EXPANDED) != 0;
+  width = cur_char_width * (expanded + 1);
+  height = cur_char_height;
 
   if (trs_model == 1 && char_index >= 0xc0) {
     /* On Model I, 0xc0-0xff is another copy of 0x80-0xbf */
     char_index -= 0x40;
   }
   if (char_index >= 0x80 && char_index <= 0xbf && !(currentmode & INVERSE)) {
-    /* Use graphics character bitmap instead of font */
-    switch (currentmode & EXPANDED) {
-      case NORMAL:
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = cur_char_width;
-        srcRect.h = cur_char_height;
-        destRect.x = destx;
-        destRect.y = desty;
-        destRect.w = srcRect.w;
-        destRect.h = srcRect.h;
-        SDL_BlitSurface(trs_box[0][char_index-0x80], &srcRect, screen, &destRect);
-        addToDrawList(&destRect);
-        break;
-      case EXPANDED:
-        /* use expanded graphics character bitmap instead of font */
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = cur_char_width*2;
-        srcRect.h = cur_char_height;
-        destRect.x = destx;
-        destRect.y = desty;
-        destRect.w = srcRect.w;
-        destRect.h = srcRect.h;
-        SDL_BlitSurface(trs_box[1][char_index-0x80], &srcRect, screen, &destRect);
-        addToDrawList(&destRect);
-        break;
-    }
+    /* Use box graphics character bitmap */
+    srcRect.x = 0;
+    srcRect.y = 0;
+    srcRect.w = width;
+    srcRect.h = height;
+    destRect.x = destx;
+    destRect.y = desty;
+    destRect.w = srcRect.w;
+    destRect.h = srcRect.h;
+    SDL_BlitSurface(trs_box[expanded][char_index - 0x80], &srcRect, screen, &destRect);
+    addToDrawList(&destRect);
   } else {
-    /* Draw character using a builtin bitmap */
+    /* Use regular character bitmap */
     if (trs_model > 1 && char_index >= 0xc0 &&
         (currentmode & (ALTERNATE+INVERSE)) == 0) {
       char_index -= 0x40;
     }
-    switch (currentmode & ~ALTERNATE) {
-      case NORMAL:
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = cur_char_width;
-        srcRect.h = cur_char_height;
-        destRect.x = destx;
-        destRect.y = desty;
-        destRect.w = srcRect.w;
-        destRect.h = srcRect.h;
-        SDL_BlitSurface(trs_char[0][char_index], &srcRect, screen, &destRect);
-        addToDrawList(&destRect);
-        break;
-      case EXPANDED:
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = cur_char_width*2;
-        srcRect.h = cur_char_height;
-        destRect.x = destx;
-        destRect.y = desty;
-        destRect.w = srcRect.w;
-        destRect.h = srcRect.h;
-        SDL_BlitSurface(trs_char[1][char_index], &srcRect, screen, &destRect);
-        addToDrawList(&destRect);
-        break;
-      case INVERSE:
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = cur_char_width;
-        srcRect.h = cur_char_height;
-        destRect.x = destx;
-        destRect.y = desty;
-        destRect.w = srcRect.w;
-        destRect.h = srcRect.h;
-        if (char_index & 0x80)
-          SDL_BlitSurface(trs_char[2][char_index & 0x7f], &srcRect, screen, &destRect);
-        else
-          SDL_BlitSurface(trs_char[0][char_index & 0x7f], &srcRect, screen, &destRect);
-        addToDrawList(&destRect);
-        break;
-      case EXPANDED+INVERSE:
-        srcRect.x = 0;
-        srcRect.y = 0;
-        srcRect.w = cur_char_width*2;
-        srcRect.h = cur_char_height;
-        destRect.x = destx;
-        destRect.y = desty;
-        destRect.w = srcRect.w;
-        destRect.h = srcRect.h;
-        if (char_index & 0x80)
-          SDL_BlitSurface(trs_char[3][char_index & 0x7f], &srcRect, screen, &destRect);
-        else
-          SDL_BlitSurface(trs_char[1][char_index & 0x7f], &srcRect, screen, &destRect);
-        addToDrawList(&destRect);
-        break;
+    if ((currentmode & INVERSE) && (char_index & 0x80)) {
+      expanded += 2;
+      char_index &= 0x7f;
     }
+    srcRect.x = 0;
+    srcRect.y = 0;
+    srcRect.w = width;
+    srcRect.h = height;
+    destRect.x = destx;
+    destRect.y = desty;
+    destRect.w = srcRect.w;
+    destRect.h = srcRect.h;
+    SDL_BlitSurface(trs_char[expanded][char_index], &srcRect, screen, &destRect);
+    addToDrawList(&destRect);
   }
+
+  /* Overlay grafyx on character */
   if (grafyx_enable) {
     /* assert(grafyx_overlay); */
-    int srcx, srcy, duny;
+    int srcx = ((col + grafyx_xoffset) % G_XSIZE) * cur_char_width;
+    int srcy = (row * cur_char_height + grafyx_yoffset * (scale * 2))
+      % (G_YSIZE * (scale * 2));
+    int duny = imageSize.height - srcy;
 
-    srcx = ((col+grafyx_xoffset) % G_XSIZE)*cur_char_width;
-    srcy = (row*cur_char_height + grafyx_yoffset*(scale * 2))
-      % (G_YSIZE*(scale * 2));
     srcRect.x = srcx;
     srcRect.y = srcy;
-    srcRect.w = cur_char_width;
-    srcRect.h = cur_char_height;
+    srcRect.w = width;
+    srcRect.h = height;
     destRect.x = destx;
     destRect.y = desty;
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
     addToDrawList(&destRect);
-    TrsSoftBlit(image, &srcRect, screen, &destRect,1);
+    TrsSoftBlit(image, &srcRect, screen, &destRect, 1);
     /* Draw wrapped portion if any */
-    duny = imageSize.height - srcy;
     if (duny < cur_char_height) {
       srcRect.x = srcx;
       srcRect.y = 0;
-      srcRect.w = cur_char_width;
-      srcRect.h = cur_char_height - duny;
+      srcRect.w = width;
+      srcRect.h = height - duny;
       destRect.x = destx;
       destRect.y = desty + duny;
       destRect.w = srcRect.w;
       destRect.h = srcRect.h;
       addToDrawList(&destRect);
-      TrsSoftBlit(image, &srcRect, screen, &destRect,1);
+      TrsSoftBlit(image, &srcRect, screen, &destRect, 1);
     }
   }
   if (hrg_enable)
