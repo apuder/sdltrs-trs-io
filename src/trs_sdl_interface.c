@@ -2950,8 +2950,8 @@ void trs_screen_write_char(int position, int char_index)
     row = position >> 6;
     col = position - (row << 6);
   } else {
-    row = position / row_chars;
-    col = position - (row * row_chars);
+    row = position / 80;
+    col = position - (row * 80);
   }
   destx = col * cur_char_width + left_margin;
   desty = row * cur_char_height + top_margin;
@@ -3050,13 +3050,13 @@ void trs_gui_write_char(int position, int char_index, int invert)
   if (position >= screen_chars)
     return;
 
+  row = position >> 6;
+  col = position - (row << 6);
+
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
-    row = (position >> 6) + 4;
-    col = (position - ((position >> 6) << 6)) + 8;
-  } else {
-    row = position / row_chars;
-    col = position - (row * row_chars);
+    row += 4;
+    col += 8;
   }
 
   srcRect.x = 0;
