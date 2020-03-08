@@ -167,7 +167,7 @@ int  trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text(const char *text, int x, int y, int invert)
 {
-  int const position = x + y * 64;
+  int const position = x + (y << 6);
   int i;
 
   for (i = 0; i < (strlen(text) <= 62 - x ? strlen(text) : 62 - x); i++)
@@ -176,7 +176,7 @@ void trs_gui_write_text(const char *text, int x, int y, int invert)
 
 void trs_gui_center_text(const char *text, int y, int invert)
 {
-  int const position = (64 - strlen(text)) / 2 + y * 64;
+  int const position = (64 - strlen(text)) / 2 + (y << 6);
   int i;
 
   for (i = 0; i < (int)strlen(text); i++)
@@ -205,7 +205,7 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
 {
   int i, j;
 
-  for (i = y * 64 + x; i < (y + h) * 64 + x; i += 64)
+  for (i = (y << 6) + x; i < ((y + h) << 6) + x; i += 64)
     for (j = i; j < i + w; j++)
       trs_gui_write_char(j, ' ', 0);
 }
