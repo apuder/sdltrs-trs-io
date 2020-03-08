@@ -27,27 +27,28 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
-#define N_JOYBUTTONS (20)
-#define GUI          (1)
-#define KEYBRD       (2)
-#define SAVE         (3)
-#define LOAD         (4)
-#define RESET        (5)
-#define EXIT         (6)
-#define PAUSE        (7)
-#define JOYGUI       (8)
-#define DISK         (9)
-#define HARD         (10)
-#define STRINGY      (11)
-#define TAPE         (12)
-#define READ         (13)
-#define WRITE        (14)
-#define EMULATOR     (15)
-#define INTERFACE    (16)
-#define OTHER        (17)
-#define KEYS         (18)
-#define EXEC         (19)
-#define SAVE_BMP     (20)
+#define GUI          1
+#define KEYBRD       2
+#define SAVE         3
+#define LOAD         4
+#define RESET        5
+#define EXIT         6
+#define PAUSE        7
+#define JOYGUI       8
+#define DISK         9
+#define HARD         10
+#define STRINGY      11
+#define TAPE         12
+#define READ         13
+#define WRITE        14
+#define EMULATOR     15
+#define INTERFACE    16
+#define OTHER        17
+#define KEYS         18
+#define EXEC         19
+#define SAVE_BMP     20
+
+#define N_JOYBUTTONS 20
 
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;
@@ -70,7 +71,7 @@ void trs_gui_save_bmp(void);
 void trs_gui_new_machine(void);
 void trs_gui(void);
 
-void trs_gui_refresh();
+void trs_gui_refresh(void);
 void trs_gui_write_char(int position, int char_index, int invert);
 
 void trs_gui_get_virtual_key(void);

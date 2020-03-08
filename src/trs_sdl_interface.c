@@ -63,7 +63,6 @@
 #include <sys/file.h>
 #include <unistd.h>
 #include <SDL.h>
-
 #include "blit.h"
 #include "error.h"
 #include "trs_iodefs.h"
@@ -79,13 +78,14 @@
 extern char *program_name;
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 
+extern int  trs_gui_exit_sdltrs(void);
 extern void trs_gui_keys_sdltrs(void);
 extern void trs_gui_model(void);
 
 #define MAX_RECTS 2048
-#define WHITE 0xe0e0ff
-#define BLACK 0
-#define GREEN 0x344843
+#define WHITE     0xe0e0ff
+#define BLACK     0
+#define GREEN     0x344843
 
 /* Public data */
 int window_border_width;
@@ -137,8 +137,8 @@ static int currentmode = NORMAL;
 static int OrigHeight, OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
 static int cur_char_height = TRS_CHAR_HEIGHT * 2;
-static int disksizes[8] = {5,5,5,5,8,8,8,8};
-static int disksteps[8] = {1,1,1,1,2,2,2,2};
+static int disksizes[8] = { 5, 5, 5, 5, 8, 8, 8, 8 };
+static int disksteps[8] = { 1, 1, 1, 1, 2, 2, 2, 2 };
 static int mousepointer = 1;
 static int mouse_x_size = 640, mouse_y_size = 240;
 static int mouse_sens = 3;
@@ -164,16 +164,16 @@ static Uint32 last_key[256];
 #define PASTE_GETNEXT 1
 #define PASTE_KEYDOWN 2
 #define PASTE_KEYUP   3
-static int paste_state = PASTE_IDLE;
-static int paste_lastkey = FALSE;
+static int  paste_state = PASTE_IDLE;
+static int  paste_lastkey = FALSE;
 extern int  PasteManagerStartPaste(void);
 extern void PasteManagerStartCopy(char *string);
-extern int PasteManagerGetChar(unsigned short *character);
+extern int  PasteManagerGetChar(unsigned short *character);
 
-#define COPY_IDLE      0
-#define COPY_STARTED   1
-#define COPY_DEFINED   2
-#define COPY_CLEAR     3
+#define COPY_IDLE     0
+#define COPY_STARTED  1
+#define COPY_DEFINED  2
+#define COPY_CLEAR    3
 static int copyStatus = COPY_IDLE;
 static int selectionStartX = 0;
 static int selectionStartY = 0;
@@ -187,7 +187,7 @@ static int requestSelectAll = FALSE;
 /* True size of graphics memory -- some is offscreen */
 #define G_XSIZE 128
 #define G_YSIZE 256
-static char grafyx[(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE)];
+static char grafyx[(2 * G_YSIZE * MAX_SCALE) * (G_XSIZE * MAX_SCALE)];
 static unsigned char grafyx_unscaled[G_YSIZE][G_XSIZE];
 
 static unsigned char grafyx_microlabs = 0;
@@ -211,23 +211,23 @@ static unsigned char grafyx_xoffset = 0, grafyx_yoffset = 0;
 #define G3_COORD    0x80
 #define G3_ENABLE   0x40
 #define G3_COMMAND  0x20
-#define G3_YLOW(v)  (((v)&0x1e)>>1)
+#define G3_YLOW(v)  (((v) & 0x1e) >> 1)
 
 typedef struct image_size_type {
-    unsigned int width;
-    unsigned int height;
-    unsigned int bytes_per_line;
+  unsigned int width;
+  unsigned int height;
+  unsigned int bytes_per_line;
 } IMAGE_SIZE_TYPE;
 
 IMAGE_SIZE_TYPE imageSize = {
-  /*width, height*/    8*G_XSIZE, 2*G_YSIZE,  /* if scale=1 */
+  /*width, height*/    8 * G_XSIZE, 2 * G_YSIZE,  /* if scale = 1 */
   /*bytes_per_line*/   G_XSIZE,  /* if scale = 1 */
 };
 
 #define HRG_MEMSIZE (1024 * 12)        /* 12k * 8 bit graphics memory */
 static unsigned char hrg_screen[HRG_MEMSIZE];
-static int hrg_pixel_x[2][6+1];
-static int hrg_pixel_y[12+1];
+static int hrg_pixel_x[2][6 + 1];
+static int hrg_pixel_y[12 + 1];
 static int hrg_pixel_width[2][6];
 static int hrg_pixel_height[12];
 static int hrg_enable = 0;
@@ -244,177 +244,177 @@ static int key_queue_entries;
 
 /* Option handling */
 typedef struct trs_opt_struct {
-  char *name;
-  void (*handler)(char *,int, char *);
+  const char *name;
+  void (*handler)(char *, int, char *);
   int hasArg;
   int intArg;
   char *strArg;
 } trs_opt;
 
-static void trs_opt_scale(char *arg, int intarg, char *stringarg);
-static void trs_opt_resize3(char *arg, int intarg, char *stringarg);
-static void trs_opt_resize4(char *arg, int intarg, char *stringarg);
-static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
-static void trs_opt_debug(char *arg, int intarg, char *stringarg);
-static void trs_opt_model(char *arg, int intarg, char *stringarg);
+static void trs_opt_background(char *arg, int intarg, char *stringarg);
+static void trs_opt_borderwidth(char *arg, int intarg, char *stringarg);
+static void trs_opt_cass(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset1(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset3(char *arg, int intarg, char *stringarg);
 static void trs_opt_charset4(char *arg, int intarg, char *stringarg);
-static void trs_opt_printer(char *arg, int intarg, char *stringarg);
-static void trs_opt_string(char *arg, int intarg, char *stringarg);
+static void trs_opt_debug(char *arg, int intarg, char *stringarg);
 static void trs_opt_disk(char *arg, int intarg, char *stringarg);
-static void trs_opt_hard(char *arg, int intarg, char *stringarg);
-static void trs_opt_stringy(char *arg, int intarg, char *stringarg);
-static void trs_opt_wafer(char *arg, int intarg, char *stringarg);
-static void trs_opt_cass(char *arg, int intarg, char *stringarg);
 static void trs_opt_diskset(char *arg, int intarg, char *stringarg);
-static void trs_opt_keystretch(char *arg, int intarg, char *stringarg);
-static void trs_opt_borderwidth(char *arg, int intarg, char *stringarg);
-static void trs_opt_microlabs(char *arg, int intarg, char *stringarg);
-static void trs_opt_led(char *arg, int intarg, char *stringarg);
 static void trs_opt_doubler(char *arg, int intarg, char *stringarg);
+static void trs_opt_emtsafe(char *arg, int intarg, char *stringarg);
+static void trs_opt_foreground(char *arg, int intarg, char *stringarg);
+static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
+static void trs_opt_guibackground(char *arg, int intarg, char *stringarg);
+static void trs_opt_guiforeground(char *arg, int intarg, char *stringarg);
+static void trs_opt_hard(char *arg, int intarg, char *stringarg);
+static void trs_opt_huffman(char *arg, int intarg, char *stringarg);
+static void trs_opt_hypermem(char *arg, int intarg, char *stringarg);
+static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg);
+static void trs_opt_joybuttonmap(char *arg, int intarg, char *stringarg);
+static void trs_opt_joysticknum(char *arg, int intarg, char *stringarg);
+static void trs_opt_keypadjoy(char *arg, int intarg, char *stringarg);
+static void trs_opt_keystretch(char *arg, int intarg, char *stringarg);
+static void trs_opt_le18(char *arg, int intarg, char *stringarg);
+static void trs_opt_led(char *arg, int intarg, char *stringarg);
+static void trs_opt_lower(char *arg, int intarg, char *stringarg);
+static void trs_opt_microlabs(char *arg, int intarg, char *stringarg);
+static void trs_opt_model(char *arg, int intarg, char *stringarg);
+static void trs_opt_mousepointer(char *arg, int intarg, char *stringarg);
+static void trs_opt_printer(char *arg, int intarg, char *stringarg);
+static void trs_opt_resize3(char *arg, int intarg, char *stringarg);
+static void trs_opt_resize4(char *arg, int intarg, char *stringarg);
+static void trs_opt_samplerate(char *arg, int intarg, char *stringarg);
+static void trs_opt_scale(char *arg, int intarg, char *stringarg);
+static void trs_opt_scanlines(char *arg, int intarg, char *stringarg);
+static void trs_opt_selector(char *arg, int intarg, char *stringarg);
+static void trs_opt_shiftbracket(char *arg, int intarg, char *stringarg);
 static void trs_opt_sizemap(char *arg, int intarg, char *stringarg);
+static void trs_opt_sound(char *arg, int intarg, char *stringarg);
 #ifdef __linux
 static void trs_opt_stepmap(char *arg, int intarg, char *stringarg);
 #endif
-static void trs_opt_truedam(char *arg, int intarg, char *stringarg);
-static void trs_opt_samplerate(char *arg, int intarg, char *stringarg);
+static void trs_opt_string(char *arg, int intarg, char *stringarg);
+static void trs_opt_stringy(char *arg, int intarg, char *stringarg);
+static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
 static void trs_opt_switches(char *arg, int intarg, char *stringarg);
-static void trs_opt_shiftbracket(char *arg, int intarg, char *stringarg);
-static void trs_opt_keypadjoy(char *arg, int intarg, char *stringarg);
-static void trs_opt_joysticknum(char *arg, int intarg, char *stringarg);
-static void trs_opt_foreground(char *arg, int intarg, char *stringarg);
-static void trs_opt_background(char *arg, int intarg, char *stringarg);
-static void trs_opt_guiforeground(char *arg, int intarg, char *stringarg);
-static void trs_opt_guibackground(char *arg, int intarg, char *stringarg);
-static void trs_opt_emtsafe(char *arg, int intarg, char *stringarg);
+static void trs_opt_truedam(char *arg, int intarg, char *stringarg);
 static void trs_opt_turbo(char *arg, int intarg, char *stringarg);
 static void trs_opt_turborate(char *arg, int intarg, char *stringarg);
-static void trs_opt_mousepointer(char *arg, int intarg, char *stringarg);
-static void trs_opt_joybuttonmap(char *arg, int intarg, char *stringarg);
-static void trs_opt_joyaxismapped(char *arg, int intarg, char *stringarg);
-static void trs_opt_huffman(char *arg, int intarg, char *stringarg);
-static void trs_opt_hypermem(char *arg, int intarg, char *stringarg);
-static void trs_opt_supermem(char *arg, int intarg, char *stringarg);
-static void trs_opt_selector(char *arg, int intarg, char *stringarg);
-static void trs_opt_le18(char *arg, int intarg, char *stringarg);
-static void trs_opt_lower(char *arg, int intarg, char *stringarg);
-static void trs_opt_sound(char *arg, int intarg, char *stringarg);
-static void trs_opt_scanlines(char *arg, int intarg, char *stringarg);
+static void trs_opt_wafer(char *arg, int intarg, char *stringarg);
 
-trs_opt options[] = {
-{"scale",trs_opt_scale,1,0,NULL},
-{"resize3",trs_opt_resize3,0,1,NULL},
-{"resize4",trs_opt_resize4,0,1,NULL},
-{"noresize3",trs_opt_resize3,0,0,NULL},
-{"noresize4",trs_opt_resize4,0,0,NULL},
-{"fullscreen",trs_opt_fullscreen,0,1,NULL},
-{"nofullscreen",trs_opt_fullscreen,0,0,NULL},
-{"debug",trs_opt_debug,0,1,NULL},
-{"nodebug",trs_opt_debug,0,0,NULL},
-{"model",trs_opt_model,1,0,NULL},
-{"charset1",trs_opt_charset1,1,0,NULL},
-{"charset3",trs_opt_charset3,1,0,NULL},
-{"charset4",trs_opt_charset4,1,0,NULL},
-{"romfile",trs_opt_string,1,0,romfile},
-{"romfile3",trs_opt_string,1,0,romfile3},
-{"romfile4p",trs_opt_string,1,0,romfile4p},
-{"disk0",trs_opt_disk,1,0,NULL},
-{"disk1",trs_opt_disk,1,1,NULL},
-{"disk2",trs_opt_disk,1,2,NULL},
-{"disk3",trs_opt_disk,1,3,NULL},
-{"disk4",trs_opt_disk,1,4,NULL},
-{"disk5",trs_opt_disk,1,5,NULL},
-{"disk6",trs_opt_disk,1,6,NULL},
-{"disk7",trs_opt_disk,1,7,NULL},
-{"hard0",trs_opt_hard,1,0,NULL},
-{"hard1",trs_opt_hard,1,1,NULL},
-{"hard2",trs_opt_hard,1,2,NULL},
-{"hard3",trs_opt_hard,1,3,NULL},
-{"stringy",trs_opt_stringy,0,1,NULL},
-{"nostringy",trs_opt_stringy,0,0,NULL},
-{"wafer0",trs_opt_wafer,1,0,NULL},
-{"wafer1",trs_opt_wafer,1,1,NULL},
-{"wafer2",trs_opt_wafer,1,2,NULL},
-{"wafer3",trs_opt_wafer,1,3,NULL},
-{"wafer4",trs_opt_wafer,1,4,NULL},
-{"wafer5",trs_opt_wafer,1,5,NULL},
-{"wafer6",trs_opt_wafer,1,6,NULL},
-{"wafer7",trs_opt_wafer,1,7,NULL},
-{"cassette",trs_opt_cass,1,0,NULL},
-{"diskset",trs_opt_diskset,1,0,NULL},
-{"diskdir",trs_opt_string,1,0,trs_disk_dir},
-{"harddir",trs_opt_string,1,0,trs_hard_dir},
-{"cassdir",trs_opt_string,1,0,trs_cass_dir},
-{"disksetdir",trs_opt_string,1,0,trs_disk_set_dir},
-{"statedir",trs_opt_string,1,0,trs_state_dir},
-{"printer",trs_opt_printer,1,0,NULL},
-{"printerdir",trs_opt_string,1,0,trs_printer_dir},
-{"printercmd",trs_opt_string,1,0,trs_printer_command},
-{"keystretch",trs_opt_keystretch,1,0,NULL},
-{"borderwidth",trs_opt_borderwidth,1,0,NULL},
-{"microlabs",trs_opt_microlabs,0,1,NULL},
-{"nomicrolabs",trs_opt_microlabs,0,0,NULL},
-{"showled",trs_opt_led,0,1,NULL},
-{"hideled",trs_opt_led,0,0,NULL},
-{"doubler",trs_opt_doubler,1,0,NULL},
-{"sizemap",trs_opt_sizemap,1,0,NULL},
+static const trs_opt options[] = {
+  { "background",      trs_opt_background,    1, 0, NULL                },
+  { "bg",              trs_opt_background,    1, 0, NULL                },
+  { "borderwidth",     trs_opt_borderwidth,   1, 0, NULL                },
+  { "cassdir",         trs_opt_string,        1, 0, trs_cass_dir        },
+  { "cassette",        trs_opt_cass,          1, 0, NULL                },
+  { "charset1",        trs_opt_charset1,      1, 0, NULL                },
+  { "charset3",        trs_opt_charset3,      1, 0, NULL                },
+  { "charset4",        trs_opt_charset4,      1, 0, NULL                },
+  { "debug",           trs_opt_debug,         0, 1, NULL                },
+  { "disk0",           trs_opt_disk,          1, 0, NULL                },
+  { "disk1",           trs_opt_disk,          1, 1, NULL                },
+  { "disk2",           trs_opt_disk,          1, 2, NULL                },
+  { "disk3",           trs_opt_disk,          1, 3, NULL                },
+  { "disk4",           trs_opt_disk,          1, 4, NULL                },
+  { "disk5",           trs_opt_disk,          1, 5, NULL                },
+  { "disk6",           trs_opt_disk,          1, 6, NULL                },
+  { "disk7",           trs_opt_disk,          1, 7, NULL                },
+  { "diskdir",         trs_opt_string,        1, 0, trs_disk_dir        },
+  { "diskset",         trs_opt_diskset,       1, 0, NULL                },
+  { "disksetdir",      trs_opt_string,        1, 0, trs_disk_set_dir    },
+  { "doubler",         trs_opt_doubler,       1, 0, NULL                },
+  { "emtsafe",         trs_opt_emtsafe,       0, 1, NULL                },
+  { "fg",              trs_opt_foreground,    1, 0, NULL                },
+  { "foreground",      trs_opt_foreground,    1, 0, NULL                },
+  { "fullscreen",      trs_opt_fullscreen,    0, 1, NULL                },
+  { "guibackground",   trs_opt_guibackground, 1, 0, NULL                },
+  { "guibg",           trs_opt_guibackground, 1, 0, NULL                },
+  { "guifg",           trs_opt_guiforeground, 1, 0, NULL                },
+  { "guiforeground",   trs_opt_guiforeground, 1, 0, NULL                },
+  { "hard0",           trs_opt_hard,          1, 0, NULL                },
+  { "hard1",           trs_opt_hard,          1, 1, NULL                },
+  { "hard2",           trs_opt_hard,          1, 2, NULL                },
+  { "hard3",           trs_opt_hard,          1, 3, NULL                },
+  { "harddir",         trs_opt_string,        1, 0, trs_hard_dir        },
+  { "hideled",         trs_opt_led,           0, 0, NULL                },
+  { "huffman",         trs_opt_huffman,       0, 1, NULL                },
+  { "hypermem",        trs_opt_hypermem,      0, 1, NULL                },
+  { "joyaxismapped",   trs_opt_joyaxismapped, 0, 1, NULL                },
+  { "joybuttonmap",    trs_opt_joybuttonmap,  1, 0, NULL                },
+  { "joysticknum",     trs_opt_joysticknum,   1, 0, NULL                },
+  { "keypadjoy",       trs_opt_keypadjoy,     0, 1, NULL                },
+  { "keystretch",      trs_opt_keystretch,    1, 0, NULL                },
+  { "le18",            trs_opt_le18,          0, 1, NULL                },
+  { "lower",           trs_opt_lower,         0, 1, NULL                },
+  { "microlabs",       trs_opt_microlabs,     0, 1, NULL                },
+  { "model",           trs_opt_model,         1, 0, NULL                },
+  { "mousepointer",    trs_opt_mousepointer,  0, 1, NULL                },
+  { "nodebug",         trs_opt_debug,         0, 0, NULL                },
+  { "noemtsafe",       trs_opt_emtsafe,       0, 0, NULL                },
+  { "nofullscreen",    trs_opt_fullscreen,    0, 0, NULL                },
+  { "nohuffman",       trs_opt_huffman,       0, 0, NULL                },
+  { "nohypermem",      trs_opt_hypermem,      0, 0, NULL                },
+  { "nojoyaxismapped", trs_opt_joyaxismapped, 0, 0, NULL                },
+  { "nokeypadjoy",     trs_opt_keypadjoy,     0, 0, NULL                },
+  { "nole18",          trs_opt_le18,          0, 0, NULL                },
+  { "nolower",         trs_opt_lower,         0, 0, NULL                },
+  { "nomicrolabs",     trs_opt_microlabs,     0, 0, NULL                },
+  { "nomousepointer",  trs_opt_mousepointer,  0, 0, NULL                },
+  { "noresize3",       trs_opt_resize3,       0, 0, NULL                },
+  { "noresize4",       trs_opt_resize4,       0, 0, NULL                },
+  { "noscanlines",     trs_opt_scanlines,     0, 0, NULL                },
+  { "noselector",      trs_opt_selector,      0, 0, NULL                },
+  { "noshiftbracket",  trs_opt_shiftbracket,  0, 0, NULL                },
+  { "nosound",         trs_opt_sound,         0, 0, NULL                },
+  { "nostringy",       trs_opt_stringy,       0, 0, NULL                },
+  { "nosupermem",      trs_opt_supermem,      0, 0, NULL                },
+  { "notruedam",       trs_opt_truedam,       0, 0, NULL                },
+  { "noturbo",         trs_opt_turbo,         0, 0, NULL                },
+  { "printer",         trs_opt_printer,       1, 0, NULL                },
+  { "printercmd",      trs_opt_string,        1, 0, trs_printer_command },
+  { "printerdir",      trs_opt_string,        1, 0, trs_printer_dir     },
+  { "resize3",         trs_opt_resize3,       0, 1, NULL                },
+  { "resize4",         trs_opt_resize4,       0, 1, NULL                },
+  { "romfile",         trs_opt_string,        1, 0, romfile             },
+  { "romfile3",        trs_opt_string,        1, 0, romfile3            },
+  { "romfile4p",       trs_opt_string,        1, 0, romfile4p           },
+  { "samplerate",      trs_opt_samplerate,    1, 0, NULL                },
+  { "scale",           trs_opt_scale,         1, 0, NULL                },
+  { "scanlines",       trs_opt_scanlines,     0, 1, NULL                },
+  { "selector",        trs_opt_selector,      0, 1, NULL                },
+  { "serial",          trs_opt_string,        1, 0, trs_uart_name       },
+  { "shiftbracket",    trs_opt_shiftbracket,  0, 1, NULL                },
+  { "showled",         trs_opt_led,           0, 1, NULL                },
+  { "sizemap",         trs_opt_sizemap,       1, 0, NULL                },
+  { "sound",           trs_opt_sound,         0, 1, NULL                },
+  { "statedir",        trs_opt_string,        1, 0, trs_state_dir       },
 #ifdef __linux
-{"stepmap",trs_opt_stepmap,1,0,NULL},
+  { "stepmap",         trs_opt_stepmap,       1, 0, NULL                },
 #endif
-{"truedam",trs_opt_truedam,0,1,NULL},
-{"notruedam",trs_opt_truedam,0,0,NULL},
-{"samplerate",trs_opt_samplerate,1,0,NULL},
-{"serial",trs_opt_string,1,0,trs_uart_name},
-{"switches",trs_opt_switches,1,0,NULL},
-{"shiftbracket",trs_opt_shiftbracket,0,1,NULL},
-{"noshiftbracket",trs_opt_shiftbracket,0,0,NULL},
-{"keypadjoy",trs_opt_keypadjoy,0,1,NULL},
-{"nokeypadjoy",trs_opt_keypadjoy,0,0,NULL},
-{"joysticknum",trs_opt_joysticknum,1,0,NULL},
-{"foreground",trs_opt_foreground,1,0,NULL},
-{"fg",trs_opt_foreground,1,0,NULL},
-{"background",trs_opt_background,1,0,NULL},
-{"bg",trs_opt_background,1,0,NULL},
-{"guiforeground",trs_opt_guiforeground,1,0,NULL},
-{"guifg",trs_opt_guiforeground,1,0,NULL},
-{"guibackground",trs_opt_guibackground,1,0,NULL},
-{"guibg",trs_opt_guibackground,1,0,NULL},
-{"emtsafe",trs_opt_emtsafe,0,1,NULL},
-{"noemtsafe",trs_opt_emtsafe,0,0,NULL},
-{"turbo",trs_opt_turbo,0,1,NULL},
-{"noturbo",trs_opt_turbo,0,0,NULL},
-{"turborate",trs_opt_turborate,1,0,NULL},
-{"mousepointer",trs_opt_mousepointer,0,1,NULL},
-{"nomousepointer",trs_opt_mousepointer,0,0,NULL},
-{"joybuttonmap",trs_opt_joybuttonmap,1,0,NULL},
-{"joyaxismapped",trs_opt_joyaxismapped,0,1,NULL},
-{"nojoyaxismapped",trs_opt_joyaxismapped,0,0,NULL},
-{"huffman",trs_opt_huffman,0,1,NULL},
-{"nohuffman",trs_opt_huffman,0,0,NULL},
-{"hypermem",trs_opt_hypermem,0,1,NULL},
-{"nohypermem",trs_opt_hypermem,0,0,NULL},
-{"supermem",trs_opt_supermem,0,1,NULL},
-{"nosupermem",trs_opt_supermem,0,0,NULL},
-{"selector",trs_opt_selector,0,1,NULL},
-{"noselector",trs_opt_selector,0,0,NULL},
-{"le18",trs_opt_le18,0,1,NULL},
-{"nole18",trs_opt_le18,0,0,NULL},
-{"lower",trs_opt_lower,0,1,NULL},
-{"nolower",trs_opt_lower,0,0,NULL},
-{"sound",trs_opt_sound,0,1,NULL},
-{"nosound",trs_opt_sound,0,0,NULL},
-{"scanlines",trs_opt_scanlines,0,1,NULL},
-{"noscanlines",trs_opt_scanlines,0,0,NULL},
+  { "stringy",         trs_opt_stringy,       0, 1, NULL                },
+  { "supermem",        trs_opt_supermem,      0, 1, NULL                },
+  { "switches",        trs_opt_switches,      1, 0, NULL                },
+  { "truedam",         trs_opt_truedam,       0, 1, NULL                },
+  { "turbo",           trs_opt_turbo,         0, 1, NULL                },
+  { "turborate",       trs_opt_turborate,     1, 0, NULL                },
+  { "wafer0",          trs_opt_wafer,         1, 0, NULL                },
+  { "wafer1",          trs_opt_wafer,         1, 1, NULL                },
+  { "wafer2",          trs_opt_wafer,         1, 2, NULL                },
+  { "wafer3",          trs_opt_wafer,         1, 3, NULL                },
+  { "wafer4",          trs_opt_wafer,         1, 4, NULL                },
+  { "wafer5",          trs_opt_wafer,         1, 5, NULL                },
+  { "wafer6",          trs_opt_wafer,         1, 6, NULL                },
+  { "wafer7",          trs_opt_wafer,         1, 7, NULL                },
 };
 
-static const int num_options = sizeof(options)/sizeof(trs_opt);
+static const int num_options = sizeof(options) / sizeof(trs_opt);
 
 /* Private routines */
 static void bitmap_init(void);
 static void grafyx_redraw(void);
 
-static void stripWhitespace (char *inputStr)
+static void stripWhitespace(char *inputStr)
 {
   char *start, *end;
 
@@ -463,59 +463,59 @@ int trs_write_config_file(const char *filename)
   FILE *config_file;
   int i;
 
-  if ((config_file = fopen(filename,"w")) == NULL)
+  if ((config_file = fopen(filename, "w")) == NULL)
     return -1;
 
-  fprintf(config_file,"scale=%d\n",scale);
-  fprintf(config_file,"%sresize3\n",resize3 ? "" : "no");
-  fprintf(config_file,"%sresize4\n",resize4 ? "" : "no");
-  fprintf(config_file,"model=");
+  fprintf(config_file, "scale=%d\n", scale);
+  fprintf(config_file, "%sresize3\n", resize3 ? "" : "no");
+  fprintf(config_file, "%sresize4\n", resize4 ? "" : "no");
+  fprintf(config_file, "model=");
   switch(trs_model) {
     case 1:
-      fprintf(config_file,"1\n");
+      fprintf(config_file, "1\n");
       break;
     case 3:
-      fprintf(config_file,"3\n");
+      fprintf(config_file, "3\n");
       break;
     case 4:
-      fprintf(config_file,"4\n");
+      fprintf(config_file, "4\n");
       break;
     case 5:
-      fprintf(config_file,"4P\n");
+      fprintf(config_file, "4P\n");
       break;
   }
-  fprintf(config_file,"charset1=%s\n",charset_name(trs_charset1));
-  fprintf(config_file,"charset3=%s\n",charset_name(trs_charset3));
-  fprintf(config_file,"charset4=%s\n",charset_name(trs_charset4));
-  fprintf(config_file,"romfile=%s\n",romfile);
-  fprintf(config_file,"romfile3=%s\n",romfile3);
-  fprintf(config_file,"romfile4p=%s\n",romfile4p);
-  fprintf(config_file,"diskdir=%s\n",trs_disk_dir);
-  fprintf(config_file,"harddir=%s\n",trs_hard_dir);
-  fprintf(config_file,"cassdir=%s\n",trs_cass_dir);
-  fprintf(config_file,"disksetdir=%s\n",trs_disk_set_dir);
-  fprintf(config_file,"statedir=%s\n",trs_state_dir);
-  fprintf(config_file,"printer=%d\n",trs_printer);
-  fprintf(config_file,"printerdir=%s\n",trs_printer_dir);
-  fprintf(config_file,"printercmd=%s\n",trs_printer_command);
-  fprintf(config_file,"keystretch=%d\n",stretch_amount);
-  fprintf(config_file,"borderwidth=%d\n",window_border_width);
-  fprintf(config_file,"%sfullscreen\n",fullscreen ? "" : "no");
-  fprintf(config_file,"%smicrolabs\n",grafyx_microlabs ? "" : "no");
-  fprintf(config_file,"%s\n",trs_show_led ? "showled" : "hideled");
-  fprintf(config_file,"doubler=");
+  fprintf(config_file, "charset1=%s\n", charset_name(trs_charset1));
+  fprintf(config_file, "charset3=%s\n", charset_name(trs_charset3));
+  fprintf(config_file, "charset4=%s\n", charset_name(trs_charset4));
+  fprintf(config_file, "romfile=%s\n", romfile);
+  fprintf(config_file, "romfile3=%s\n", romfile3);
+  fprintf(config_file, "romfile4p=%s\n", romfile4p);
+  fprintf(config_file, "diskdir=%s\n", trs_disk_dir);
+  fprintf(config_file, "harddir=%s\n", trs_hard_dir);
+  fprintf(config_file, "cassdir=%s\n", trs_cass_dir);
+  fprintf(config_file, "disksetdir=%s\n", trs_disk_set_dir);
+  fprintf(config_file, "statedir=%s\n", trs_state_dir);
+  fprintf(config_file, "printer=%d\n", trs_printer);
+  fprintf(config_file, "printerdir=%s\n", trs_printer_dir);
+  fprintf(config_file, "printercmd=%s\n", trs_printer_command);
+  fprintf(config_file, "keystretch=%d\n", stretch_amount);
+  fprintf(config_file, "borderwidth=%d\n", window_border_width);
+  fprintf(config_file, "%sfullscreen\n", fullscreen ? "" : "no");
+  fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
+  fprintf(config_file, "%s\n", trs_show_led ? "showled" : "hideled");
+  fprintf(config_file, "doubler=");
   switch(trs_disk_doubler) {
     case TRSDISK_PERCOM:
-      fprintf(config_file,"percom\n");
+      fprintf(config_file, "percom\n");
       break;
     case TRSDISK_TANDY:
-      fprintf(config_file,"tandy\n");
+      fprintf(config_file, "tandy\n");
       break;
     case TRSDISK_BOTH:
-      fprintf(config_file,"both\n");
+      fprintf(config_file, "both\n");
       break;
     case TRSDISK_NODOUBLER:
-      fprintf(config_file,"none\n");
+      fprintf(config_file, "none\n");
       break;
   }
   fprintf(config_file, "sizemap=%d,%d,%d,%d,%d,%d,%d,%d\n",
@@ -529,7 +529,7 @@ int trs_write_config_file(const char *filename)
           trs_disk_getsize(7));
 #ifdef __linux
   fprintf(config_file, "stepmap=%d,%d,%d,%d,%d,%d,%d,%d\n",
-          trs_disk_getstep(0),            /* Corrected to trs_disk_getstep vs getsize  */
+          trs_disk_getstep(0),            /* Corrected to trs_disk_getstep vs getsize */
           trs_disk_getstep(1),            /* Corrected by Larry Kraemer 08-01-2011 */
           trs_disk_getstep(2),
           trs_disk_getstep(3),
@@ -538,53 +538,55 @@ int trs_write_config_file(const char *filename)
           trs_disk_getstep(6),
           trs_disk_getstep(7));
 #endif
-  fprintf(config_file,"%struedam\n",trs_disk_truedam ? "" : "no");
-  fprintf(config_file,"samplerate=%d\n",cassette_default_sample_rate);
-  fprintf(config_file,"serial=%s\n",trs_uart_name);
-  fprintf(config_file,"switches=%d\n",trs_uart_switches);
-  fprintf(config_file,"%sshiftbracket\n",trs_kb_bracket_state ? "" : "no");
-  fprintf(config_file,"joysticknum=");
+  fprintf(config_file, "%struedam\n", trs_disk_truedam ? "" : "no");
+  fprintf(config_file, "samplerate=%d\n", cassette_default_sample_rate);
+  fprintf(config_file, "serial=%s\n", trs_uart_name);
+  fprintf(config_file, "switches=%d\n", trs_uart_switches);
+  fprintf(config_file, "%sshiftbracket\n", trs_kb_bracket_state ? "" : "no");
+  fprintf(config_file, "joysticknum=");
   if (trs_joystick_num == -1)
-    fprintf(config_file,"none\n");
+    fprintf(config_file, "none\n");
   else
-    fprintf(config_file,"%d\n",trs_joystick_num);
-  fprintf(config_file,"%skeypadjoy\n",trs_keypad_joystick ? "" : "no");
-  fprintf(config_file,"foreground=0x%x\n",foreground);
-  fprintf(config_file,"background=0x%x\n",background);
-  fprintf(config_file,"guiforeground=0x%x\n",gui_foreground);
-  fprintf(config_file,"guibackground=0x%x\n",gui_background);
-  fprintf(config_file,"%sturbo\n",timer_overclock ? "" : "no");
-  fprintf(config_file,"turborate=%d\n", timer_overclock_rate);
+    fprintf(config_file, "%d\n", trs_joystick_num);
+  fprintf(config_file, "%skeypadjoy\n", trs_keypad_joystick ? "" : "no");
+  fprintf(config_file, "foreground=0x%x\n", foreground);
+  fprintf(config_file, "background=0x%x\n", background);
+  fprintf(config_file, "guiforeground=0x%x\n", gui_foreground);
+  fprintf(config_file, "guibackground=0x%x\n", gui_background);
+  fprintf(config_file, "%sturbo\n", timer_overclock ? "" : "no");
+  fprintf(config_file, "turborate=%d\n", timer_overclock_rate);
 
-  for (i=0;i<8;i++) {
+  for (i = 0; i < 8; i++) {
     const char *diskname = trs_disk_getfilename(i);
 
-    if (diskname[0] != 0)
-      fprintf(config_file,"disk%d=%s\n",i,diskname);
+    if (diskname[0])
+      fprintf(config_file, "disk%d=%s\n", i, diskname);
   }
-  for (i=0;i<4;i++) {
+  for (i = 0; i < 4; i++) {
     const char *diskname = trs_hard_getfilename(i);
 
-    if (diskname[0] != 0)
-      fprintf(config_file,"hard%d=%s\n",i,diskname);
+    if (diskname[0])
+      fprintf(config_file, "hard%d=%s\n", i, diskname);
   }
-  for (i=0;i<8;i++) {
+  for (i = 0; i < 8; i++) {
     const char *diskname = stringy_get_name(i);
 
-    if (diskname[0] != 0)
-      fprintf(config_file,"wafer%d=%s\n",i,diskname);
+    if (diskname[0])
+      fprintf(config_file, "wafer%d=%s\n", i, diskname);
   }
   {
     const char *cassname = trs_cassette_getfilename();
 
-    if (cassname[0] != 0)
-      fprintf(config_file,"cassette=%s\n",cassname);
+    if (cassname[0])
+      fprintf(config_file, "cassette=%s\n", cassname);
   }
 
   fprintf(config_file, "%smousepointer\n", mousepointer ? "" : "no");
+
   fprintf(config_file, "joybuttonmap=");
   for (i = 0; i < N_JOYBUTTONS; i++)
     fprintf(config_file, i < N_JOYBUTTONS - 1 ? "%d," : "%d\n", jbutton_map[i]);
+
   fprintf(config_file, "%sjoyaxismapped\n", jaxis_mapped ? "" : "no");
 
   fprintf(config_file, "%shuffman\n", huffman_ram ? "" : "no");
@@ -606,12 +608,15 @@ static void trs_set_to_defaults(void)
 {
   int i;
 
-  for (i=0;i<8;i++)
+  for (i = 0; i < 8; i++)
     trs_disk_remove(i);
-  for (i=0;i<4;i++)
+
+  for (i = 0; i < 4; i++)
     trs_hard_remove(i);
-  for (i=0;i<8;i++)
+
+  for (i = 0; i < 8; i++)
     stringy_remove(i);
+
   trs_cassette_remove();
 
   scale = 1;
@@ -625,9 +630,9 @@ static void trs_set_to_defaults(void)
   trs_charset1 = 3;
   trs_charset3 = 4;
   trs_charset4 = 8;
-  strcpy(romfile,"level2.rom");
-  strcpy(romfile3,"model3.rom");
-  strcpy(romfile4p,"model4p.rom");
+  strcpy(romfile, "level2.rom");
+  strcpy(romfile3, "model3.rom");
+  strcpy(romfile4p, "model4p.rom");
   trs_disk_dir[0] = 0;
   trs_hard_dir[0] = 0;
   trs_cass_dir[0] = 0;
@@ -635,9 +640,9 @@ static void trs_set_to_defaults(void)
   trs_state_dir[0] = 0;
   trs_printer_dir[0] = 0;
 #ifdef _WIN32
-  strcpy(trs_printer_command,"notepad %s");
+  strcpy(trs_printer_command, "notepad %s");
 #else
-  strcpy(trs_printer_command,"lpr %s");
+  strcpy(trs_printer_command, "lpr %s");
 #endif
   stretch_amount = STRETCH_AMOUNT;
   window_border_width = 2;
@@ -676,8 +681,10 @@ static void trs_set_to_defaults(void)
 static void trs_opt_scale(char *arg, int intarg, char *stringarg)
 {
   scale = atoi(arg);
-  if (scale <= 0) scale = 1;
-  if (scale > MAX_SCALE) scale = MAX_SCALE;
+  if (scale <= 0)
+    scale = 1;
+  if (scale > MAX_SCALE)
+    scale = MAX_SCALE;
 }
 
 static void trs_opt_resize3(char *arg, int intarg, char *stringarg)
@@ -941,7 +948,7 @@ static void trs_opt_keypadjoy(char *arg, int intarg, char *stringarg)
 
 static void trs_opt_joysticknum(char *arg, int intarg, char *stringarg)
 {
-  if (strcasecmp(arg,"none") == 0)
+  if (strcasecmp(arg, "none") == 0)
     trs_joystick_num = -1;
   else
     trs_joystick_num = atoi(arg);
@@ -1062,7 +1069,7 @@ static void trs_disk_setsizes(void)
 {
   unsigned int j;
 
-  for (j=0; j<=7; j++) {
+  for (j = 0; j <= 7; j++) {
     if (disksizes[j] == 5 || disksizes[j] == 8)
       trs_disk_setsize(j, disksizes[j]);
     else
@@ -1071,10 +1078,11 @@ static void trs_disk_setsizes(void)
 }
 
 static void trs_disk_setsteps(void)
-{            /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
+{
   unsigned int j;
 
-  for (j=0; j<=7; j++) {
+  /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
+  for (j = 0; j <= 7; j++) {
     if (disksteps[j] == 1 || disksteps[j] == 2)
       trs_disk_setstep(j, disksteps[j]);
     else
@@ -1082,7 +1090,7 @@ static void trs_disk_setsteps(void)
   }
 }
 
-int trs_load_config_file()
+int trs_load_config_file(void)
 {
   char line[FILENAME_MAX];
   char *arg;
@@ -1095,15 +1103,15 @@ int trs_load_config_file()
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
-    snprintf(trs_config_file, FILENAME_MAX-1, "./sdltrs.t8c");
+    snprintf(trs_config_file, FILENAME_MAX - 1, "./sdltrs.t8c");
 #else
     const char *home = getenv("HOME");
 
-    snprintf(trs_config_file, FILENAME_MAX-1, "%s/.sdltrs.t8c", home);
+    snprintf(trs_config_file, FILENAME_MAX - 1, "%s/.sdltrs.t8c", home);
 #endif
   }
 
-  if ((config_file = fopen(trs_config_file,"r")) == NULL) {
+  if ((config_file = fopen(trs_config_file, "r")) == NULL) {
     if (trs_write_config_file(trs_config_file) == -1)
       error("failed to write %s: %s", trs_config_file, strerror(errno));
     return -1;
@@ -1118,13 +1126,13 @@ int trs_load_config_file()
 
     stripWhitespace(line);
 
-    for (i=0;i<num_options;i++) {
+    for (i = 0; i < num_options; i++) {
       if (strcasecmp(line, options[i].name) == 0) {
         if (options[i].hasArg) {
           if (arg)
-            (*options[i].handler)(arg,options[i].intArg,options[i].strArg);
+            (*options[i].handler)(arg, options[i].intArg, options[i].strArg);
         } else
-          (*options[i].handler)(NULL,options[i].intArg,options[i].strArg);
+          (*options[i].handler)(NULL, options[i].intArg, options[i].strArg);
         break;
       }
     }
@@ -1138,15 +1146,16 @@ int trs_load_config_file()
 
 void trs_parse_command_line(int argc, char **argv, int *debug)
 {
-  int i,j;
+  int i, j;
 
   /* Check for config or state files on the command line */
   trs_config_file[0] = 0;
   init_state_file[0] = 0;
   trs_cmd_file[0] = 0;
+
   for (i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
-      for (j=0;j<num_options;j++) {
+      for (j = 0; j < num_options; j++) {
         if (strcasecmp(&argv[i][1], options[j].name) == 0) {
           if (options[j].hasArg)
             i++;
@@ -1156,12 +1165,12 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     }
     else if (strlen(argv[i]) < 4) {
     }
-    else if (strcasecmp(&argv[i][strlen(argv[i])-4],".t8c") == 0)
-      snprintf(trs_config_file,FILENAME_MAX - 1,"%s",argv[i]);
-    else if (strcasecmp(&argv[i][strlen(argv[i])-4],".t8s") == 0)
-      snprintf(init_state_file,FILENAME_MAX - 1,"%s",argv[i]);
-    else if (strcasecmp(&argv[i][strlen(argv[i])-4],".cmd") == 0)
-      snprintf(trs_cmd_file,FILENAME_MAX - 1,"%s",argv[i]);
+    else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".t8c") == 0)
+      snprintf(trs_config_file, FILENAME_MAX - 1, "%s", argv[i]);
+    else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".t8s") == 0)
+      snprintf(init_state_file, FILENAME_MAX - 1, "%s", argv[i]);
+    else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".cmd") == 0)
+      snprintf(trs_cmd_file, FILENAME_MAX - 1, "%s", argv[i]);
   }
 
   if (trs_load_config_file() == -1)
@@ -1170,14 +1179,14 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
   for (i = 1; i < argc; i++) {
     int argAvail = ((i + 1) < argc); /* is argument available? */
 
-    for (j=0;j<num_options;j++) {
+    for (j = 0; j < num_options; j++) {
       if (argv[i][0] == '-') {
         if (strcasecmp(&argv[i][1], options[j].name) == 0) {
           if (options[j].hasArg) {
             if (argAvail)
-              (*options[j].handler)(argv[++i],options[j].intArg,options[j].strArg);
+              (*options[j].handler)(argv[++i], options[j].intArg, options[j].strArg);
           } else
-            (*options[j].handler)(NULL,options[j].intArg,options[j].strArg);
+            (*options[j].handler)(NULL, options[j].intArg, options[j].strArg);
           break;
         }
       }
@@ -1185,6 +1194,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     if (j == num_options && argv[i][0] == '-')
       error("unrecognized option %s", argv[i]);
   }
+
   *debug = debugger;
   trs_disk_setsizes();
   trs_disk_setsteps();
@@ -1212,7 +1222,7 @@ void trs_rom_init(void)
 {
   switch(trs_model) {
     case 1:
-      if (romfile[0] != 0) {
+      if (romfile[0]) {
         if (trs_load_rom(romfile) == 0)
           break;
       }
@@ -1221,7 +1231,7 @@ void trs_rom_init(void)
       break;
     case 3:
     case 4:
-      if (romfile3[0] != 0) {
+      if (romfile3[0]) {
         if (trs_load_rom(romfile3) == 0)
           break;
       }
@@ -1229,7 +1239,7 @@ void trs_rom_init(void)
         trs_load_compiled_rom(trs_rom3_size, trs_rom3);
       break;
     case 5:
-      if (romfile4p[0] != 0) {
+      if (romfile4p[0]) {
         if (trs_load_rom(romfile4p) == 0)
           break;
       }
@@ -1248,7 +1258,7 @@ void trs_rom_init(void)
   }
 }
 
-void trs_screen_var_reset()
+void trs_screen_var_reset(void)
 {
   text80x24 = 0;
   screen640x240 = 0;
@@ -1273,7 +1283,7 @@ void trs_screen_caption(void)
 #ifdef SDL2
   SDL_SetWindowTitle(window, title);
 #else
-  SDL_WM_SetCaption(title,NULL);
+  SDL_WM_SetCaption(title, NULL);
 #endif
   if (trs_show_led)
     trs_turbo_led();
@@ -1317,8 +1327,8 @@ void trs_screen_init(void)
       cur_char_height = TRS_CHAR_HEIGHT * (scale * 2);
   }
 
-  imageSize.width = 8*G_XSIZE * scale;
-  imageSize.height = 2*G_YSIZE * scale;
+  imageSize.width = 8 * G_XSIZE * scale;
+  imageSize.height = 2 * G_YSIZE * scale;
   imageSize.bytes_per_line = G_XSIZE * scale;
 
   if (fullscreen)
@@ -1335,10 +1345,10 @@ void trs_screen_init(void)
 
   if (trs_model >= 3  && !resize) {
     OrigWidth = cur_char_width * 80 + 2 * border_width;
-    left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
+    left_margin = cur_char_width * (80 - row_chars) / 2 + border_width;
     OrigHeight = TRS_CHAR_HEIGHT4 * (scale * 2) * 24 + 2 * border_width + led_height;
     top_margin = (TRS_CHAR_HEIGHT4 * (scale * 2) * 24 -
-                 cur_char_height * col_chars)/2 + border_width;
+                 cur_char_height * col_chars) / 2 + border_width;
   } else {
     OrigWidth = cur_char_width * row_chars + 2 * border_width;
     left_margin = border_width;
@@ -1377,7 +1387,7 @@ void trs_screen_init(void)
 
   if (image)
     SDL_FreeSurface(image);
-  memset(grafyx,0,(2*G_YSIZE*MAX_SCALE) * (G_XSIZE*MAX_SCALE));
+  memset(grafyx, 0, (2 * G_YSIZE * MAX_SCALE) * (G_XSIZE * MAX_SCALE));
   image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1,
                                    imageSize.bytes_per_line, 1, 1, 1, 0);
 
@@ -1388,10 +1398,10 @@ void trs_screen_init(void)
   colors[1].r   = (foreground) & 0xFF;
   colors[1].g   = (foreground >> 8) & 0xFF;
   colors[1].b   = (foreground >> 16) & 0xFF;
-  light_red     = SDL_MapRGB(screen->format, 0x00,0x00,0x40);
-  bright_red    = SDL_MapRGB(screen->format, 0x00,0x00,0xff);
-  light_orange  = SDL_MapRGB(screen->format, 0x40,0x28,0x40);
-  bright_orange = SDL_MapRGB(screen->format, 0x00,0xa0,0xff);
+  light_red     = SDL_MapRGB(screen->format, 0x00, 0x00, 0x40);
+  bright_red    = SDL_MapRGB(screen->format, 0x00, 0x00, 0xff);
+  light_orange  = SDL_MapRGB(screen->format, 0x40, 0x28, 0x40);
+  bright_orange = SDL_MapRGB(screen->format, 0x00, 0xa0, 0xff);
 #else
   colors[0].r   = (background >> 16) & 0xFF;
   colors[0].g   = (background >> 8) & 0xFF;
@@ -1399,16 +1409,16 @@ void trs_screen_init(void)
   colors[1].r   = (foreground >> 16) & 0xFF;
   colors[1].g   = (foreground >> 8) & 0xFF;
   colors[1].b   = (foreground) & 0xFF;
-  light_red     = SDL_MapRGB(screen->format, 0x40,0x00,0x00);
-  bright_red    = SDL_MapRGB(screen->format, 0xff,0x00,0x00);
-  light_orange  = SDL_MapRGB(screen->format, 0x40,0x28,0x00);
-  bright_orange = SDL_MapRGB(screen->format, 0xff,0xa0,0x00);
+  light_red     = SDL_MapRGB(screen->format, 0x40, 0x00, 0x00);
+  bright_red    = SDL_MapRGB(screen->format, 0xff, 0x00, 0x00);
+  light_orange  = SDL_MapRGB(screen->format, 0x40, 0x28, 0x00);
+  bright_orange = SDL_MapRGB(screen->format, 0xff, 0xa0, 0x00);
 #endif
 
 #ifdef SDL2
-  SDL_SetPaletteColors(image->format->palette,colors,0,2);
+  SDL_SetPaletteColors(image->format->palette, colors, 0, 2);
 #else
-  SDL_SetPalette(image,SDL_LOGPAL,colors,0,2);
+  SDL_SetPalette(image, SDL_LOGPAL, colors, 0, 2);
 #endif
 
   TrsBlitMap(image->format->palette, screen->format);
@@ -1416,8 +1426,8 @@ void trs_screen_init(void)
   trs_screen_caption();
 
   if (trs_show_led) {
-    trs_disk_led(-1,0);
-    trs_hard_led(-1,0);
+    trs_disk_led(-1, 0);
+    trs_hard_led(-1, 0);
     trs_turbo_led();
   }
 
@@ -1434,7 +1444,7 @@ static void addToDrawList(SDL_Rect *rect)
 #if defined(SDL2) || !defined(NOX)
 static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 {
-  int i,y;
+  int x, y;
 
   if (copy_x < orig_x) {
     int swap_x;
@@ -1457,31 +1467,31 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
     const int pitch = screen->pitch;
     Uint8 *start8;
 
-    for (y=orig_y;y < orig_y+scale;y++) {
+    for (y = orig_y; y < orig_y + scale; y++) {
       start8 = (Uint8 *) screen->pixels +
         (y * pitch) + orig_x;
-      for (i=0;i<(copy_x-orig_x+scale);i++,start8++)
+      for (x = 0; x < (copy_x-orig_x + scale); x++, start8++)
         *start8 ^= 0xFF;
     }
     if (copy_y > orig_y) {
-      for (y=copy_y;y < copy_y+scale;y++) {
+      for (y = copy_y; y < copy_y + scale; y++) {
         start8 = (Uint8 *) screen->pixels +
           (y * pitch) + orig_x;
-        for (i=0;i<(copy_x-orig_x+scale);i++,start8++)
+        for (x = 0; x < (copy_x-orig_x + scale); x++, start8++)
           *start8 ^= 0xFF;
       }
     }
-    for (y=orig_y+scale;y < copy_y;y++) {
+    for (y = orig_y + scale; y < copy_y; y++) {
       start8 = (Uint8 *) screen->pixels +
         (y * pitch) + orig_x;
-      for (i=0;i<scale;i++)
+      for (x = 0; x < scale; x++)
         *start8++ ^= 0xFF;
     }
     if (copy_x > orig_x) {
-      for (y=orig_y+scale;y < copy_y;y++) {
+      for (y = orig_y + scale; y < copy_y; y++) {
         start8 = (Uint8 *) screen->pixels +
           (y * pitch) + copy_x;
-        for (i=0;i<scale;i++)
+        for (x = 0; x < scale; x++)
           *start8++ ^= 0xFF;
       }
     }
@@ -1490,31 +1500,31 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
     const int pitch2 = screen->pitch / 2;
     Uint16 *start16;
 
-    for (y=orig_y;y < orig_y+scale;y++) {
+    for (y = orig_y; y < orig_y + scale; y++) {
       start16 = (Uint16 *) screen->pixels +
         (y * pitch2) + orig_x;
-      for (i=0;i<(copy_x-orig_x+scale);i++,start16++)
+      for (x = 0; x < (copy_x-orig_x + scale); x++, start16++)
         *start16 ^= 0xFFFF;
     }
     if (copy_y > orig_y) {
-      for (y=copy_y;y < copy_y+scale;y++) {
+      for (y = copy_y; y < copy_y + scale; y++) {
         start16 = (Uint16 *) screen->pixels +
           (y * pitch2) + orig_x;
-        for (i=0;i<(copy_x-orig_x+scale);i++,start16++)
+        for (x = 0; x < (copy_x-orig_x + scale); x++, start16++)
           *start16 ^= 0xFFFF;
       }
     }
-    for (y=orig_y+scale;y < copy_y;y++) {
+    for (y = orig_y + scale; y < copy_y; y++) {
       start16 = (Uint16 *) screen->pixels +
         (y * pitch2) + orig_x;
-      for (i=0;i<scale;i++)
+      for (x = 0; x < scale; x++)
         *start16++ ^= 0xFFFF;
     }
     if (copy_x > orig_x) {
-      for (y=orig_y+scale;y < copy_y;y++) {
+      for (y = orig_y + scale; y < copy_y; y++) {
         start16 = (Uint16 *) screen->pixels +
           (y * pitch2) + copy_x;
-        for (i=0;i<scale;i++)
+        for (x = 0; x < scale; x++)
           *start16++ ^= 0xFFFF;
       }
     }
@@ -1523,31 +1533,31 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
     const int pitch4 = screen->pitch / 4;
     Uint32 *start32;
 
-    for (y=orig_y;y<orig_y+scale;y++) {
+    for (y = orig_y; y< orig_y + scale; y++) {
       start32 = (Uint32 *) screen->pixels +
         (y * pitch4) + orig_x;
-      for (i=0;i<(copy_x-orig_x+scale);i++,start32++)
+      for (x = 0; x < (copy_x-orig_x + scale); x++, start32++)
         *start32 ^= 0xFFFFFFFF;
     }
     if (copy_y > orig_y) {
-      for (y=copy_y;y<copy_y+scale;y++) {
+      for (y = copy_y; y< copy_y + scale; y++) {
         start32 = (Uint32 *) screen->pixels +
           (y * pitch4) + orig_x;
-        for (i=0;i<(copy_x-orig_x+scale);i++,start32++)
+        for (x = 0; x < (copy_x-orig_x + scale); x++, start32++)
           *start32 ^= 0xFFFFFFFF;
       }
     }
-    for (y=orig_y+scale;y < copy_y;y++) {
+    for (y = orig_y + scale; y < copy_y; y++) {
       start32 = (Uint32 *) screen->pixels +
         (y * pitch4) + orig_x;
-      for (i=0;i<scale;i++)
+      for (x = 0; x < scale; x++)
         *start32++ ^= 0xFFFFFFFF;
     }
     if (copy_x > orig_x) {
-      for (y=orig_y+scale;y < copy_y;y++) {
+      for (y = orig_y + scale; y < copy_y; y++) {
         start32 = (Uint32 *) screen->pixels +
           (y * pitch4) + copy_x;
-        for (i=0;i<scale;i++)
+        for (x = 0; x < scale; x++)
           *start32++ ^= 0xFFFFFFFF;
       }
     }
@@ -1653,12 +1663,12 @@ static void ProcessCopySelection(int selectAll)
   }
 }
 
-void trs_end_copy()
+void trs_end_copy(void)
 {
   copyStatus = COPY_CLEAR;
 }
 
-void trs_paste_started()
+void trs_paste_started(void)
 {
   paste_state = PASTE_GETNEXT;
 }
@@ -1667,7 +1677,7 @@ void trs_paste_started()
 /*
  * Flush SDL output
  */
-void trs_sdl_flush()
+void trs_sdl_flush(void)
 {
 #if defined(SDL2) || !defined(NOX)
   if (mousepointer) {
@@ -1697,28 +1707,27 @@ void trs_sdl_flush()
 #ifdef SDL2
     SDL_UpdateWindowSurface(window);
   else
-    SDL_UpdateWindowSurfaceRects(window,drawnRects,drawnRectCount);
+    SDL_UpdateWindowSurfaceRects(window, drawnRects, drawnRectCount);
 #else
-    SDL_UpdateRect(screen,0,0,0,0);
+    SDL_UpdateRect(screen, 0, 0, 0, 0);
   else
-    SDL_UpdateRects(screen,drawnRectCount,drawnRects);
+    SDL_UpdateRects(screen, drawnRectCount, drawnRects);
 #endif
   drawnRectCount = 0;
 }
 
 void trs_exit(int confirm)
 {
-  extern int trs_gui_exit_sdltrs();
   static int recursion = 0;
   SDL_Surface *buffer = NULL;
 
   if (recursion && confirm) return;
   recursion = 1;
 
-  if (confirm != 0) {
+  if (confirm) {
     buffer = SDL_ConvertSurface(screen, screen->format, SDL_SWSURFACE);
     if (!trs_gui_exit_sdltrs()) {
-      SDL_BlitSurface(buffer,NULL,screen,NULL);
+      SDL_BlitSurface(buffer, NULL, screen, NULL);
       SDL_FreeSurface(buffer);
       trs_gui_refresh();
       recursion = 0;
@@ -2039,8 +2048,8 @@ void trs_get_event(int wait)
             {
               trs_reset(1);
               if (trs_show_led) {
-                trs_disk_led(-1,0);
-                trs_hard_led(-1,0);
+                trs_disk_led(-1, 0);
+                trs_hard_led(-1, 0);
                 trs_turbo_led();
               }
             }
@@ -2236,18 +2245,16 @@ void trs_get_event(int wait)
             case SDLK_5:
             case SDLK_6:
             case SDLK_7:
-              {
+              if (keysym.mod & KMOD_SHIFT) {
+                trs_disk_remove(keysym.sym - SDLK_0);
+              } else {
                 char filename[FILENAME_MAX];
 
-                if (keysym.mod & KMOD_SHIFT) {
-                  trs_disk_remove(keysym.sym-SDLK_0);
-                } else {
-                  if (trs_gui_file_browse(trs_disk_dir, filename, NULL,0,
-                        " Floppy Disk Image ") != -1)
-                    trs_disk_insert(keysym.sym-SDLK_0, filename);
-                  trs_screen_refresh();
-                  trs_sdl_flush();
-                }
+                if (trs_gui_file_browse(trs_disk_dir, filename, NULL, 0,
+                      " Floppy Disk Image ") != -1)
+                  trs_disk_insert(keysym.sym - SDLK_0, filename);
+                trs_screen_refresh();
+                trs_sdl_flush();
               }
               break;
             default:
@@ -2259,7 +2266,7 @@ void trs_get_event(int wait)
           keysym.sym = 0;
           break;
         }
-        if (last_key[keysym.scancode] != 0)
+        if (last_key[keysym.scancode])
         /*
          * We think this hardware key is already pressed.
          * Assume we are getting key repeat and ignore it.
@@ -2362,7 +2369,7 @@ void trs_get_event(int wait)
           trs_xlate_keysym(keysym.unicode);
         }
 #endif
-        else if (keysym.sym != 0) {
+        else if (keysym.sym) {
           last_key[keysym.scancode] = keysym.sym;
           trs_xlate_keysym(keysym.sym);
         }
@@ -2376,7 +2383,7 @@ void trs_get_event(int wait)
 #endif
         if (keysym.mod & KMOD_LALT)
           break;
-        if (last_key[keysym.scancode] != 0)
+        if (last_key[keysym.scancode])
           trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
         last_key[keysym.scancode] = 0;
         break;
@@ -2405,8 +2412,8 @@ void trs_get_event(int wait)
               trigger_keydown = 1;
             value = 1;
           }
-          else if (abs(event.jaxis.value) < JOY_BOUNCE/8) {
-            if (value != 0)
+          else if (abs(event.jaxis.value) < JOY_BOUNCE / 8) {
+            if (value)
               trigger_keyup = 1;
             value = 0;
           }
@@ -2506,7 +2513,7 @@ void trs_screen_expanded(int flag)
 
   if ((currentmode ^ bit) & EXPANDED) {
     currentmode ^= EXPANDED;
-    SDL_FillRect(screen,NULL,background);
+    SDL_FillRect(screen, NULL, background);
     trs_screen_refresh();
   }
 }
@@ -2556,11 +2563,11 @@ static void trs_screen_640x240(int flag)
   if (resize)
     trs_screen_init();
   else {
-    left_margin = cur_char_width * (80 - row_chars)/2 + border_width;
+    left_margin = cur_char_width * (80 - row_chars) / 2 + border_width;
     top_margin = (TRS_CHAR_HEIGHT4 * (scale * 2) * 24 -
-        cur_char_height * col_chars)/2 + border_width;
+        cur_char_height * col_chars) / 2 + border_width;
     if (left_margin > border_width || top_margin > border_width)
-      SDL_FillRect(screen,NULL,background);
+      SDL_FillRect(screen, NULL, background);
   }
   trs_screen_refresh();
 }
@@ -2572,7 +2579,7 @@ void trs_screen_80x24(int flag)
   text80x24 = flag;
 }
 
-void screen_init()
+void screen_init(void)
 {
   unsigned int i;
 
@@ -2614,15 +2621,15 @@ boxes_init(int fg_color, int bg_color, int width, int height, int expanded)
     trs_box[expanded][graphics_char] =
       SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
 #if defined(big_endian) && !defined(__linux)
-                           0x000000ff, 0x0000ff00,0x00ff0000,0);
+                           0x000000ff, 0x0000ff00, 0x00ff0000, 0);
 #else
-                           0x00ff0000, 0x0000ff00,0x000000ff,0);
+                           0x00ff0000, 0x0000ff00, 0x000000ff, 0);
 #endif
 
     /* Clear everything */
     SDL_FillRect(trs_box[expanded][graphics_char], &fullrect, bg_color);
 
-    for (bit = 0 ; bit < 6; ++bit) {
+    for (bit = 0; bit < 6; ++bit) {
       if (graphics_char & (1 << bit)) {
         SDL_FillRect(trs_box[expanded][graphics_char], &bits[bit], fg_color);
       }
@@ -2649,28 +2656,28 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
    */
   mydata = (unsigned int *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT *
       scale_x * scale_y * sizeof(unsigned int));
-  mypixels= (unsigned char *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT * 8);
+  mypixels = (unsigned char *)malloc(TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT * 8);
   if (mydata == NULL || mypixels == NULL) {
     trs_sdl_cleanup();
     fatal("CreateSurfaceFromDataScale: failed to allocate memory");
   }
 
   /* Read the character data */
-  for (j= 0; (unsigned)j< TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT; j += 8)
-    for (i= j + 7; i >= j; i--)
-      *(mypixels + i)= (*(data + (j >> 3)) >> (i - j)) & 1;
+  for (j = 0; (unsigned)j < TRS_CHAR_WIDTH * TRS_CHAR_HEIGHT; j += 8)
+    for (i = j + 7; i >= j; i--)
+      *(mypixels + i) = (*(data + (j >> 3)) >> (i - j)) & 1;
 
   currdata = mydata;
   /* And prepare our rescaled character. */
-  for (j= 0; (unsigned)j< TRS_CHAR_HEIGHT * scale_y; j++) {
-    currpixel = mypixels + ((j/scale_y) * TRS_CHAR_WIDTH);
-    for (w= 0; w< TRS_CHAR_WIDTH ; w++) {
+  for (j = 0; (unsigned)j < TRS_CHAR_HEIGHT * scale_y; j++) {
+    currpixel = mypixels + ((j / scale_y) * TRS_CHAR_WIDTH);
+    for (w = 0; w < TRS_CHAR_WIDTH; w++) {
       if (*currpixel++ == 0) {
-        for (i=0;(unsigned)i<scale_x;i++)
+        for (i = 0; (unsigned)i < scale_x; i++)
           *currdata++ = bg_color;
       }
       else {
-        for (i=0;(unsigned)i<scale_x;i++)
+        for (i = 0; (unsigned)i < scale_x; i++)
           *currdata++ = fg_color;
       }
     }
@@ -2678,12 +2685,12 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 
   free(mypixels);
 
-  return(SDL_CreateRGBSurfaceFrom(mydata, TRS_CHAR_WIDTH*scale_x,
-         TRS_CHAR_HEIGHT*scale_y, 32, TRS_CHAR_WIDTH*scale_x * 4,
+  return(SDL_CreateRGBSurfaceFrom(mydata, TRS_CHAR_WIDTH * scale_x,
+         TRS_CHAR_HEIGHT * scale_y, 32, TRS_CHAR_WIDTH * scale_x * 4,
 #if defined(big_endian) && !defined(__linux)
-         0x000000ff, 0x0000ff00, 0x00ff0000,0));
+         0x000000ff, 0x0000ff00, 0x00ff0000, 0));
 #else
-         0x00ff0000, 0x0000ff00, 0x000000ff,0));
+         0x00ff0000, 0x0000ff00, 0x000000ff, 0));
 #endif
 }
 
@@ -2726,7 +2733,7 @@ static void bitmap_init(void)
       SDL_FreeSurface(trs_char[4][i]);
     }
     /* For the GUI, make sure we have brackets, backslash and block graphics */
-    if ((i>='[' && i<=']') || i>=128)
+    if ((i >= '[' && i <= ']') || i >= 128)
       trs_char[4][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
             gui_foreground, gui_background, scale, scale * 2);
@@ -2738,7 +2745,7 @@ static void bitmap_init(void)
       free(trs_char[5][i]->pixels);
       SDL_FreeSurface(trs_char[5][i]);
     }
-    if ((i>='[' && i<=']') || i>=128)
+    if ((i >= '[' && i <= ']') || i >= 128)
       trs_char[5][i] =
         CreateSurfaceFromDataScale(trs_char_data[0][i],
             gui_background, gui_foreground, scale, scale * 2);
@@ -2750,26 +2757,27 @@ static void bitmap_init(void)
   boxes_init(foreground, background,
       cur_char_width, TRS_CHAR_HEIGHT * (scale * 2), 0);
   boxes_init(foreground, background,
-      cur_char_width*2, TRS_CHAR_HEIGHT * (scale * 2), 1);
+      cur_char_width * 2, TRS_CHAR_HEIGHT * (scale * 2), 1);
   boxes_init(gui_foreground, gui_background,
       cur_char_width, TRS_CHAR_HEIGHT * (scale * 2), 2);
 }
 
-void trs_screen_refresh()
+void trs_screen_refresh(void)
 {
-  int i, srcx, srcy, dunx, duny;
-  SDL_Rect srcRect, destRect;
-
 #if XDEBUG
   debug("trs_screen_refresh\n");
 #endif
   if (grafyx_enable && !grafyx_overlay) {
-    srcx = cur_char_width * grafyx_xoffset;
-    srcy = (scale * 2) * grafyx_yoffset;
+    int srcx = cur_char_width * grafyx_xoffset;
+    int srcy = (scale * 2) * grafyx_yoffset;
+    int dunx = imageSize.width - srcx;
+    int duny = imageSize.height - srcy;
+    SDL_Rect srcRect, destRect;
+
     srcRect.x = srcx;
     srcRect.y = srcy;
-    srcRect.w = cur_char_width*row_chars;
-    srcRect.h = cur_char_height*col_chars;
+    srcRect.w = cur_char_width * row_chars;
+    srcRect.h = cur_char_height * col_chars;
     destRect.x = left_margin;
     destRect.y = top_margin;
     destRect.w = srcRect.w;
@@ -2777,12 +2785,11 @@ void trs_screen_refresh()
     SDL_BlitSurface(image, &srcRect, screen, &destRect);
     addToDrawList(&destRect);
     /* Draw wrapped portions if any */
-    dunx = imageSize.width - srcx;
-    if (dunx < cur_char_width*row_chars) {
+    if (dunx < cur_char_width * row_chars) {
       srcRect.x = 0;
       srcRect.y = srcy;
-      srcRect.w = cur_char_width*row_chars - dunx;
-      srcRect.h = cur_char_height*col_chars;
+      srcRect.w = cur_char_width * row_chars - dunx;
+      srcRect.h = cur_char_height * col_chars;
       destRect.x = left_margin + dunx;
       destRect.y = top_margin;
       destRect.w = srcRect.w;
@@ -2790,23 +2797,22 @@ void trs_screen_refresh()
       SDL_BlitSurface(image, &srcRect, screen, &destRect);
       addToDrawList(&destRect);
     }
-    duny = imageSize.height - srcy;
-    if (duny < cur_char_height*col_chars) {
+    if (duny < cur_char_height * col_chars) {
       srcRect.x = srcx;
       srcRect.y = 0;
-      srcRect.w = cur_char_width*row_chars;
-      srcRect.h = cur_char_height*col_chars - duny;
+      srcRect.w = cur_char_width * row_chars;
+      srcRect.h = cur_char_height * col_chars - duny;
       destRect.x = left_margin;
       destRect.y = top_margin + duny;
       destRect.w = srcRect.w;
       destRect.h = srcRect.h;
       addToDrawList(&destRect);
       SDL_BlitSurface(image, &srcRect, screen, &destRect);
-      if (dunx < cur_char_width*row_chars) {
+      if (dunx < cur_char_width * row_chars) {
         srcRect.x = 0;
         srcRect.y = 0;
-        srcRect.w = cur_char_width*row_chars - dunx;
-        srcRect.h = cur_char_height*col_chars - duny;
+        srcRect.w = cur_char_width * row_chars - dunx;
+        srcRect.h = cur_char_height * col_chars - duny;
         destRect.x = left_margin + dunx;
         destRect.y = top_margin + duny;
         destRect.w = srcRect.w;
@@ -2816,13 +2822,15 @@ void trs_screen_refresh()
       }
     }
   } else {
+    int i;
+
     for (i = 0; i < screen_chars; i++)
       trs_screen_write_char(i, trs_screen[i]);
   }
 
   if (trs_show_led) {
-    trs_disk_led(-1,0);
-    trs_hard_led(-1,0);
+    trs_disk_led(-1, 0);
+    trs_hard_led(-1, 0);
     trs_turbo_led();
   }
 
@@ -2831,36 +2839,36 @@ void trs_screen_refresh()
 
 void trs_disk_led(int drive, int on_off)
 {
-  static int countdown[8] = {0,0,0,0,0,0,0,0};
+  static int countdown[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
   int const drive0_led_x = border_width;
   unsigned int i;
   SDL_Rect rect;
 
-  rect.w = 16*scale;
-  rect.h = 2*(scale * 2);
+  rect.w = 16 * scale;
+  rect.h = 2 * (scale * 2);
   rect.y = OrigHeight - rect.h;
 
   if (drive == -1) {
-    for (i=0;i<8;i++) {
-      rect.x = drive0_led_x + 24*scale*i;
+    for (i = 0; i < 8; i++) {
+      rect.x = drive0_led_x + 24 * scale * i;
       SDL_FillRect(screen, &rect, light_red);
       addToDrawList(&rect);
     }
   }
   else if (on_off) {
     if (countdown[drive] == 0) {
-      rect.x = drive0_led_x + 24*scale*drive;
+      rect.x = drive0_led_x + 24 * scale * drive;
       SDL_FillRect(screen, &rect, bright_red);
       addToDrawList(&rect);
     }
-    countdown[drive] = 2*timer_hz;
+    countdown[drive] = 2 * timer_hz;
   }
   else {
-    for (i=0;i<8;i++) {
+    for (i = 0; i < 8; i++) {
       if (countdown[i]) {
         countdown[i]--;
         if (countdown[i] == 0) {
-          rect.x = drive0_led_x + 24*scale*i;
+          rect.x = drive0_led_x + 24 * scale * i;
           SDL_FillRect(screen, &rect, light_red);
           addToDrawList(&rect);
         }
@@ -2871,36 +2879,36 @@ void trs_disk_led(int drive, int on_off)
 
 void trs_hard_led(int drive, int on_off)
 {
-  static int countdown[4] = {0,0,0,0};
-  int const drive0_led_x = OrigWidth - border_width - 88*scale;
+  static int countdown[4] = { 0, 0, 0, 0 };
+  int const drive0_led_x = OrigWidth - border_width - 88 * scale;
   unsigned int i;
   SDL_Rect rect;
 
-  rect.w = 16*scale;
-  rect.h = 2*(scale * 2);
+  rect.w = 16 * scale;
+  rect.h = 2 * (scale * 2);
   rect.y = OrigHeight - rect.h;
 
   if (drive == -1) {
-    for (i=0;i<4;i++) {
-      rect.x = drive0_led_x + 24*scale*i;
+    for (i = 0; i < 4; i++) {
+      rect.x = drive0_led_x + 24 * scale * i;
       SDL_FillRect(screen, &rect, light_red);
       addToDrawList(&rect);
     }
   }
   else if (on_off) {
     if (countdown[drive] == 0) {
-      rect.x = drive0_led_x + 24*scale*drive;
+      rect.x = drive0_led_x + 24 * scale * drive;
       SDL_FillRect(screen, &rect, bright_red);
       addToDrawList(&rect);
     }
-    countdown[drive] = timer_hz/2;
+    countdown[drive] = timer_hz / 2;
   }
   else {
-    for (i=0;i<4;i++) {
+    for (i = 0; i < 4; i++) {
       if (countdown[i]) {
         countdown[i]--;
         if (countdown[i] == 0) {
-          rect.x = drive0_led_x + 24*scale*i;
+          rect.x = drive0_led_x + 24 * scale * i;
           SDL_FillRect(screen, &rect, light_red);
           addToDrawList(&rect);
         }
@@ -2913,8 +2921,8 @@ void trs_turbo_led(void)
 {
   SDL_Rect rect;
 
-  rect.w = 16*scale;
-  rect.h = 2*(scale * 2);
+  rect.w = 16 * scale;
+  rect.h = 2 * (scale * 2);
   rect.x = (OrigWidth - border_width) / 2 - 8 * scale;
   rect.y = OrigHeight - rect.h;
 
@@ -3020,18 +3028,18 @@ void trs_screen_write_char(int position, int char_index)
     hrg_update_char(position);
 }
 
-void trs_gui_refresh()
+void trs_gui_refresh(void)
 {
 #ifdef SDL2
   SDL_UpdateWindowSurface(window);
 #else
-  SDL_UpdateRect(screen,0,0,0,0);
+  SDL_UpdateRect(screen, 0, 0, 0, 0);
 #endif
 }
 
 void trs_gui_write_char(int position, int char_index, int invert)
 {
-  int row,col;
+  int row, col;
   SDL_Rect srcRect, destRect;
 
   if (position >= screen_chars)
@@ -3060,7 +3068,7 @@ void trs_gui_write_char(int position, int char_index, int invert)
     char_index -= 0x40;
   if (char_index >= 0x80 && char_index <= 0xbf && !(currentmode & INVERSE)) {
     /* Use graphics character bitmap instead of font */
-    SDL_BlitSurface(trs_box[2][char_index-0x80], &srcRect, screen, &destRect);
+    SDL_BlitSurface(trs_box[2][char_index - 0x80], &srcRect, screen, &destRect);
   } else {
     /* Draw character using a builtin bitmap */
     if (trs_model > 1 && char_index >= 0xc0 &&
@@ -3080,20 +3088,20 @@ static void grafyx_write_byte(int x, int y, char byte)
   int const screen_x = ((x - grafyx_xoffset + G_XSIZE) % G_XSIZE);
   int const screen_y = ((y - grafyx_yoffset + G_YSIZE) % G_YSIZE);
   int const on_screen = screen_x < row_chars &&
-    screen_y < col_chars*cur_char_height/(scale * 2);
+    screen_y < col_chars * cur_char_height / (scale * 2);
   SDL_Rect srcRect, destRect;
 
   if (grafyx_enable && grafyx_overlay && on_screen) {
-    srcRect.x = x*cur_char_width;
-    srcRect.y = y*(scale * 2);
+    srcRect.x = x * cur_char_width;
+    srcRect.y = y * (scale * 2);
     srcRect.w = cur_char_width;
-    srcRect.h = (scale * 2);
-    destRect.x = left_margin + screen_x*cur_char_width;
-    destRect.y = top_margin + screen_y*(scale * 2);
+    srcRect.h = scale * 2;
+    destRect.x = left_margin + screen_x * cur_char_width;
+    destRect.y = top_margin + screen_y * (scale * 2);
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
     /* Erase old byte, preserving text */
-    TrsSoftBlit(image, &srcRect, screen, &destRect,1);
+    TrsSoftBlit(image, &srcRect, screen, &destRect, 1);
   }
 
   /* Save new byte in local memory */
@@ -3124,18 +3132,18 @@ static void grafyx_write_byte(int x, int y, char byte)
       exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
       break;
   }
-  for (j=0; j<(scale * 2); j++)
-    for (i=0; i<scale; i++)
-      grafyx[(y*(scale * 2) + j)*imageSize.bytes_per_line + x*scale + i] = exp[i];
+  for (j = 0; j < (scale * 2); j++)
+    for (i = 0; i < scale; i++)
+      grafyx[(y * (scale * 2) + j) * imageSize.bytes_per_line + x * scale + i] = exp[i];
 
   if (grafyx_enable && on_screen) {
     /* Draw new byte */
-    srcRect.x = x*cur_char_width;
-    srcRect.y = y*(scale * 2);
+    srcRect.x = x * cur_char_width;
+    srcRect.y = y * (scale * 2);
     srcRect.w = cur_char_width;
-    srcRect.h = (scale * 2);
-    destRect.x = left_margin + screen_x*cur_char_width;
-    destRect.y = top_margin + screen_y*(scale * 2);
+    srcRect.h = scale * 2;
+    destRect.x = left_margin + screen_x * cur_char_width;
+    destRect.y = top_margin + screen_y * (scale * 2);
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
     addToDrawList(&destRect);
@@ -3150,8 +3158,8 @@ static void grafyx_redraw(void)
   int i, j;
   int x, y;
 
-  for (y=0;y<G_YSIZE;y++) {
-    for (x=0;x<G_XSIZE;x++) {
+  for (y = 0; y < G_YSIZE; y++) {
+    for (x = 0; x < G_XSIZE; x++) {
       byte = grafyx_unscaled[y][x];
       switch (scale) {
         default:
@@ -3179,9 +3187,9 @@ static void grafyx_redraw(void)
           exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
           break;
       }
-      for (j=0; j<(scale * 2); j++)
-        for (i=0; i<scale; i++)
-          grafyx[(y*(scale * 2) + j)*imageSize.bytes_per_line + x*scale + i] = exp[i];
+      for (j = 0; j < (scale * 2); j++)
+        for (i = 0; i < scale; i++)
+          grafyx[(y * (scale * 2) + j) * imageSize.bytes_per_line + x * scale + i] = exp[i];
     }
   }
 }
@@ -3213,7 +3221,7 @@ void grafyx_write_data(int value)
   }
 }
 
-int grafyx_read_data()
+int grafyx_read_data(void)
 {
   int value = grafyx_unscaled[grafyx_y][grafyx_x % G_XSIZE];
 
@@ -3276,7 +3284,7 @@ void grafyx_write_overlay(int value)
   }
 }
 
-int grafyx_get_microlabs()
+int grafyx_get_microlabs(void)
 {
   return grafyx_microlabs;
 }
@@ -3450,23 +3458,23 @@ void lowe_le18_write_control(int value)
 
 /* Initialize HRG. */
 static void
-hrg_init()
+hrg_init(void)
 {
   unsigned int i;
 
   /* Precompute arrays of pixel sizes and offsets. */
   for (i = 0; i <= 6; i++) {
     hrg_pixel_x[0][i] = cur_char_width * i / 6;
-    hrg_pixel_x[1][i] = cur_char_width*2 * i / 6;
-    if (i != 0) {
-      hrg_pixel_width[0][i-1] = hrg_pixel_x[0][i] - hrg_pixel_x[0][i-1];
-      hrg_pixel_width[1][i-1] = hrg_pixel_x[1][i] - hrg_pixel_x[1][i-1];
+    hrg_pixel_x[1][i] = cur_char_width * 2 * i / 6;
+    if (i) {
+      hrg_pixel_width[0][i - 1] = hrg_pixel_x[0][i] - hrg_pixel_x[0][i - 1];
+      hrg_pixel_width[1][i - 1] = hrg_pixel_x[1][i] - hrg_pixel_x[1][i - 1];
     }
   }
   for (i = 0; i <= 12; i++) {
     hrg_pixel_y[i] = cur_char_height * i / 12;
-    if (i != 0)
-      hrg_pixel_height[i-1] = hrg_pixel_y[i] - hrg_pixel_y[i-1];
+    if (i)
+      hrg_pixel_height[i - 1] = hrg_pixel_y[i] - hrg_pixel_y[i - 1];
   }
   if (cur_char_width % 6 != 0 || cur_char_height % 12 != 0)
     error("character size %d*%d not a multiple of 6*12 HRG raster",
@@ -3527,8 +3535,8 @@ hrg_write_data(int data)
     int const destx = (position % row_chars) * cur_char_width + left_margin;
     int const desty = (position / row_chars) * cur_char_height + top_margin
       + hrg_pixel_y[line];
-    int const *x = hrg_pixel_x[(currentmode&EXPANDED)!=0];
-    int const *w = hrg_pixel_width[(currentmode&EXPANDED)!=0];
+    int const *x = hrg_pixel_x[(currentmode&EXPANDED) != 0];
+    int const *w = hrg_pixel_width[(currentmode&EXPANDED) != 0];
     int const h = hrg_pixel_height[line];
     int n0 = 0;
     int n1 = 0;
@@ -3549,7 +3557,7 @@ hrg_write_data(int data)
           flag = -1;
         }
         else {                 /* Increase width of rectangle. */
-          rect0[n0-1].w += w[j];
+          rect0[n0 - 1].w += w[j];
         }
       }
       else if (bits1 & b) {
@@ -3562,16 +3570,16 @@ hrg_write_data(int data)
           flag = 1;
         }
         else {
-          rect1[n1-1].w += w[j];
+          rect1[n1 - 1].w += w[j];
         }
       }
       else {
         flag = 0;
       }
     }
-    for (i=0;i<n0;i++)
+    for (i = 0; i < n0; i++)
       SDL_FillRect(screen, &rect0[i], background);
-    for (i=0;i<n1;i++)
+    for (i = 0; i < n1; i++)
       SDL_FillRect(screen, &rect0[i], foreground);
   }
   else {
@@ -3587,7 +3595,7 @@ hrg_write_data(int data)
 
 /* Read byte from HRG memory. */
 int
-hrg_read_data()
+hrg_read_data(void)
 {
   if (hrg_addr >= HRG_MEMSIZE) return 0xff; /* nonexistent address */
   return hrg_screen[hrg_addr];
@@ -3600,24 +3608,24 @@ hrg_update_char(int position)
 {
   int const destx = (position % row_chars) * cur_char_width + left_margin;
   int const desty = (position / row_chars) * cur_char_height + top_margin;
-  int const *x = hrg_pixel_x[(currentmode&EXPANDED)!=0];
-  int const *w = hrg_pixel_width[(currentmode&EXPANDED)!=0];
+  int const *x = hrg_pixel_x[(currentmode&EXPANDED) != 0];
+  int const *w = hrg_pixel_width[(currentmode&EXPANDED) != 0];
   int byte;
   int prev_byte = 0;
   int n = 0;
   int np = 0;
   int i, j, flag;
-  SDL_Rect rect[3*12];
+  SDL_Rect rect[3 * 12];
 
   /* Compute array of rectangles. */
   for (i = 0; i < 12; i++) {
-    if ((byte = hrg_screen[position+(i<<10)] & 0x3f) == 0) {
+    if ((byte = hrg_screen[position + (i << 10)] & 0x3f) == 0) {
     }
     else if (byte != prev_byte) {
       np = n;
       flag = 0;
       for (j = 0; j < 6; j++) {
-        if (!(byte & 1<<j)) {
+        if (!(byte & 1 << j)) {
           flag = 0;
         }
         else if (!flag) {     /* New rectangle. */
@@ -3629,7 +3637,7 @@ hrg_update_char(int position)
           flag = 1;
         }
         else {                /* Increase width. */
-          rect[n-1].w += w[j];
+          rect[n - 1].w += w[j];
         }
       }
     }
@@ -3639,7 +3647,7 @@ hrg_update_char(int position)
     }
     prev_byte = byte;
   }
-  for (i=0;i<n;i++)
+  for (i = 0; i <n; i++)
     SDL_FillRect(screen, &rect[i], foreground);
 }
 
@@ -3662,10 +3670,10 @@ void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
     if (win_y >= OrigHeight - top_margin) win_y = OrigHeight - top_margin - 1;
     *x = mouse_last_x = (win_x - left_margin)
       * mouse_x_size
-      / (OrigWidth - 2*left_margin);
+      / (OrigWidth - 2 * left_margin);
     *y = mouse_last_y = (win_y - top_margin)
       * mouse_y_size
-      / (OrigHeight - 2*top_margin);
+      / (OrigHeight - 2 * top_margin);
     mouse_last_buttons = 7;
     /* !!Note: assuming 3-button mouse */
     if (mask & SDL_BUTTON(SDL_BUTTON_LEFT))   mouse_last_buttons &= ~4;
@@ -3692,8 +3700,8 @@ void trs_set_mouse_pos(int x, int y)
     */
     return;
   }
-  dest_x = left_margin + x * (OrigWidth - 2*left_margin) / mouse_x_size;
-  dest_y = top_margin  + y * (OrigHeight - 2*top_margin) / mouse_y_size;
+  dest_x = left_margin + x * (OrigWidth - 2 * left_margin) / mouse_x_size;
+  dest_y = top_margin  + y * (OrigHeight - 2 * top_margin) / mouse_y_size;
 
 #if MOUSEDEBUG
   debug("set_mouse %d %d -> %d %d\n", x, y, dest_x, dest_y);
@@ -3725,7 +3733,7 @@ void trs_set_mouse_max(int x, int y, unsigned int sens)
   mouse_sens = sens;
 }
 
-int trs_get_mouse_type()
+int trs_get_mouse_type(void)
 {
   /* !!Note: assuming 3-button mouse */
   return 1;
@@ -3735,66 +3743,66 @@ void trs_main_save(FILE *file)
 {
   unsigned int i;
 
-  trs_save_int(file,&trs_model,1);
-  trs_save_uchar(file,trs_screen,2048);
-  trs_save_int(file,&screen_chars,1);
-  trs_save_int(file,&col_chars,1);
-  trs_save_int(file,&row_chars,1);
-  trs_save_int(file,&currentmode,1);
-  trs_save_int(file,&text80x24,1);
-  trs_save_int(file,&screen640x240,1);
-  trs_save_int(file,&trs_charset,1);
-  trs_save_int(file,&trs_charset1,1);
-  trs_save_int(file,&trs_charset3,1);
-  trs_save_int(file,&trs_charset4,1);
-  for (i=0;i<G_YSIZE;i++)
-    trs_save_uchar(file,grafyx_unscaled[i],G_XSIZE);
-  trs_save_uchar(file,&grafyx_x,1);
-  trs_save_uchar(file,&grafyx_y,1);
-  trs_save_uchar(file,&grafyx_enable,1);
-  trs_save_uchar(file,&grafyx_overlay,1);
-  trs_save_uchar(file,&grafyx_xoffset,1);
-  trs_save_uchar(file,&grafyx_yoffset,1);
-  trs_save_uchar(file,&grafyx_x,1);
-  trs_save_int(file,key_queue,KEY_QUEUE_SIZE);
-  trs_save_int(file,&key_queue_head,1);
-  trs_save_int(file,&key_queue_entries,1);
-  trs_save_int(file,&lowe_le18,1);
-  trs_save_int(file,&lowercase,1);
-  trs_save_int(file,&stringy,1);
+  trs_save_int(file, &trs_model, 1);
+  trs_save_uchar(file, trs_screen, 2048);
+  trs_save_int(file, &screen_chars, 1);
+  trs_save_int(file, &col_chars, 1);
+  trs_save_int(file, &row_chars, 1);
+  trs_save_int(file, &currentmode, 1);
+  trs_save_int(file, &text80x24, 1);
+  trs_save_int(file, &screen640x240, 1);
+  trs_save_int(file, &trs_charset, 1);
+  trs_save_int(file, &trs_charset1, 1);
+  trs_save_int(file, &trs_charset3, 1);
+  trs_save_int(file, &trs_charset4, 1);
+  for (i = 0; i < G_YSIZE; i++)
+    trs_save_uchar(file, grafyx_unscaled[i], G_XSIZE);
+  trs_save_uchar(file, &grafyx_x, 1);
+  trs_save_uchar(file, &grafyx_y, 1);
+  trs_save_uchar(file, &grafyx_enable, 1);
+  trs_save_uchar(file, &grafyx_overlay, 1);
+  trs_save_uchar(file, &grafyx_xoffset, 1);
+  trs_save_uchar(file, &grafyx_yoffset, 1);
+  trs_save_uchar(file, &grafyx_x, 1);
+  trs_save_int(file, key_queue, KEY_QUEUE_SIZE);
+  trs_save_int(file, &key_queue_head, 1);
+  trs_save_int(file, &key_queue_entries, 1);
+  trs_save_int(file, &lowe_le18, 1);
+  trs_save_int(file, &lowercase, 1);
+  trs_save_int(file, &stringy, 1);
 }
 
 void trs_main_load(FILE *file)
 {
   unsigned int i;
 
-  trs_load_int(file,&trs_model,1);
-  trs_load_uchar(file,trs_screen,2048);
-  trs_load_int(file,&screen_chars,1);
-  trs_load_int(file,&col_chars,1);
-  trs_load_int(file,&row_chars,1);
-  trs_load_int(file,&currentmode,1);
-  trs_load_int(file,&text80x24,1);
-  trs_load_int(file,&screen640x240,1);
-  trs_load_int(file,&trs_charset,1);
-  trs_load_int(file,&trs_charset1,1);
-  trs_load_int(file,&trs_charset3,1);
-  trs_load_int(file,&trs_charset4,1);
-  for (i=0;i<G_YSIZE;i++)
-    trs_load_uchar(file,grafyx_unscaled[i],G_XSIZE);
-  trs_load_uchar(file,&grafyx_x,1);
-  trs_load_uchar(file,&grafyx_y,1);
-  trs_load_uchar(file,&grafyx_enable,1);
-  trs_load_uchar(file,&grafyx_overlay,1);
-  trs_load_uchar(file,&grafyx_xoffset,1);
-  trs_load_uchar(file,&grafyx_yoffset,1);
-  trs_load_uchar(file,&grafyx_x,1);
-  trs_load_int(file,key_queue,KEY_QUEUE_SIZE);
-  trs_load_int(file,&key_queue_head,1);
-  trs_load_int(file,&key_queue_entries,1);
-  trs_load_int(file,&lowe_le18,1);
-  trs_load_int(file,&lowercase,1);
-  trs_load_int(file,&stringy,1);
+  trs_load_int(file, &trs_model, 1);
+  trs_load_uchar(file, trs_screen, 2048);
+  trs_load_int(file, &screen_chars, 1);
+  trs_load_int(file, &col_chars, 1);
+  trs_load_int(file, &row_chars, 1);
+  trs_load_int(file, &currentmode, 1);
+  trs_load_int(file, &text80x24, 1);
+  trs_load_int(file, &screen640x240, 1);
+  trs_load_int(file, &trs_charset, 1);
+  trs_load_int(file, &trs_charset1, 1);
+  trs_load_int(file, &trs_charset3, 1);
+  trs_load_int(file, &trs_charset4, 1);
+  for (i = 0; i < G_YSIZE; i++)
+    trs_load_uchar(file, grafyx_unscaled[i], G_XSIZE);
+  trs_load_uchar(file, &grafyx_x, 1);
+  trs_load_uchar(file, &grafyx_y, 1);
+  trs_load_uchar(file, &grafyx_enable, 1);
+  trs_load_uchar(file, &grafyx_overlay, 1);
+  trs_load_uchar(file, &grafyx_xoffset, 1);
+  trs_load_uchar(file, &grafyx_yoffset, 1);
+  trs_load_uchar(file, &grafyx_x, 1);
+  trs_load_int(file, key_queue, KEY_QUEUE_SIZE);
+  trs_load_int(file, &key_queue_head, 1);
+  trs_load_int(file, &key_queue_entries, 1);
+  trs_load_int(file, &lowe_le18, 1);
+  trs_load_int(file, &lowercase, 1);
+  trs_load_int(file, &stringy, 1);
 }
 
 int trs_sdl_savebmp(const char *filename)

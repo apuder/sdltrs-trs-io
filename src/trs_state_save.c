@@ -100,12 +100,12 @@ int trs_state_load(const char *filename)
 
 void trs_save_uchar(FILE *file, unsigned char *buffer, int count)
 {
-  fwrite(buffer,count,1,file);
+  fwrite(buffer, count, 1, file);
 }
 
 void trs_load_uchar(FILE *file, unsigned char *buffer, int count)
 {
-  fread(buffer,count,1,file);
+  fread(buffer, count, 1, file);
 }
 
 void trs_save_uint16(FILE *file, unsigned short *buffer, int count)
@@ -114,12 +114,12 @@ void trs_save_uint16(FILE *file, unsigned short *buffer, int count)
   unsigned short temp;
   unsigned char byte;
 
-  for (i=0;i<count;i++) {
+  for (i = 0; i < count; i++) {
     temp = *buffer++;
     byte = temp & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     byte = temp >> 8;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
   }
 }
 
@@ -128,9 +128,9 @@ void trs_load_uint16(FILE *file, unsigned short *buffer, int count)
   int i;
   unsigned char byte0, byte1;
 
-  for (i=0;i<count;i++) {
-    fread(&byte0,1,1,file);
-    fread(&byte1,1,1,file);
+  for (i = 0; i < count; i++) {
+    fread(&byte0, 1, 1, file);
+    fread(&byte1, 1, 1, file);
     *buffer++ = (byte1 << 8) | byte0;
   }
 }
@@ -141,19 +141,19 @@ void trs_save_uint32(FILE *file, unsigned *buffer, int count)
   unsigned temp;
   unsigned char byte;
 
-  for (i=0;i<count;i++) {
+  for (i = 0; i < count; i++) {
     temp = *buffer++;
     byte = temp & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     temp >>= 8;
     byte = temp & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     temp >>= 8;
     byte = temp & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     temp >>= 8;
     byte = temp & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
   }
 }
 
@@ -162,44 +162,44 @@ void trs_load_uint32(FILE *file, unsigned *buffer, int count)
   int i;
   unsigned char byte0, byte1, byte2, byte3;
 
-  for (i=0;i<count;i++) {
-    fread(&byte0,1,1,file);
-    fread(&byte1,1,1,file);
-    fread(&byte2,1,1,file);
-    fread(&byte3,1,1,file);
+  for (i = 0; i < count; i++) {
+    fread(&byte0, 1, 1, file);
+    fread(&byte1, 1, 1, file);
+    fread(&byte2, 1, 1, file);
+    fread(&byte3, 1, 1, file);
     *buffer++ = (byte3 << 24) | (byte2 << 16) | (byte1 << 8) | byte0;
   }
 }
 
 void trs_save_uint64(FILE *file, unsigned long long *buffer, int count)
 {
-  int i,j;
+  int i, j;
   unsigned long long temp;
   unsigned char byte;
 
-  for (i=0;i<count;i++) {
+  for (i = 0; i < count; i++) {
     temp = *buffer++;
-     for (j=0;j<8;j++) {
-      byte = temp & 0xFF;
-       fwrite(&byte,1,1,file);
-      temp = temp >> 8;
-      }
+     for (j = 0; j < 8; j++) {
+       byte = temp & 0xFF;
+       fwrite(&byte, 1, 1, file);
+       temp = temp >> 8;
+     }
   }
 }
 
 void trs_load_uint64(FILE *file, unsigned long long *buffer, int count)
 {
-  int i,j;
+  int i, j;
   unsigned char byte[8];
   unsigned long long temp;
 
-  for (i=0;i<count;i++) {
-    for (j=0;j<8;j++)
-      fread(&byte[j],1,1,file);
+  for (i = 0; i < count; i++) {
+    for (j = 0; j < 8; j++)
+      fread(&byte[j], 1, 1, file);
     temp = 0;
-    for (j=7;j>=0;j--) {
+    for (j = 7; j >= 0; j--) {
       temp |= byte[j];
-      if (j != 0)
+      if (j)
         temp = temp << 8;
     }
     *buffer++ = temp;
@@ -214,7 +214,7 @@ void trs_save_short(FILE *file, short *buffer, int count)
   unsigned char sign;
   unsigned char byte;
 
-  for (i=0;i<count;i++) {
+  for (i = 0; i < count; i++) {
     num = *buffer++;
     if (num < 0) {
       sign = 0x80;
@@ -226,10 +226,10 @@ void trs_save_short(FILE *file, short *buffer, int count)
     unum = num;
 
     byte = unum & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     unum = unum >> 8;
     byte = (unum & 0x7F) | sign;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
   }
 }
 
@@ -239,9 +239,9 @@ void trs_load_short(FILE *file, short *buffer, int count)
   short temp;
   unsigned char byte0, byte1, sign;
 
-  for (i=0;i<count;i++) {
-    fread(&byte0,1,1,file);
-    fread(&byte1,1,1,file);
+  for (i = 0; i < count; i++) {
+    fread(&byte0, 1, 1, file);
+    fread(&byte1, 1, 1, file);
     sign = byte1 & 0x80;
     byte1 &= 0x7f;
 
@@ -260,7 +260,7 @@ void trs_save_int(FILE *file, int *buffer, int count)
   unsigned char sign;
   unsigned char byte;
 
-  for (i=0;i<count;i++) {
+  for (i = 0; i < count; i++) {
     num = *buffer++;
     if (num < 0) {
       sign = 0x80;
@@ -272,16 +272,16 @@ void trs_save_int(FILE *file, int *buffer, int count)
     unum = num;
 
     byte = unum & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     unum = unum >> 8;
     byte = unum & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     unum = unum >> 8;
     byte = unum & 0xFF;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
     unum = unum >> 8;
     byte = (unum & 0x7F) | sign;
-    fwrite(&byte,1,1,file);
+    fwrite(&byte, 1, 1, file);
   }
 }
 
@@ -291,11 +291,11 @@ void trs_load_int(FILE *file, int *buffer, int count)
   int temp;
   unsigned char byte0, byte1, byte2, byte3, sign;
 
-  for (i=0;i<count;i++) {
-    fread(&byte0,1,1,file);
-    fread(&byte1,1,1,file);
-    fread(&byte2,1,1,file);
-    fread(&byte3,1,1,file);
+  for (i = 0; i < count; i++) {
+    fread(&byte0, 1, 1, file);
+    fread(&byte1, 1, 1, file);
+    fread(&byte2, 1, 1, file);
+    fread(&byte3, 1, 1, file);
     sign = byte3 & 0x80;
     byte3 &= 0x7f;
 
@@ -311,9 +311,9 @@ void trs_save_float(FILE *file, float *buffer, int count)
   int i;
   char float_buff[21];
 
-  for (i=0;i<count;i++)
+  for (i = 0; i < count; i++)
   {
-    snprintf(float_buff,21,"%20f",*buffer++);
+    snprintf(float_buff, 21, "%20f", *buffer++);
     trs_save_uchar(file, (unsigned char *)float_buff, 20);
   }
 }
@@ -323,10 +323,10 @@ void trs_load_float(FILE *file, float *buffer, int count)
   int i;
   char float_buff[21];
 
-  for (i=0;i<count;i++)
+  for (i = 0; i < count; i++)
   {
     trs_load_uchar(file, (unsigned char *)float_buff, 20);
-    sscanf(float_buff,"%f",buffer++);
+    sscanf(float_buff, "%f", buffer++);
   }
 }
 
@@ -350,7 +350,7 @@ void trs_load_filename(FILE *file, char *filename)
   unsigned short length;
 
   trs_load_uint16(file, &length, 1);
-  trs_load_uchar(file,(unsigned char *) filename, length);
+  trs_load_uchar(file, (unsigned char *)filename, length);
   filename[length] = 0;
 }
 
