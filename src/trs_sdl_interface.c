@@ -138,7 +138,7 @@ static int OrigHeight, OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
 static int cur_char_height = TRS_CHAR_HEIGHT * 2;
 static int disksizes[8] = { 5, 5, 5, 5, 8, 8, 8, 8 };
-static int disksteps[8] = { 1, 1, 1, 1, 2, 2, 2, 2 };
+static int disksteps[8] = { 1, 1, 1, 1, 1, 1, 1, 1 };
 static int mousepointer = 1;
 static int mouse_x_size = 640, mouse_y_size = 240;
 static int mouse_sens = 3;
@@ -668,10 +668,10 @@ static void trs_set_to_defaults(void)
   disksteps[1] = 1;            /* Corrected by Larry Kraemer 08-01-2011 */
   disksteps[2] = 1;
   disksteps[3] = 1;
-  disksteps[4] = 2;
-  disksteps[5] = 2;
-  disksteps[6] = 2;
-  disksteps[7] = 2;
+  disksteps[4] = 1;
+  disksteps[5] = 1;
+  disksteps[6] = 1;
+  disksteps[7] = 1;
   trs_disk_truedam = 0;
   cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
   trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
