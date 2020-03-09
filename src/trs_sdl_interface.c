@@ -261,6 +261,7 @@ static void trs_opt_debug(char *arg, int intarg, char *stringarg);
 static void trs_opt_disk(char *arg, int intarg, char *stringarg);
 static void trs_opt_diskset(char *arg, int intarg, char *stringarg);
 static void trs_opt_doubler(char *arg, int intarg, char *stringarg);
+static void trs_opt_doublestep(char *arg, int intarg, char *stringarg);
 static void trs_opt_emtsafe(char *arg, int intarg, char *stringarg);
 static void trs_opt_foreground(char *arg, int intarg, char *stringarg);
 static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
@@ -324,6 +325,9 @@ static const trs_opt options[] = {
   { "diskset",         trs_opt_diskset,       1, 0, NULL                },
   { "disksetdir",      trs_opt_string,        1, 0, trs_disk_set_dir    },
   { "doubler",         trs_opt_doubler,       1, 0, NULL                },
+#ifdef __linux
+  { "doublestep",      trs_opt_doublestep,    0, 2, NULL                },
+#endif
   { "emtsafe",         trs_opt_emtsafe,       0, 1, NULL                },
   { "fg",              trs_opt_foreground,    1, 0, NULL                },
   { "foreground",      trs_opt_foreground,    1, 0, NULL                },
@@ -351,6 +355,9 @@ static const trs_opt options[] = {
   { "model",           trs_opt_model,         1, 0, NULL                },
   { "mousepointer",    trs_opt_mousepointer,  0, 1, NULL                },
   { "nodebug",         trs_opt_debug,         0, 0, NULL                },
+#ifdef __linux
+  { "nodoublestep",    trs_opt_doublestep,    0, 1, NULL                },
+#endif
   { "noemtsafe",       trs_opt_emtsafe,       0, 0, NULL                },
   { "nofullscreen",    trs_opt_fullscreen,    0, 0, NULL                },
   { "nohuffman",       trs_opt_huffman,       0, 0, NULL                },
@@ -910,6 +917,14 @@ static void trs_opt_sizemap(char *arg, int intarg, char *stringarg)
 }
 
 #ifdef __linux
+static void trs_opt_doublestep(char *arg, int intarg, char *stringarg)
+{
+  int i;
+
+  for (i = 0; i <= 7; i++)
+    disksteps[i] = intarg;
+}
+
 static void trs_opt_stepmap(char *arg, int intarg, char *stringarg)
 {
   sscanf(arg, "%d,%d,%d,%d,%d,%d,%d,%d",
