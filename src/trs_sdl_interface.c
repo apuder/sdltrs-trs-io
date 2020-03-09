@@ -138,7 +138,9 @@ static int OrigHeight, OrigWidth;
 static int cur_char_width = TRS_CHAR_WIDTH;
 static int cur_char_height = TRS_CHAR_HEIGHT * 2;
 static int disksizes[8] = { 5, 5, 5, 5, 8, 8, 8, 8 };
+#ifdef __linux
 static int disksteps[8] = { 1, 1, 1, 1, 1, 1, 1, 1 };
+#endif
 static int mousepointer = 1;
 static int mouse_x_size = 640, mouse_y_size = 240;
 static int mouse_sens = 3;
@@ -261,7 +263,9 @@ static void trs_opt_debug(char *arg, int intarg, char *stringarg);
 static void trs_opt_disk(char *arg, int intarg, char *stringarg);
 static void trs_opt_diskset(char *arg, int intarg, char *stringarg);
 static void trs_opt_doubler(char *arg, int intarg, char *stringarg);
+#ifdef __linux
 static void trs_opt_doublestep(char *arg, int intarg, char *stringarg);
+#endif
 static void trs_opt_emtsafe(char *arg, int intarg, char *stringarg);
 static void trs_opt_foreground(char *arg, int intarg, char *stringarg);
 static void trs_opt_fullscreen(char *arg, int intarg, char *stringarg);
@@ -664,6 +668,7 @@ static void trs_set_to_defaults(void)
   disksizes[5] = 8;
   disksizes[6] = 8;
   disksizes[7] = 8;
+#ifdef __linux
   disksteps[0] = 1;            /* Disk Steps are 1 for Single Step, 2 for Double Step for all Eight Default Drives */
   disksteps[1] = 1;            /* Corrected by Larry Kraemer 08-01-2011 */
   disksteps[2] = 1;
@@ -672,6 +677,7 @@ static void trs_set_to_defaults(void)
   disksteps[5] = 1;
   disksteps[6] = 1;
   disksteps[7] = 1;
+#endif
   trs_disk_truedam = 0;
   cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
   trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
@@ -1092,6 +1098,7 @@ static void trs_disk_setsizes(void)
   }
 }
 
+#ifdef __linux
 static void trs_disk_setsteps(void)
 {
   unsigned int j;
@@ -1104,6 +1111,7 @@ static void trs_disk_setsteps(void)
       error("bad value %d for disk %d single/double step", disksteps[j], j);
   }
 }
+#endif
 
 int trs_load_config_file(void)
 {
@@ -1114,7 +1122,9 @@ int trs_load_config_file(void)
 
   trs_set_to_defaults();
   trs_disk_setsizes();
+#ifdef __linux
   trs_disk_setsteps();
+#endif
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
@@ -1212,7 +1222,9 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
 
   *debug = debugger;
   trs_disk_setsizes();
+#ifdef __linux
   trs_disk_setsteps();
+#endif
 }
 
 static void trs_flip_fullscreen(void)

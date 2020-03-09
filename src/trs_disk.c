@@ -391,12 +391,14 @@ trs_disk_setsize(int unit, int value)
   disk[unit].inches = (value == 8) ? 8 : 5;
 }
 
+#ifdef __linux
 void
 trs_disk_setstep(int unit, int value)
 {
   if (unit < 0 || unit > 7) return;
   disk[unit].real_step = (value == 2) ? 2 : 1;
 }
+#endif
 
 int
 trs_disk_getsize(int unit)
@@ -423,12 +425,14 @@ trs_disk_getwriteprotect(int unit)
   return disk[unit].writeprot;
 }
 
+#ifdef __linux
 int
 trs_disk_getstep(int unit)
 {
   if (unit < 0 || unit > 7) return 0;
   return disk[unit].real_step;
 }
+#endif
 
 void
 trs_disk_init(int poweron)
