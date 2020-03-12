@@ -946,7 +946,7 @@ static void trs_opt_sizemap(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_string(char *arg, int intarg, int *stringarg)
 {
-  strcpy((char *)stringarg, arg);
+  snprintf((char *)stringarg, FILENAME_MAX, "%s", arg);
 }
 
 static void trs_opt_supermem(char *arg, int intarg, int *stringarg)
