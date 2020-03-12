@@ -673,31 +673,16 @@ static void trs_set_to_defaults(void)
   trs_emtsafe = 1;
 }
 
-static void trs_opt_scale(char *arg, int intarg, int *stringarg)
+static void trs_opt_borderwidth(char *arg, int intarg, int *stringarg)
 {
-  scale = atoi(arg);
-  if (scale <= 0)
-    scale = 1;
-  if (scale > MAX_SCALE)
-    scale = MAX_SCALE;
+  window_border_width = strtol(arg, NULL, 0);
+  if (window_border_width < 0)
+    window_border_width = 2;
 }
 
-static void trs_opt_model(char *arg, int intarg, int *stringarg)
+static void trs_opt_cass(char *arg, int intarg, int *stringarg)
 {
-  if (strcmp(arg, "1") == 0 ||
-      strcasecmp(arg, "I") == 0) {
-    trs_model = 1;
-  } else if (strcmp(arg, "3") == 0 ||
-             strcasecmp(arg, "III") == 0) {
-    trs_model = 3;
-  } else if (strcmp(arg, "4") == 0 ||
-             strcasecmp(arg, "IV") == 0) {
-    trs_model = 4;
-  } else if (strcasecmp(arg, "4P") == 0 ||
-             strcasecmp(arg, "IVp") == 0) {
-    trs_model = 5;
-  } else
-    error("TRS-80 Model %s not supported", arg);
+  trs_cassette_insert(arg);
 }
 
 static void trs_opt_charset1(char *arg, int intarg, int *stringarg)
@@ -778,28 +763,9 @@ static void trs_opt_charset4(char *arg, int intarg, int *stringarg)
   }
 }
 
-static void trs_opt_printer(char *arg, int intarg, int *stringarg)
+static void trs_opt_color(char *arg, int intarg, int *color)
 {
-  if (isdigit((int)*arg)) {
-    trs_printer = atoi(arg);
-    if (trs_printer < 0 || trs_printer > 1)
-      trs_printer = 0;
-  } else
-    switch (tolower((int)*arg)) {
-      case 'n': /*none*/
-        trs_printer = 0;
-        break;
-      case 't': /*text*/
-        trs_printer = 1;
-        break;
-      default:
-        error("unknown printer type: %s", arg);
-    }
-}
-
-static void trs_opt_string(char *arg, int intarg, int *stringarg)
-{
-  strcpy((char *)stringarg, arg);
+  *color = strtol(arg, NULL, 16);
 }
 
 static void trs_opt_disk(char *arg, int intarg, int *stringarg)
@@ -807,44 +773,10 @@ static void trs_opt_disk(char *arg, int intarg, int *stringarg)
   trs_disk_insert(intarg, arg);
 }
 
-static void trs_opt_hard(char *arg, int intarg, int *stringarg)
-{
-  trs_hard_attach(intarg, arg);
-}
-
-static void trs_opt_wafer(char *arg, int intarg, int *stringarg)
-{
-  stringy_insert(intarg, arg);
-}
-
-static void trs_opt_cass(char *arg, int intarg, int *stringarg)
-{
-  trs_cassette_insert(arg);
-}
-
 static void trs_opt_diskset(char *arg, int intarg, int *stringarg)
 {
   if (trs_diskset_load(arg) == -1)
     error("failed to load Diskset %s: %s", arg, strerror(errno));
-}
-
-static void trs_opt_keystretch(char *arg, int intarg, int *stringarg)
-{
-  stretch_amount = strtol(arg, NULL, 0);
-  if (stretch_amount < 0)
-    stretch_amount = STRETCH_AMOUNT;
-}
-
-static void trs_opt_borderwidth(char *arg, int intarg, int *stringarg)
-{
-  window_border_width = strtol(arg, NULL, 0);
-  if (window_border_width < 0)
-    window_border_width = 2;
-}
-
-static void trs_opt_microlabs(char *arg, int intarg, int *stringarg)
-{
-  grafyx_set_microlabs(intarg);
 }
 
 static void trs_opt_doubler(char *arg, int intarg, int *stringarg)
@@ -867,13 +799,6 @@ static void trs_opt_doubler(char *arg, int intarg, int *stringarg)
     }
 }
 
-static void trs_opt_sizemap(char *arg, int intarg, int *stringarg)
-{
-  sscanf(arg, "%d,%d,%d,%d,%d,%d,%d,%d",
-         &disksizes[0], &disksizes[1], &disksizes[2], &disksizes[3],
-         &disksizes[4], &disksizes[5], &disksizes[6], &disksizes[7]);
-}
-
 #ifdef __linux
 static void trs_opt_doublestep(char *arg, int intarg, int *stringarg)
 {
@@ -891,37 +816,23 @@ static void trs_opt_stepmap(char *arg, int intarg, int *stringarg)
 }
 #endif
 
-static void trs_opt_samplerate(char *arg, int intarg, int *stringarg)
+static void trs_opt_hard(char *arg, int intarg, int *stringarg)
 {
-  cassette_default_sample_rate = strtol(arg, NULL, 0);
-  if (cassette_default_sample_rate < 0 ||
-      cassette_default_sample_rate > DEFAULT_SAMPLE_RATE)
-    cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
+  trs_hard_attach(intarg, arg);
 }
 
-static void trs_opt_switches(char *arg, int intarg, int *stringarg)
+static void trs_opt_huffman(char *arg, int intarg, int *stringarg)
 {
-  trs_uart_switches = strtol(arg, NULL, 0);
+  huffman_ram = intarg;
+  if (huffman_ram)
+    hypermem = 0;
 }
 
-static void trs_opt_shiftbracket(char *arg, int intarg, int *stringarg)
+static void trs_opt_hypermem(char *arg, int intarg, int *stringarg)
 {
-  trs_kb_bracket(intarg);
-}
-
-static void trs_opt_joysticknum(char *arg, int intarg, int *stringarg)
-{
-  if (strcasecmp(arg, "none") == 0)
-    trs_joystick_num = -1;
-  else
-    trs_joystick_num = atoi(arg);
-}
-
-static void trs_opt_turborate(char *arg, int intarg, int *stringarg)
-{
-  timer_overclock_rate = atoi(arg);
-  if (timer_overclock_rate <= 0)
-    timer_overclock_rate = 1;
+  hypermem = intarg;
+  if (hypermem)
+    huffman_ram = 0;
 }
 
 static void trs_opt_joybuttonmap(char *arg, int intarg, int *stringarg)
@@ -940,25 +851,78 @@ static void trs_opt_joybuttonmap(char *arg, int intarg, int *stringarg)
   }
 }
 
-static void trs_opt_huffman(char *arg, int intarg, int *stringarg)
+static void trs_opt_joysticknum(char *arg, int intarg, int *stringarg)
 {
-  huffman_ram = intarg;
-  if (huffman_ram)
-    hypermem = 0;
+  if (strcasecmp(arg, "none") == 0)
+    trs_joystick_num = -1;
+  else
+    trs_joystick_num = atoi(arg);
 }
 
-static void trs_opt_hypermem(char *arg, int intarg, int *stringarg)
+static void trs_opt_keystretch(char *arg, int intarg, int *stringarg)
 {
-  hypermem = intarg;
-  if (hypermem)
-    huffman_ram = 0;
+  stretch_amount = strtol(arg, NULL, 0);
+  if (stretch_amount < 0)
+    stretch_amount = STRETCH_AMOUNT;
 }
 
-static void trs_opt_supermem(char *arg, int intarg, int *stringarg)
+static void trs_opt_microlabs(char *arg, int intarg, int *stringarg)
 {
-  supermem = intarg;
-  if (supermem)
-    selector = 0;
+  grafyx_set_microlabs(intarg);
+}
+
+static void trs_opt_model(char *arg, int intarg, int *stringarg)
+{
+  if (strcmp(arg, "1") == 0 ||
+      strcasecmp(arg, "I") == 0) {
+    trs_model = 1;
+  } else if (strcmp(arg, "3") == 0 ||
+             strcasecmp(arg, "III") == 0) {
+    trs_model = 3;
+  } else if (strcmp(arg, "4") == 0 ||
+             strcasecmp(arg, "IV") == 0) {
+    trs_model = 4;
+  } else if (strcasecmp(arg, "4P") == 0 ||
+             strcasecmp(arg, "IVp") == 0) {
+    trs_model = 5;
+  } else
+    error("TRS-80 Model %s not supported", arg);
+}
+
+static void trs_opt_printer(char *arg, int intarg, int *stringarg)
+{
+  if (isdigit((int)*arg)) {
+    trs_printer = atoi(arg);
+    if (trs_printer < 0 || trs_printer > 1)
+      trs_printer = 0;
+  } else
+    switch (tolower((int)*arg)) {
+      case 'n': /*none*/
+        trs_printer = 0;
+        break;
+      case 't': /*text*/
+        trs_printer = 1;
+        break;
+      default:
+        error("unknown printer type: %s", arg);
+    }
+}
+
+static void trs_opt_samplerate(char *arg, int intarg, int *stringarg)
+{
+  cassette_default_sample_rate = strtol(arg, NULL, 0);
+  if (cassette_default_sample_rate < 0 ||
+      cassette_default_sample_rate > DEFAULT_SAMPLE_RATE)
+    cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
+}
+
+static void trs_opt_scale(char *arg, int intarg, int *stringarg)
+{
+  scale = atoi(arg);
+  if (scale <= 0)
+    scale = 1;
+  if (scale > MAX_SCALE)
+    scale = MAX_SCALE;
 }
 
 static void trs_opt_selector(char *arg, int intarg, int *stringarg)
@@ -968,14 +932,50 @@ static void trs_opt_selector(char *arg, int intarg, int *stringarg)
     supermem = 0;
 }
 
-static void trs_opt_color(char *arg, int intarg, int *color)
+static void trs_opt_shiftbracket(char *arg, int intarg, int *stringarg)
 {
-  *color = strtol(arg, NULL, 16);
+  trs_kb_bracket(intarg);
+}
+
+static void trs_opt_sizemap(char *arg, int intarg, int *stringarg)
+{
+  sscanf(arg, "%d,%d,%d,%d,%d,%d,%d,%d",
+         &disksizes[0], &disksizes[1], &disksizes[2], &disksizes[3],
+         &disksizes[4], &disksizes[5], &disksizes[6], &disksizes[7]);
+}
+
+static void trs_opt_string(char *arg, int intarg, int *stringarg)
+{
+  strcpy((char *)stringarg, arg);
+}
+
+static void trs_opt_supermem(char *arg, int intarg, int *stringarg)
+{
+  supermem = intarg;
+  if (supermem)
+    selector = 0;
+}
+
+static void trs_opt_switches(char *arg, int intarg, int *stringarg)
+{
+  trs_uart_switches = strtol(arg, NULL, 0);
+}
+
+static void trs_opt_turborate(char *arg, int intarg, int *stringarg)
+{
+  timer_overclock_rate = atoi(arg);
+  if (timer_overclock_rate <= 0)
+    timer_overclock_rate = 1;
 }
 
 static void trs_opt_value(char *arg, int intarg, int *variable)
 {
   *variable = intarg;
+}
+
+static void trs_opt_wafer(char *arg, int intarg, int *stringarg)
+{
+  stringy_insert(intarg, arg);
 }
 
 static void trs_disk_setsizes(void)
