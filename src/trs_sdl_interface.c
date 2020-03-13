@@ -2765,7 +2765,6 @@ void trs_screen_refresh(void)
 void trs_disk_led(int drive, int on_off)
 {
   static int countdown[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  int const drive0_led_x = border_width;
   unsigned int i;
   SDL_Rect rect;
 
@@ -2775,14 +2774,14 @@ void trs_disk_led(int drive, int on_off)
 
   if (drive == -1) {
     for (i = 0; i < 8; i++) {
-      rect.x = drive0_led_x + 24 * scale * i;
+      rect.x = border_width + 24 * scale * i;
       SDL_FillRect(screen, &rect, light_red);
       addToDrawList(&rect);
     }
   }
   else if (on_off) {
     if (countdown[drive] == 0) {
-      rect.x = drive0_led_x + 24 * scale * drive;
+      rect.x = border_width + 24 * scale * drive;
       SDL_FillRect(screen, &rect, bright_red);
       addToDrawList(&rect);
     }
@@ -2793,7 +2792,7 @@ void trs_disk_led(int drive, int on_off)
       if (countdown[i]) {
         countdown[i]--;
         if (countdown[i] == 0) {
-          rect.x = drive0_led_x + 24 * scale * i;
+          rect.x = border_width + 24 * scale * i;
           SDL_FillRect(screen, &rect, light_red);
           addToDrawList(&rect);
         }
