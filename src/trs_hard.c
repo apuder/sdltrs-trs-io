@@ -121,7 +121,7 @@ void trs_hard_init(void)
   state.head = 0;
   state.status = 0;
   state.command = 0;
-  for (i=0; i<TRS_HARD_MAXDRIVES; i++) {
+  for (i = 0; i < TRS_HARD_MAXDRIVES; i++) {
     if (state.d[i].file == NULL) {
       state.d[i].writeprot = 0;
       state.d[i].cyls = 0;
@@ -172,7 +172,7 @@ int trs_hard_in(int port)
     case TRS_HARD_WP: {
       int i;
       v = 0;
-      for (i=0; i<TRS_HARD_MAXDRIVES; i++) {
+      for (i = 0; i < TRS_HARD_MAXDRIVES; i++) {
 	open_drive(i);
 	if (state.d[i].writeprot) {
 	  v |= TRS_HARD_WPBIT(i) | TRS_HARD_WPSOME;
@@ -234,7 +234,7 @@ void trs_hard_out(int port, int value)
     }
     if ((value & TRS_HARD_DEVICE_ENABLE) && state.present == 0) {
       int i;
-      for (i=0; i<TRS_HARD_MAXDRIVES; i++) {
+      for (i = 0; i < TRS_HARD_MAXDRIVES; i++) {
 	if (open_drive(i)) state.present = 1;
       }
     }
@@ -565,26 +565,26 @@ static void trs_save_harddrive(FILE *file, Drive *d)
   else
      trs_save_int(file, &one, 1);
   trs_save_filename(file, d->filename);
-  trs_save_int(file, &d->writeprot,1);
-  trs_save_int(file, &d->cyls,1);
-  trs_save_int(file, &d->heads,1);
-  trs_save_int(file, &d->secs,1);
+  trs_save_int(file, &d->writeprot, 1);
+  trs_save_int(file, &d->cyls, 1);
+  trs_save_int(file, &d->heads, 1);
+  trs_save_int(file, &d->secs, 1);
 }
 
 static void trs_load_harddrive(FILE *file, Drive *d)
 {
   int file_not_null;
 
-  trs_load_int(file,&file_not_null,1);
+  trs_load_int(file, &file_not_null, 1);
   if (file_not_null)
     d->file = (FILE *) 1;
   else
     d->file = NULL;
   trs_load_filename(file, d->filename);
-  trs_load_int(file, &d->writeprot,1);
-  trs_load_int(file, &d->cyls,1);
-  trs_load_int(file, &d->heads,1);
-  trs_load_int(file, &d->secs,1);
+  trs_load_int(file, &d->writeprot, 1);
+  trs_load_int(file, &d->cyls, 1);
+  trs_load_int(file, &d->heads, 1);
+  trs_load_int(file, &d->secs, 1);
 }
 
 void trs_hard_save(FILE *file)
@@ -603,7 +603,7 @@ void trs_hard_save(FILE *file)
   trs_save_uchar(file, &state.status, 1);
   trs_save_uchar(file, &state.command, 1);
   trs_save_int(file, &state.bytesdone, 1);
-  for (i=0;i<TRS_HARD_MAXDRIVES;i++)
+  for (i = 0; i< TRS_HARD_MAXDRIVES; i++)
     trs_save_harddrive(file, &state.d[i]);
 }
 
@@ -611,7 +611,7 @@ void trs_hard_load(FILE *file)
 {
   int i;
 
-  for (i=0;i<TRS_HARD_MAXDRIVES;i++) {
+  for (i = 0; i< TRS_HARD_MAXDRIVES; i++) {
     if (state.d[i].file != NULL)
       fclose(state.d[i].file);
   }
@@ -627,12 +627,12 @@ void trs_hard_load(FILE *file)
   trs_load_uchar(file, &state.status, 1);
   trs_load_uchar(file, &state.command, 1);
   trs_load_int(file, &state.bytesdone, 1);
-  for (i=0;i<TRS_HARD_MAXDRIVES;i++) {
+  for (i = 0; i < TRS_HARD_MAXDRIVES; i++) {
     trs_load_harddrive(file, &state.d[i]);
     if (state.d[i].file != NULL) {
-      state.d[i].file = fopen(state.d[i].filename,"rb+");
+      state.d[i].file = fopen(state.d[i].filename, "rb+");
       if (state.d[i].file == NULL) {
-        state.d[i].file = fopen(state.d[i].filename,"rb");
+        state.d[i].file = fopen(state.d[i].filename, "rb");
         state.d[i].writeprot = 1;
       } else {
         state.d[i].writeprot = 0;

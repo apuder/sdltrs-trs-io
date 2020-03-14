@@ -46,8 +46,8 @@
 /*
  * Debug flags.  Update help_message in debug.c if these change.
  */
-#define IODEBUG_IN  (1<<0)  /* IN instructions */
-#define IODEBUG_OUT (2<<0)  /* OUT instructions */
+#define IODEBUG_IN  (1 << 0)  /* IN instructions */
+#define IODEBUG_OUT (2 << 0)  /* OUT instructions */
 
 #include <time.h>
 

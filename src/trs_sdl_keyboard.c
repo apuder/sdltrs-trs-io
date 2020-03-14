@@ -65,10 +65,10 @@ static int key_queue_entries;
 /*
  * TRS-80 key matrix
  */
-#define TK(a, b) (((a)<<4)+(b))
+#define TK(a, b) (((a) << 4) + (b))
 #define TK_ADDR(tk) (((tk) >> 4)&0xf)
-#define TK_DATA(tk) ((tk)&0xf)
-#define TK_DOWN(tk) (((tk)&0x10000) == 0)
+#define TK_DATA(tk) ((tk) & 0xf)
+#define TK_DOWN(tk) (((tk) & 0x10000) == 0)
 
 #define TK_AtSign       TK(0, 0)  /* @   */
 #define TK_A            TK(0, 1)
@@ -500,22 +500,22 @@ int trs_kb_bracket_state = 0;
 
 void trs_keyboard_save(FILE *file)
 {
-  fwrite(&keystate,8,sizeof(int),file);
-  fwrite(&force_shift,1,sizeof(int),file);
-  fwrite(&joystate,1,sizeof(int),file);
-  fwrite(&key_stretch_timeout,1,sizeof(long long),file);
-  fwrite(&stretch_amount,1,sizeof(int),file);
-  fwrite(&trs_kb_bracket_state,1,sizeof(int),file);
+  fwrite(&keystate, 8, sizeof(int), file);
+  fwrite(&force_shift, 1, sizeof(int), file);
+  fwrite(&joystate, 1, sizeof(int), file);
+  fwrite(&key_stretch_timeout, 1, sizeof(long long), file);
+  fwrite(&stretch_amount, 1, sizeof(int), file);
+  fwrite(&trs_kb_bracket_state, 1, sizeof(int), file);
 }
 
 void trs_keyboard_load(FILE *file)
 {
-  fread(&keystate,8,sizeof(int),file);
-  fread(&force_shift,1,sizeof(int),file);
-  fread(&joystate,1,sizeof(int),file);
-  fread(&key_stretch_timeout,1,sizeof(long long),file);
-  fread(&stretch_amount,1,sizeof(int),file);
-  fread(&trs_kb_bracket_state,1,sizeof(int),file);
+  fread(&keystate, 8, sizeof(int), file);
+  fread(&force_shift, 1, sizeof(int), file);
+  fread(&joystate, 1, sizeof(int), file);
+  fread(&key_stretch_timeout, 1, sizeof(long long), file);
+  fread(&stretch_amount, 1, sizeof(int), file);
+  fread(&trs_kb_bracket_state, 1, sizeof(int), file);
 }
 
 void trs_kb_reset()
@@ -541,11 +541,11 @@ void trs_kb_bracket(int shifted)
   */
   int i;
   trs_kb_bracket_state = shifted;
-  for (i=0x5b; i<=0x5f; i++) {
+  for (i = 0x5b; i <= 0x5f; i++) {
     ascii_key_table[i].shift_action =
       shifted ? TK_ForceShift : TK_ForceNoShift;
   }
-  for (i=0x7b; i<0x7f; i++) {
+  for (i = 0x7b; i < 0x7f; i++) {
     ascii_key_table[i].shift_action =
       shifted ? TK_ForceNoShift : TK_ForceShift;
   }
@@ -646,7 +646,7 @@ void trs_open_joystick(void)
  }
 
   if ((trs_joystick_num != -1) &&
-      (trs_joystick_num <= (num_joysticks -1))) {
+      (trs_joystick_num <= (num_joysticks - 1))) {
       open_joy = SDL_JoystickOpen(trs_joystick_num);
   }
   else
@@ -751,7 +751,7 @@ static void change_keystate(int action)
     switch (action) {
       case TK_AllKeysUp:
 	/* force all keys up */
-	for (i=0; i<7; i++) {
+	for (i = 0; i < 7; i++) {
 	    keystate[i] = 0;
 	}
 	force_shift = TK_Neutral;
@@ -778,7 +778,7 @@ static int kb_mem_value(int address)
 {
     int i, bitpos, data = 0;
 
-    for (i=0, bitpos=1; i<7; i++, bitpos<<=1) {
+    for (i = 0, bitpos = 1; i < 7; i++, bitpos <<= 1) {
 	if (address & bitpos) {
 	    data |= keystate[i];
 	}

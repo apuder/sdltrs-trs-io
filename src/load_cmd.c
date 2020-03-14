@@ -18,7 +18,7 @@
 #include "load_cmd.h"
 
 int
-load_cmd(FILE* f, unsigned char memory[1<<16],
+load_cmd(FILE* f, unsigned char memory[1 << 16],
 	 unsigned char* loadmap, int verbosity, FILE* outf,
 	 int isam, char* pds, int* xferaddr, int stopxfer)
 {
@@ -31,7 +31,7 @@ load_cmd(FILE* f, unsigned char memory[1<<16],
   unsigned short addr; /* wrap at 2**16 */
 
   if (loadmap) {
-    memset(loadmap, 0, 1<<16);
+    memset(loadmap, 0, 1 << 16);
   }
   if (xferaddr) {
     *xferaddr = -1;
@@ -251,7 +251,7 @@ load_cmd(FILE* f, unsigned char memory[1<<16],
       if (count != 11) {
 	return c;
       }
-      for (i=0; i<8; i++) {
+      for (i = 0; i < 8; i++) {
 	v = getc(f);
 	if (v == EOF) return LOAD_CMD_EOF;
 	pentry[i] = v;

@@ -79,7 +79,7 @@ int trs_load_cmd(const char *filename)
 
   if((program = fopen(filename,"rb")) == NULL) {
     error("failed to load CMD file %s: %s", filename, strerror(errno));
-    return(-1);
+    return -1;
   }
   if (load_cmd(program, &memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK) {
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
@@ -88,10 +88,10 @@ int trs_load_cmd(const char *filename)
   } else {
     error("unknown CMD format");
     fclose(program);
-    return(-1);
+    return -1;
   }
   fclose(program);
-  return(0);
+  return 0;
 }
 
 int trs_load_rom(const char *filename)
@@ -102,7 +102,7 @@ int trs_load_rom(const char *filename)
   if((program = fopen(filename, "rb")) == NULL)
   {
     error("failed to load ROM file %s: %s", filename, strerror(errno));
-    return(-1);
+    return -1;
   }
   c = getc(program);
   if (c == ':') {
@@ -112,9 +112,9 @@ int trs_load_rom(const char *filename)
     fclose(program);
     if (trs_rom_size == -1) {
       error("ROM file %s not in Intel hex format", filename);
-      return(-1);
+      return -1;
     } else
-      return(0);
+      return 0;
   } else if (c == 1 || c == 5) {
     /* Assume MODELA/III file */
     extern Uchar *rom; /*!! fixme*/
@@ -129,7 +129,7 @@ int trs_load_rom(const char *filename)
         }
       }
       fclose(program);
-      return(0);
+      return 0;
     } else {
       /* Guess it wasn't one */
       rewind(program);
@@ -141,7 +141,7 @@ int trs_load_rom(const char *filename)
     mem_write_rom(trs_rom_size++, c);
     c = getc(program);
   }
-  return(0);
+  return 0;
 }
 
 void trs_load_compiled_rom(int size, unsigned char rom[])

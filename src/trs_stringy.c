@@ -684,7 +684,7 @@ static void trs_load_stringy(FILE *file, stringy_info_t *d)
 {
   int file_not_null;
 
-  trs_load_int(file,&file_not_null, 1);
+  trs_load_int(file, &file_not_null, 1);
   if (file_not_null)
     d->file = (FILE *) 1;
   else
@@ -709,7 +709,7 @@ void trs_stringy_save(FILE *file)
 {
   int i;
 
-  for (i=0;i<STRINGY_MAX_UNITS;i++)
+  for (i = 0; i < STRINGY_MAX_UNITS; i++)
     trs_save_stringy(file, &stringy_info[i]);
 }
 
@@ -717,12 +717,12 @@ void trs_stringy_load(FILE *file)
 {
   int i;
 
-  for (i=0;i<STRINGY_MAX_UNITS;i++) {
+  for (i = 0; i < STRINGY_MAX_UNITS; i++) {
     trs_load_stringy(file, &stringy_info[i]);
     if (stringy_info[i].file != NULL) {
-      stringy_info[i].file = fopen(stringy_info[i].name,"rb+");
+      stringy_info[i].file = fopen(stringy_info[i].name, "rb+");
       if (stringy_info[i].file == NULL) {
-        stringy_info[i].file = fopen(stringy_info[i].name,"rb");
+        stringy_info[i].file = fopen(stringy_info[i].name, "rb");
         stringy_info[i].in_port |= 1 << 0;
       } else {
         stringy_info[i].in_port &= ~(1 << 0);;

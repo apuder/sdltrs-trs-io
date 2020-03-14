@@ -120,7 +120,7 @@ extern int trs_hard_getwriteprotect(int unit);
  *  t = track 0 not found
  *  m = bad address mark
  */
-#define TRS_HARD_ERROR (TRS_HARD_DATA+1)
+#define TRS_HARD_ERROR (TRS_HARD_DATA + 1)
 #define	TRS_HARD_BBDERR   0x80
 #define TRS_HARD_DATAERR  0x40
 #define TRS_HARD_IDERR    0x20 /* unused? */
@@ -132,21 +132,21 @@ extern int trs_hard_getwriteprotect(int unit);
 
 /* Write precompensation register (write only) */
 /* Value *4 is the starting cylinder for write precomp */
-#define TRS_HARD_PRECOMP (TRS_HARD_DATA+1)
+#define TRS_HARD_PRECOMP (TRS_HARD_DATA + 1)
 
 /* Sector count register (read/write) */
 /* Used only for multiple sector accesses; otherwise ignored. */
 /* Autodecrements when used. */
-#define TRS_HARD_SECCNT (TRS_HARD_DATA+2)
+#define TRS_HARD_SECCNT (TRS_HARD_DATA + 2)
 
 /* Sector number register (read/write) */
-#define TRS_HARD_SECNUM (TRS_HARD_DATA+3)
+#define TRS_HARD_SECNUM (TRS_HARD_DATA + 3)
 
 /* Cylinder low byte register (read/write) */
-#define TRS_HARD_CYLLO (TRS_HARD_DATA+4)
+#define TRS_HARD_CYLLO (TRS_HARD_DATA + 4)
 
 /* Cylinder high byte register (read/write) */
-#define TRS_HARD_CYLHI (TRS_HARD_DATA+5)
+#define TRS_HARD_CYLHI (TRS_HARD_DATA + 5)
 
 /* Size/drive/head register (read/write):
  *  essddhhh
@@ -155,7 +155,7 @@ extern int trs_hard_getwriteprotect(int unit);
  *  dd = drive
  *  hhh = head
  */
-#define TRS_HARD_SDH (TRS_HARD_DATA+6)
+#define TRS_HARD_SDH (TRS_HARD_DATA + 6)
 #define TRS_HARD_ECCMASK    0x80
 #define TRS_HARD_ECCSHIFT   7
 #define TRS_HARD_SIZEMASK   0x60
@@ -178,7 +178,7 @@ extern int trs_hard_getwriteprotect(int unit);
  *  i = command in progress (=software reset required)
  *  e = error
  */
-#define TRS_HARD_STATUS (TRS_HARD_DATA+7)
+#define TRS_HARD_STATUS (TRS_HARD_DATA + 7)
 #define TRS_HARD_BUSY     0x80
 #define TRS_HARD_READY    0x40
 #define TRS_HARD_WRERR    0x20
@@ -189,7 +189,7 @@ extern int trs_hard_getwriteprotect(int unit);
 #define TRS_HARD_ERR	  0x01
 
 /* Command register (write only) */
-#define TRS_HARD_COMMAND (TRS_HARD_DATA+7)
+#define TRS_HARD_COMMAND (TRS_HARD_DATA + 7)
 
 /*
  * WD1010 commands

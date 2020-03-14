@@ -65,8 +65,8 @@ static void win_set_readonly(char *filename, int readonly)
   DWORD attr;
   attr = GetFileAttributes(filename);
   SetFileAttributes(filename, readonly != 0
-		? (attr | FILE_ATTRIBUTE_READONLY)
-		: (attr & ~FILE_ATTRIBUTE_READONLY));
+                    ? (attr | FILE_ATTRIBUTE_READONLY)
+                    : (attr & ~FILE_ATTRIBUTE_READONLY));
 }
 #endif
 
@@ -91,7 +91,7 @@ void trs_protect_cass(int writeprot)
   trs_cassette_remove();
 
 #ifdef _WIN32
-  win_set_readonly(prot_filename,writeprot);
+  win_set_readonly(prot_filename, writeprot);
 #else
   if (writeprot)
     newmode = st.st_mode & ~(S_IWUSR);
@@ -125,12 +125,12 @@ void trs_protect_disk(int drive, int writeprot)
 
   if (emutype == JV3 || emutype == DMK) {
 #ifdef _WIN32
-    win_set_readonly(prot_filename,0);
+    win_set_readonly(prot_filename, 0);
 #else
     chmod(prot_filename, st.st_mode | (S_IWUSR|S_IWGRP|S_IWOTH));
 #endif
-    f=fopen(prot_filename,"r+");
-    if (f!=NULL) {
+    f = fopen(prot_filename, "r+");
+    if (f != NULL) {
       if (emutype == JV3) {
         /* Set the magic byte */
         fseek(f, 256*34-1, 0);
@@ -144,7 +144,7 @@ void trs_protect_disk(int drive, int writeprot)
   }
 
 #ifdef _WIN32
-  win_set_readonly(prot_filename,writeprot);
+  win_set_readonly(prot_filename, writeprot);
 #else
   if (writeprot)
     newmode = st.st_mode & ~(S_IWUSR);
@@ -152,7 +152,7 @@ void trs_protect_disk(int drive, int writeprot)
     newmode = st.st_mode | (S_IWUSR);
   chmod(prot_filename, newmode);
 #endif
-  trs_disk_insert(drive,prot_filename);
+  trs_disk_insert(drive, prot_filename);
 }
 
 void trs_protect_hard(int drive, int writeprot)
@@ -177,12 +177,12 @@ void trs_protect_hard(int drive, int writeprot)
   trs_hard_remove(drive);
 
 #ifdef _WIN32
-  win_set_readonly(prot_filename,0);
+  win_set_readonly(prot_filename, 0);
 #else
   chmod(prot_filename, st.st_mode | (S_IWUSR|S_IWGRP|S_IWOTH));
 #endif
-  f=fopen(prot_filename,"r+");
-  if (f!=NULL) {
+  f = fopen(prot_filename, "r+");
+  if (f != NULL) {
     fseek(f, 7, 0);
     newmode = getc(f);
     if (newmode != EOF) {
@@ -194,7 +194,7 @@ void trs_protect_hard(int drive, int writeprot)
   }
 
 #ifdef _WIN32
-  win_set_readonly(prot_filename,writeprot);
+  win_set_readonly(prot_filename, writeprot);
 #else
   if (writeprot)
     newmode = st.st_mode & ~(S_IWUSR);
@@ -202,7 +202,7 @@ void trs_protect_hard(int drive, int writeprot)
     newmode = st.st_mode | (S_IWUSR);
   chmod(prot_filename, newmode);
 #endif
-  trs_hard_attach(drive,prot_filename);
+  trs_hard_attach(drive, prot_filename);
 }
 
 void trs_protect_stringy(int drive, int writeprot)
@@ -227,12 +227,12 @@ void trs_protect_stringy(int drive, int writeprot)
   stringy_remove(drive);
 
 #ifdef _WIN32
-  win_set_readonly(prot_filename,0);
+  win_set_readonly(prot_filename, 0);
 #else
   chmod(prot_filename, st.st_mode | (S_IWUSR|S_IWGRP|S_IWOTH));
 #endif
-  f=fopen(prot_filename,"r+");
-  if (f!=NULL) {
+  f = fopen(prot_filename, "r+");
+  if (f != NULL) {
     fseek(f, 5, 0);
     newmode = getc(f);
     if (newmode != EOF) {
@@ -247,7 +247,7 @@ void trs_protect_stringy(int drive, int writeprot)
   }
 
 #ifdef _WIN32
-  win_set_readonly(prot_filename,writeprot);
+  win_set_readonly(prot_filename, writeprot);
 #else
   if (writeprot)
     newmode = st.st_mode & ~(S_IWUSR);
@@ -255,7 +255,7 @@ void trs_protect_stringy(int drive, int writeprot)
     newmode = st.st_mode | (S_IWUSR);
   chmod(prot_filename, newmode);
 #endif
-  stringy_insert(drive,prot_filename);
+  stringy_insert(drive, prot_filename);
 }
 
 int trs_create_blank_jv1(const char *fname)
@@ -265,7 +265,7 @@ int trs_create_blank_jv1(const char *fname)
   /* Unformatted JV1 disk - just an empty file! */
   f = fopen(fname, "wb");
   if (f == NULL)
-	return -1;
+    return -1;
   fclose(f);
   return 0;
 }
@@ -278,8 +278,8 @@ int trs_create_blank_jv3(const char *fname)
   /* Unformatted JV3 disk. */
   f = fopen(fname, "wb");
   if (f == NULL)
-	return -1;
-  for (i=0; i<(256*34); i++)
+    return -1;
+  for (i = 0; i < (256 * 34); i++)
     putc(0xff, f);
   fclose(f);
   return 0;
@@ -294,7 +294,7 @@ int trs_create_blank_dmk(const char *fname, int sides, int density,
 
   f = fopen(fname, "wb");
   if (f == NULL)
-	return -1;
+    return -1;
   putc(0, f);           /* 0: not write protected */
   putc(0, f);           /* 1: initially zero tracks */
   if (eight) {
@@ -347,7 +347,7 @@ int trs_create_blank_hard(const char *fname, int cyl, int sec,
   Uchar *rhhp = (Uchar *) &rhh;
   int cksum;
 
-  memset(&rhh,0,sizeof(rhh));
+  memset(&rhh, 0, sizeof(rhh));
 
   rhh.id1 = 0x56;
   rhh.id2 = 0xcb;
@@ -372,14 +372,14 @@ int trs_create_blank_hard(const char *fname, int cyl, int sec,
   snprintf(rhh.filename, 192, "%s", fname);
 
   cksum = 0;
-  for (i=0; i<=31; i++) {
+  for (i = 0; i <= 31; i++) {
     cksum += rhhp[i];
   }
   rhh.cksum = ((Uchar) cksum) ^ 0x4c;
 
   f = fopen(fname, "wb");
   if (f == NULL)
-    return(1);
+    return 1;
   fwrite(&rhh, sizeof(rhh), 1, f);
   fclose(f);
   return 0;

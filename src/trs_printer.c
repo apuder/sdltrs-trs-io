@@ -62,11 +62,11 @@ int trs_printer_reset(void)
     if (trs_printer_command[0] != 0) {
       snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
       if (system(command) == -1)
-        return(-1);
+        return -1;
     }
-    return(0);
+    return 0;
   } else
-    return(-1);
+    return -1;
 }
 
 void trs_printer_open(void)

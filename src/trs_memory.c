@@ -308,9 +308,9 @@ void mem_init()
 {
     /* +1 so strings from mem_pointer are NUL-terminated */
     if (rom == NULL)
-        rom = (Uchar *) calloc(MAX_ROM_SIZE+1, 1);
+        rom = (Uchar *) calloc(MAX_ROM_SIZE + 1, 1);
     if (video == NULL)
-        video = (Uchar *) calloc(MAX_VIDEO_SIZE+1, 1);
+        video = (Uchar *) calloc(MAX_VIDEO_SIZE + 1, 1);
     if (trs_model < 4)
         trs_video_size = 1024;
     else
@@ -453,7 +453,7 @@ int mem_read(int address)
 
       case 0x40: /* Model 4 map 0 */
 	if (address >= RAM_START) {
-	    return memory[address + bank_offset[address>>15]];
+	    return memory[address + bank_offset[address >> 15]];
 	}
 	if (address == PRINTER_ADDRESS) return trs_printer_read();
 	if (address < trs_rom_size) return rom[address];
@@ -471,7 +471,7 @@ int mem_read(int address)
       case 0x50: /* Model 4P map 0, boot ROM out */
       case 0x51: /* Model 4P map 1, boot ROM out */
 	if (address >= RAM_START || address < KEYBOARD_START) {
-	    return memory[address + bank_offset[address>>15]];
+	    return memory[address + bank_offset[address >> 15]];
 	}
 	if (address >= VIDEO_START) {
 	    return video[address + video_offset];
@@ -483,7 +483,7 @@ int mem_read(int address)
       case 0x52: /* Model 4P map 2, boot ROM out */
       case 0x56: /* Model 4P map 2, boot ROM in */
 	if (address < 0xf400) {
-	    return memory[address + bank_offset[address>>15]];
+	    return memory[address + bank_offset[address >> 15]];
 	}
 	if (address >= 0xf800) return video[address-0xf800];
 	return trs_kb_mem_read(address);
@@ -491,7 +491,7 @@ int mem_read(int address)
       case 0x43: /* Model 4 map 3 */
       case 0x53: /* Model 4P map 3, boot ROM out */
       case 0x57: /* Model 4P map 3, boot ROM in */
-	return memory[address + bank_offset[address>>15]];
+	return memory[address + bank_offset[address >> 15]];
 
     }
     /* not reached */
@@ -637,7 +637,7 @@ void mem_write(int address, int value)
       case 0x50: /* Model 4P map 0, boot ROM out */
       case 0x54: /* Model 4P map 0, boot ROM in */
 	if (address >= RAM_START) {
-	    memory[address + bank_offset[address>>15]] = value;
+	    memory[address + bank_offset[address >> 15]] = value;
 	} else if (address >= VIDEO_START) {
 	    int vaddr = address+ video_offset;
 	    if (video[vaddr] != value) {
@@ -653,7 +653,7 @@ void mem_write(int address, int value)
       case 0x51: /* Model 4P map 1, boot ROM out */
       case 0x55: /* Model 4P map 1, boot ROM in */
 	if (address >= RAM_START || address < KEYBOARD_START) {
-	    memory[address + bank_offset[address>>15]] = value;
+	    memory[address + bank_offset[address >> 15]] = value;
 	} else if (address >= VIDEO_START) {
 	    int vaddr = address + video_offset;
 	    if (video[vaddr] != value) {
@@ -667,7 +667,7 @@ void mem_write(int address, int value)
       case 0x52: /* Model 4P map 2, boot ROM out */
       case 0x56: /* Model 4P map 2, boot ROM in */
 	if (address < 0xf400) {
-	    memory[address + bank_offset[address>>15]] = value;
+	    memory[address + bank_offset[address >> 15]] = value;
 	} else if (address >= 0xf800) {
 	    int vaddr = address - 0xf800;
 	    if (video[vaddr] != value) {
@@ -680,7 +680,7 @@ void mem_write(int address, int value)
       case 0x43: /* Model 4 map 3 */
       case 0x53: /* Model 4P map 3, boot ROM out */
       case 0x57: /* Model 4P map 3, boot ROM in */
-	memory[address + bank_offset[address>>15]] = value;
+	memory[address + bank_offset[address >> 15]] = value;
 	break;
     }
 }
@@ -803,7 +803,7 @@ Uchar *mem_pointer(int address, int writing)
 
       case 0x40: /* Model 4 map 0 reading */
 	if (address >= RAM_START) {
-	    return &memory[address + bank_offset[address>>15]];
+	    return &memory[address + bank_offset[address >> 15]];
 	}
 	if (address < trs_rom_size) return &rom[address];
 	if (address >= VIDEO_START) {
@@ -815,7 +815,7 @@ Uchar *mem_pointer(int address, int writing)
       case 0x58: /* Model 4P map 0, boot ROM out, writing */
       case 0x5c: /* Model 4P map 0, boot ROM in, writing */
 	if (address >= RAM_START) {
-	    return &memory[address + bank_offset[address>>15]];
+	    return &memory[address + bank_offset[address >> 15]];
 	}
 	if (address >= VIDEO_START) {
 	    return &video[address + video_offset];
@@ -833,7 +833,7 @@ Uchar *mem_pointer(int address, int writing)
       case 0x59: /* Model 4P map 1, boot ROM out, writing */
       case 0x5d: /* Model 4P map 1, boot ROM in, writing */
 	if (address >= RAM_START || address < KEYBOARD_START) {
-	    return &memory[address + bank_offset[address>>15]];
+	    return &memory[address + bank_offset[address >> 15]];
 	}
 	if (address >= VIDEO_START) {
 	    return &video[address + video_offset];
@@ -847,7 +847,7 @@ Uchar *mem_pointer(int address, int writing)
       case 0x56: /* Model 4P map 2, boot ROM in, reading */
       case 0x5e: /* Model 4P map 2, boot ROM in, writing */
 	if (address < 0xf400) {
-	    return &memory[address + bank_offset[address>>15]];
+	    return &memory[address + bank_offset[address >> 15]];
 	}
 	if (address >= 0xf800) return &video[address-0xf800];
 	return NULL;
@@ -858,7 +858,7 @@ Uchar *mem_pointer(int address, int writing)
       case 0x5b: /* Model 4P map 3, boot ROM out, writing */
       case 0x57: /* Model 4P map 3, boot ROM in, reading */
       case 0x5f: /* Model 4P map 3, boot ROM in, writing */
-	return &memory[address + bank_offset[address>>15]];
+	return &memory[address + bank_offset[address >> 15]];
     }
     /* not reached */
     return NULL;
@@ -867,8 +867,8 @@ Uchar *mem_pointer(int address, int writing)
 void trs_mem_save(FILE *file)
 {
   trs_save_uchar(file, memory, 0x200001);
-  trs_save_uchar(file, rom, MAX_ROM_SIZE+1);
-  trs_save_uchar(file, video, MAX_VIDEO_SIZE+1);
+  trs_save_uchar(file, rom, MAX_ROM_SIZE + 1);
+  trs_save_uchar(file, video, MAX_VIDEO_SIZE + 1);
   trs_save_int(file, &trs_rom_size, 1);
   trs_save_int(file, &trs_video_size, 1);
   trs_save_int(file, &memory_map, 1);
@@ -887,8 +887,8 @@ void trs_mem_save(FILE *file)
 void trs_mem_load(FILE *file)
 {
   trs_load_uchar(file, memory, 0x200001);
-  trs_load_uchar(file, rom, MAX_ROM_SIZE+1);
-  trs_load_uchar(file, video, MAX_VIDEO_SIZE+1);
+  trs_load_uchar(file, rom, MAX_ROM_SIZE + 1);
+  trs_load_uchar(file, video, MAX_VIDEO_SIZE + 1);
   trs_load_int(file, &trs_rom_size, 1);
   trs_load_int(file, &trs_video_size, 1);
   trs_load_int(file, &memory_map, 1);

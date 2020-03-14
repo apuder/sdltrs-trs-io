@@ -118,7 +118,7 @@ int trs_sound = 1;
 #else
 #define FRAGSIZE 9
 #endif
-#define SOUND_RING_SIZE (1<<(FRAGSIZE+8))
+#define SOUND_RING_SIZE (1 << (FRAGSIZE + 8))
 static int cassette_afmt = AUDIO_U8;
 static Uint8 sound_ring[SOUND_RING_SIZE];
 static Uint8 *sound_ring_read_ptr = sound_ring;
@@ -393,9 +393,9 @@ create_wav_header(FILE *f)
   if (put_twobyte(WAVE_FORMAT_PCM, f) < 0) return -1;
   if (put_twobyte(WAVE_FORMAT_MONO, f) < 0) return -1;
   if (put_fourbyte(cassette_sample_rate, f) < 0) return -1;
-  field = (WAVE_FORMAT_MONO * cassette_sample_rate * WAVE_FORMAT_8BIT/8);
+  field = (WAVE_FORMAT_MONO * cassette_sample_rate * WAVE_FORMAT_8BIT / 8);
   if (put_fourbyte(field, f) < 0) return -1;
-  field = (WAVE_FORMAT_MONO * WAVE_FORMAT_8BIT/8);
+  field = (WAVE_FORMAT_MONO * WAVE_FORMAT_8BIT / 8);
   if (put_twobyte(field, f) < 0) return -1;
   if (put_twobyte(WAVE_FORMAT_8BIT, f) < 0) return -1; /* end of fmt chunk */
   if (fputs("data", f) < 0) return -1;
@@ -447,7 +447,7 @@ parse_wav_header(FILE *f)
   if (get_fourbyte(&n4, f) < 0) return -1;
   cassette_sample_rate = n4;
   if (get_fourbyte(&n4, f) < 0) return -1; /* ignore this field */
-  expect2 = WAVE_FORMAT_MONO * WAVE_FORMAT_8BIT/8;
+  expect2 = WAVE_FORMAT_MONO * WAVE_FORMAT_8BIT / 8;
   if (get_twobyte(&n2, f) < 0) return -1;
   if (n2 != expect2) {
     error("unusable wav file: must be %d bytes/sample", expect2);
@@ -546,7 +546,7 @@ set_audio_format(int state)
     return -1;
   }
 
-  if (abs(obtained.freq - desired.freq) > desired.freq/20) {
+  if (abs(obtained.freq - desired.freq) > desired.freq / 20) {
     error("requested sample rate %d Hz, got %d Hz",
 	       desired.freq, obtained.freq);
     errno = EINVAL;
@@ -810,10 +810,10 @@ transition_out(int value)
     }
     sample = value_to_sample[cassette_value];
     nsamples = (unsigned long)
-      (ddelta_us / (1000000.0/cassette_sample_rate) + 0.5);
+      (ddelta_us / (1000000.0 / cassette_sample_rate) + 0.5);
     if (nsamples == 0) nsamples = 1; /* always at least one sample */
     cassette_roundoff_error =
-      nsamples * (1000000.0/cassette_sample_rate) - ddelta_us;
+      nsamples * (1000000.0 / cassette_sample_rate) - ddelta_us;
 #if CASSDEBUG
     debug("%d %4lu %d -> %3lu\n", cassette_value,
 	  z80_state.t_count - cassette_transition, value, nsamples);
@@ -929,7 +929,7 @@ transition_out(int value)
 
   default:
     error("output format %s not implemented",
-	  cassette_format < (sizeof(format_name)/sizeof(char *)) ?
+	  cassette_format < (sizeof(format_name) / sizeof(char *)) ?
 	  format_name[cassette_format] : "out of range;");
     break;
   }
@@ -1020,14 +1020,14 @@ transition_in()
 	       cassette_noisefloor, cabs, next);
 #endif
 	if (cabs > 1) {
-	  cassette_avg = (99*cassette_avg + cabs)/100;
+	  cassette_avg = (99*cassette_avg + cabs) / 100;
 	}
 	if (cabs > cassette_env) {
-	  cassette_env = (cassette_env + 9*cabs)/10;
+	  cassette_env = (cassette_env + 9*cabs) / 10;
 	} else if (cabs > 10) {
-	  cassette_env = (99*cassette_env + cabs)/100;
+	  cassette_env = (99*cassette_env + cabs) / 100;
 	}
-	cassette_noisefloor = (cassette_avg + cassette_env)/2;
+	cassette_noisefloor = (cassette_avg + cassette_env) / 2;
       }
       nsamples++;
       /* Allow reset button */
@@ -1035,7 +1035,7 @@ transition_in()
       if (z80_state.nmi) break;
     } while (next == cassette_value && maxsamples-- > 0);
     cassette_next = next;
-    delta_ts = nsamples * (1000000.0/cassette_sample_rate)
+    delta_ts = nsamples * (1000000.0 / cassette_sample_rate)
       * z80_state.clockMHz - cassette_roundoff_error;
     cassette_delta = (unsigned long) delta_ts + 0.5;
     cassette_roundoff_error = cassette_delta - delta_ts;
@@ -1088,7 +1088,7 @@ transition_in()
 
   default:
     error("input format %s not implemented",
-	  cassette_format < (sizeof(format_name)/sizeof(char *)) ?
+	  cassette_format < (sizeof(format_name) / sizeof(char *)) ?
 	  format_name[cassette_format] : "out of range;");
     break;
   }
@@ -1178,7 +1178,7 @@ void trs_cassette_out(int value)
   }
 
   /* Do sound emulation by sending samples to /dev/dsp */
-  if (trs_sound && cassette_motor == 0 ) {
+  if (trs_sound && cassette_motor == 0) {
     if (cassette_state != SOUND && value == 0) return;
     if (assert_state(SOUND) < 0) return;
 #ifdef SUSPEND_DELAY
@@ -1247,9 +1247,9 @@ trs_orch90_out(int channels, int value)
     ddelta_us = 300000.0;
   }
   nsamples = (unsigned long)
-    (ddelta_us / (1000000.0/cassette_sample_rate) + 0.5);
+    (ddelta_us / (1000000.0 / cassette_sample_rate) + 0.5);
   cassette_roundoff_error =
-    nsamples * (1000000.0/cassette_sample_rate) - ddelta_us;
+    nsamples * (1000000.0 / cassette_sample_rate) - ddelta_us;
 
   while (nsamples-- > 0) {
     put_sample(orch90_left, TRUE, cassette_file);

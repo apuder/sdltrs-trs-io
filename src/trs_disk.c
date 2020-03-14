@@ -40,14 +40,14 @@
 /*
  * Debug flags.  Update help_message in debug.c if these change.
  */
-#define DISKDEBUG_FDCREG   (1<<0)  /* FDC register reads and writes */
-#define DISKDEBUG_FDCCMD   (1<<1)  /* FDC commands */
-#define DISKDEBUG_VTOS3    (1<<2)  /* VTOS 3.0 JV3 kludges */
-#define DISKDEBUG_GAPS     (1<<3)  /* Gaps and real_writetrk */
-#define DISKDEBUG_REALSIZE (1<<4)  /* REAL sector size detection */
-#define DISKDEBUG_READADR  (1<<5)  /* Read Address timing */
-#define DISKDEBUG_DMK      (1<<6)  /* DMK support */
-#define DISKDEBUG_REALERR  (1<<7)  /* ioctl errors accessing real disks */
+#define DISKDEBUG_FDCREG   (1 << 0)  /* FDC register reads and writes */
+#define DISKDEBUG_FDCCMD   (1 << 1)  /* FDC commands */
+#define DISKDEBUG_VTOS3    (1 << 2)  /* VTOS 3.0 JV3 kludges */
+#define DISKDEBUG_GAPS     (1 << 3)  /* Gaps and real_writetrk */
+#define DISKDEBUG_REALSIZE (1 << 4)  /* REAL sector size detection */
+#define DISKDEBUG_READADR  (1 << 5)  /* Read Address timing */
+#define DISKDEBUG_DMK      (1 << 6)  /* DMK support */
+#define DISKDEBUG_REALERR  (1 << 7)  /* ioctl errors accessing real disks */
 
 #define TSTATEREV 1       /* Index holes timed by T-states, not real time */
 #define SIZERETRY 1       /* Retry in different sizes on real_read */
@@ -343,7 +343,7 @@ trs_disk_debug()
 	 state.format_gap[0], state.format_gap[1], state.format_gap[2],
 	 state.format_gap[3], state.format_gap[4]);
   printf("  debug flags: %#x\n", trs_disk_debug_flags);
-  for (i=0; i<NDRIVES; i++) {
+  for (i = 0; i < NDRIVES; i++) {
     DiskState *d = &disk[i];
     printf("Drive %d state: "
 	   "writeprot %d, phytrack %d (0x%02x), inches %d, step %d, type ",
@@ -455,7 +455,7 @@ trs_disk_init(int poweron)
   state.last_readadr = -1;
   state.motor_timeout = 0;
   if (poweron) {
-    for (i=0; i<NDRIVES; i++) {
+    for (i = 0; i < NDRIVES; i++) {
       disk[i].phytrack = 0;
 	  if (disk[i].file == NULL) {
         disk[i].emutype = NONE;
@@ -541,7 +541,7 @@ jv3_sort_ids(int drive)
   int olddrive = state.curdrive;
   int i, track, side;
 
-  for (i=0; i<=JV3_SECSMAX; i++) {
+  for (i = 0; i <= JV3_SECSMAX; i++) {
     d->u.jv3.sorted_id[i] = i;
   }
   state.curdrive = drive;
@@ -549,12 +549,12 @@ jv3_sort_ids(int drive)
 	jv3_id_compare);
   state.curdrive = olddrive;
 
-  for (track=0; track<MAXTRACKS; track++) {
+  for (track = 0; track < MAXTRACKS; track++) {
     d->u.jv3.track_start[track][0] = -1;
     d->u.jv3.track_start[track][1] = -1;
   }
   track = side = -1;
-  for (i=0; i<JV3_SECSMAX; i++) {
+  for (i = 0; i < JV3_SECSMAX; i++) {
     SectorId *sid = &d->u.jv3.id[d->u.jv3.sorted_id[i]];
     if (sid->track != track ||
 	(sid->flags & JV3_SIDE ? 1 : 0) != side) {
@@ -766,82 +766,82 @@ int trs_diskset_save(const char *filename)
     int i;
 
     if (getcwd(dirname, FILENAME_MAX) == NULL)
-      return(-1);
+      return -1;
 
     f = fopen(filename, "w");
     if (f) {
-      for (i=0;i<8;i++) {
+      for (i = 0; i < 8; i++) {
         diskfilename = trs_disk_getfilename(i);
         if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname)+1];
-        fputs(diskfilename,f);
-        fprintf(f,"\n");
+          diskfilename = &diskfilename[strlen(dirname) + 1];
+        fputs(diskfilename, f);
+        fprintf(f, "\n");
         }
-      for (i=0;i<4;i++) {
+      for (i = 0; i < 4; i++) {
         diskfilename = trs_hard_getfilename(i);
         if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname)+1];
-        fputs(diskfilename,f);
-        fprintf(f,"\n");
+          diskfilename = &diskfilename[strlen(dirname) + 1];
+        fputs(diskfilename, f);
+        fprintf(f, "\n");
         }
-      for (i=0;i<8;i++) {
+      for (i = 0; i < 8; i++) {
         diskfilename = stringy_get_name(i);
         if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname)+1];
-        fputs(diskfilename,f);
-        fprintf(f,"\n");
+          diskfilename = &diskfilename[strlen(dirname) + 1];
+        fputs(diskfilename, f);
+        fprintf(f, "\n");
         }
       fclose(f);
-      return(0);
+      return 0;
       }
     else
-      return(-1);
+      return -1;
 }
 
 int trs_diskset_load(const char *filename)
 {
-  char diskname[FILENAME_MAX+1];
+  char diskname[FILENAME_MAX + 1];
   FILE *f;
   int i;
 
   f = fopen(filename, "r");
 
   if (f) {
-    for (i=0;i<8;i++) {
-      if (fgets(diskname,FILENAME_MAX,f) == NULL)
+    for (i = 0; i < 8; i++) {
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
         trs_disk_remove(i);
-        trs_disk_insert(i,diskname);
+        trs_disk_insert(i, diskname);
       }
     }
-    for (i=0;i<4;i++) {
-      if (fgets(diskname,FILENAME_MAX,f) == NULL)
+    for (i = 0; i < 4; i++) {
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
         trs_hard_remove(i);
-        trs_hard_attach(i,diskname);
+        trs_hard_attach(i, diskname);
       }
     }
-    for (i=0;i<8;i++) {
-      if (fgets(diskname,FILENAME_MAX,f) == NULL)
+    for (i = 0; i < 8; i++) {
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
       if (strlen(diskname) != 0) {
         stringy_remove(i);
-        stringy_insert(i,diskname);
+        stringy_insert(i, diskname);
       }
     }
     fclose(f);
-    return(0);
+    return 0;
   }
   else
-    return(-1);
+    return -1;
 }
 
 void
@@ -935,7 +935,7 @@ trs_disk_insert(int drive, const char *diskname)
 
     /* Scan to find their offsets */
     ofst = JV3_SECSTART;
-    for (id_index=0; id_index<JV3_SECSPERBLK; id_index++) {
+    for (id_index = 0; id_index < JV3_SECSPERBLK; id_index++) {
       d->u.jv3.offset[id_index] = ofst;
       ofst += id_index_to_size(d, id_index);
     }
@@ -947,17 +947,17 @@ trs_disk_insert(int drive, const char *diskname)
 
     /* Scan to find their offsets */
     ofst += JV3_SECSTART;
-    for (id_index=JV3_SECSPERBLK; id_index<JV3_SECSPERBLK*2; id_index++) {
+    for (id_index = JV3_SECSPERBLK; id_index < JV3_SECSPERBLK*2; id_index++) {
       d->u.jv3.offset[id_index] = ofst;
       ofst += id_index_to_size(d, id_index);
     }
 
     /* Find u.jv3.last_used_id value and u.jv3.free_id hints */
-    for (n=0; n<4; n++) {
+    for (n = 0; n < 4; n++) {
       d->u.jv3.free_id[n] = JV3_SECSMAX;
     }
     d->u.jv3.last_used_id = -1;
-    for (id_index=0; id_index<JV3_SECSMAX; id_index++) {
+    for (id_index = 0; id_index < JV3_SECSMAX; id_index++) {
       if (d->u.jv3.id[id_index].track == JV3_FREE) {
 	int size_code = id_index_to_size_code(d, id_index);
 	if (d->u.jv3.free_id[size_code] == JV3_SECSMAX) {
@@ -1122,11 +1122,11 @@ search(int sector, int side)
     dmk_get_track(d);
 
     /* loop through IDAMs in track */
-    for (i = 0; i < DMK_TKHDR_SIZE; i+=2) {
+    for (i = 0; i < DMK_TKHDR_SIZE; i += 2) {
       unsigned char *p;
 
       /* fetch index of next IDAM */
-      int idamp = d->u.dmk.buf[i] + (d->u.dmk.buf[i+1] << 8);
+      int idamp = d->u.dmk.buf[i] + (d->u.dmk.buf[i + 1] << 8);
 
       /* fail if no more IDAMs */
       if (idamp == 0) break;
@@ -1481,7 +1481,7 @@ trs_disk_data_read(void)
   SectorId *sid;
 
   if (trs_show_led)
-    trs_disk_led(state.curdrive,1);
+    trs_disk_led(state.curdrive, 1);
 
   switch (state.currcommand & TRSDISK_CMDMASK) {
 
@@ -1657,7 +1657,7 @@ trs_disk_data_write(unsigned char data)
   int c;
 
   if (trs_show_led)
-    trs_disk_led(state.curdrive,1);
+    trs_disk_led(state.curdrive, 1);
 
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
     debug("data_write(0x%02x) pc 0x%04x\n", data, REG_PC);
@@ -1711,7 +1711,7 @@ trs_disk_data_write(unsigned char data)
 	     happen with weird "protected" formats */
 	  i = j = d->u.dmk.nextidam;
 	  while (i < DMK_TKHDR_SIZE) {
-	    idamp = (d->u.dmk.buf[i] + (d->u.dmk.buf[i+1] << 8))
+	    idamp = (d->u.dmk.buf[i] + (d->u.dmk.buf[i + 1] << 8))
 	      & DMK_IDAMP_BITS;
 	    if (idamp != 0 && idamp != DMK_IDAMP_BITS &&
 		d->u.dmk.curbyte /*!!+ erase shutoff slop?*/ > idamp) {
@@ -2279,7 +2279,7 @@ trs_disk_command_write(unsigned char cmd)
   trs_event_func event;
 
   if (trs_show_led)
-    trs_disk_led(state.curdrive,1);
+    trs_disk_led(state.curdrive, 1);
 
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
     debug("command_write(0x%02x) pc 0x%04x\n", cmd, REG_PC);
@@ -2308,7 +2308,7 @@ trs_disk_command_write(unsigned char cmd)
       i = 0;
       j = d->u.dmk.nextidam;
       while (i < DMK_TKHDR_SIZE) {
-	idamp = (oldtkhdr[i] + (oldtkhdr[i+1] << 8)) & DMK_IDAMP_BITS;
+	idamp = (oldtkhdr[i] + (oldtkhdr[i + 1] << 8)) & DMK_IDAMP_BITS;
 	if (idamp == 0 || idamp == DMK_IDAMP_BITS) break;
 	if (idamp < d->u.dmk.curbyte) {
 	  /* IDAM overwritten; don't copy */
@@ -2554,7 +2554,7 @@ trs_disk_command_write(unsigned char cmd)
 	/* DMK search dumps the size code into state.bytecount; adjust
            to real bytecount here */
 	if (non_ibm) {
-	  state.bytecount = 16 * (((state.bytecount - 1)&0xff)+1);
+	  state.bytecount = 16 * (((state.bytecount - 1)&0xff) + 1);
 	} else {
 	  state.bytecount = 128 << (state.bytecount & 3);
 	}
@@ -2772,7 +2772,7 @@ trs_disk_command_write(unsigned char cmd)
 	  /* Smash following sectors. This is especially a kludge because
 	     it uses the sector numbers, not the known physical sector
 	     order. */
-	  for (i = state.sector+1; i <= 0x7f; i++) {
+	  for (i = state.sector + 1; i <= 0x7f; i++) {
 	    j = search(i, -1);
 	    if (j != -1) {
 	      if (trs_disk_debug_flags & DISKDEBUG_VTOS3) {
@@ -2802,7 +2802,7 @@ trs_disk_command_write(unsigned char cmd)
 	/* DMK search dumps the size code into state.bytecount; adjust
            to real bytecount here */
 	if (non_ibm) {
-	  state.bytecount = 16 * (((state.bytecount - 1)&0xff)+1);
+	  state.bytecount = 16 * (((state.bytecount - 1)&0xff) + 1);
 	} else {
 	  state.bytecount = 128 << (state.bytecount & 3);
 	}
@@ -2815,13 +2815,13 @@ trs_disk_command_write(unsigned char cmd)
 
 	/* Write remaining gap (per data sheets) and DAM */
 	nzeros = 6 * (state.density ? 2 : 1) * dmk_incr(d);
-	for (i=0; i<nzeros; i++) {
+	for (i = 0; i < nzeros; i++) {
 	  c = putc(0, d->file);
 	  if (c == EOF) state.status |= TRSDISK_WRITEFLT;
 	  d->u.dmk.buf[id_index++] = 0;
 	}
 	if (state.density) {
-	  for (i=0; i<3; i++) {
+	  for (i = 0; i < 3; i++) {
 	    c = putc(0xa1, d->file);
 	    if (c == EOF) state.status |= TRSDISK_WRITEFLT;
 	    d->u.dmk.buf[id_index++] = 0xa1;
@@ -2903,7 +2903,7 @@ trs_disk_command_write(unsigned char cmd)
 	   that the sectors are all the same angular length (bytlen).
 	*/
 	a = angle();
-	bytlen = (1.0 - GAP1ANGLE - GAP4ANGLE)/((float)JV1_SECPERTRK);
+	bytlen = (1.0 - GAP1ANGLE - GAP4ANGLE) / ((float)JV1_SECPERTRK);
 	i = (int)( (a - GAP1ANGLE) / bytlen + 1.0 );
 	if (i >= JV1_SECPERTRK) {
 	  /* Wrap around to start of track */
@@ -2943,7 +2943,7 @@ trs_disk_command_write(unsigned char cmd)
 	*/
 	a = angle();
 	b = GAP1ANGLE;
-	bytlen = (1.0 - GAP1ANGLE - GAP4ANGLE)/((float)totbyt);
+	bytlen = (1.0 - GAP1ANGLE - GAP4ANGLE) / ((float)totbyt);
 	i = id_index;
 	for (;;) {
 	  SectorId *sid = &d->u.jv3.id[d->u.jv3.sorted_id[i]];
@@ -2990,7 +2990,7 @@ trs_disk_command_write(unsigned char cmd)
 	for (i = 0; i < DMK_TKHDR_SIZE; i+=2) {
 	  prev_idamp = idamp;
 	  prev_dden = dden;
-	  idamp = d->u.dmk.buf[i] + (d->u.dmk.buf[i+1] << 8);
+	  idamp = d->u.dmk.buf[i] + (d->u.dmk.buf[i + 1] << 8);
 	  if (idamp == 0) break;
 	  dden = (idamp & DMK_DDEN_FLAG) != 0;
 	  idamp &= DMK_IDAMP_BITS;
@@ -3096,7 +3096,7 @@ trs_disk_command_write(unsigned char cmd)
       if (d->emutype == JV3) {
 	/* Erase track if already formatted */
 	int i;
-	for (i=0; i<=d->u.jv3.last_used_id; i++) {
+	for (i = 0; i <= d->u.jv3.last_used_id; i++) {
 	  if (d->u.jv3.id[i].track == d->phytrack &&
 	      ((d->u.jv3.id[i].flags & JV3_SIDE) != 0) == state.curside) {
 	    jv3_free_sector(d, i);
@@ -3157,77 +3157,77 @@ trs_disk_command_write(unsigned char cmd)
 
 static void trs_fdc_save(FILE *file, FDCState *fdc)
 {
-  trs_save_uchar(file,&fdc->status,1);
-  trs_save_uchar(file,&fdc->track,1);
-  trs_save_uchar(file,&fdc->sector,1);
-  trs_save_uchar(file,&fdc->data,1);
-  trs_save_uchar(file,&fdc->currcommand,1);
-  trs_save_int(file,&fdc->lastdirection,1);
-  trs_save_int(file,&fdc->bytecount,1);
-  trs_save_int(file,&fdc->format,1);
-  trs_save_int(file,&fdc->format_bytecount,1);
-  trs_save_int(file,&fdc->format_sec,1);
-  trs_save_int(file,&fdc->format_gapcnt,1);
-  trs_save_int(file,fdc->format_gap,5);
-  trs_save_uint16(file,&fdc->crc,1);
-  trs_save_uint32(file,&fdc->curdrive,1);
-  trs_save_int(file,&fdc->curside,1);
-  trs_save_int(file,&fdc->density,1);
-  trs_save_uchar(file,&fdc->controller,1);
-  trs_save_int(file,&fdc->last_readadr,1);
-  trs_save_uint64(file,(unsigned long long *) &fdc->motor_timeout,1);
+  trs_save_uchar(file, &fdc->status, 1);
+  trs_save_uchar(file, &fdc->track, 1);
+  trs_save_uchar(file, &fdc->sector, 1);
+  trs_save_uchar(file, &fdc->data, 1);
+  trs_save_uchar(file, &fdc->currcommand, 1);
+  trs_save_int(file, &fdc->lastdirection, 1);
+  trs_save_int(file, &fdc->bytecount, 1);
+  trs_save_int(file, &fdc->format, 1);
+  trs_save_int(file, &fdc->format_bytecount, 1);
+  trs_save_int(file, &fdc->format_sec, 1);
+  trs_save_int(file, &fdc->format_gapcnt, 1);
+  trs_save_int(file, fdc->format_gap, 5);
+  trs_save_uint16(file, &fdc->crc, 1);
+  trs_save_uint32(file, &fdc->curdrive, 1);
+  trs_save_int(file, &fdc->curside, 1);
+  trs_save_int(file, &fdc->density, 1);
+  trs_save_uchar(file, &fdc->controller, 1);
+  trs_save_int(file, &fdc->last_readadr, 1);
+  trs_save_uint64(file, (unsigned long long *) &fdc->motor_timeout, 1);
 }
 
 static void trs_fdc_load(FILE *file, FDCState *fdc)
 {
-  trs_load_uchar(file,&fdc->status,1);
-  trs_load_uchar(file,&fdc->track,1);
-  trs_load_uchar(file,&fdc->sector,1);
-  trs_load_uchar(file,&fdc->data,1);
-  trs_load_uchar(file,&fdc->currcommand,1);
-  trs_load_int(file,&fdc->lastdirection,1);
-  trs_load_int(file,&fdc->bytecount,1);
-  trs_load_int(file,&fdc->format,1);
-  trs_load_int(file,&fdc->format_bytecount,1);
-  trs_load_int(file,&fdc->format_sec,1);
-  trs_load_int(file,&fdc->format_gapcnt,1);
-  trs_load_int(file,fdc->format_gap,5);
-  trs_load_uint16(file,&fdc->crc,1);
-  trs_load_uint32(file,&fdc->curdrive,1);
-  trs_load_int(file,&fdc->curside,1);
-  trs_load_int(file,&fdc->density,1);
-  trs_load_uchar(file,&fdc->controller,1);
-  trs_load_int(file,&fdc->last_readadr,1);
-  trs_load_uint64(file,(unsigned long long *) &fdc->motor_timeout,1);
+  trs_load_uchar(file, &fdc->status, 1);
+  trs_load_uchar(file, &fdc->track, 1);
+  trs_load_uchar(file, &fdc->sector, 1);
+  trs_load_uchar(file, &fdc->data, 1);
+  trs_load_uchar(file, &fdc->currcommand, 1);
+  trs_load_int(file, &fdc->lastdirection, 1);
+  trs_load_int(file, &fdc->bytecount, 1);
+  trs_load_int(file, &fdc->format, 1);
+  trs_load_int(file, &fdc->format_bytecount, 1);
+  trs_load_int(file, &fdc->format_sec, 1);
+  trs_load_int(file, &fdc->format_gapcnt, 1);
+  trs_load_int(file, fdc->format_gap, 5);
+  trs_load_uint16(file, &fdc->crc, 1);
+  trs_load_uint32(file, &fdc->curdrive, 1);
+  trs_load_int(file, &fdc->curside, 1);
+  trs_load_int(file, &fdc->density, 1);
+  trs_load_uchar(file, &fdc->controller, 1);
+  trs_load_int(file, &fdc->last_readadr, 1);
+  trs_load_uint64(file, (unsigned long long *) &fdc->motor_timeout, 1);
 }
 
 static void trs_save_sectorid(FILE *file, SectorId *id)
 {
-  trs_save_uchar(file,&id->track,1);
-  trs_save_uchar(file,&id->sector,1);
-  trs_save_uchar(file,&id->flags,1);
+  trs_save_uchar(file, &id->track, 1);
+  trs_save_uchar(file, &id->sector, 1);
+  trs_save_uchar(file, &id->flags, 1);
 }
 
 static void trs_load_sectorid(FILE *file, SectorId *id)
 {
-  trs_load_uchar(file,&id->track,1);
-  trs_load_uchar(file,&id->sector,1);
-  trs_load_uchar(file,&id->flags,1);
+  trs_load_uchar(file, &id->track, 1);
+  trs_load_uchar(file, &id->sector, 1);
+  trs_load_uchar(file, &id->flags, 1);
 }
 
 static void trs_save_jv3state(FILE *file, JV3State *jv3)
 {
   int i;
 
-  trs_save_int(file,jv3->free_id,4);
-  trs_save_int(file,&jv3->last_used_id,1);
-  trs_save_int(file,&jv3->nblocks,1);
-  trs_save_int(file,&jv3->sorted_valid,1);
-  for (i=0;i<JV3_SECSMAX+1;i++)
-    trs_save_sectorid(file,&jv3->id[i]);
+  trs_save_int(file, jv3->free_id, 4);
+  trs_save_int(file, &jv3->last_used_id, 1);
+  trs_save_int(file, &jv3->nblocks, 1);
+  trs_save_int(file, &jv3->sorted_valid, 1);
+  for (i = 0; i < JV3_SECSMAX + 1; i++)
+    trs_save_sectorid(file, &jv3->id[i]);
   trs_save_int(file, jv3->offset, JV3_SECSMAX + 1);
   trs_save_short(file, jv3->sorted_id, JV3_SECSMAX + 1);
-  for (i=0;i<MAXTRACKS;i++)
+  for (i = 0; i < MAXTRACKS; i++)
     trs_save_short(file, jv3->track_start[i], JV3_SIDES);
 }
 
@@ -3235,66 +3235,66 @@ static void trs_load_jv3state(FILE *file, JV3State *jv3)
 {
   int i;
 
-  trs_load_int(file,jv3->free_id,4);
-  trs_load_int(file,&jv3->last_used_id,1);
-  trs_load_int(file,&jv3->nblocks,1);
-  trs_load_int(file,&jv3->sorted_valid,1);
-  for (i=0;i<JV3_SECSMAX+1;i++)
-    trs_load_sectorid(file,&jv3->id[i]);
+  trs_load_int(file, jv3->free_id, 4);
+  trs_load_int(file, &jv3->last_used_id, 1);
+  trs_load_int(file, &jv3->nblocks, 1);
+  trs_load_int(file, &jv3->sorted_valid, 1);
+  for (i = 0; i < JV3_SECSMAX + 1; i++)
+    trs_load_sectorid(file, &jv3->id[i]);
   trs_load_int(file, jv3->offset, JV3_SECSMAX + 1);
   trs_load_short(file, jv3->sorted_id, JV3_SECSMAX + 1);
-  for (i=0;i<MAXTRACKS;i++)
+  for (i = 0; i < MAXTRACKS; i++)
     trs_load_short(file, jv3->track_start[i], JV3_SIDES);
 }
 
 static void trs_save_dmkstate(FILE *file, DMKState *dmk)
 {
-  trs_save_int(file,&dmk->ntracks,1);
-  trs_save_int(file,&dmk->tracklen,1);
-  trs_save_int(file,&dmk->nsides,1);
-  trs_save_int(file,&dmk->sden,1);
-  trs_save_int(file,&dmk->ignden,1);
-  trs_save_int(file,&dmk->curtrack,1);
-  trs_save_int(file,&dmk->curside,1);
-  trs_save_int(file,&dmk->curbyte,1);
-  trs_save_int(file,&dmk->nextidam,1);
-  trs_save_uchar(file,dmk->buf,DMK_TRACKLEN_MAX);
+  trs_save_int(file, &dmk->ntracks, 1);
+  trs_save_int(file, &dmk->tracklen, 1);
+  trs_save_int(file, &dmk->nsides, 1);
+  trs_save_int(file, &dmk->sden, 1);
+  trs_save_int(file, &dmk->ignden, 1);
+  trs_save_int(file, &dmk->curtrack, 1);
+  trs_save_int(file, &dmk->curside, 1);
+  trs_save_int(file, &dmk->curbyte, 1);
+  trs_save_int(file, &dmk->nextidam, 1);
+  trs_save_uchar(file, dmk->buf, DMK_TRACKLEN_MAX);
 }
 
 static void trs_load_dmkstate(FILE *file, DMKState *dmk)
 {
-  trs_load_int(file,&dmk->ntracks,1);
-  trs_load_int(file,&dmk->tracklen,1);
-  trs_load_int(file,&dmk->nsides,1);
-  trs_load_int(file,&dmk->sden,1);
-  trs_load_int(file,&dmk->ignden,1);
-  trs_load_int(file,&dmk->curtrack,1);
-  trs_load_int(file,&dmk->curside,1);
-  trs_load_int(file,&dmk->curbyte,1);
-  trs_load_int(file,&dmk->nextidam,1);
-  trs_load_uchar(file,dmk->buf,DMK_TRACKLEN_MAX);
+  trs_load_int(file, &dmk->ntracks, 1);
+  trs_load_int(file, &dmk->tracklen, 1);
+  trs_load_int(file, &dmk->nsides, 1);
+  trs_load_int(file, &dmk->sden, 1);
+  trs_load_int(file, &dmk->ignden, 1);
+  trs_load_int(file, &dmk->curtrack, 1);
+  trs_load_int(file, &dmk->curside, 1);
+  trs_load_int(file, &dmk->curbyte, 1);
+  trs_load_int(file, &dmk->nextidam, 1);
+  trs_load_uchar(file, dmk->buf, DMK_TRACKLEN_MAX);
 }
 
 static void trs_save_realstate(FILE *file, RealState *real)
 {
-  trs_save_int(file,&real->rps,1);
-  trs_save_int(file,&real->size_code,1);
-  trs_save_int(file,&real->empty,1);
-  trs_save_int(file,(int *)&real->empty_timeout,1);
-  trs_save_uint32(file,&real->fmt_nbytes,1);
-  trs_save_int(file,&real->fmt_fill,1);
-  trs_save_uchar(file,real->buf,MAXSECSIZE);
+  trs_save_int(file, &real->rps, 1);
+  trs_save_int(file, &real->size_code, 1);
+  trs_save_int(file, &real->empty, 1);
+  trs_save_int(file, (int *)&real->empty_timeout, 1);
+  trs_save_uint32(file, &real->fmt_nbytes, 1);
+  trs_save_int(file, &real->fmt_fill, 1);
+  trs_save_uchar(file, real->buf, MAXSECSIZE);
 }
 
 static void trs_load_realstate(FILE *file, RealState *real)
 {
-  trs_load_int(file,&real->rps,1);
-  trs_load_int(file,&real->size_code,1);
-  trs_load_int(file,&real->empty,1);
-  trs_load_int(file,(int *)&real->empty_timeout,1);
-  trs_load_uint32(file,&real->fmt_nbytes,1);
-  trs_load_int(file,&real->fmt_fill,1);
-  trs_load_uchar(file,real->buf,MAXSECSIZE);
+  trs_load_int(file, &real->rps, 1);
+  trs_load_int(file, &real->size_code, 1);
+  trs_load_int(file, &real->empty, 1);
+  trs_load_int(file, (int *)&real->empty_timeout, 1);
+  trs_load_uint32(file, &real->fmt_nbytes, 1);
+  trs_load_int(file, &real->fmt_fill, 1);
+  trs_load_uchar(file, real->buf, MAXSECSIZE);
 }
 
 static void trs_save_diskstate(FILE *file, DiskState *d)
@@ -3302,15 +3302,15 @@ static void trs_save_diskstate(FILE *file, DiskState *d)
   int one = 1;
   int zero = 0;
 
-  trs_save_int(file,&d->writeprot,1);
-  trs_save_int(file,&d->phytrack,1);
-  trs_save_int(file,&d->emutype,1);
-  trs_save_int(file,&d->real_step,1);
+  trs_save_int(file, &d->writeprot, 1);
+  trs_save_int(file, &d->phytrack, 1);
+  trs_save_int(file, &d->emutype, 1);
+  trs_save_int(file, &d->real_step, 1);
   if (d->file == NULL)
      trs_save_int(file, &zero, 1);
   else
      trs_save_int(file, &one, 1);
-  trs_save_filename(file,d->filename);
+  trs_save_filename(file, d->filename);
   if (d->emutype == JV3)
     trs_save_jv3state(file, &d->u.jv3);
   else if (d->emutype == REAL)
@@ -3323,16 +3323,16 @@ static void trs_load_diskstate(FILE *file, DiskState *d)
 {
   int file_not_null;
 
-  trs_load_int(file,&d->writeprot,1);
-  trs_load_int(file,&d->phytrack,1);
-  trs_load_int(file,&d->emutype,1);
-  trs_load_int(file,&d->real_step,1);
-  trs_load_int(file,&file_not_null,1);
+  trs_load_int(file, &d->writeprot, 1);
+  trs_load_int(file, &d->phytrack, 1);
+  trs_load_int(file, &d->emutype, 1);
+  trs_load_int(file, &d->real_step, 1);
+  trs_load_int(file, &file_not_null, 1);
   if (file_not_null)
     d->file = (FILE *) 1;
   else
     d->file = NULL;
-  trs_load_filename(file,d->filename);
+  trs_load_filename(file, d->filename);
   if (d->emutype == JV3)
     trs_load_jv3state(file, &d->u.jv3);
   else if (d->emutype == REAL)
@@ -3345,16 +3345,16 @@ void trs_disk_save(FILE *file)
 {
   int i;
 
-  trs_save_int(file,&trs_disk_nocontroller,1);
-  trs_save_int(file,&trs_disk_doubler,1);
-  trs_save_float(file,&trs_disk_holewidth,1);
-  trs_save_int(file,&trs_disk_truedam,1);
-  trs_save_int(file,&trs_disk_debug_flags,1);
+  trs_save_int(file, &trs_disk_nocontroller, 1);
+  trs_save_int(file, &trs_disk_doubler, 1);
+  trs_save_float(file, &trs_disk_holewidth, 1);
+  trs_save_int(file, &trs_disk_truedam, 1);
+  trs_save_int(file, &trs_disk_debug_flags, 1);
 
-  trs_fdc_save(file,&state);
-  trs_fdc_save(file,&other_state);
-  for (i=0;i<NDRIVES;i++) {
-    trs_save_diskstate(file,&disk[i]);
+  trs_fdc_save(file, &state);
+  trs_fdc_save(file, &other_state);
+  for (i = 0; i < NDRIVES; i++) {
+    trs_save_diskstate(file, &disk[i]);
   }
 }
 
@@ -3362,27 +3362,27 @@ void trs_disk_load(FILE *file)
 {
   int i;
 
-  for (i=0;i<NDRIVES;i++) {
+  for (i = 0; i < NDRIVES; i++) {
     if (disk[i].file != NULL)
       fclose(disk[i].file);
   }
-  trs_load_int(file,&trs_disk_nocontroller,1);
-  trs_load_int(file,&trs_disk_doubler,1);
-  trs_load_float(file,&trs_disk_holewidth,1);
-  trs_load_int(file,&trs_disk_truedam,1);
-  trs_load_int(file,&trs_disk_debug_flags,1);
-  trs_fdc_load(file,&state);
-  trs_fdc_load(file,&other_state);
-  for (i=0;i<NDRIVES;i++) {
-    trs_load_diskstate(file,&disk[i]);
+  trs_load_int(file, &trs_disk_nocontroller, 1);
+  trs_load_int(file, &trs_disk_doubler, 1);
+  trs_load_float(file, &trs_disk_holewidth, 1);
+  trs_load_int(file, &trs_disk_truedam, 1);
+  trs_load_int(file, &trs_disk_debug_flags, 1);
+  trs_fdc_load(file, &state);
+  trs_fdc_load(file, &other_state);
+  for (i = 0; i < NDRIVES; i++) {
+    trs_load_diskstate(file, &disk[i]);
      if (disk[i].file != NULL) {
-      disk[i].file = fopen(disk[i].filename,"rb+");
+      disk[i].file = fopen(disk[i].filename, "rb+");
       if (disk[i].file == NULL) {
-        disk[i].file = fopen(disk[i].filename,"rb");
+        disk[i].file = fopen(disk[i].filename, "rb");
         if (disk[i].file == NULL) {
           disk[i].emutype = NONE;
           disk[i].writeprot = 0;
-	      disk[i].filename[0] = 0;
+          disk[i].filename[0] = 0;
           continue;
         }
         disk[i].writeprot = 1;
@@ -3833,9 +3833,9 @@ real_writetrk()
     debug("real_writetrk size 0%d secs %d gap3 %d fill 0x%02x hex data ",
 	  d->u.real.size_code, d->u.real.fmt_nbytes/4, gap3,
 	  d->u.real.fmt_fill);
-    for (i=0; i<d->u.real.fmt_nbytes; i+=4) {
-      debug("%02x%02x%02x%02x ", d->u.real.buf[i], d->u.real.buf[i+1],
-	    d->u.real.buf[i+2], d->u.real.buf[i+3]);
+    for (i = 0; i < d->u.real.fmt_nbytes; i += 4) {
+      debug("%02x%02x%02x%02x ", d->u.real.buf[i], d->u.real.buf[i + 1],
+	    d->u.real.buf[i + 2], d->u.real.buf[i + 3]);
     }
     debug("\n");
   }
