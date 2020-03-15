@@ -21,6 +21,11 @@ case $host_os in
     ;;
 esac
 
+AC_ARG_ENABLE([fastmem],
+  [AS_HELP_STRING([--enable-fastmem], [faster but not accurate Z80 block moves])],
+  [AC_DEFINE([FAST_MEM])
+   AC_MSG_NOTICE([faster but not accurate Z80 block moves enabled])])
+
 AC_ARG_ENABLE([readline],
   [AS_HELP_STRING([--enable-readline], [readline support for zbx debugger])],
   [AC_SEARCH_LIBS(tgetent, curses ncurses ncursesw, [], [])

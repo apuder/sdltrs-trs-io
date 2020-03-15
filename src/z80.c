@@ -989,6 +989,43 @@ static void do_ldi()
     T_COUNT(16);
 }
 
+#ifdef FAST_MEM
+static void do_ldir()
+{
+    int moved, undoc;
+
+    T_COUNT(((REG_BC-1) & 0xffff) * 21 + 16);
+
+    do {
+      mem_write(REG_DE, moved = mem_read(REG_HL));
+      REG_DE++;
+      REG_HL++;
+    } while (--REG_BC);
+
+    CLEAR_OVERFLOW();
+    undoc = REG_A + moved;
+    REG_F = (REG_F & ~(UNDOC3_MASK|UNDOC5_MASK|HALF_CARRY_MASK|SUBTRACT_MASK))
+      | (undoc & UNDOC3_MASK) | ((undoc & 2) ? UNDOC5_MASK : 0);
+}
+
+static void do_lddr()
+{
+    int moved, undoc;
+
+    T_COUNT(((REG_BC-1) & 0xffff) * 21 + 16);
+
+    do {
+      mem_write(REG_DE, moved = mem_read(REG_HL));
+      REG_DE--;
+      REG_HL--;
+    } while (--REG_BC);
+
+    CLEAR_OVERFLOW();
+    undoc = REG_A + moved;
+    REG_F = (REG_F & ~(UNDOC3_MASK|UNDOC5_MASK|HALF_CARRY_MASK|SUBTRACT_MASK))
+      | (undoc & UNDOC3_MASK) | ((undoc & 2) ? UNDOC5_MASK : 0);
+}
+#else
 static void do_ldir()
 {
     do_ldi();
@@ -1006,6 +1043,7 @@ static void do_lddr()
       T_COUNT(5);
     }
 }
+#endif
 
 static void do_ld_a_i()
 {
