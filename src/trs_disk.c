@@ -758,92 +758,6 @@ trs_disk_emutype(DiskState *d)
   d->emutype = JV1;
 }
 
-int trs_diskset_save(const char *filename)
-{
-    const char *diskfilename;
-    char dirname[FILENAME_MAX];
-    FILE *f;
-    int i;
-
-    if (getcwd(dirname, FILENAME_MAX) == NULL)
-      return -1;
-
-    f = fopen(filename, "w");
-    if (f) {
-      for (i = 0; i < 8; i++) {
-        diskfilename = trs_disk_getfilename(i);
-        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname) + 1];
-        fputs(diskfilename, f);
-        fprintf(f, "\n");
-        }
-      for (i = 0; i < 4; i++) {
-        diskfilename = trs_hard_getfilename(i);
-        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname) + 1];
-        fputs(diskfilename, f);
-        fprintf(f, "\n");
-        }
-      for (i = 0; i < 8; i++) {
-        diskfilename = stringy_get_name(i);
-        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname) + 1];
-        fputs(diskfilename, f);
-        fprintf(f, "\n");
-        }
-      fclose(f);
-      return 0;
-      }
-    else
-      return -1;
-}
-
-int trs_diskset_load(const char *filename)
-{
-  char diskname[FILENAME_MAX + 1];
-  FILE *f;
-  int i;
-
-  f = fopen(filename, "r");
-
-  if (f) {
-    for (i = 0; i < 8; i++) {
-      if (fgets(diskname, FILENAME_MAX, f) == NULL)
-        continue;
-      if (strlen(diskname) != 0)
-        diskname[strlen(diskname)-1] = 0;
-      if (strlen(diskname) != 0) {
-        trs_disk_remove(i);
-        trs_disk_insert(i, diskname);
-      }
-    }
-    for (i = 0; i < 4; i++) {
-      if (fgets(diskname, FILENAME_MAX, f) == NULL)
-        continue;
-      if (strlen(diskname) != 0)
-        diskname[strlen(diskname)-1] = 0;
-      if (strlen(diskname) != 0) {
-        trs_hard_remove(i);
-        trs_hard_attach(i, diskname);
-      }
-    }
-    for (i = 0; i < 8; i++) {
-      if (fgets(diskname, FILENAME_MAX, f) == NULL)
-        continue;
-      if (strlen(diskname) != 0)
-        diskname[strlen(diskname)-1] = 0;
-      if (strlen(diskname) != 0) {
-        stringy_remove(i);
-        stringy_insert(i, diskname);
-      }
-    }
-    fclose(f);
-    return 0;
-  }
-  else
-    return -1;
-}
-
 void
 trs_disk_remove(int drive)
 {
@@ -3155,245 +3069,6 @@ trs_disk_command_write(unsigned char cmd)
   }
 }
 
-static void trs_fdc_save(FILE *file, FDCState *fdc)
-{
-  trs_save_uchar(file, &fdc->status, 1);
-  trs_save_uchar(file, &fdc->track, 1);
-  trs_save_uchar(file, &fdc->sector, 1);
-  trs_save_uchar(file, &fdc->data, 1);
-  trs_save_uchar(file, &fdc->currcommand, 1);
-  trs_save_int(file, &fdc->lastdirection, 1);
-  trs_save_int(file, &fdc->bytecount, 1);
-  trs_save_int(file, &fdc->format, 1);
-  trs_save_int(file, &fdc->format_bytecount, 1);
-  trs_save_int(file, &fdc->format_sec, 1);
-  trs_save_int(file, &fdc->format_gapcnt, 1);
-  trs_save_int(file, fdc->format_gap, 5);
-  trs_save_uint16(file, &fdc->crc, 1);
-  trs_save_uint32(file, &fdc->curdrive, 1);
-  trs_save_int(file, &fdc->curside, 1);
-  trs_save_int(file, &fdc->density, 1);
-  trs_save_uchar(file, &fdc->controller, 1);
-  trs_save_int(file, &fdc->last_readadr, 1);
-  trs_save_uint64(file, (unsigned long long *) &fdc->motor_timeout, 1);
-}
-
-static void trs_fdc_load(FILE *file, FDCState *fdc)
-{
-  trs_load_uchar(file, &fdc->status, 1);
-  trs_load_uchar(file, &fdc->track, 1);
-  trs_load_uchar(file, &fdc->sector, 1);
-  trs_load_uchar(file, &fdc->data, 1);
-  trs_load_uchar(file, &fdc->currcommand, 1);
-  trs_load_int(file, &fdc->lastdirection, 1);
-  trs_load_int(file, &fdc->bytecount, 1);
-  trs_load_int(file, &fdc->format, 1);
-  trs_load_int(file, &fdc->format_bytecount, 1);
-  trs_load_int(file, &fdc->format_sec, 1);
-  trs_load_int(file, &fdc->format_gapcnt, 1);
-  trs_load_int(file, fdc->format_gap, 5);
-  trs_load_uint16(file, &fdc->crc, 1);
-  trs_load_uint32(file, &fdc->curdrive, 1);
-  trs_load_int(file, &fdc->curside, 1);
-  trs_load_int(file, &fdc->density, 1);
-  trs_load_uchar(file, &fdc->controller, 1);
-  trs_load_int(file, &fdc->last_readadr, 1);
-  trs_load_uint64(file, (unsigned long long *) &fdc->motor_timeout, 1);
-}
-
-static void trs_save_sectorid(FILE *file, SectorId *id)
-{
-  trs_save_uchar(file, &id->track, 1);
-  trs_save_uchar(file, &id->sector, 1);
-  trs_save_uchar(file, &id->flags, 1);
-}
-
-static void trs_load_sectorid(FILE *file, SectorId *id)
-{
-  trs_load_uchar(file, &id->track, 1);
-  trs_load_uchar(file, &id->sector, 1);
-  trs_load_uchar(file, &id->flags, 1);
-}
-
-static void trs_save_jv3state(FILE *file, JV3State *jv3)
-{
-  int i;
-
-  trs_save_int(file, jv3->free_id, 4);
-  trs_save_int(file, &jv3->last_used_id, 1);
-  trs_save_int(file, &jv3->nblocks, 1);
-  trs_save_int(file, &jv3->sorted_valid, 1);
-  for (i = 0; i < JV3_SECSMAX + 1; i++)
-    trs_save_sectorid(file, &jv3->id[i]);
-  trs_save_int(file, jv3->offset, JV3_SECSMAX + 1);
-  trs_save_short(file, jv3->sorted_id, JV3_SECSMAX + 1);
-  for (i = 0; i < MAXTRACKS; i++)
-    trs_save_short(file, jv3->track_start[i], JV3_SIDES);
-}
-
-static void trs_load_jv3state(FILE *file, JV3State *jv3)
-{
-  int i;
-
-  trs_load_int(file, jv3->free_id, 4);
-  trs_load_int(file, &jv3->last_used_id, 1);
-  trs_load_int(file, &jv3->nblocks, 1);
-  trs_load_int(file, &jv3->sorted_valid, 1);
-  for (i = 0; i < JV3_SECSMAX + 1; i++)
-    trs_load_sectorid(file, &jv3->id[i]);
-  trs_load_int(file, jv3->offset, JV3_SECSMAX + 1);
-  trs_load_short(file, jv3->sorted_id, JV3_SECSMAX + 1);
-  for (i = 0; i < MAXTRACKS; i++)
-    trs_load_short(file, jv3->track_start[i], JV3_SIDES);
-}
-
-static void trs_save_dmkstate(FILE *file, DMKState *dmk)
-{
-  trs_save_int(file, &dmk->ntracks, 1);
-  trs_save_int(file, &dmk->tracklen, 1);
-  trs_save_int(file, &dmk->nsides, 1);
-  trs_save_int(file, &dmk->sden, 1);
-  trs_save_int(file, &dmk->ignden, 1);
-  trs_save_int(file, &dmk->curtrack, 1);
-  trs_save_int(file, &dmk->curside, 1);
-  trs_save_int(file, &dmk->curbyte, 1);
-  trs_save_int(file, &dmk->nextidam, 1);
-  trs_save_uchar(file, dmk->buf, DMK_TRACKLEN_MAX);
-}
-
-static void trs_load_dmkstate(FILE *file, DMKState *dmk)
-{
-  trs_load_int(file, &dmk->ntracks, 1);
-  trs_load_int(file, &dmk->tracklen, 1);
-  trs_load_int(file, &dmk->nsides, 1);
-  trs_load_int(file, &dmk->sden, 1);
-  trs_load_int(file, &dmk->ignden, 1);
-  trs_load_int(file, &dmk->curtrack, 1);
-  trs_load_int(file, &dmk->curside, 1);
-  trs_load_int(file, &dmk->curbyte, 1);
-  trs_load_int(file, &dmk->nextidam, 1);
-  trs_load_uchar(file, dmk->buf, DMK_TRACKLEN_MAX);
-}
-
-static void trs_save_realstate(FILE *file, RealState *real)
-{
-  trs_save_int(file, &real->rps, 1);
-  trs_save_int(file, &real->size_code, 1);
-  trs_save_int(file, &real->empty, 1);
-  trs_save_int(file, (int *)&real->empty_timeout, 1);
-  trs_save_uint32(file, &real->fmt_nbytes, 1);
-  trs_save_int(file, &real->fmt_fill, 1);
-  trs_save_uchar(file, real->buf, MAXSECSIZE);
-}
-
-static void trs_load_realstate(FILE *file, RealState *real)
-{
-  trs_load_int(file, &real->rps, 1);
-  trs_load_int(file, &real->size_code, 1);
-  trs_load_int(file, &real->empty, 1);
-  trs_load_int(file, (int *)&real->empty_timeout, 1);
-  trs_load_uint32(file, &real->fmt_nbytes, 1);
-  trs_load_int(file, &real->fmt_fill, 1);
-  trs_load_uchar(file, real->buf, MAXSECSIZE);
-}
-
-static void trs_save_diskstate(FILE *file, DiskState *d)
-{
-  int one = 1;
-  int zero = 0;
-
-  trs_save_int(file, &d->writeprot, 1);
-  trs_save_int(file, &d->phytrack, 1);
-  trs_save_int(file, &d->emutype, 1);
-  trs_save_int(file, &d->real_step, 1);
-  if (d->file == NULL)
-     trs_save_int(file, &zero, 1);
-  else
-     trs_save_int(file, &one, 1);
-  trs_save_filename(file, d->filename);
-  if (d->emutype == JV3)
-    trs_save_jv3state(file, &d->u.jv3);
-  else if (d->emutype == REAL)
-    trs_save_realstate(file, &d->u.real);
-  else
-    trs_save_dmkstate(file, &d->u.dmk);
-}
-
-static void trs_load_diskstate(FILE *file, DiskState *d)
-{
-  int file_not_null;
-
-  trs_load_int(file, &d->writeprot, 1);
-  trs_load_int(file, &d->phytrack, 1);
-  trs_load_int(file, &d->emutype, 1);
-  trs_load_int(file, &d->real_step, 1);
-  trs_load_int(file, &file_not_null, 1);
-  if (file_not_null)
-    d->file = (FILE *) 1;
-  else
-    d->file = NULL;
-  trs_load_filename(file, d->filename);
-  if (d->emutype == JV3)
-    trs_load_jv3state(file, &d->u.jv3);
-  else if (d->emutype == REAL)
-    trs_load_realstate(file, &d->u.real);
-  else
-    trs_load_dmkstate(file, &d->u.dmk);
-}
-
-void trs_disk_save(FILE *file)
-{
-  int i;
-
-  trs_save_int(file, &trs_disk_nocontroller, 1);
-  trs_save_int(file, &trs_disk_doubler, 1);
-  trs_save_float(file, &trs_disk_holewidth, 1);
-  trs_save_int(file, &trs_disk_truedam, 1);
-  trs_save_int(file, &trs_disk_debug_flags, 1);
-
-  trs_fdc_save(file, &state);
-  trs_fdc_save(file, &other_state);
-  for (i = 0; i < NDRIVES; i++) {
-    trs_save_diskstate(file, &disk[i]);
-  }
-}
-
-void trs_disk_load(FILE *file)
-{
-  int i;
-
-  for (i = 0; i < NDRIVES; i++) {
-    if (disk[i].file != NULL)
-      fclose(disk[i].file);
-  }
-  trs_load_int(file, &trs_disk_nocontroller, 1);
-  trs_load_int(file, &trs_disk_doubler, 1);
-  trs_load_float(file, &trs_disk_holewidth, 1);
-  trs_load_int(file, &trs_disk_truedam, 1);
-  trs_load_int(file, &trs_disk_debug_flags, 1);
-  trs_fdc_load(file, &state);
-  trs_fdc_load(file, &other_state);
-  for (i = 0; i < NDRIVES; i++) {
-    trs_load_diskstate(file, &disk[i]);
-     if (disk[i].file != NULL) {
-      disk[i].file = fopen(disk[i].filename, "rb+");
-      if (disk[i].file == NULL) {
-        disk[i].file = fopen(disk[i].filename, "rb");
-        if (disk[i].file == NULL) {
-          disk[i].emutype = NONE;
-          disk[i].writeprot = 0;
-          disk[i].filename[0] = 0;
-          continue;
-        }
-        disk[i].writeprot = 1;
-      } else {
-        disk[i].writeprot = 0;
-      }
-    }
-  }
-}
-
-
 /* Interface to real floppy drive */
 int
 real_rate(DiskState *d)
@@ -3869,3 +3544,326 @@ real_writetrk()
 #endif
 }
 
+int trs_diskset_save(const char *filename)
+{
+    const char *diskfilename;
+    char dirname[FILENAME_MAX];
+    FILE *f;
+    int i;
+
+    if (getcwd(dirname, FILENAME_MAX) == NULL)
+      return -1;
+
+    f = fopen(filename, "w");
+    if (f) {
+      for (i = 0; i < 8; i++) {
+        diskfilename = trs_disk_getfilename(i);
+        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
+          diskfilename = &diskfilename[strlen(dirname) + 1];
+        fputs(diskfilename, f);
+        fprintf(f, "\n");
+        }
+      for (i = 0; i < 4; i++) {
+        diskfilename = trs_hard_getfilename(i);
+        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
+          diskfilename = &diskfilename[strlen(dirname) + 1];
+        fputs(diskfilename, f);
+        fprintf(f, "\n");
+        }
+      for (i = 0; i < 8; i++) {
+        diskfilename = stringy_get_name(i);
+        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
+          diskfilename = &diskfilename[strlen(dirname) + 1];
+        fputs(diskfilename, f);
+        fprintf(f, "\n");
+        }
+      fclose(f);
+      return 0;
+      }
+    else
+      return -1;
+}
+
+int trs_diskset_load(const char *filename)
+{
+  char diskname[FILENAME_MAX + 1];
+  FILE *f;
+  int i;
+
+  f = fopen(filename, "r");
+
+  if (f) {
+    for (i = 0; i < 8; i++) {
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
+        continue;
+      if (strlen(diskname) != 0)
+        diskname[strlen(diskname)-1] = 0;
+      if (strlen(diskname) != 0) {
+        trs_disk_remove(i);
+        trs_disk_insert(i, diskname);
+      }
+    }
+    for (i = 0; i < 4; i++) {
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
+        continue;
+      if (strlen(diskname) != 0)
+        diskname[strlen(diskname)-1] = 0;
+      if (strlen(diskname) != 0) {
+        trs_hard_remove(i);
+        trs_hard_attach(i, diskname);
+      }
+    }
+    for (i = 0; i < 8; i++) {
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
+        continue;
+      if (strlen(diskname) != 0)
+        diskname[strlen(diskname)-1] = 0;
+      if (strlen(diskname) != 0) {
+        stringy_remove(i);
+        stringy_insert(i, diskname);
+      }
+    }
+    fclose(f);
+    return 0;
+  }
+  else
+    return -1;
+}
+
+static void trs_fdc_save(FILE *file, FDCState *fdc)
+{
+  trs_save_uchar(file, &fdc->status, 1);
+  trs_save_uchar(file, &fdc->track, 1);
+  trs_save_uchar(file, &fdc->sector, 1);
+  trs_save_uchar(file, &fdc->data, 1);
+  trs_save_uchar(file, &fdc->currcommand, 1);
+  trs_save_int(file, &fdc->lastdirection, 1);
+  trs_save_int(file, &fdc->bytecount, 1);
+  trs_save_int(file, &fdc->format, 1);
+  trs_save_int(file, &fdc->format_bytecount, 1);
+  trs_save_int(file, &fdc->format_sec, 1);
+  trs_save_int(file, &fdc->format_gapcnt, 1);
+  trs_save_int(file, fdc->format_gap, 5);
+  trs_save_uint16(file, &fdc->crc, 1);
+  trs_save_uint32(file, &fdc->curdrive, 1);
+  trs_save_int(file, &fdc->curside, 1);
+  trs_save_int(file, &fdc->density, 1);
+  trs_save_uchar(file, &fdc->controller, 1);
+  trs_save_int(file, &fdc->last_readadr, 1);
+  trs_save_uint64(file, (unsigned long long *) &fdc->motor_timeout, 1);
+}
+
+static void trs_fdc_load(FILE *file, FDCState *fdc)
+{
+  trs_load_uchar(file, &fdc->status, 1);
+  trs_load_uchar(file, &fdc->track, 1);
+  trs_load_uchar(file, &fdc->sector, 1);
+  trs_load_uchar(file, &fdc->data, 1);
+  trs_load_uchar(file, &fdc->currcommand, 1);
+  trs_load_int(file, &fdc->lastdirection, 1);
+  trs_load_int(file, &fdc->bytecount, 1);
+  trs_load_int(file, &fdc->format, 1);
+  trs_load_int(file, &fdc->format_bytecount, 1);
+  trs_load_int(file, &fdc->format_sec, 1);
+  trs_load_int(file, &fdc->format_gapcnt, 1);
+  trs_load_int(file, fdc->format_gap, 5);
+  trs_load_uint16(file, &fdc->crc, 1);
+  trs_load_uint32(file, &fdc->curdrive, 1);
+  trs_load_int(file, &fdc->curside, 1);
+  trs_load_int(file, &fdc->density, 1);
+  trs_load_uchar(file, &fdc->controller, 1);
+  trs_load_int(file, &fdc->last_readadr, 1);
+  trs_load_uint64(file, (unsigned long long *) &fdc->motor_timeout, 1);
+}
+
+static void trs_save_sectorid(FILE *file, SectorId *id)
+{
+  trs_save_uchar(file, &id->track, 1);
+  trs_save_uchar(file, &id->sector, 1);
+  trs_save_uchar(file, &id->flags, 1);
+}
+
+static void trs_load_sectorid(FILE *file, SectorId *id)
+{
+  trs_load_uchar(file, &id->track, 1);
+  trs_load_uchar(file, &id->sector, 1);
+  trs_load_uchar(file, &id->flags, 1);
+}
+
+static void trs_save_jv3state(FILE *file, JV3State *jv3)
+{
+  int i;
+
+  trs_save_int(file, jv3->free_id, 4);
+  trs_save_int(file, &jv3->last_used_id, 1);
+  trs_save_int(file, &jv3->nblocks, 1);
+  trs_save_int(file, &jv3->sorted_valid, 1);
+  for (i = 0; i < JV3_SECSMAX + 1; i++)
+    trs_save_sectorid(file, &jv3->id[i]);
+  trs_save_int(file, jv3->offset, JV3_SECSMAX + 1);
+  trs_save_short(file, jv3->sorted_id, JV3_SECSMAX + 1);
+  for (i = 0; i < MAXTRACKS; i++)
+    trs_save_short(file, jv3->track_start[i], JV3_SIDES);
+}
+
+static void trs_load_jv3state(FILE *file, JV3State *jv3)
+{
+  int i;
+
+  trs_load_int(file, jv3->free_id, 4);
+  trs_load_int(file, &jv3->last_used_id, 1);
+  trs_load_int(file, &jv3->nblocks, 1);
+  trs_load_int(file, &jv3->sorted_valid, 1);
+  for (i = 0; i < JV3_SECSMAX + 1; i++)
+    trs_load_sectorid(file, &jv3->id[i]);
+  trs_load_int(file, jv3->offset, JV3_SECSMAX + 1);
+  trs_load_short(file, jv3->sorted_id, JV3_SECSMAX + 1);
+  for (i = 0; i < MAXTRACKS; i++)
+    trs_load_short(file, jv3->track_start[i], JV3_SIDES);
+}
+
+static void trs_save_dmkstate(FILE *file, DMKState *dmk)
+{
+  trs_save_int(file, &dmk->ntracks, 1);
+  trs_save_int(file, &dmk->tracklen, 1);
+  trs_save_int(file, &dmk->nsides, 1);
+  trs_save_int(file, &dmk->sden, 1);
+  trs_save_int(file, &dmk->ignden, 1);
+  trs_save_int(file, &dmk->curtrack, 1);
+  trs_save_int(file, &dmk->curside, 1);
+  trs_save_int(file, &dmk->curbyte, 1);
+  trs_save_int(file, &dmk->nextidam, 1);
+  trs_save_uchar(file, dmk->buf, DMK_TRACKLEN_MAX);
+}
+
+static void trs_load_dmkstate(FILE *file, DMKState *dmk)
+{
+  trs_load_int(file, &dmk->ntracks, 1);
+  trs_load_int(file, &dmk->tracklen, 1);
+  trs_load_int(file, &dmk->nsides, 1);
+  trs_load_int(file, &dmk->sden, 1);
+  trs_load_int(file, &dmk->ignden, 1);
+  trs_load_int(file, &dmk->curtrack, 1);
+  trs_load_int(file, &dmk->curside, 1);
+  trs_load_int(file, &dmk->curbyte, 1);
+  trs_load_int(file, &dmk->nextidam, 1);
+  trs_load_uchar(file, dmk->buf, DMK_TRACKLEN_MAX);
+}
+
+static void trs_save_realstate(FILE *file, RealState *real)
+{
+  trs_save_int(file, &real->rps, 1);
+  trs_save_int(file, &real->size_code, 1);
+  trs_save_int(file, &real->empty, 1);
+  trs_save_int(file, (int *)&real->empty_timeout, 1);
+  trs_save_uint32(file, &real->fmt_nbytes, 1);
+  trs_save_int(file, &real->fmt_fill, 1);
+  trs_save_uchar(file, real->buf, MAXSECSIZE);
+}
+
+static void trs_load_realstate(FILE *file, RealState *real)
+{
+  trs_load_int(file, &real->rps, 1);
+  trs_load_int(file, &real->size_code, 1);
+  trs_load_int(file, &real->empty, 1);
+  trs_load_int(file, (int *)&real->empty_timeout, 1);
+  trs_load_uint32(file, &real->fmt_nbytes, 1);
+  trs_load_int(file, &real->fmt_fill, 1);
+  trs_load_uchar(file, real->buf, MAXSECSIZE);
+}
+
+static void trs_save_diskstate(FILE *file, DiskState *d)
+{
+  int one = 1;
+  int zero = 0;
+
+  trs_save_int(file, &d->writeprot, 1);
+  trs_save_int(file, &d->phytrack, 1);
+  trs_save_int(file, &d->emutype, 1);
+  trs_save_int(file, &d->real_step, 1);
+  if (d->file == NULL)
+     trs_save_int(file, &zero, 1);
+  else
+     trs_save_int(file, &one, 1);
+  trs_save_filename(file, d->filename);
+  if (d->emutype == JV3)
+    trs_save_jv3state(file, &d->u.jv3);
+  else if (d->emutype == REAL)
+    trs_save_realstate(file, &d->u.real);
+  else
+    trs_save_dmkstate(file, &d->u.dmk);
+}
+
+static void trs_load_diskstate(FILE *file, DiskState *d)
+{
+  int file_not_null;
+
+  trs_load_int(file, &d->writeprot, 1);
+  trs_load_int(file, &d->phytrack, 1);
+  trs_load_int(file, &d->emutype, 1);
+  trs_load_int(file, &d->real_step, 1);
+  trs_load_int(file, &file_not_null, 1);
+  if (file_not_null)
+    d->file = (FILE *) 1;
+  else
+    d->file = NULL;
+  trs_load_filename(file, d->filename);
+  if (d->emutype == JV3)
+    trs_load_jv3state(file, &d->u.jv3);
+  else if (d->emutype == REAL)
+    trs_load_realstate(file, &d->u.real);
+  else
+    trs_load_dmkstate(file, &d->u.dmk);
+}
+
+void trs_disk_save(FILE *file)
+{
+  int i;
+
+  trs_save_int(file, &trs_disk_nocontroller, 1);
+  trs_save_int(file, &trs_disk_doubler, 1);
+  trs_save_float(file, &trs_disk_holewidth, 1);
+  trs_save_int(file, &trs_disk_truedam, 1);
+  trs_save_int(file, &trs_disk_debug_flags, 1);
+
+  trs_fdc_save(file, &state);
+  trs_fdc_save(file, &other_state);
+  for (i = 0; i < NDRIVES; i++) {
+    trs_save_diskstate(file, &disk[i]);
+  }
+}
+
+void trs_disk_load(FILE *file)
+{
+  int i;
+
+  for (i = 0; i < NDRIVES; i++) {
+    if (disk[i].file != NULL)
+      fclose(disk[i].file);
+  }
+  trs_load_int(file, &trs_disk_nocontroller, 1);
+  trs_load_int(file, &trs_disk_doubler, 1);
+  trs_load_float(file, &trs_disk_holewidth, 1);
+  trs_load_int(file, &trs_disk_truedam, 1);
+  trs_load_int(file, &trs_disk_debug_flags, 1);
+  trs_fdc_load(file, &state);
+  trs_fdc_load(file, &other_state);
+  for (i = 0; i < NDRIVES; i++) {
+    trs_load_diskstate(file, &disk[i]);
+     if (disk[i].file != NULL) {
+      disk[i].file = fopen(disk[i].filename, "rb+");
+      if (disk[i].file == NULL) {
+        disk[i].file = fopen(disk[i].filename, "rb");
+        if (disk[i].file == NULL) {
+          disk[i].emutype = NONE;
+          disk[i].writeprot = 0;
+          disk[i].filename[0] = 0;
+          continue;
+        }
+        disk[i].writeprot = 1;
+      } else {
+        disk[i].writeprot = 0;
+      }
+    }
+  }
+}

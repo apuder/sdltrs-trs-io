@@ -498,26 +498,6 @@ static tstate_t key_stretch_timeout;
 int stretch_amount = STRETCH_AMOUNT;
 int trs_kb_bracket_state = 0;
 
-void trs_keyboard_save(FILE *file)
-{
-  fwrite(&keystate, 8, sizeof(int), file);
-  fwrite(&force_shift, 1, sizeof(int), file);
-  fwrite(&joystate, 1, sizeof(int), file);
-  fwrite(&key_stretch_timeout, 1, sizeof(long long), file);
-  fwrite(&stretch_amount, 1, sizeof(int), file);
-  fwrite(&trs_kb_bracket_state, 1, sizeof(int), file);
-}
-
-void trs_keyboard_load(FILE *file)
-{
-  fread(&keystate, 8, sizeof(int), file);
-  fread(&force_shift, 1, sizeof(int), file);
-  fread(&joystate, 1, sizeof(int), file);
-  fread(&key_stretch_timeout, 1, sizeof(long long), file);
-  fread(&stretch_amount, 1, sizeof(int), file);
-  fread(&trs_kb_bracket_state, 1, sizeof(int), file);
-}
-
 void trs_kb_reset()
 {
   key_stretch_timeout = z80_state.t_count;
@@ -875,4 +855,24 @@ int dequeue_key()
 #endif
   }
   return rval;
+}
+
+void trs_keyboard_save(FILE *file)
+{
+  fwrite(&keystate, 8, sizeof(int), file);
+  fwrite(&force_shift, 1, sizeof(int), file);
+  fwrite(&joystate, 1, sizeof(int), file);
+  fwrite(&key_stretch_timeout, 1, sizeof(long long), file);
+  fwrite(&stretch_amount, 1, sizeof(int), file);
+  fwrite(&trs_kb_bracket_state, 1, sizeof(int), file);
+}
+
+void trs_keyboard_load(FILE *file)
+{
+  fread(&keystate, 8, sizeof(int), file);
+  fread(&force_shift, 1, sizeof(int), file);
+  fread(&joystate, 1, sizeof(int), file);
+  fread(&key_stretch_timeout, 1, sizeof(long long), file);
+  fread(&stretch_amount, 1, sizeof(int), file);
+  fread(&trs_kb_bracket_state, 1, sizeof(int), file);
 }
