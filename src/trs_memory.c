@@ -541,7 +541,7 @@ void trs80_model1_write_mmio(int address, int value)
        * video ram, emulating the gate in Z30.
        */
       if (trs_model == 1) {
-        if(value & 0xa0)
+        if (value & 0xa0)
           value &= 0xbf;
         else
           value |= 0x40;

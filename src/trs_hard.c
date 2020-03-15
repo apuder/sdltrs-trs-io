@@ -603,7 +603,7 @@ void trs_hard_save(FILE *file)
   trs_save_uchar(file, &state.status, 1);
   trs_save_uchar(file, &state.command, 1);
   trs_save_int(file, &state.bytesdone, 1);
-  for (i = 0; i< TRS_HARD_MAXDRIVES; i++)
+  for (i = 0; i < TRS_HARD_MAXDRIVES; i++)
     trs_save_harddrive(file, &state.d[i]);
 }
 
@@ -611,7 +611,7 @@ void trs_hard_load(FILE *file)
 {
   int i;
 
-  for (i = 0; i< TRS_HARD_MAXDRIVES; i++) {
+  for (i = 0; i < TRS_HARD_MAXDRIVES; i++) {
     if (state.d[i].file != NULL)
       fclose(state.d[i].file);
   }

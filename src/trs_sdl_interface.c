@@ -1454,14 +1454,14 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
     const int pitch4 = screen->pitch / 4;
     Uint32 *start32;
 
-    for (y = orig_y; y< orig_y + scale; y++) {
+    for (y = orig_y; y < orig_y + scale; y++) {
       start32 = (Uint32 *) screen->pixels +
         (y * pitch4) + orig_x;
       for (x = 0; x < (copy_x-orig_x + scale); x++, start32++)
         *start32 ^= 0xFFFFFFFF;
     }
     if (copy_y > orig_y) {
-      for (y = copy_y; y< copy_y + scale; y++) {
+      for (y = copy_y; y < copy_y + scale; y++) {
         start32 = (Uint32 *) screen->pixels +
           (y * pitch4) + orig_x;
         for (x = 0; x < (copy_x-orig_x + scale); x++, start32++)

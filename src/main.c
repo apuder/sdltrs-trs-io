@@ -67,7 +67,7 @@ static void check_endian()
   wordregister x;
   x.byte.low = 1;
   x.byte.high = 0;
-  if(x.word != 1)
+  if (x.word != 1)
     fatal("Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.");
 }
 
@@ -77,7 +77,7 @@ int trs_load_cmd(const char *filename)
   extern Uchar memory;
   int entry;
 
-  if((program = fopen(filename,"rb")) == NULL) {
+  if ((program = fopen(filename,"rb")) == NULL) {
     error("failed to load CMD file %s: %s", filename, strerror(errno));
     return -1;
   }
@@ -99,8 +99,7 @@ int trs_load_rom(const char *filename)
   FILE *program;
   int c;
 
-  if((program = fopen(filename, "rb")) == NULL)
-  {
+  if ((program = fopen(filename, "rb")) == NULL) {
     error("failed to load ROM file %s: %s", filename, strerror(errno));
     return -1;
   }
@@ -149,7 +148,7 @@ void trs_load_compiled_rom(int size, unsigned char rom[])
   int i;
 
   trs_rom_size = size;
-  for(i = 0; i < size; ++i)
+  for (i = 0; i < size; ++i)
     mem_write_rom(i, rom[i]);
 }
 
@@ -212,12 +211,12 @@ int SDLmain(int argc, char *argv[])
   trs_rom_init();
   trs_reset(1);
 
-  if (init_state_file[0] != 0) {
+  if (init_state_file[0]) {
     trs_state_load(init_state_file);
     trs_screen_init();
     trs_screen_refresh();
   }
-  if (trs_cmd_file[0] != 0)
+  if (trs_cmd_file[0])
     trs_load_cmd(trs_cmd_file);
 
   if (!debug || fullscreen) {

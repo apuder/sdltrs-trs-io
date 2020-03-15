@@ -267,7 +267,7 @@ void do_emt_read()
     return;
   }
   if (trs_show_led) {
-    for (i = 0;i<3;i++) {
+    for (i = 0; i < 3; i++) {
       if (REG_DE == xtrshard_fd[i])
         trs_hard_led(i, 1);
     }
@@ -302,7 +302,7 @@ void do_emt_write()
     return;
   }
   if (trs_show_led) {
-    for (i = 0;i<3;i++) {
+    for (i = 0; i < 3; i++) {
       if (REG_DE == xtrshard_fd[i])
         trs_hard_led(i, 1);
     }
@@ -328,7 +328,7 @@ void do_emt_lseek()
     return;
   }
   offset = 0;
-  for (i = 0; i<8; i++) {
+  for (i = 0; i < 8; i++) {
     offset = offset + (mem_read(REG_HL + i) << i*8);
   }
   offset = lseek(REG_DE, offset, REG_BC);
@@ -339,7 +339,7 @@ void do_emt_lseek()
     REG_A = errno;
     REG_F &= ~ZERO_MASK;
   }
-  for (i = REG_HL; i<8; i++) {
+  for (i = REG_HL; i < 8; i++) {
     mem_write(REG_HL + i, offset & 0xff);
     offset >>= 8;
   }
@@ -642,7 +642,7 @@ void do_emt_ftruncate()
     return;
   }
   offset = 0;
-  for (i = 0; i<8; i++) {
+  for (i = 0; i < 8; i++) {
     offset = offset + (mem_read(REG_HL + i) << i*8);
   }
 #ifdef _WIN32
@@ -760,7 +760,7 @@ int do_emt_closefd(int odindex)
 {
   int i;
   if (od[odindex].xtrshard) {
-    for (i = 0;i<4;i++) {
+    for (i = 0; i < 4; i++) {
       if (xtrshard_fd[i] == od[odindex].fd)
         xtrshard_fd[i] = -1;
     }
@@ -825,14 +825,14 @@ void trs_imp_exp_save(FILE *file)
   int one = 1;
   int zero = 0;
 
-  for (i = 0; i< MAX_OPENDIR; i++) {
+  for (i = 0; i < MAX_OPENDIR; i++) {
     if (dir[i].dir == NULL)
       trs_save_int(file, &zero, 1);
     else
       trs_save_int(file, &one, 1);
     trs_save_filename(file, dir[i].pathname);
   }
-  for (i = 0; i< MAX_OPENDISK; i++) {
+  for (i = 0; i < MAX_OPENDISK; i++) {
     trs_save_int(file, &od[i].fd, 1);
     trs_save_int(file, &od[i].inuse, 1);
     trs_save_int(file, &od[i].oflag, 1);
@@ -847,16 +847,16 @@ void trs_imp_exp_load(FILE *file)
   int i, dir_present;
 
   /* Close any open dirs and files */
-  for (i = 0; i< MAX_OPENDIR; i++) {
+  for (i = 0; i < MAX_OPENDIR; i++) {
     if (dir[i].dir)
       closedir(dir[i].dir);
   }
-  for (i = 0; i< MAX_OPENDISK; i++) {
+  for (i = 0; i < MAX_OPENDISK; i++) {
     if (od[i].inuse)
       close(od[i].fd);
   }
   /* Load the state */
-  for (i = 0; i< MAX_OPENDIR; i++) {
+  for (i = 0; i < MAX_OPENDIR; i++) {
     trs_load_int(file, &dir_present, 1);
     trs_load_filename(file, dir[i].pathname);
     if (dir_present)
@@ -864,7 +864,7 @@ void trs_imp_exp_load(FILE *file)
     else
       dir[i].dir = NULL;
   }
-  for (i = 0; i< MAX_OPENDISK; i++) {
+  for (i = 0; i < MAX_OPENDISK; i++) {
     trs_load_int(file, &od[i].fd, 1);
     trs_load_int(file, &od[i].inuse, 1);
     trs_load_int(file, &od[i].oflag, 1);
@@ -875,11 +875,11 @@ void trs_imp_exp_load(FILE *file)
   /* Reopen the files */
   for (i = 0; i < 4; i++)
     xtrshard_fd[i] = -1;
-  for (i = 0; i< MAX_OPENDIR; i++) {
+  for (i = 0; i < MAX_OPENDIR; i++) {
     if (dir[i].dir)
       dir[i].dir = opendir(dir[i].pathname);
   }
-  for (i = 0; i< MAX_OPENDISK; i++) {
+  for (i = 0; i < MAX_OPENDISK; i++) {
     if (od[i].inuse) {
       od[i].fd = open(od[i].filename, od[i].oflag);
       if (od[i].xtrshard)
@@ -893,7 +893,7 @@ trs_impexp_xtrshard_attach(int drive, const char *filename)
 {
   int i;
 
-  for (i = 0; i< MAX_OPENDISK; i++) {
+  for (i = 0; i < MAX_OPENDISK; i++) {
     if (od[i].inuse && od[i].xtrshard && (od[i].xtrshard_unit == drive)) {
       close(od[i].fd);
       snprintf(od[i].filename, FILENAME_MAX - 1, "%s", filename);
@@ -908,7 +908,7 @@ trs_impexp_xtrshard_remove(int drive)
 {
   int i;
 
-  for (i = 0; i< MAX_OPENDISK; i++) {
+  for (i = 0; i < MAX_OPENDISK; i++) {
     if (od[i].inuse && od[i].xtrshard && (od[i].xtrshard_unit == drive)) {
       close(od[i].fd);
       od[i].fd = -1;

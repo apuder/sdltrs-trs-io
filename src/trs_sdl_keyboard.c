@@ -866,14 +866,13 @@ int dequeue_key()
 {
   int rval = -1;
 
-  if(key_queue_entries > 0)
-    {
-      rval = key_queue[key_queue_head];
-      key_queue_head = (key_queue_head + 1) % KEY_QUEUE_SIZE;
-      key_queue_entries--;
+  if (key_queue_entries > 0) {
+    rval = key_queue[key_queue_head];
+    key_queue_head = (key_queue_head + 1) % KEY_QUEUE_SIZE;
+    key_queue_entries--;
 #if QDEBUG
-      debug("dequeue_key 0x%x\n", rval);
+    debug("dequeue_key 0x%x\n", rval);
 #endif
-    }
+  }
   return rval;
 }

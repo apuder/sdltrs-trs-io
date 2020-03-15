@@ -59,7 +59,7 @@ int trs_printer_reset(void)
   if (printer_open) {
     fclose(printer);
     printer_open = FALSE;
-    if (trs_printer_command[0] != 0) {
+    if (trs_printer_command[0]) {
       snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
       if (system(command) == -1)
         return -1;
@@ -96,7 +96,7 @@ void trs_printer_write(int value)
       trs_printer_open();
 
     if (printer_open) {
-      if(value == 0x0D) {
+      if (value == 0x0D) {
         fputc('\n',printer);
       } else {
         fputc(value,printer);
