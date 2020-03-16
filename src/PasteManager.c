@@ -21,8 +21,6 @@ int PasteManagerGetChar(unsigned short *character)
     if (charCount)
       return 1;
   }
-
-  free(pasteString);
   return 0;
 }
 
