@@ -19,16 +19,11 @@ int PasteManagerGetChar(unsigned short *character)
     *character = pasteString[pasteStringLength - charCount];
     charCount--;
     if (charCount)
-      return(1);
-    else {
-      free(pasteString);
-      return(0);
-    }
+      return 1;
   }
-  else {
-    free(pasteString);
-    return(0);
-  }
+
+  free(pasteString);
+  return 0;
 }
 
 int PasteManagerStartPaste(void)
@@ -47,7 +42,7 @@ int PasteManagerStartPaste(void)
 }
 
 
-void PasteManagerStartCopy(char *string)
+void PasteManagerStartCopy(const char *string)
 {
   SDL_SetClipboardText(string);
   trs_end_copy();
@@ -70,16 +65,14 @@ int PasteManagerGetChar(unsigned short *character)
     *character = pasteString[pasteStringLength - charCount];
     charCount--;
     if (charCount)
-      return(TRUE);
+      return TRUE;
     else {
       GlobalUnlock(hClipboardData);
       CloseClipboard();
-      return(FALSE);
     }
   }
-  else {
-    return(FALSE);
-  }
+
+  return FALSE;
 }
 
 int PasteManagerStartPaste(void)
@@ -91,17 +84,12 @@ int PasteManagerStartPaste(void)
       charCount = pasteStringLength = strlen(pasteString);
       trs_paste_started();
       return TRUE;
-    } else {
-      pasteString = NULL;
-      charCount = 0;
-      return FALSE;
     }
   }
-  else {
-    pasteString = NULL;
-    charCount = 0;
-    return FALSE;
-  }
+
+  pasteString = NULL;
+  charCount = 0;
+  return FALSE;
 }
 
 void PasteManagerStartCopy(char *string)
@@ -111,7 +99,7 @@ void PasteManagerStartCopy(char *string)
 
   if (OpenClipboard(NULL)) {
     EmptyClipboard();
-    hCopyData = GlobalAlloc(GMEM_DDESHARE, strlen(string)+1);
+    hCopyData = GlobalAlloc(GMEM_DDESHARE, strlen(string) + 1);
     pchData = (char *)GlobalLock(hCopyData);
     snprintf(pchData, strlen(string), "%s", string);
     GlobalUnlock(hCopyData);
@@ -137,7 +125,7 @@ void PasteManagerStartCopy(char *string)
 /* forward declarations */
 static int init_scrap(void);
 static int lost_scrap(void);
-static void put_scrap(int srclen, char *src);
+static void put_scrap(int srclen, const char *src);
 static void get_scrap(int *dstlen, char **dst);
 /* The system message filter function -- handle clipboard messages */
 static int clipboard_filter(const SDL_Event *event);
@@ -183,20 +171,18 @@ static int init_scrap(void)
   SDL_SetError("SDL is not running on known window manager");
 
   SDL_VERSION(&info.version);
-  if ( SDL_GetWMInfo(&info) )
-    {
+  if (SDL_GetWMInfo(&info)) {
     /* Save the information for later use */
-    if ( info.subsystem == SDL_SYSWM_X11 )
-    {
+    if ( info.subsystem == SDL_SYSWM_X11 ) {
       SDL_Display = info.info.x11.display;
       SDL_Window = info.info.x11.window;
       Lock_Display = info.info.x11.lock_func;
       Unlock_Display = info.info.x11.unlock_func;
-      _atom_CLIPBOARD = XInternAtom (SDL_Display, "CLIPBOARD", False);
-      _atom_UTF8 = XInternAtom (SDL_Display, "UTF8_STRING", False);
-      _atom_TEXT = XInternAtom (SDL_Display, "TEXT", False);
-      _atom_COMPOUND = XInternAtom (SDL_Display, "COMPOUND_TEXT", False);
-      _atom_SDL = XInternAtom (SDL_Display, "SDL_SELECTION", False);
+      _atom_CLIPBOARD = XInternAtom(SDL_Display, "CLIPBOARD", False);
+      _atom_UTF8 = XInternAtom(SDL_Display, "UTF8_STRING", False);
+      _atom_TEXT = XInternAtom(SDL_Display, "TEXT", False);
+      _atom_COMPOUND = XInternAtom(SDL_Display, "COMPOUND_TEXT", False);
+      _atom_SDL = XInternAtom(SDL_Display, "SDL_SELECTION", False);
 
       /* Enable the special window hook events */
       SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
@@ -204,26 +190,25 @@ static int init_scrap(void)
 
       retval = 0;
     }
-    else
-    {
+    else {
       SDL_SetError("SDL is not running on X11");
     }
 
   }
-  return(retval);
+  return retval;
 }
 
 static int lost_scrap(void)
 {
   int retval;
   Lock_Display();
-  retval = ( XGetSelectionOwner(SDL_Display, _atom_CLIPBOARD) != SDL_Window );
+  retval = (XGetSelectionOwner(SDL_Display, _atom_CLIPBOARD) != SDL_Window);
   Unlock_Display();
 
   return(retval);
 }
 
-static void put_scrap(int srclen, char *src)
+static void put_scrap(int srclen, const char *src)
 {
   char *dst;
 
@@ -236,10 +221,11 @@ static void put_scrap(int srclen, char *src)
   Lock_Display();
 
   XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
-      _atom_CLIPBOARD, XA_STRING, 8, PropModeReplace, (unsigned char *)dst, srclen);
+                  _atom_CLIPBOARD, XA_STRING, 8, PropModeReplace,
+                  (unsigned char *)dst, srclen);
 
   XSync (SDL_Display, False);
-  if ( lost_scrap() ) {
+  if (lost_scrap()) {
     XSetSelectionOwner(SDL_Display, _atom_CLIPBOARD, SDL_Window, CurrentTime);
   }
   Unlock_Display();
@@ -253,25 +239,23 @@ static Window get_scrap_owner (Atom *selection)
                               XA_CUT_BUFFER4, XA_CUT_BUFFER5, XA_CUT_BUFFER6,
                               XA_CUT_BUFFER7 };
 
-    Window owner = XGetSelectionOwner (SDL_Display, *selection);
+    Window owner = XGetSelectionOwner(SDL_Display, *selection);
     if (owner != None)
         return owner;
 
-    owner = XGetSelectionOwner (SDL_Display, _atom_CLIPBOARD);
+    owner = XGetSelectionOwner(SDL_Display, _atom_CLIPBOARD);
     if (owner != None)
         return owner;
 
-    while (i < 10)
-    {
-        owner = XGetSelectionOwner (SDL_Display, buffers[i]);
-        if (owner != None)
-        {
+    while (i < 10) {
+        owner = XGetSelectionOwner(SDL_Display, buffers[i]);
+        if (owner != None) {
             *selection = buffers[i];
             return owner;
         }
         i++;
     }
-    
+
     return None;
 }
 
@@ -298,8 +282,7 @@ static void get_scrap(int *dstlen, char **dst)
   /* If we are the owner, simply return the clip buffer, if it matches
    * the request type.
    */
-  if (!lost_scrap ())
-  {
+  if (!lost_scrap ()) {
     *dstlen = strlen(clipboard);
     *dst = strdup(clipboard);
     if (*dst == NULL)
@@ -311,37 +294,34 @@ static void get_scrap(int *dstlen, char **dst)
 
   /* Find a selection owner. */
   source = _atom_CLIPBOARD;
-  owner = get_scrap_owner (&source);
-  if (owner == None)
-  {
+  owner = get_scrap_owner(&source);
+  if (owner == None) {
     Unlock_Display ();
     *dstlen = 0;
     *dst = NULL;
     return;
   }
 
-  timestamp =  _cliptime;
+  timestamp = _cliptime;
 
   /* Copy and convert the selection into our SDL_SELECTION atom of the
    * window. 
    * Flush afterwards, so we have an immediate effect and do not receive
    * the old buffer anymore.
    */
-  XConvertSelection (SDL_Display, source, XA_STRING, _atom_SDL, SDL_Window,
-                     timestamp);
-  XSync (SDL_Display, False);
+  XConvertSelection(SDL_Display, source, XA_STRING, _atom_SDL, SDL_Window,
+                    timestamp);
+  XSync(SDL_Display, False);
 
   /* Let's wait for the SelectionNotify event from the callee and
    * react upon it as soon as it is received.
    */
-  for (start = time (0);;)
-  {
-      if (XCheckTypedWindowEvent (SDL_Display, SDL_Window,
-                                  SelectionNotify, &ev))
+  for (start = time (0) ;;) {
+      if (XCheckTypedWindowEvent(SDL_Display, SDL_Window,
+                                 SelectionNotify, &ev))
           break;
-      if (time (0) - start >= 5)
-      {
-        Unlock_Display ();
+      if (time (0) - start >= 5) {
+        Unlock_Display();
         *dstlen = 0;
         *dst = NULL;
         return;
@@ -351,13 +331,13 @@ static void get_scrap(int *dstlen, char **dst)
   /* Get any property type and check the sel_type afterwards to decide
    * what to do.
    */
-  if (XGetWindowProperty (SDL_Display, ev.xselection.requestor,
-                          _atom_SDL, 0, 0, True,
-                          AnyPropertyType, &sel_type, &sel_format,
-                          &nbytes, &overflow, &src) != Success)
+  if (XGetWindowProperty(SDL_Display, ev.xselection.requestor,
+                         _atom_SDL, 0, 0, True,
+                         AnyPropertyType, &sel_type, &sel_format,
+                         &nbytes, &overflow, &src) != Success)
   {
-    XFree (src);
-    Unlock_Display ();
+    XFree(src);
+    Unlock_Display();
     *dstlen = 0;
     *dst = NULL;
     return;
@@ -367,10 +347,9 @@ static void get_scrap(int *dstlen, char **dst)
    * XA_STRING, UTF8_STRING and TEXT is valid.
    */
   if (sel_type != _atom_UTF8 && sel_type != _atom_TEXT
-      && sel_type != XA_STRING)
-  {
+      && sel_type != XA_STRING) {
     /* No matching text type found. Return nothing then. */
-    XFree (src);
+    XFree(src);
     *dstlen = 0;
     *dst = NULL;
     return;
@@ -395,28 +374,26 @@ static void get_scrap(int *dstlen, char **dst)
   /* X11 guarantees NULL termination, add an extra byte. */
   length = step * overflow;
   retval = malloc (length + 1);
-  if (retval)
-  {
+  if (retval) {
     unsigned long boffset = 0;
     chunk = MAX_CHUNK_SIZE(SDL_Display);
-    memset (retval, 0, (size_t) (length + 1));
+    memset (retval, 0, (size_t)(length + 1));
 
     /* Read as long as there is data. */
-    while (overflow)
-    {
-      if (XGetWindowProperty (SDL_Display, ev.xselection.requestor,
-                              _atom_SDL, offset, chunk, True,
-                              AnyPropertyType, &sel_type, &sel_format,
-                              &nbytes, &overflow, &src) != Success)
+    while (overflow) {
+      if (XGetWindowProperty(SDL_Display, ev.xselection.requestor,
+                             _atom_SDL, offset, chunk, True,
+                             AnyPropertyType, &sel_type, &sel_format,
+                             &nbytes, &overflow, &src) != Success)
       {
         break;
       }
-            
+
       offset += nbytes / (32 / sel_format);
       nbytes *= step * sel_format / 8;
-      memcpy (retval + boffset, src, nbytes);
+      memcpy(retval + boffset, src, nbytes);
       boffset += nbytes;
-      XFree (src);
+      XFree(src);
     }
   }
   else
@@ -427,7 +404,7 @@ static void get_scrap(int *dstlen, char **dst)
     return; 
   }
 
-  Unlock_Display ();
+  Unlock_Display();
   *dst = retval;
   *dstlen = strlen(retval);
   return;
@@ -436,8 +413,8 @@ static void get_scrap(int *dstlen, char **dst)
 static int clipboard_filter(const SDL_Event *event)
 {
   /* Post all non-window manager specific events */
-  if ( event->type != SDL_SYSWMEVENT ) {
-    return(1);
+  if (event->type != SDL_SYSWMEVENT) {
+    return 1;
   }
 
   /* Handle window-manager specific clipboard events */
@@ -459,50 +436,44 @@ static int clipboard_filter(const SDL_Event *event)
       sevent.xselection.property = None;
       sevent.xselection.requestor = req->requestor;
       sevent.xselection.time = req->time;
-      if ( XGetWindowProperty(SDL_Display, DefaultRootWindow(SDL_Display),
-                              _atom_CLIPBOARD, 0, INT_MAX/4, False, req->target,
-                              &sevent.xselection.target, &seln_format,
-                              &nbytes, &overflow, &seln_data) == Success )
+      if (XGetWindowProperty(SDL_Display, DefaultRootWindow(SDL_Display),
+                             _atom_CLIPBOARD, 0, INT_MAX / 4, False, req->target,
+                             &sevent.xselection.target, &seln_format,
+                             &nbytes, &overflow, &seln_data) == Success)
         {
-          if ( sevent.xselection.target == req->target )
-            {
-              if ( sevent.xselection.target == XA_STRING )
-                {
-                  if ( seln_data[nbytes-1] == '\0' )
+          if (sevent.xselection.target == req->target) {
+              if (sevent.xselection.target == XA_STRING) {
+                  if (seln_data[nbytes - 1] == '\0')
                     --nbytes;
                 }
               XChangeProperty(SDL_Display, req->requestor, req->property,
-                sevent.xselection.target, seln_format, PropModeReplace,
-                                                      seln_data, nbytes);
+                              sevent.xselection.target, seln_format, PropModeReplace,
+                              seln_data, nbytes);
               sevent.xselection.property = req->property;
             }
           XFree(seln_data);
         }
-      XSendEvent(SDL_Display,req->requestor,False,0,&sevent);
+      XSendEvent(SDL_Display, req->requestor, False, 0, &sevent);
       XSync(SDL_Display, False);
     }
     break;
   }
 
   /* Post the event for X11 clipboard reading above */
-  return(1);
+  return 1;
 }
-int PasteManagerGetChar(unsigned short *character)
+
+int PasteManagerGetChar(unsigned short *character)
 {
   if (charCount) {
     *character = pasteString[pasteStringLength - charCount];
     charCount--;
     if (charCount)
-      return(1);
-    else {
-      free(pasteString);
-      return(0);
-    }
+      return 1;
   }
-  else {
-    free(pasteString);
-    return(0);
-  }
+
+  free(pasteString);
+  return 0;
 }
 
 int PasteManagerStartPaste(void)
@@ -518,7 +489,7 @@ int PasteManagerStartPaste(void)
      firstTime = 0;
   }
 
-  get_scrap(&pasteStringLength, (char**) &pasteString);
+  get_scrap(&pasteStringLength, (char**)&pasteString);
 
   charCount = pasteStringLength;
   if (charCount) {
@@ -526,11 +497,11 @@ int PasteManagerStartPaste(void)
     return 1;
   } else {
     free(pasteString);
-    return 0; 
+    return 0;
   }
 }
 
-void PasteManagerStartCopy(char *string)
+void PasteManagerStartCopy(const char *string)
 {
   int result;
 
@@ -543,7 +514,7 @@ void PasteManagerStartCopy(char *string)
      firstTime = 0;
   }
 
-  put_scrap(strlen(string)+1, string);
+  put_scrap(strlen(string) + 1, string);
   trs_end_copy();
 }
 #endif

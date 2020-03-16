@@ -169,7 +169,7 @@ static Uint32 last_key[256];
 static int  paste_state = PASTE_IDLE;
 static int  paste_lastkey = FALSE;
 extern int  PasteManagerStartPaste(void);
-extern void PasteManagerStartCopy(char *string);
+extern void PasteManagerStartCopy(const char *string);
 extern int  PasteManagerGetChar(unsigned short *character);
 
 #define COPY_IDLE     0
