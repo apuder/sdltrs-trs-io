@@ -2847,7 +2847,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
                                  int rows, int columns, int selection)
 {
   int row, column;
-  int entry_count = rows*columns;
+  int entry_count = rows * columns;
   int num, i, j, key;
   int width, first_x, first_y;
   unsigned int max_len = 0;
@@ -2859,9 +2859,9 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   row = selection / columns;
   column = selection % columns;
   for (num = 0; num < entry_count; num++)
-    if (strlen(entry[num]) > max_len)
-      max_len = strlen(entry[num]);
-  width = columns * (max_len + 1) - 1;
+    if (strlen(entry[num]) + 1 > max_len)
+      max_len = strlen(entry[num]) + 1;
+  width = columns * max_len - 1;
   first_x = (64 - width) / 2;
   first_y = (16 - rows) / 2;
 
@@ -2870,14 +2870,14 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   trs_gui_clear_rect(first_x, first_y, width, rows);
   for (i = 0; i < rows; i++)
     for (j = 0; j < columns; j++)
-      trs_gui_write_text(entry[i * columns + j], first_x + j * (max_len + 1), first_y + i, 0);
+      trs_gui_write_text(entry[i * columns + j], first_x + j * max_len, first_y + i, 0);
 
   while (1) {
     selection = row * columns + column;
-    trs_gui_write_text(entry[selection], first_x + column * (max_len + 1), first_y + row, 1);
+    trs_gui_write_text(entry[selection], first_x + column * max_len, first_y + row, 1);
     trs_gui_refresh();
     key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], first_x + column * (max_len + 1), first_y + row, 0);
+    trs_gui_write_text(entry[selection], first_x + column * max_len, first_y + row, 0);
     switch (key) {
       case SDLK_DOWN:
         if (row < rows - 1) row++; else row = 0;
