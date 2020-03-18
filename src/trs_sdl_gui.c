@@ -65,7 +65,6 @@
 #define MENU_WAFER_BROWSE_TYPE  5
 #define MENU_CASS_BROWSE_TYPE   6
 
-#define CHECK_TIMEOUT 4000
 #define N_KEYS        52
 #define SHIFT         39
 
@@ -2077,56 +2076,14 @@ void trs_gui_joystick_display_map(int show_active)
 
 void trs_gui_joystick_check_mapping(void)
 {
-  char text[30];
-  int counter = CHECK_TIMEOUT;
-  SDL_Event event;
+  int button = trs_gui_joystick_get_button();
 
-  while (counter) {
-    snprintf(text, 30, "Press Joystick Button (%d sec)", counter / 1000 + 1);
-    trs_gui_frame(16, 1, 31, 3);
-    trs_gui_write_text(text, 17, 2, 0);
+  if (button != 1) {
+    jbutton_active[button] = 1;
+    trs_gui_joystick_display_map(1);
     trs_gui_refresh();
-
-    if (SDL_PollEvent(&event)) {
-      switch (event.type) {
-      case SDL_QUIT:
-        trs_exit(0);
-        break;
-      case SDL_KEYDOWN:
-        if (event.key.keysym.mod & KMOD_ALT) {
-          switch (event.key.keysym.sym) {
-#ifdef _WIN32
-            case SDLK_F4:
-#endif
-            case SDLK_q:
-              trs_exit(1);
-              break;
-            default:
-              break;
-          }
-        }
-        else if (event.key.keysym.sym == SDLK_F8)
-          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
-        else if (event.key.keysym.sym == SDLK_ESCAPE)
-          return;
-        break;
-      case SDL_JOYBUTTONDOWN:
-        if (event.jbutton.button < N_JOYBUTTONS) {
-          counter = CHECK_TIMEOUT;
-          jbutton_active[event.jbutton.button] = 1;
-        }
-        break;
-      case SDL_JOYBUTTONUP:
-        if (event.jbutton.button < N_JOYBUTTONS)
-          jbutton_active[event.jbutton.button] = 0;
-        break;
-      }
-      trs_gui_joystick_display_map(1);
-    }
-    else {
-      SDL_Delay(100);
-      counter -= 100;
-    }
+    SDL_Delay(1000);
+    jbutton_active[button] = 0;
   }
 }
 
