@@ -2045,6 +2045,7 @@ void trs_gui_joystick_unmap_all_buttons(void)
  }
 }
 
+
 void trs_gui_joystick_display_map(int show_active)
 {
   int row, column, i;
@@ -2074,6 +2075,61 @@ void trs_gui_joystick_display_map(int show_active)
   }
 }
 
+void trs_gui_joystick_check_mapping(void)
+{
+  char text[30];
+  int counter = CHECK_TIMEOUT;
+  SDL_Event event;
+
+  while (counter) {
+    snprintf(text, 30, "Press Joystick Button (%d sec)", counter / 1000 + 1);
+    trs_gui_frame(16, 1, 31, 3);
+    trs_gui_write_text(text, 17, 2, 0);
+    trs_gui_refresh();
+
+    if (SDL_PollEvent(&event)) {
+      switch (event.type) {
+      case SDL_QUIT:
+        trs_exit(0);
+        break;
+      case SDL_KEYDOWN:
+        if (event.key.keysym.mod & KMOD_ALT) {
+          switch (event.key.keysym.sym) {
+#ifdef _WIN32
+            case SDLK_F4:
+#endif
+            case SDLK_q:
+              trs_exit(1);
+              break;
+            default:
+              break;
+          }
+        }
+        else if (event.key.keysym.sym == SDLK_F8)
+          trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
+        else if (event.key.keysym.sym == SDLK_ESCAPE)
+          return;
+        break;
+      case SDL_JOYBUTTONDOWN:
+        if (event.jbutton.button < N_JOYBUTTONS) {
+          counter = CHECK_TIMEOUT;
+          jbutton_active[event.jbutton.button] = 1;
+        }
+        break;
+      case SDL_JOYBUTTONUP:
+        if (event.jbutton.button < N_JOYBUTTONS)
+          jbutton_active[event.jbutton.button] = 0;
+        break;
+      }
+      trs_gui_joystick_display_map(1);
+    }
+    else {
+      SDL_Delay(100);
+      counter -= 100;
+    }
+  }
+}
+
 int trs_gui_display_question(const char *text)
 {
   const char *answer_choices[] = {
@@ -2095,7 +2151,7 @@ void trs_gui_joystick_map_joystick(void)
    {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *on_off_choices[2] = {"   Off", "    On"};
-  int selection = 0, checking = 0, counter;
+  int selection = 0;
 
   while (1) {
     snprintf(&display_menu[5].title[54], 7, "%s", on_off_choices[jaxis_mapped]);
@@ -2117,7 +2173,7 @@ void trs_gui_joystick_map_joystick(void)
         trs_gui_joystick_unmap_all_buttons();
         break;
       case 4:
-        checking = 1;
+        trs_gui_joystick_check_mapping();
         break;
       case 5:
         jaxis_mapped = trs_gui_display_popup("Stick", on_off_choices, 2, jaxis_mapped);
@@ -2125,61 +2181,6 @@ void trs_gui_joystick_map_joystick(void)
       case -1:
         return;
         break;
-    }
-    counter = CHECK_TIMEOUT;
-    while (checking) {
-      char text[62];
-      int len, first_x;
-      SDL_Event event;
-
-      snprintf(text, 60, "Press Joystick Button (%d sec)", counter / 1000 + 1);
-      len = strlen(text);
-      first_x = (64 - len) / 2;
-      trs_gui_frame(first_x - 1, 1, len + 2, 3);
-      trs_gui_write_text(text, first_x, 2, 0);
-      trs_gui_refresh();
-      if (SDL_PollEvent(&event)) {
-        switch (event.type) {
-        case SDL_QUIT:
-          trs_exit(0);
-          break;
-        case SDL_KEYDOWN:
-          if (event.key.keysym.mod & KMOD_ALT) {
-            switch (event.key.keysym.sym) {
-#ifdef _WIN32
-              case SDLK_F4:
-#endif
-              case SDLK_q:
-                trs_exit(1);
-                break;
-              default:
-                break;
-            }
-          }
-          else if (event.key.keysym.sym == SDLK_F8)
-            trs_exit(!(event.key.keysym.mod & KMOD_SHIFT));
-          else if (event.key.keysym.sym == SDLK_ESCAPE)
-            checking = 0;
-          break;
-        case SDL_JOYBUTTONDOWN:
-          if (event.jbutton.button < N_JOYBUTTONS) {
-            counter = CHECK_TIMEOUT;
-            jbutton_active[event.jbutton.button] = 1;
-          }
-          break;
-        case SDL_JOYBUTTONUP:
-          if (event.jbutton.button < N_JOYBUTTONS)
-            jbutton_active[event.jbutton.button] = 0;
-          break;
-        }
-        trs_gui_joystick_display_map(1);
-      }
-      else {
-        SDL_Delay(100);
-        counter -= 100;
-        if (counter <= 0)
-          checking = 0;
-      }
     }
   }
 }
