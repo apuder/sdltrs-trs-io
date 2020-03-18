@@ -1950,8 +1950,6 @@ void trs_gui_display_management(void)
           scanlines = gui_scanlines;
           window_border_width = gui_border_width;
           trs_screen_init();
-          trs_gui_clear_screen();
-          trs_screen_refresh();
         }
       return;
       break;
