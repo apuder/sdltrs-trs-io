@@ -2966,9 +2966,6 @@ void trs_gui_joy_gui(void)
   if (selection == -1)
     return;
 
-  trs_screen_refresh();
-  trs_sdl_flush();
-
   switch (function_codes[selection]) {
     case GUI:
       trs_gui();
