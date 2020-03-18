@@ -2140,59 +2140,19 @@ int trs_gui_display_question(const char *text)
   return trs_gui_display_popup(text, answer_choices, 2, 0);
 }
 
-void trs_gui_joystick_map_joystick(void)
-{
-  MENU_ENTRY display_menu[] =
-  {{"Map Button to Key", MENU_NORMAL_TYPE},
-   {"Map Button to Function", MENU_NORMAL_TYPE},
-   {"Unmap Button", MENU_NORMAL_TYPE},
-   {"Unmap All Buttons", MENU_NORMAL_TYPE},
-   {"Check Button Mapping", MENU_NORMAL_TYPE},
-   {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE},
-   {"", 0}};
-  const char *on_off_choices[2] = {"   Off", "    On"};
-  int selection = 0;
-
-  while (1) {
-    snprintf(&display_menu[5].title[54], 7, "%s", on_off_choices[jaxis_mapped]);
-    trs_gui_clear_screen();
-    trs_gui_joystick_display_map(0);
-
-    selection = trs_gui_display_menu("SDLTRS Map Joystick to Keys/Functions Menu", display_menu, selection);
-    switch(selection) {
-      case 0:
-        trs_gui_joystick_map_button_to_key();
-        break;
-      case 1:
-        trs_gui_joystick_map_button_to_function();
-        break;
-      case 2:
-        trs_gui_joystick_unmap_button();
-        break;
-      case 3:
-        trs_gui_joystick_unmap_all_buttons();
-        break;
-      case 4:
-        trs_gui_joystick_check_mapping();
-        break;
-      case 5:
-        jaxis_mapped = trs_gui_display_popup("Stick", on_off_choices, 2, jaxis_mapped);
-        break;
-      case -1:
-        return;
-        break;
-    }
-  }
-}
-
 void trs_gui_joystick_management(void)
 {
   MENU_ENTRY display_menu[] =
   {{"Use Keypad for Joystick                                     ", MENU_NORMAL_TYPE},
    {"USB Joystick/Gamepad                                        ", MENU_NORMAL_TYPE},
-   {"Map Joystick to Keys/Functions", MENU_NORMAL_TYPE},
+   {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE},
+   {"Map Button to Key", MENU_NORMAL_TYPE},
+   {"Map Button to Function", MENU_NORMAL_TYPE},
+   {"Unmap Button", MENU_NORMAL_TYPE},
+   {"Unmap All Buttons", MENU_NORMAL_TYPE},
+   {"Check Button Mapping", MENU_NORMAL_TYPE},
    {"", 0}};
-  const char *keypad_choices[2] =     {"      No", "     Yes"};
+  const char *yes_no_choices[2] =     {"      No", "     Yes"};
   char *joystick_choices[MAX_JOYSTICKS + 1];
   char joystick_strings[MAX_JOYSTICKS + 1][64];
   int selection = 0;
@@ -2204,17 +2164,19 @@ void trs_gui_joystick_management(void)
     joystick_choices[i] = joystick_strings[i];
 
   while (1) {
-    snprintf(&display_menu[0].title[52], 9, "%s", keypad_choices[gui_keypad_joystick]);
+    snprintf(&display_menu[0].title[52], 9, "%s", yes_no_choices[gui_keypad_joystick]);
     if (gui_joystick_num == -1)
       snprintf(&display_menu[1].title[48], 13, "        None");
     else
       snprintf(&display_menu[1].title[50], 13, "Joystick %1d", gui_joystick_num);
+    snprintf(&display_menu[2].title[52], 9, "%s", yes_no_choices[jaxis_mapped]);
     trs_gui_clear_screen();
+    trs_gui_joystick_display_map(0);
 
     selection = trs_gui_display_menu("SDLTRS Joystick Setting Menu", display_menu, selection);
     switch(selection) {
       case 0:
-        gui_keypad_joystick = trs_gui_display_popup("Keypad", keypad_choices, 2,
+        gui_keypad_joystick = trs_gui_display_popup("Keypad", yes_no_choices, 2,
             gui_keypad_joystick);
         break;
       case 1:
@@ -2243,7 +2205,22 @@ void trs_gui_joystick_management(void)
           gui_joystick_num = joy_index - 1;
         break;
       case 2:
-        trs_gui_joystick_map_joystick();
+        jaxis_mapped = trs_gui_display_popup("Stick", yes_no_choices, 2, jaxis_mapped);
+        break;
+      case 3:
+        trs_gui_joystick_map_button_to_key();
+        break;
+      case 4:
+        trs_gui_joystick_map_button_to_function();
+        break;
+      case 5:
+        trs_gui_joystick_unmap_button();
+        break;
+      case 6:
+        trs_gui_joystick_unmap_all_buttons();
+        break;
+      case 7:
+        trs_gui_joystick_check_mapping();
         break;
       case -1:
         if (trs_keypad_joystick != gui_keypad_joystick) {
