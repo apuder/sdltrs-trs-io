@@ -143,7 +143,7 @@ static int  trs_gui_input_string(const char *title, const char *input, char* out
 static int  trs_gui_display_popup(const char* title, const char **entry,
                                   int entry_count, int selection);
 static int  trs_gui_display_popup_matrix(const char* title, const char **entry,
-                                         int rows, int columns, int selection);
+                                         int rows, int cols, int selection);
 static int  trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
 static void trs_gui_disk_creation(void);
 static void trs_gui_disk_sizes(void);
@@ -1989,14 +1989,14 @@ int trs_gui_joystick_get_button(void)
 
 void trs_gui_joystick_display_map(int show_active)
 {
-  int row, column, i;
+  int row, col, i;
   char text[10];
 
-  for (column = 0; column < 5; column++) {
+  for (col = 0; col < 5; col++) {
     for (row = 0; row < 4; row++) {
-      i = column * 4 + row;
+      i = col * 4 + row;
       snprintf(text, 4, "%2d:", i);
-      trs_gui_write_text(text, 2 + column * 12, 11 + row, 0);
+      trs_gui_write_text(text, 2 + col * 12, 11 + row, 0);
       switch (jbutton_map[i]) {
         case -1:     snprintf(text, 9, "---     "); break;
         case GUI:    snprintf(text, 9, "<GUI>   "); break;
@@ -2011,7 +2011,7 @@ void trs_gui_joystick_display_map(int show_active)
           snprintf(text, 9, "%s", trs_gui_get_key_name(jbutton_map[i]));
           break;
       }
-      trs_gui_write_text(text, 5 + column * 12, 11 + row, show_active ? jbutton_active[i] : 0);
+      trs_gui_write_text(text, 5 + col * 12, 11 + row, show_active ? jbutton_active[i] : 0);
     }
   }
 }
@@ -2711,10 +2711,10 @@ void trs_gui(void)
 }
 
 int trs_gui_display_popup_matrix(const char* title, const char **entry,
-                                 int rows, int columns, int selection)
+                                 int rows, int cols, int selection)
 {
-  int row, column;
-  int entry_count = rows * columns;
+  int row, col;
+  int entry_count = rows * cols;
   int i, j, key;
   int width, first_x, first_y;
   unsigned int max_len = 0;
@@ -2723,12 +2723,12 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
     selection = 0;
   else if (selection >= entry_count)
     selection = entry_count - 1;
-  row = selection / columns;
-  column = selection % columns;
+  row = selection / cols;
+  col = selection % cols;
   for (i = 0; i < entry_count; i++)
     if (strlen(entry[i]) + 1 > max_len)
       max_len = strlen(entry[i]) + 1;
-  width = columns * max_len - 1;
+  width = cols * max_len - 1;
   first_x = (64 - width) / 2;
   first_y = (16 - rows) / 2;
 
@@ -2736,15 +2736,15 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   trs_gui_write_text(title, first_x + 1, first_y - 1, 0);
   trs_gui_clear_rect(first_x, first_y, width, rows);
   for (i = 0; i < rows; i++)
-    for (j = 0; j < columns; j++)
-      trs_gui_write_text(entry[i * columns + j], first_x + j * max_len, first_y + i, 0);
+    for (j = 0; j < cols; j++)
+      trs_gui_write_text(entry[i * cols + j], first_x + j * max_len, first_y + i, 0);
 
   while (1) {
-    selection = row * columns + column;
-    trs_gui_write_text(entry[selection], first_x + column * max_len, first_y + row, 1);
+    selection = row * cols + col;
+    trs_gui_write_text(entry[selection], first_x + col * max_len, first_y + row, 1);
     trs_gui_refresh();
     key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], first_x + column * max_len, first_y + row, 0);
+    trs_gui_write_text(entry[selection], first_x + col * max_len, first_y + row, 0);
     switch (key) {
       case SDLK_DOWN:
         if (row < rows - 1) row++; else row = 0;
@@ -2753,16 +2753,16 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
         if (row > 0) row--; else row = rows - 1;
         break;
       case SDLK_RIGHT:
-        if (column < columns - 1) column++; else column = 0;
+        if (col < cols - 1) col++; else col = 0;
         break;
       case SDLK_LEFT:
-        if (column > 0) column--; else column = columns - 1;
+        if (col > 0) col--; else col = cols - 1;
         break;
       case SDLK_HOME:
-        column = 0;
+        col = 0;
         break;
       case SDLK_END:
-        column = columns - 1;
+        col = cols - 1;
         break;
       case SDLK_PAGEUP:
         row = 0;
