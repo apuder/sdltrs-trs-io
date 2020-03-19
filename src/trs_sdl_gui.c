@@ -1733,33 +1733,23 @@ void trs_gui_cassette_management(void)
         if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
             trs_cass_dir, filename, FILENAME_MAX - 1, 1) == 0) {
           ret = 0;
-          if (image_type == 0) {
-            trs_add_extension(filename, ".cas");
-            cassette_file = fopen(filename, "wb");
-            if (cassette_file == NULL)
-              ret = -1;
-            else {
-              fclose(cassette_file);
-            }
+          switch (image_type) {
+            case 0:
+              trs_add_extension(filename, ".cas");
+              break;
+            case 1:
+              trs_add_extension(filename, ".cpt");
+              break;
+            default:
+              trs_add_extension(filename, ".wav");
+              break;
           }
-          else if (image_type == 1) {
-            trs_add_extension(filename, ".cpt");
-            cassette_file = fopen(filename, "wb");
-            if (cassette_file == NULL)
-              ret = -1;
-            else {
-              fclose(cassette_file);
-            }
-          }
+          if ((cassette_file = fopen(filename, "wb")) == NULL)
+            ret = -1;
           else {
-            trs_add_extension(filename, ".wav");
-            cassette_file = fopen(filename, "wb");
-            if (cassette_file == NULL)
-              ret = -1;
-            else {
+            if (image_type == 2)
               ret = create_wav_header(cassette_file);
-              fclose(cassette_file);
-            }
+            fclose(cassette_file);
           }
           if (ret)
             trs_gui_display_message("Error", "Error creating Cassette Image");
