@@ -58,9 +58,9 @@
  * Key event queue
  */
 #define KEY_QUEUE_SIZE	(32)
-static int key_queue[KEY_QUEUE_SIZE];
-static int key_queue_head;
-static int key_queue_entries;
+int key_queue[KEY_QUEUE_SIZE];
+int key_queue_head;
+int key_queue_entries;
 
 /*
  * TRS-80 key matrix

@@ -75,17 +75,20 @@
 #include "trs_cassette.h"
 #include "trs_sdl_keyboard.h"
 
+#define KEY_QUEUE_SIZE 32
+#define MAX_RECTS      2048
+#define WHITE          0xe0e0ff
+#define BLACK          0
+#define GREEN          0x344843
+
 extern char *program_name;
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
-
+extern int  key_queue[KEY_QUEUE_SIZE];
+extern int  key_queue_head;
+extern int  key_queue_entries;
 extern int  trs_gui_exit_sdltrs(void);
 extern void trs_gui_keys_sdltrs(void);
 extern void trs_gui_model(void);
-
-#define MAX_RECTS 2048
-#define WHITE     0xe0e0ff
-#define BLACK     0
-#define GREEN     0x344843
 
 /* Public data */
 int window_border_width;
@@ -235,14 +238,6 @@ static int hrg_pixel_height[12];
 static int hrg_enable = 0;
 static int hrg_addr = 0;
 static void hrg_update_char(int position);
-
-/*
- * Key event queueing routines
- */
-#define KEY_QUEUE_SIZE (32)
-static int key_queue[KEY_QUEUE_SIZE];
-static int key_queue_head;
-static int key_queue_entries;
 
 /* Option handling */
 typedef struct trs_opt_struct {
