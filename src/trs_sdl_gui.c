@@ -2333,23 +2333,15 @@ void trs_gui_model(void)
                                    " TRS-80 Model 4P"};
   const char *on_off_choices[2] = {"        Off", "         On"};
   int selection = 0;
-  int model_selection = 0;
+  int model_selection;
   int grafyx;
   int local_trs_model = trs_model;
 
   while (1) {
-    switch(local_trs_model) {
-      case 1:
-        model_selection = 0;
-        break;
-      case 3:
-      case 4:
-        model_selection = local_trs_model - 2;
-        break;
-      case 5:
-        model_selection = 3;
-        break;
-    }
+    if (local_trs_model == 1)
+      model_selection = 0;
+    else
+      model_selection = local_trs_model - 2;
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
     snprintf(&model_menu[2].title[49], 12, "%s", on_off_choices[lowercase]);
     snprintf(&model_menu[4].title[49], 12, "%s", on_off_choices[stringy]);
@@ -2373,20 +2365,10 @@ void trs_gui_model(void)
       case 0:
         model_selection = trs_gui_display_popup("Model", model_choices, 4,
             model_selection);
-        switch(model_selection) {
-          case 0:
-            local_trs_model = 1;
-            break;
-          case 1:
-            local_trs_model = 3;
-            break;
-          case 2:
-            local_trs_model = 4;
-            break;
-          case 3:
-            local_trs_model = 5;
-            break;
-        }
+        if (model_selection == 0)
+          local_trs_model = 1;
+        else
+          local_trs_model = model_selection + 2;
         break;
       case 2:
         lowercase = trs_gui_display_popup("Lowercase", on_off_choices, 2,
