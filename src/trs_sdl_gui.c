@@ -1794,8 +1794,7 @@ void trs_gui_display_management(void)
    {"LED Display for Disks and Turbo Mode                        ", MENU_NORMAL_TYPE},
    {"Display Scanlines to simulate old CRT                       ", MENU_NORMAL_TYPE},
    {"", 0}};
-  const char *resize_choices[2] =   {"        No", "       Yes"};
-  const char *disk_led_choices[2] = {" Hide", " Show"};
+  const char *yes_no_choices[2] =   {"        No", "       Yes"};
   const char *font1_choices[7] =    {"      Early",
                                      "      Stock",
                                      "      LCmod",
@@ -1835,11 +1834,11 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[5].title[47], 14, "%s", font34_choices[local_trs_charset3]);
     snprintf(&display_menu[6].title[47], 14, "%s", font34_choices[local_trs_charset4]);
     snprintf(&display_menu[7].title[52], 9, "%8d", gui_border_width);
-    snprintf(&display_menu[8].title[50], 11, "%s", resize_choices[gui_resize3]);
-    snprintf(&display_menu[9].title[50], 11, "%s", resize_choices[gui_resize4]);
+    snprintf(&display_menu[8].title[50], 11, "%s", yes_no_choices[gui_resize3]);
+    snprintf(&display_menu[9].title[50], 11, "%s", yes_no_choices[gui_resize4]);
     snprintf(&display_menu[10].title[54], 7, "%s", scale_choices[gui_scale - 1]);
-    snprintf(&display_menu[11].title[55], 6, "%s", disk_led_choices[gui_show_led]);
-    snprintf(&display_menu[12].title[50], 11, "%s", resize_choices[gui_scanlines]);
+    snprintf(&display_menu[11].title[50], 11, "%s", yes_no_choices[gui_show_led]);
+    snprintf(&display_menu[12].title[50], 11, "%s", yes_no_choices[gui_scanlines]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu", display_menu, selection);
@@ -1909,11 +1908,11 @@ void trs_gui_display_management(void)
         }
         break;
       case 8:
-        gui_resize3 = trs_gui_display_popup("Resize 3", resize_choices, 2,
+        gui_resize3 = trs_gui_display_popup("Resize 3", yes_no_choices, 2,
             gui_resize3);
         break;
       case 9:
-        gui_resize4 = trs_gui_display_popup("Resize 4", resize_choices, 2,
+        gui_resize4 = trs_gui_display_popup("Resize 4", yes_no_choices, 2,
             gui_resize4);
         break;
       case 10:
@@ -1921,11 +1920,11 @@ void trs_gui_display_management(void)
             gui_scale - 1) + 1;
         break;
       case 11:
-        gui_show_led = trs_gui_display_popup("LED", disk_led_choices, 2,
+        gui_show_led = trs_gui_display_popup("LEDs", yes_no_choices, 2,
             gui_show_led);
         break;
       case 12:
-        gui_scanlines = trs_gui_display_popup("Scanlines", resize_choices, 2,
+        gui_scanlines = trs_gui_display_popup("Scanlines", yes_no_choices, 2,
             gui_scanlines);
         break;
       case -1:
