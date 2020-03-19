@@ -160,12 +160,7 @@ static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static int  trs_gui_config_management(void);
 static int  trs_gui_joystick_get_button(void);
-static void trs_gui_joystick_map_button_to_key(void);
-static void trs_gui_joystick_map_button_to_function(void);
-static void trs_gui_joystick_unmap_button(void);
-static void trs_gui_joystick_unmap_all_buttons(void);
 static void trs_gui_joystick_display_map(int show_active);
-static void trs_gui_joystick_check_mapping(void);
 static const char *trs_gui_get_key_name(int key);
 static int  trs_gui_virtual_keyboard(void);
 static int  trs_gui_display_question(const char *text);
@@ -1992,51 +1987,6 @@ int trs_gui_joystick_get_button(void)
   return -1;
 }
 
-void trs_gui_joystick_map_button_to_key(void)
-{
-  int key, button;
-
-  trs_gui_frame(20, 1, 23, 3);
-  trs_gui_write_text("     Select Key      ", 21, 2, 0);
-  trs_gui_refresh();
-  if ((key = trs_gui_virtual_keyboard()) == -1)
-    return;
-  if ((button = trs_gui_joystick_get_button()) != -1)
-    jbutton_map[button] = key;
-}
-
-void trs_gui_joystick_map_button_to_function(void)
-{
-  int selection, button;
-
-  trs_gui_frame(20, 1, 23, 3);
-  trs_gui_write_text("   Select Function   ", 21, 2, 0);
-  trs_gui_refresh();
-  if ((selection = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0)) == -1)
-    return;
-  if ((button = trs_gui_joystick_get_button()) != -1)
-    jbutton_map[button] = function_codes[selection];
-}
-
-void trs_gui_joystick_unmap_button(void)
-{
-  int button = trs_gui_joystick_get_button();
-
-  if (button != -1)
-    jbutton_map[button] = -1;
-}
-
-void trs_gui_joystick_unmap_all_buttons(void)
-{
-  if (trs_gui_display_question("Are You Sure?") == 1) {
-    int i;
-
-    for (i = 0; i < N_JOYBUTTONS; i++)
-      jbutton_map[i] = -1;
- }
-}
-
-
 void trs_gui_joystick_display_map(int show_active)
 {
   int row, column, i;
@@ -2066,19 +2016,6 @@ void trs_gui_joystick_display_map(int show_active)
   }
 }
 
-void trs_gui_joystick_check_mapping(void)
-{
-  int button = trs_gui_joystick_get_button();
-
-  if (button != 1) {
-    jbutton_active[button] = 1;
-    trs_gui_joystick_display_map(1);
-    trs_gui_refresh();
-    SDL_Delay(1000);
-    jbutton_active[button] = 0;
-  }
-}
-
 int trs_gui_display_question(const char *text)
 {
   const char *answer_choices[] = {
@@ -2105,6 +2042,7 @@ void trs_gui_joystick_management(void)
   char *joystick_choices[MAX_JOYSTICKS + 1];
   char joystick_strings[MAX_JOYSTICKS + 1][64];
   int selection = 0;
+  int button, key;
   int i, num_joysticks, joy_index;
   int gui_keypad_joystick = trs_keypad_joystick;
   int gui_joystick_num = trs_joystick_num;
@@ -2157,19 +2095,41 @@ void trs_gui_joystick_management(void)
         jaxis_mapped = trs_gui_display_popup("Stick", yes_no_choices, 2, jaxis_mapped);
         break;
       case 3:
-        trs_gui_joystick_map_button_to_key();
+        trs_gui_frame(20, 1, 23, 3);
+        trs_gui_write_text("     Select Key      ", 21, 2, 0);
+        trs_gui_refresh();
+        if ((key = trs_gui_virtual_keyboard()) != -1) {
+          if ((button = trs_gui_joystick_get_button()) != -1)
+            jbutton_map[button] = key;
+        }
         break;
       case 4:
-        trs_gui_joystick_map_button_to_function();
+        trs_gui_frame(20, 1, 23, 3);
+        trs_gui_write_text("   Select Function   ", 21, 2, 0);
+        trs_gui_refresh();
+        if ((key = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0)) != -1) {
+          if ((button = trs_gui_joystick_get_button()) != -1)
+            jbutton_map[button] = function_codes[key];
+        }
         break;
       case 5:
-        trs_gui_joystick_unmap_button();
+        if ((button = trs_gui_joystick_get_button()) != -1)
+          jbutton_map[button] = -1;
         break;
       case 6:
-        trs_gui_joystick_unmap_all_buttons();
+        if (trs_gui_display_question("Are You Sure?") == 1) {
+          for (i = 0; i < N_JOYBUTTONS; i++)
+            jbutton_map[i] = -1;
+         }
         break;
       case 7:
-        trs_gui_joystick_check_mapping();
+        if ((button = trs_gui_joystick_get_button()) != 1) {
+          jbutton_active[button] = 1;
+          trs_gui_joystick_display_map(1);
+          trs_gui_refresh();
+          SDL_Delay(1000);
+          jbutton_active[button] = 0;
+        }
         break;
       case -1:
         if (trs_keypad_joystick != gui_keypad_joystick) {
