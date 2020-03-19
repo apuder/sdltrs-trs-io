@@ -151,6 +151,8 @@ static void trs_gui_disk_sizes(void);
 static void trs_gui_disk_steps(void);
 #endif
 static void trs_gui_disk_options(void);
+static void trs_gui_diskset_load(void);
+static void trs_gui_diskset_save(void);
 static void trs_gui_joystick_management(void);
 static void trs_gui_printer_management(void);
 static void trs_gui_default_dirs(void);
@@ -1369,6 +1371,28 @@ void trs_gui_disk_options(void)
   }
 }
 
+void trs_gui_diskset_load(void)
+{
+  char filename[FILENAME_MAX];
+
+  if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, " Disk Set ") >= 0) {
+    if (trs_diskset_load(filename) == -1)
+      trs_gui_display_message("Error", "Failed to load Disk Set");
+  }
+}
+
+void trs_gui_diskset_save(void)
+{
+  char filename[FILENAME_MAX];
+
+  if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
+      trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
+    trs_add_extension(filename, ".set");
+    if (trs_diskset_save(filename) == -1)
+      trs_gui_display_message("Error", "Failed to save Disk Set");
+  }
+}
+
 void trs_gui_disk_management(void)
 {
   MENU_ENTRY disk_menu[] =
@@ -1386,7 +1410,6 @@ void trs_gui_disk_management(void)
    {"Create Blank Floppy Disk", MENU_NORMAL_TYPE},
    {"Disk Drive Options", MENU_NORMAL_TYPE},
    {"", 0}};
-  char filename[FILENAME_MAX];
   int selection = 0;
   int i;
 
@@ -1405,19 +1428,10 @@ void trs_gui_disk_management(void)
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Menu", disk_menu, selection);
     switch(selection) {
       case 9:
-        filename[0] = 0;
-        if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-            trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
-          trs_add_extension(filename, ".set");
-          if (trs_diskset_save(filename) == -1)
-            trs_gui_display_message("Error", "Failed to save Disk Set");
-        }
+        trs_gui_diskset_save();
         break;
       case 10:
-        if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, " Disk Set ") >= 0) {
-          if (trs_diskset_load(filename) == -1)
-            trs_gui_display_message("Error", "Failed to load Disk Set");
-        }
+        trs_gui_diskset_load();
         break;
       case 11:
         trs_gui_disk_creation();
@@ -1480,19 +1494,10 @@ void trs_gui_hard_management(void)
     selection = trs_gui_display_menu("SDLTRS Hard Disk Menu", hard_menu, selection);
     switch(selection) {
       case 5:
-        filename[0] = 0;
-        if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-            trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
-          trs_add_extension(filename, ".set");
-          if (trs_diskset_save(filename) == -1)
-            trs_gui_display_message("Error", "Failed to save Disk Set");
-        }
+        trs_gui_diskset_save();
         break;
       case 6:
-        if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, " Disk Set ") >= 0) {
-          if (trs_diskset_load(filename) == -1)
-            trs_gui_display_message("Error", "Failed to load Disk Set");
-        }
+        trs_gui_diskset_load();
         break;
       case 7:
         snprintf(input, 4, "%d", cylinder_count);
@@ -1626,19 +1631,10 @@ void trs_gui_stringy_management(void)
     selection = trs_gui_display_menu("SDLTRS Stringy Wafer Menu", stringy_menu, selection);
     switch(selection) {
       case 9:
-        filename[0] = 0;
-        if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
-            trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
-          trs_add_extension(filename, ".set");
-          if (trs_diskset_save(filename) == -1)
-            trs_gui_display_message("Error", "Failed to save Disk Set");
-        }
+        trs_gui_diskset_save();
         break;
       case 10:
-        if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, " Disk Set ") >= 0) {
-          if (trs_diskset_load(filename) == -1)
-            trs_gui_display_message("Error", "Failed to load Disk Set");
-        }
+        trs_gui_diskset_load();
         break;
       case 11:
         wafer_insert = trs_gui_display_popup("Wafer", wafer_choices, 9,
