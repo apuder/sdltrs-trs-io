@@ -422,7 +422,7 @@ static void stripWhitespace(char *inputStr)
 
 static const char *charset_name(int charset)
 {
-  switch(charset) {
+  switch (charset) {
     case 0:
       return "early";
     case 1:
@@ -462,7 +462,7 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file, "%sresize3\n", resize3 ? "" : "no");
   fprintf(config_file, "%sresize4\n", resize4 ? "" : "no");
   fprintf(config_file, "model=");
-  switch(trs_model) {
+  switch (trs_model) {
     case 1:
       fprintf(config_file, "1\n");
       break;
@@ -496,7 +496,7 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
   fprintf(config_file, "%s\n", trs_show_led ? "showled" : "hideled");
   fprintf(config_file, "doubler=");
-  switch(trs_disk_doubler) {
+  switch (trs_disk_doubler) {
     case TRSDISK_PERCOM:
       fprintf(config_file, "percom\n");
       break;
@@ -1138,7 +1138,7 @@ static void trs_flip_fullscreen(void)
 
 void trs_rom_init(void)
 {
-  switch(trs_model) {
+  switch (trs_model) {
     case 1:
       if (romfile[0]) {
         if (trs_load_rom(romfile) == 0)
@@ -1519,7 +1519,7 @@ static void ProcessCopySelection(int selectAll)
     }
   }
 
-  switch(copyStatus) {
+  switch (copyStatus) {
     case COPY_IDLE:
       if (selectAll) {
         copyStatus = COPY_DEFINED;
@@ -1888,7 +1888,7 @@ void trs_get_event(int wait)
     } else {
       if (!SDL_PollEvent(&event)) return;
     }
-    switch(event.type) {
+    switch (event.type) {
       case SDL_QUIT:
         trs_exit(0);
         break;

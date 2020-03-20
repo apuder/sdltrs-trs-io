@@ -57,7 +57,7 @@
 /*
  * Key event queue
  */
-#define KEY_QUEUE_SIZE	(32)
+#define KEY_QUEUE_SIZE  (32)
 int key_queue[KEY_QUEUE_SIZE];
 int key_queue_head;
 int key_queue_entries;
@@ -65,8 +65,8 @@ int key_queue_entries;
 /*
  * TRS-80 key matrix
  */
-#define TK(a, b) (((a) << 4) + (b))
-#define TK_ADDR(tk) (((tk) >> 4)&0xf)
+#define TK(a, b)    (((a) << 4) + (b))
+#define TK_ADDR(tk) (((tk) >> 4) & 0xf)
 #define TK_DATA(tk) ((tk) & 0xf)
 #define TK_DOWN(tk) (((tk) & 0x10000) == 0)
 
@@ -155,8 +155,8 @@ int key_queue_entries;
 
 typedef struct
 {
-    int bit_action;
-    int shift_action;
+  int bit_action;
+  int shift_action;
 } KeyTable;
 
 /* Keysyms in the extended ASCII range 0x0000 - 0x00ff */
@@ -490,6 +490,7 @@ KeyTable ascii_key_table[] = {
 static int keystate[8] = { 0, };
 static int force_shift = TK_Neutral;
 static int joystate = 0;
+int key_heartbeat = 0;
 int trs_joystick_num = 0;
 int trs_keypad_joystick = TRUE;
 
@@ -503,7 +504,6 @@ void trs_kb_reset()
   key_stretch_timeout = z80_state.t_count;
 }
 
-int key_heartbeat = 0;
 void trs_kb_heartbeat()
 {
   /* Don't hold keys in queue too long */
@@ -520,6 +520,7 @@ void trs_kb_bracket(int shifted)
      these keys didn't exist on real machines anyway.
   */
   int i;
+
   trs_kb_bracket_state = shifted;
   for (i = 0x5b; i <= 0x5f; i++) {
     ascii_key_table[i].shift_action =
@@ -534,7 +535,8 @@ void trs_kb_bracket(int shifted)
 /* Emulate joystick with the keypad */
 int trs_emulate_joystick(int key_down, int bit_action)
 {
-  if (bit_action < TK_Joystick) return 0;
+  if (bit_action < TK_Joystick)
+    return 0;
   if (key_down) {
     joystate |= (bit_action & 0x1f);
   } else {
@@ -686,136 +688,140 @@ int trs_joystick_in()
 
 void trs_xlate_keysym(int keysym)
 {
-    int key_down;
-    KeyTable* kt;
-    static int shift_action = TK_Neutral;
+  int key_down;
+  KeyTable* kt;
+  static int shift_action = TK_Neutral;
 
-    if (keysym == 0x10000) {
-	/* force all keys up */
-	queue_key(TK_AllKeysUp);
-	shift_action = TK_Neutral;
-	return;
+  if (keysym == 0x10000) {
+    /* force all keys up */
+    queue_key(TK_AllKeysUp);
+    shift_action = TK_Neutral;
+    return;
+  }
+
+  key_down = (keysym & 0x10000) == 0;
+  kt = &ascii_key_table[keysym & 0xFFFF];
+
+  if (kt->bit_action == TK_NULL)
+    return;
+  if (trs_emulate_joystick(key_down, kt->bit_action))
+    return;
+
+  if (key_down) {
+    if (shift_action != TK_ForceShiftPersistent &&
+        shift_action != kt->shift_action) {
+      shift_action = kt->shift_action;
+      queue_key(shift_action);
     }
-
-    key_down = (keysym & 0x10000) == 0;
-    kt = &ascii_key_table[keysym & 0xFFFF];
-
-    if (kt->bit_action == TK_NULL) return;
-    if (trs_emulate_joystick(key_down, kt->bit_action)) return;
-
-    if (key_down) {
-      if (shift_action != TK_ForceShiftPersistent &&
-	  shift_action != kt->shift_action) {
-	shift_action = kt->shift_action;
-	queue_key(shift_action);
-      }
-      queue_key(kt->bit_action);
-    } else {
-      queue_key(kt->bit_action | 0x10000);
-      if (shift_action != TK_Neutral &&
-	  shift_action == kt->shift_action) {
-	shift_action = TK_Neutral;
-	queue_key(shift_action);
-      }
+    queue_key(kt->bit_action);
+  } else {
+    queue_key(kt->bit_action | 0x10000);
+    if (shift_action != TK_Neutral &&
+        shift_action == kt->shift_action) {
+      shift_action = TK_Neutral;
+      queue_key(shift_action);
     }
+  }
 }
 
 static void change_keystate(int action)
 {
-    int key_down;
-    int i;
+  int key_down;
+  int i;
 #ifdef KBDEBUG
-    debug("change_keystate: action 0x%x\n", action);
+  debug("change_keystate: action 0x%x\n", action);
 #endif
 
-    switch (action) {
-      case TK_AllKeysUp:
-	/* force all keys up */
-	for (i = 0; i < 7; i++) {
-	    keystate[i] = 0;
-	}
-	force_shift = TK_Neutral;
-	break;
+  switch (action) {
+    case TK_AllKeysUp:
+      /* force all keys up */
+      for (i = 0; i < 7; i++) {
+        keystate[i] = 0;
+      }
+      force_shift = TK_Neutral;
+      break;
 
-      case TK_Neutral:
-      case TK_ForceShift:
-      case TK_ForceNoShift:
-      case TK_ForceShiftPersistent:
-	force_shift = action;
-	break;
+    case TK_Neutral:
+    case TK_ForceShift:
+    case TK_ForceNoShift:
+    case TK_ForceShiftPersistent:
+      force_shift = action;
+      break;
 
-      default:
-	key_down = TK_DOWN(action);
-	if (key_down) {
-	    keystate[TK_ADDR(action)] |= (1 << TK_DATA(action));
-	} else {
-	    keystate[TK_ADDR(action)] &= ~(1 << TK_DATA(action));
-	}
-    }
+    default:
+      key_down = TK_DOWN(action);
+      if (key_down) {
+        keystate[TK_ADDR(action)] |= (1 << TK_DATA(action));
+      } else {
+        keystate[TK_ADDR(action)] &= ~(1 << TK_DATA(action));
+      }
+  }
 }
 
 static int kb_mem_value(int address)
 {
-    int i, bitpos, data = 0;
+  int i, bitpos, data = 0;
 
-    for (i = 0, bitpos = 1; i < 7; i++, bitpos <<= 1) {
-	if (address & bitpos) {
-	    data |= keystate[i];
-	}
+  for (i = 0, bitpos = 1; i < 7; i++, bitpos <<= 1) {
+    if (address & bitpos) {
+      data |= keystate[i];
     }
-    if (address & 0x80) {
-	int tmp = keystate[7];
-	if (trs_model == 1) {
-	    if (force_shift == TK_ForceNoShift) {
-		/* deactivate shift key */
-		tmp &= ~1;
-	    } else if (force_shift != TK_Neutral) {
-		/* activate shift key */
-		tmp |= 1;
-	    }
-	} else {
-	    if (force_shift == TK_ForceNoShift) {
-		/* deactivate both shift keys */
-		tmp &= ~3;
-	    } else if (force_shift != TK_Neutral) {
-		/* if no shift keys are down, activate left shift key */
-		if ((tmp & 3) == 0) tmp |= 1;
-	    }
-	}
-	data |= tmp;
+  }
+  if (address & 0x80) {
+    int tmp = keystate[7];
+
+    if (trs_model == 1) {
+      if (force_shift == TK_ForceNoShift) {
+        /* deactivate shift key */
+        tmp &= ~1;
+      } else if (force_shift != TK_Neutral) {
+        /* activate shift key */
+        tmp |= 1;
+      }
+    } else {
+      if (force_shift == TK_ForceNoShift) {
+        /* deactivate both shift keys */
+        tmp &= ~3;
+      } else if (force_shift != TK_Neutral) {
+        /* if no shift keys are down, activate left shift key */
+        if ((tmp & 3) == 0)
+          tmp |= 1;
+        }
     }
-    return data;
+  data |= tmp;
+  }
+  return data;
 }
 
 int trs_kb_mem_read(int address)
 {
-    int key = -1;
+  int key = -1;
 
-    /* Avoid delaying key state changes in queue for too long */
-    if (key_heartbeat > 2) {
-      do {
-	key = dequeue_key();
-	if (key >= 0) {
-	  change_keystate(key);
-	}
-      } while (key >= 0);
-    }
+  /* Avoid delaying key state changes in queue for too long */
+  if (key_heartbeat > 2) {
+    do {
+      key = dequeue_key();
+      if (key >= 0) {
+        change_keystate(key);
+      }
+    } while (key >= 0);
+  }
 
-    /* After each key state change, impose a timeout before the next one
-       so that the Z80 program doesn't miss any by polling too rarely,
-       and so that we don't tickle the bugs in some common TRS-80 keyboard
-       drivers that strike if two keys change simultaneously */
-    if (key_stretch_timeout - z80_state.t_count > TSTATE_T_MID) {
-	/* Get the next key */
-	key = dequeue_key();
-	key_stretch_timeout = z80_state.t_count + stretch_amount;
-    }
+  /* After each key state change, impose a timeout before the next one
+     so that the Z80 program doesn't miss any by polling too rarely,
+     and so that we don't tickle the bugs in some common TRS-80 keyboard
+     drivers that strike if two keys change simultaneously */
+  if (key_stretch_timeout - z80_state.t_count > TSTATE_T_MID) {
+    /* Get the next key */
+    key = dequeue_key();
+    key_stretch_timeout = z80_state.t_count + stretch_amount;
+  }
 
-    if (key >= 0) {
-      change_keystate(key);
-    }
-    key_heartbeat = 0;
-    return kb_mem_value(address);
+  if (key >= 0) {
+    change_keystate(key);
+  }
+  key_heartbeat = 0;
+  return kb_mem_value(address);
 }
 
 void clear_key_queue()
@@ -823,7 +829,7 @@ void clear_key_queue()
   key_queue_head = 0;
   key_queue_entries = 0;
 #if QDEBUG
-    debug("clear_key_queue\n");
+  debug("clear_key_queue\n");
 #endif
 }
 
