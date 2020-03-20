@@ -184,13 +184,13 @@ void do_emt_setddir()
   }
   strcpy(trs_disk_dir, (char *)mem_pointer(REG_HL, 0));
   if (trs_disk_dir[0] == '~' &&
-      (trs_disk_dir[1] == DIR_SLASH_CHR || trs_disk_dir[1] == '\0')) {
+      (trs_disk_dir[1] == DIR_SLASH || trs_disk_dir[1] == '\0')) {
     const char* home = getenv("HOME");
 
     if (home) {
       char dirname[FILENAME_MAX];
 
-      snprintf(dirname, FILENAME_MAX, "%s%c%s", home, DIR_SLASH_CHR, trs_disk_dir + 1);
+      snprintf(dirname, FILENAME_MAX, "%s%c%s", home, DIR_SLASH, trs_disk_dir + 1);
       snprintf(trs_disk_dir, FILENAME_MAX, "%s", dirname);
     }
   }
@@ -683,7 +683,7 @@ void do_emt_opendisk()
     return;
   }
 
-  if (*name == DIR_SLASH_CHR || *trs_disk_dir == '\0') {
+  if (*name == DIR_SLASH || *trs_disk_dir == '\0') {
     qname = strdup(name);
   } else {
     int const len = strlen(trs_disk_dir) + strlen(name) + 2;
@@ -691,7 +691,7 @@ void do_emt_opendisk()
       trs_sdl_cleanup();
       fatal("emt_opendisk: failed to allocate memory");
     }
-    snprintf(qname, len, "%s%c%s", trs_disk_dir, DIR_SLASH_CHR, name);
+    snprintf(qname, len, "%s%c%s", trs_disk_dir, DIR_SLASH, name);
   }
   for (i = 0; i < MAX_OPENDISK; i++) {
     if (!od[i].inuse) break;

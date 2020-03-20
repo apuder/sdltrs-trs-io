@@ -584,7 +584,7 @@ int trs_gui_file_browse(const char* path, char* name, const char *mask,
   snprintf(current_dir, FILENAME_MAX - 1, "%s", path);
 
   for (i = strlen(current_dir); i > 0; i--) {
-    if (current_dir[i] == DIR_SLASH_CHR) {
+    if (current_dir[i] == DIR_SLASH) {
       current_dir[i + 1] = 0;
       break;
     }
@@ -595,8 +595,9 @@ int trs_gui_file_browse(const char* path, char* name, const char *mask,
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
       error("getcwd: %s", current_dir);
   }
-  if (current_dir[strlen(current_dir) - 1] != DIR_SLASH_CHR)
-    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), DIR_SLASH_STR);
+  if (current_dir[strlen(current_dir) - 1] != DIR_SLASH)
+    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir),
+        "%c", DIR_SLASH);
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return -1;
 
@@ -702,26 +703,26 @@ int trs_gui_file_browse(const char* path, char* name, const char *mask,
 
             if (new_dir[1] == '.' && new_dir[2] == '.') {
               for (i = strlen(current_dir) - 2; i >= 0; i--) {
-                if (current_dir[i] == DIR_SLASH_CHR) {
+                if (current_dir[i] == DIR_SLASH) {
                   current_dir[i + 1] = 0;
                   break;
                 }
               }
               if (i < 0 &&
 #ifdef _WIN32
-                current_dir[2] != DIR_SLASH_CHR) {
+                current_dir[2] != DIR_SLASH) {
 #else
-                current_dir[0] != DIR_SLASH_CHR) {
+                current_dir[0] != DIR_SLASH) {
 #endif
                 if (getcwd(current_dir, FILENAME_MAX) == NULL)
                   error("getcwd: %s", current_dir);
                 snprintf(current_dir + strlen(current_dir),
-                    FILENAME_MAX - strlen(current_dir), DIR_SLASH_STR);
+                    FILENAME_MAX - strlen(current_dir), "%c", DIR_SLASH);
               }
             } else {
               snprintf(current_dir + strlen(current_dir),
                   FILENAME_MAX - strlen(current_dir), "%s", &new_dir[1]);
-              current_dir[strlen(current_dir) - 1] = DIR_SLASH_CHR;
+              current_dir[strlen(current_dir) - 1] = DIR_SLASH;
             }
 
             trs_gui_delete_filename_list();
@@ -781,7 +782,7 @@ done:
         {
           snprintf(name + strlen(name), FILENAME_MAX - strlen(name),
               "%s", &new_dir[1]);
-          filename[strlen(name) - 1] = DIR_SLASH_CHR;
+          filename[strlen(name) - 1] = DIR_SLASH;
         }
       }
     }

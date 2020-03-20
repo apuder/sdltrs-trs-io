@@ -66,11 +66,9 @@
 #define MAX_JOYSTICKS 8
 
 #ifdef _WIN32
-#define DIR_SLASH_CHR '\\'
-#define DIR_SLASH_STR "\\"
+#define DIR_SLASH '\\'
 #else
-#define DIR_SLASH_CHR '/'
-#define DIR_SLASH_STR "/"
+#define DIR_SLASH '/'
 #endif
 
 extern char romfile[FILENAME_MAX];
