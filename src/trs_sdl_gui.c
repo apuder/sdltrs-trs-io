@@ -1067,80 +1067,84 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
         break;
       case SDLK_DELETE:
       case SDLK_BACKSPACE:
-        if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
-            (entry[selection].type == MENU_HARD_BROWSE_TYPE) ||
-            (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
-            (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
-          if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
+        switch (entry[selection].type) {
+          case MENU_FLOPPY_BROWSE_TYPE:
             trs_disk_remove(selection);
-          } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE) {
+            break;
+          case MENU_HARD_BROWSE_TYPE:
             trs_hard_remove(selection);
-          } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
+            break;
+          case MENU_WAFER_BROWSE_TYPE:
             stringy_remove(selection);
-          } else {
+            break;
+          case MENU_CASS_BROWSE_TYPE:
             trs_cassette_remove();
-          }
+            break;
+        }
+        if (entry[selection].type != MENU_NORMAL_TYPE) {
           entry[selection].title[0] = ' ';
           return selection;
         }
         break;
       case SDLK_RETURN:
       case SDLK_TAB:
-        if ((entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) ||
-            (entry[selection].type == MENU_HARD_BROWSE_TYPE) ||
-            (entry[selection].type == MENU_WAFER_BROWSE_TYPE) ||
-            (entry[selection].type == MENU_CASS_BROWSE_TYPE)) {
-          if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
+        switch (entry[selection].type) {
+          case MENU_FLOPPY_BROWSE_TYPE:
             if (trs_gui_file_browse(trs_disk_getfilename(selection)[0] == 0 ?
                 trs_disk_dir : trs_disk_getfilename(selection), filename, NULL,
                 0, " Floppy Disk Image ") >= 0)
               trs_disk_insert(selection, filename);
-          } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE) {
+            break;
+          case MENU_HARD_BROWSE_TYPE:
             if (trs_gui_file_browse(trs_hard_getfilename(selection)[0] == 0 ?
                 trs_hard_dir : trs_hard_getfilename(selection), filename, NULL,
                 0, " Hard Disk Image ") >= 0)
               trs_hard_attach(selection, filename);
-          } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
+            break;
+          case MENU_WAFER_BROWSE_TYPE:
             if (trs_gui_file_browse(stringy_get_name(selection)[0] == 0 ?
                 trs_cass_dir : stringy_get_name(selection), filename, NULL,
                 0, " Wafer Image ") >= 0)
               stringy_insert(selection, filename);
-          } else {
+            break;
+          case MENU_CASS_BROWSE_TYPE:
             if (trs_gui_file_browse(trs_cassette_getfilename()[0] == 0 ?
                 trs_cass_dir : trs_cassette_getfilename(), filename, NULL,
                 0, " Cassette Image ") >= 0)
               trs_cassette_insert(filename);
-          }
+            break;
         }
         return selection;
-        break;
       case SDLK_SPACE:
-        if (entry[selection].type == MENU_FLOPPY_BROWSE_TYPE) {
-          if (trs_disk_getwriteprotect(selection))
-            trs_protect_disk(selection, 0);
-          else
-            trs_protect_disk(selection, 1);
-        } else if (entry[selection].type == MENU_HARD_BROWSE_TYPE) {
-          if (trs_hard_getwriteprotect(selection))
-            trs_protect_hard(selection, 0);
-          else
-            trs_protect_hard(selection, 1);
-        } else if (entry[selection].type == MENU_CASS_BROWSE_TYPE) {
-          if (trs_cass_getwriteprotect())
-            trs_protect_cass(0);
-          else
-            trs_protect_cass(1);
-        } else if (entry[selection].type == MENU_WAFER_BROWSE_TYPE) {
-          if (stringy_get_writeprotect(selection))
-            trs_protect_stringy(selection, 0);
-          else
-            trs_protect_stringy(selection, 1);
+        switch (entry[selection].type) {
+          case MENU_FLOPPY_BROWSE_TYPE:
+            if (trs_disk_getwriteprotect(selection))
+              trs_protect_disk(selection, 0);
+            else
+              trs_protect_disk(selection, 1);
+            break;
+          case MENU_HARD_BROWSE_TYPE:
+            if (trs_hard_getwriteprotect(selection))
+              trs_protect_hard(selection, 0);
+            else
+              trs_protect_hard(selection, 1);
+            break;
+          case MENU_CASS_BROWSE_TYPE:
+            if (trs_cass_getwriteprotect())
+              trs_protect_cass(0);
+            else
+              trs_protect_cass(1);
+            break;
+          case MENU_WAFER_BROWSE_TYPE:
+            if (stringy_get_writeprotect(selection))
+              trs_protect_stringy(selection, 0);
+            else
+              trs_protect_stringy(selection, 1);
+            break;
         }
         return selection;
-        break;
       case SDLK_ESCAPE:
         return -1;
-        break;
     }
   }
 }
