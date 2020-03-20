@@ -952,14 +952,14 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
 int trs_gui_display_popup(const char* title, const char **entry,
                           int entry_count, int selection)
 {
-  int num = 0, i, key;
+  int i, key;
   int first_x, first_y;
   int const saved_selection = selection;
   unsigned int max_len = 0;
 
-  for (num = 0; num < entry_count; num++) {
-    if (strlen(entry[num]) > max_len)
-      max_len = strlen(entry[num]);
+  for (i = 0; i < entry_count; i++) {
+    if (strlen(entry[i]) > max_len)
+      max_len = strlen(entry[i]);
   }
   first_x = (64 - max_len) / 2;
   first_y = (16 - entry_count) / 2;
@@ -967,8 +967,8 @@ int trs_gui_display_popup(const char* title, const char **entry,
   trs_gui_frame(first_x - 1, first_y - 1, max_len + 2, entry_count + 2);
   trs_gui_write_text(title, first_x + 1, first_y - 1, 0);
 
-  for (num = 0; num < entry_count; num++)
-    trs_gui_write_text(entry[num], first_x, first_y + num, 0);
+  for (i = 0; i < entry_count; i++)
+    trs_gui_write_text(entry[i], first_x, first_y + i, 0);
 
   while (1) {
     trs_gui_write_text(entry[selection], first_x, selection + first_y, 1);
@@ -980,7 +980,7 @@ int trs_gui_display_popup(const char* title, const char **entry,
       if (tolower(key) == 'y') return 1;
     }
     if (key >= '0' && key <= 'z') {
-      for (i = 0; i < num; i++) {
+      for (i = 0; i < entry_count; i++) {
         if (strchr(entry[i], toupper(key))) {
           selection = i;
           break;
