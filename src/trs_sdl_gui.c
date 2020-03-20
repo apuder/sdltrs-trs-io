@@ -174,7 +174,7 @@ void trs_gui_write_text(const char *text, int x, int y, int invert)
   int const position = x + (y << 6);
   int i;
 
-  for (i = 0; i < (strlen(text) <= 62 - x ? strlen(text) : 62 - x); i++)
+  for (i = 0; i < ((int)strlen(text) <= 62 - x ? (int)strlen(text) : 62 - x); i++)
     trs_gui_write_char(position + i, text[i], invert);
 }
 
