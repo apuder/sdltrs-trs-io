@@ -68,6 +68,7 @@
 #define N_KEYS        52
 #define SHIFT         39
 
+static char filename[FILENAME_MAX];
 static char **filenamelist = NULL;
 static int filenamecount = 0;
 static int filenamelistsize = 0;
@@ -122,18 +123,18 @@ int jaxis_mapped = 0;
 
 extern int  scanlines;
 extern void trs_gui_write_char(int position, int char_index, int invert);
-extern int  trs_sdl_savebmp(const char *filename);
+extern int  trs_sdl_savebmp(const char *name);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x, int y, int w, int h);
 static void trs_gui_clear_rect(int x, int y, int w, int h);
 static void trs_gui_clear_screen(void);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
-static void trs_add_extension(char *filename, const char *ext);
+static void trs_add_extension(char *name, const char *ext);
 static int  trs_gui_get_key(void);
 static void trs_gui_display_message(const char *title, const char *message);
 static void trs_gui_create_filename_list(void);
-static void trs_gui_add_to_filename_list(char *filename);
+static void trs_gui_add_to_filename_list(char *name);
 static int  trs_gui_filename_cmp(const char *name1, const char *name2);
 static void trs_gui_quicksort(char **start, char **end, int (*sort_function) ());
 static void trs_gui_delete_filename_list(void);
@@ -235,16 +236,16 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
     snprintf(limited, limit + 1, "%s", orig);
 }
 
-void trs_add_extension(char *filename, const char *ext)
+void trs_add_extension(char *name, const char *ext)
 {
-  int const flen = strlen(filename);
+  int const flen = strlen(name);
   int const elen = strlen(ext);
 
   if (flen > elen)
-    if (strcasecmp(&filename[flen - elen], ext) == 0)
+    if (strcasecmp(&name[flen - elen], ext) == 0)
       return;
 
-  snprintf(filename + flen, FILENAME_MAX - flen, "%s", ext);
+  snprintf(name + flen, FILENAME_MAX - flen, "%s", ext);
 }
 
 int trs_gui_get_key(void)
@@ -417,9 +418,9 @@ void trs_gui_create_filename_list(void)
   }
 }
 
-void trs_gui_add_to_filename_list(char *filename)
+void trs_gui_add_to_filename_list(char *name)
 {
-  filenamelist[filenamecount++] = filename;
+  filenamelist[filenamecount++] = name;
   if (filenamecount == filenamelistsize) {
     char **filenamelist_new;
 
@@ -502,13 +503,13 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
 {
   DIR *directory = NULL;
   char pathname[FILENAME_MAX];
-  char *filename;
-  char *filename_pos;
+  char *name;
+  char *name_pos;
   struct dirent *dir_entry;
   struct stat st;
 
   snprintf(pathname, FILENAME_MAX, "%s", path);
-  filename_pos = pathname + strlen(path);
+  name_pos = pathname + strlen(path);
 
   directory = opendir(path);
   if (directory) {
@@ -518,13 +519,13 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       if (strcmp(dir_entry->d_name, ".") == 0)
         continue;
 
-      snprintf(filename_pos, FILENAME_MAX, "%s", dir_entry->d_name);
+      snprintf(name_pos, FILENAME_MAX, "%s", dir_entry->d_name);
       stat(pathname, &st);
       if ((st.st_mode & S_IFMT) == S_IFDIR) {
         int const dirname_len = strlen(dir_entry->d_name);
 
-        if ( (filename = (char *) malloc(dirname_len + 3)) ) {
-          snprintf(filename, dirname_len + 3, "<%s>", dir_entry->d_name);
+        if ( (name = (char *) malloc(dirname_len + 3)) ) {
+          snprintf(name, dirname_len + 3, "<%s>", dir_entry->d_name);
         }
       } else if (browse_dir) {
         continue;
@@ -535,11 +536,11 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
           if (strcasecmp(&dir_entry->d_name[strlen(dir_entry->d_name) - 4], mask) != 0)
             continue;
         }
-        filename = (char *) strdup(dir_entry->d_name);
+        name = (char *) strdup(dir_entry->d_name);
       }
-      if (!filename)
+      if (!name)
         return -1;
-      trs_gui_add_to_filename_list(filename);
+      trs_gui_add_to_filename_list(name);
     }
     closedir(directory);
 #ifdef _WIN32
@@ -566,7 +567,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
   return -1;
 }
 
-int trs_gui_file_browse(const char* path, char* filename, const char *mask,
+int trs_gui_file_browse(const char* path, char* name, const char *mask,
                         int browse_dir, const char* type)
 {
   char current_dir[FILENAME_MAX];
@@ -765,27 +766,27 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 done:
   if (selection >= 0) {
     selection += current_first;
-    snprintf(filename, FILENAME_MAX, "%s", current_dir);
+    snprintf(name, FILENAME_MAX, "%s", current_dir);
     if (browse_dir) {
       new_dir = filenamelist[selection];
       if (new_dir[1] != '.' && new_dir[2] != '.') {
 #ifdef _WIN32
         if (new_dir[0] == '[') {
-          filename[0] = new_dir[1];
-          filename[1] = new_dir[2];
-          filename[2] = '\\';
-          filename[3] = 0;
+          name[0] = new_dir[1];
+          name[1] = new_dir[2];
+          name[2] = '\\';
+          name[3] = 0;
         } else
 #endif
         {
-          snprintf(filename + strlen(filename), FILENAME_MAX - strlen(filename),
+          snprintf(name + strlen(name), FILENAME_MAX - strlen(name),
               "%s", &new_dir[1]);
-          filename[strlen(filename) - 1] = DIR_SLASH_CHR;
+          filename[strlen(name) - 1] = DIR_SLASH_CHR;
         }
       }
     }
     else
-      snprintf(filename + strlen(filename), FILENAME_MAX - strlen(filename),
+      snprintf(name + strlen(name), FILENAME_MAX - strlen(name),
           "%s", filenamelist[selection]);
   }
   trs_gui_delete_filename_list();
@@ -998,7 +999,6 @@ int trs_gui_display_popup(const char* title, const char **entry,
 
 int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
 {
-  char filename[FILENAME_MAX];
   int num = 0, i, key;
 
   trs_gui_frame(0, 0, 64, 16);
@@ -1161,7 +1161,6 @@ void trs_gui_disk_creation(void)
   const char *drive_choices[9] =      {"  None", "Disk 0", "Disk 1", "Disk 2",
                                        "Disk 3", "Disk 4", "Disk 5", "Disk 6",
                                        "Disk 7"};
-  char filename[FILENAME_MAX];
   int selection = 6;
   int ret;
   static int image_type = 1;
@@ -1342,8 +1341,6 @@ void trs_gui_disk_options(void)
 
 void trs_gui_diskset_load(void)
 {
-  char filename[FILENAME_MAX];
-
   if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, " Disk Set ") >= 0) {
     if (trs_diskset_load(filename) == -1)
       trs_gui_display_message("Error", "Failed to load Disk Set");
@@ -1352,8 +1349,7 @@ void trs_gui_diskset_load(void)
 
 void trs_gui_diskset_save(void)
 {
-  char filename[FILENAME_MAX];
-
+  filename[0] = 0;
   if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
       trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".set");
@@ -1438,7 +1434,6 @@ void trs_gui_hard_management(void)
   static int dir_sector = 1;
   static int drive_insert = 0;
   const char *drive_choices[5] = {"  None", "Hard 0", "Hard 1", "Hard 2", "Hard 3"};
-  char filename[FILENAME_MAX];
   char input[4];
   int selection = 0;
   int i, value;
@@ -1579,7 +1574,6 @@ void trs_gui_stringy_management(void)
    {"", 0}};
   const char *wafer_choices[9] = {"   None", "Wafer 0", "Wafer 1", "Wafer 2", "Wafer 3",
                                   "Wafer 4", "Wafer 5", "Wafer 6", "Wafer 7"};
-  char filename[FILENAME_MAX];
   int selection = 0;
   int i;
   static int wafer_insert = 0;
@@ -1644,7 +1638,6 @@ void trs_gui_cassette_management(void)
   static int image_type = 0;
   static int drive_insert = 1;
   char input[12];
-  char filename[FILENAME_MAX];
   int selection = 0;
   int ret;
   int value;
@@ -2134,7 +2127,7 @@ void trs_gui_misc_management(void)
    {"                                                            ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *on_off_choices[2] = {"      Off", "       On"};
-  char input[FILENAME_MAX];
+  char input[12];
   int selection = 0;
 
   while (1) {
@@ -2190,8 +2183,10 @@ void trs_gui_misc_management(void)
         }
         break;
       case 8:
-        if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name, input, FILENAME_MAX - 1, 0) == 0) {
-          snprintf(trs_uart_name, FILENAME_MAX, "%s", input);
+        filename[0] = 0;
+        if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name,
+            filename, FILENAME_MAX - 1, 0) == 0) {
+          snprintf(trs_uart_name, FILENAME_MAX, "%s", filename);
           trs_uart_init(0);
         }
         break;
@@ -2213,7 +2208,6 @@ void trs_gui_printer_management(void)
    {"   ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *printer_choices[2] = {"     None", "     Text"};
-  char input[FILENAME_MAX];
   int selection = 0;
 
   while (1) {
@@ -2234,8 +2228,10 @@ void trs_gui_printer_management(void)
           trs_gui_display_message("Warning", "No Printer Output in File");
         break;
       case 3:
-        if (trs_gui_input_string("Enter Printer Command", trs_printer_command, input, FILENAME_MAX - 1, 0) == 0)
-          snprintf(trs_printer_command, FILENAME_MAX, "%s", input);
+        filename[0] = 0;
+        if (trs_gui_input_string("Enter Printer Command", trs_printer_command,
+            filename, FILENAME_MAX - 1, 0) == 0)
+          snprintf(trs_printer_command, FILENAME_MAX, "%s", filename);
         break;
       case -1:
         return;
@@ -2503,8 +2499,7 @@ int trs_gui_exit_sdltrs(void)
 
 void trs_gui_save_bmp(void)
 {
-  char filename[FILENAME_MAX];
-
+  filename[0] = 0;
   if (trs_gui_input_string("Save Screenshot, TAB selects directory",
                            trs_printer_dir, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".bmp");
@@ -2517,8 +2512,7 @@ void trs_gui_save_bmp(void)
 
 void trs_gui_write_config(void)
 {
-  char filename[FILENAME_MAX];
-
+  filename[0] = 0;
   if (trs_gui_input_string("Write Configuration File, TAB selects directory",
                            trs_config_file, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8c");
@@ -2577,8 +2571,6 @@ static int trs_gui_config_management(void)
 
 void trs_gui_save_state(void)
 {
-  char filename[FILENAME_MAX];
-
   filename[0] = 0;
   if (trs_gui_input_string("Save Emulator State, TAB selects directory",
       init_state_file[0] != 0 ? init_state_file : trs_state_dir, filename, FILENAME_MAX - 5, 1) == 0) {
@@ -2590,8 +2582,6 @@ void trs_gui_save_state(void)
 
 int trs_gui_load_state(void)
 {
-  char filename[FILENAME_MAX];
-
   if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0, " Saved State (.t8s) ") >= 0) {
     if (trs_state_load(filename) == 0)
       return 0;
