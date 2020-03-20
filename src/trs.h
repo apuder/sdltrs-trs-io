@@ -65,6 +65,14 @@
 #define DEFAULT_SAMPLE_RATE 44100  /* samples/sec to use for .wav files */
 #define MAX_JOYSTICKS 8
 
+#ifdef _WIN32
+#define DIR_SLASH_CHR '\\'
+#define DIR_SLASH_STR "\\"
+#else
+#define DIR_SLASH_CHR '/'
+#define DIR_SLASH_STR "/"
+#endif
+
 extern char romfile[FILENAME_MAX];
 extern char romfile3[FILENAME_MAX];
 extern char romfile4p[FILENAME_MAX];

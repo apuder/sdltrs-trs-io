@@ -583,11 +583,7 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
   snprintf(current_dir, FILENAME_MAX - 1, "%s", path);
 
   for (i = strlen(current_dir); i > 0; i--) {
-#ifdef _WIN32
-    if (current_dir[i] == '\\') {
-#else
-    if (current_dir[i] == '/') {
-#endif
+    if (current_dir[i] == DIR_SLASH_CHR) {
       current_dir[i + 1] = 0;
       break;
     }
@@ -598,13 +594,8 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
       error("getcwd: %s", current_dir);
   }
-#ifdef _WIN32
-  if (current_dir[strlen(current_dir) - 1] != '\\')
-    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), "\\");
-#else
-  if (current_dir[strlen(current_dir) - 1] != '/')
-    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), "/");
-#endif
+  if (current_dir[strlen(current_dir) - 1] != DIR_SLASH_CHR)
+    snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir), DIR_SLASH_STR);
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return -1;
 
@@ -710,39 +701,26 @@ int trs_gui_file_browse(const char* path, char* filename, const char *mask,
 
             if (new_dir[1] == '.' && new_dir[2] == '.') {
               for (i = strlen(current_dir) - 2; i >= 0; i--) {
-#ifdef _WIN32
-                if (current_dir[i] == '\\') {
-#else
-                if (current_dir[i] == '/') {
-#endif
+                if (current_dir[i] == DIR_SLASH_CHR) {
                   current_dir[i + 1] = 0;
                   break;
                 }
               }
               if (i < 0 &&
 #ifdef _WIN32
-                current_dir[2] != '\\') {
+                current_dir[2] != DIR_SLASH_CHR) {
 #else
-                current_dir[0] != '/') {
+                current_dir[0] != DIR_SLASH_CHR) {
 #endif
                 if (getcwd(current_dir, FILENAME_MAX) == NULL)
                   error("getcwd: %s", current_dir);
-#ifdef _WIN32
                 snprintf(current_dir + strlen(current_dir),
-                    FILENAME_MAX - strlen(current_dir), "\\");
-#else
-                snprintf(current_dir + strlen(current_dir),
-                    FILENAME_MAX - strlen(current_dir), "/");
-#endif
+                    FILENAME_MAX - strlen(current_dir), DIR_SLASH_STR);
               }
             } else {
               snprintf(current_dir + strlen(current_dir),
                   FILENAME_MAX - strlen(current_dir), "%s", &new_dir[1]);
-#ifdef _WIN32
-              current_dir[strlen(current_dir) - 1] = '\\';
-#else
-              current_dir[strlen(current_dir) - 1] = '/';
-#endif
+              current_dir[strlen(current_dir) - 1] = DIR_SLASH_CHR;
             }
 
             trs_gui_delete_filename_list();
@@ -802,11 +780,7 @@ done:
         {
           snprintf(filename + strlen(filename), FILENAME_MAX - strlen(filename),
               "%s", &new_dir[1]);
-#ifdef _WIN32
-          filename[strlen(filename) - 1] = '\\';
-#else
-          filename[strlen(filename) - 1] = '/';
-#endif
+          filename[strlen(filename) - 1] = DIR_SLASH_CHR;
         }
       }
     }
