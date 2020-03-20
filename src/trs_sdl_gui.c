@@ -2518,6 +2518,8 @@ void trs_gui_write_config(void)
     trs_add_extension(filename, ".t8c");
     if (trs_write_config_file(filename) == -1)
       trs_gui_display_message("Error", "Failed to write Configuration");
+    else
+      snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
   }
 }
 
@@ -2577,6 +2579,8 @@ void trs_gui_save_state(void)
     trs_add_extension(filename, ".t8s");
     if (trs_state_save(filename) == -1)
       trs_gui_display_message("Error", "Failed to save State");
+    else
+      snprintf(init_state_file, FILENAME_MAX, "%s", filename);
   }
 }
 
