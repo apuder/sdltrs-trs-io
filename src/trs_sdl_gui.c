@@ -165,6 +165,7 @@ static void trs_gui_joystick_display_map(int show_active);
 static const char *trs_gui_get_key_name(int key);
 static int  trs_gui_virtual_keyboard(void);
 static int  trs_gui_display_question(const char *text);
+static int  trs_gui_file_overwrite(void);
 void trs_gui_keys_sdltrs(void);
 void trs_gui_model(void);
 int  trs_gui_exit_sdltrs(void);
@@ -1981,6 +1982,17 @@ int trs_gui_display_question(const char *text)
   return trs_gui_display_popup(text, answer_choices, 2, 0);
 }
 
+int trs_gui_file_overwrite(void)
+{
+  FILE *file = fopen(filename, "r");
+
+  if (file != NULL) {
+    fclose(file);
+    return trs_gui_display_question("Overwrite file?");
+  }
+  return 1;
+}
+
 void trs_gui_joystick_management(void)
 {
   MENU_ENTRY display_menu[] =
@@ -2487,8 +2499,10 @@ void trs_gui_save_bmp(void)
     trs_add_extension(filename, ".bmp");
     trs_screen_refresh();
     trs_sdl_flush();
-    if (trs_sdl_savebmp(filename) != 0)
-      trs_gui_display_message("Error", "Failed to save Screenshot");
+    if (trs_gui_file_overwrite()) {
+      if (trs_sdl_savebmp(filename) != 0)
+        trs_gui_display_message("Error", "Failed to save Screenshot");
+    }
   }
 }
 
@@ -2498,10 +2512,12 @@ void trs_gui_write_config(void)
   if (trs_gui_input_string("Write Configuration File, TAB selects directory",
       trs_config_file, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8c");
-    if (trs_write_config_file(filename) == -1)
-      trs_gui_display_message("Error", "Failed to write Configuration");
-    else
-      snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
+    if (trs_gui_file_overwrite()) {
+      if (trs_write_config_file(filename) == -1)
+        trs_gui_display_message("Error", "Failed to write Configuration");
+      else
+        snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
+    }
   }
 }
 
@@ -2558,10 +2574,12 @@ void trs_gui_save_state(void)
   if (trs_gui_input_string("Save Emulator State, TAB selects directory",
       init_state_file[0] != 0 ? init_state_file : trs_state_dir, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8s");
-    if (trs_state_save(filename) == -1)
-      trs_gui_display_message("Error", "Failed to save State");
-    else
-      snprintf(init_state_file, FILENAME_MAX, "%s", filename);
+    if (trs_gui_file_overwrite()) {
+      if (trs_state_save(filename) == -1)
+        trs_gui_display_message("Error", "Failed to save State");
+      else
+        snprintf(init_state_file, FILENAME_MAX, "%s", filename);
+    }
   }
 }
 
