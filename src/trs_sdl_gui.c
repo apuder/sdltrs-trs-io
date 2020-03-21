@@ -878,10 +878,8 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_RETURN:
         output[length] = 0;
         return 0;
-        break;
       case SDLK_ESCAPE:
         return -1;
-        break;
       case SDLK_DOWN:
       case SDLK_TAB:
       case SDLK_UP:
@@ -992,10 +990,8 @@ int trs_gui_display_popup(const char* title, const char **entry,
       case SDLK_SPACE:
       case SDLK_TAB:
         return selection;
-        break;
       case SDLK_ESCAPE:
         return saved_selection;
-        break;
     }
   }
 }
@@ -1231,7 +1227,6 @@ void trs_gui_disk_creation(void)
         break;
       case -1:
         return;
-        break;
     }
   }
 }
@@ -1339,7 +1334,6 @@ void trs_gui_disk_options(void)
 #endif
       case -1:
         return;
-        break;
     }
   }
 }
@@ -1411,7 +1405,6 @@ void trs_gui_disk_management(void)
         break;
       case -1:
         return;
-        break;
     }
   }
 }
@@ -1551,7 +1544,6 @@ void trs_gui_hard_management(void)
         break;
       case -1:
         return;
-        break;
     }
   }
 }
@@ -1618,7 +1610,6 @@ void trs_gui_stringy_management(void)
         break;
       case -1:
         return;
-        break;
     }
   }
 }
@@ -1720,7 +1711,6 @@ void trs_gui_cassette_management(void)
         break;
       case -1:
         return;
-        break;
     }
   }
 }
@@ -1904,8 +1894,7 @@ void trs_gui_display_management(void)
           window_border_width = gui_border_width;
           trs_screen_init();
         }
-      return;
-      break;
+        return;
     }
   }
 }
@@ -1948,7 +1937,6 @@ int trs_gui_joystick_get_button(void)
           return -1;
         }
         return event.jbutton.button;
-        break;
     }
   }
   return -1;
@@ -2108,7 +2096,6 @@ void trs_gui_joystick_management(void)
           trs_open_joystick();
         }
         return;
-        break;
     }
   }
 }
@@ -2194,7 +2181,6 @@ void trs_gui_misc_management(void)
         trs_kb_bracket(trs_kb_bracket_state);
         trs_screen_caption();
         return;
-        break;
     }
   }
 }
@@ -2235,7 +2221,6 @@ void trs_gui_printer_management(void)
         break;
       case -1:
         return;
-        break;
     }
   }
 }
@@ -2285,13 +2270,6 @@ void trs_gui_model(void)
 
     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu", model_menu, selection);
     switch (selection) {
-      case -1:
-        if (trs_model != local_trs_model) {
-          trs_model = local_trs_model;
-          trs_gui_new_machine();
-        }
-        return;
-        break;
       case 0:
         model_selection = trs_gui_display_popup("Model", model_choices, 4,
             model_selection);
@@ -2341,6 +2319,12 @@ void trs_gui_model(void)
         if (selector)
           supermem = 0;
         break;
+      case -1:
+        if (trs_model != local_trs_model) {
+          trs_model = local_trs_model;
+          trs_gui_new_machine();
+        }
+        return;
     }
   }
 }
@@ -2375,9 +2359,6 @@ void trs_gui_default_dirs(void)
 
     selection = trs_gui_display_menu("SDLTRS Default Directory Menu", default_menu, selection);
     switch (selection) {
-      case -1:
-        return;
-        break;
       case 1:
         trs_gui_file_browse(trs_disk_dir, trs_disk_dir, NULL, 1, " Floppy Disk ");
         break;
@@ -2396,6 +2377,8 @@ void trs_gui_default_dirs(void)
       case 11:
         trs_gui_file_browse(trs_printer_dir, trs_printer_dir, NULL, 1, " Printer Output ");
         break;
+      case -1:
+        return;
     }
   }
 }
@@ -2422,9 +2405,6 @@ void trs_gui_rom_files(void)
 
     selection = trs_gui_display_menu("SDLTRS ROM File Selection Menu", romfile_menu, selection);
     switch (selection) {
-      case -1:
-        return;
-        break;
       case 1:
         trs_gui_file_browse(romfile, romfile, NULL, 0, " Model 1 ROM ");
         break;
@@ -2434,6 +2414,8 @@ void trs_gui_rom_files(void)
       case 7:
         trs_gui_file_browse(romfile4p, romfile4p, NULL, 0, " Model 4P ROM ");
         break;
+      case -1:
+        return;
     }
   }
 }
@@ -2566,7 +2548,6 @@ static int trs_gui_config_management(void)
         break;
       case -1:
         return 0;
-        break;
     }
   }
 }
@@ -2630,9 +2611,6 @@ void trs_gui(void)
 
     selection = trs_gui_display_menu("SDLTRS Main Menu", main_menu, selection);
     switch (selection) {
-      case -1:
-        return;
-        break;
       case 0:
         trs_gui_disk_management();
         break;
@@ -2674,6 +2652,8 @@ void trs_gui(void)
       case 12:
         trs_gui_about_sdltrs();
         break;
+      case -1:
+        return;
     }
   }
 }
@@ -2754,10 +2734,8 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
       case SDLK_SPACE:
       case SDLK_TAB:
         return selection;
-        break;
       case SDLK_ESCAPE:
         return -1;
-        break;
     }
   }
 }
