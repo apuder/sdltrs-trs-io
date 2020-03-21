@@ -2730,8 +2730,8 @@ void trs_screen_refresh(void)
       destRect.y = top_margin + duny;
       destRect.w = srcRect.w;
       destRect.h = srcRect.h;
-      addToDrawList(&destRect);
       SDL_BlitSurface(image, &srcRect, screen, &destRect);
+      addToDrawList(&destRect);
       if (dunx < cur_char_width * row_chars) {
         srcRect.x = 0;
         srcRect.y = 0;
@@ -2741,8 +2741,8 @@ void trs_screen_refresh(void)
         destRect.y = top_margin + duny;
         destRect.w = srcRect.w;
         destRect.h = srcRect.h;
-        addToDrawList(&destRect);
         SDL_BlitSurface(image, &srcRect, screen, &destRect);
+        addToDrawList(&destRect);
       }
     }
   } else {
@@ -2936,8 +2936,8 @@ void trs_screen_write_char(int position, int char_index)
     destRect.y = desty;
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
-    addToDrawList(&destRect);
     TrsSoftBlit(image, &srcRect, screen, &destRect, 1);
+    addToDrawList(&destRect);
     /* Draw wrapped portion if any */
     if (duny < cur_char_height) {
       srcRect.x = srcx;
@@ -2948,8 +2948,8 @@ void trs_screen_write_char(int position, int char_index)
       destRect.y = desty + duny;
       destRect.w = srcRect.w;
       destRect.h = srcRect.h;
-      addToDrawList(&destRect);
       TrsSoftBlit(image, &srcRect, screen, &destRect, 1);
+      addToDrawList(&destRect);
     }
   }
   if (hrg_enable)
@@ -3074,8 +3074,8 @@ static void grafyx_write_byte(int x, int y, char byte)
     destRect.y = top_margin + screen_y * (scale * 2);
     destRect.w = srcRect.w;
     destRect.h = srcRect.h;
-    addToDrawList(&destRect);
     TrsSoftBlit(image, &srcRect, screen, &destRect, grafyx_overlay);
+    addToDrawList(&destRect);
   }
 }
 
