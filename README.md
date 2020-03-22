@@ -22,10 +22,10 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 ## Packages
 
-  * [sdltrs_1.2.7-1_i386.deb]    (32-bit, SDL)
-  * [sdl2trs_1.2.7-1_i386.deb]   (32-bit, SDL2)
-  * [sdltrs_1.2.7-1_amd64.deb]   (64-bit, SDL)
-  * [sdl2trs_1.2.7-1_amd64.deb]  (64-bit, SDL2)
+  * [sdltrs_1.2.8-1_i386.deb]    (32-bit, SDL)
+  * [sdl2trs_1.2.8-1_i386.deb]   (32-bit, SDL2)
+  * [sdltrs_1.2.8-1_amd64.deb]   (64-bit, SDL)
+  * [sdl2trs_1.2.8-1_amd64.deb]  (64-bit, SDL2)
 
 (Build on Debian 9/i386 & Ubuntu 18.04LTS/amd64)
 
@@ -52,7 +52,7 @@ are build on the *master* branch ...
 [sdltrs.exe]: bin/sdltrs.exe
 [sdl2trs.exe]: bin/sdl2trs.exe
 [sdl2trs64.exe]: bin/sdl2trs64.exe
-[sdltrs_1.2.7-1_i386.deb]: bin/sdltrs_1.2.7-1_i386.deb
-[sdl2trs_1.2.7-1_i386.deb]: bin/sdl2trs_1.2.7-1_i386.deb
-[sdltrs_1.2.7-1_amd64.deb]: bin/sdltrs_1.2.7-1_amd64.deb
-[sdl2trs_1.2.7-1_amd64.deb]: bin/sdl2trs_1.2.7-1_amd64.deb
+[sdltrs_1.2.8-1_i386.deb]: bin/sdltrs_1.2.8-1_i386.deb
+[sdl2trs_1.2.8-1_i386.deb]: bin/sdl2trs_1.2.8-1_i386.deb
+[sdltrs_1.2.8-1_amd64.deb]: bin/sdltrs_1.2.8-1_amd64.deb
+[sdl2trs_1.2.8-1_amd64.deb]: bin/sdl2trs_1.2.8-1_amd64.deb
