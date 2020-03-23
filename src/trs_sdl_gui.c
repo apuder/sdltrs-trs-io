@@ -1115,28 +1115,16 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
       case SDLK_SPACE:
         switch (entry[selection].type) {
           case MENU_FLOPPY_BROWSE_TYPE:
-            if (trs_disk_getwriteprotect(selection))
-              trs_protect_disk(selection, 0);
-            else
-              trs_protect_disk(selection, 1);
+            trs_protect_disk(selection, !trs_disk_getwriteprotect(selection));
             break;
           case MENU_HARD_BROWSE_TYPE:
-            if (trs_hard_getwriteprotect(selection))
-              trs_protect_hard(selection, 0);
-            else
-              trs_protect_hard(selection, 1);
+            trs_protect_hard(selection, !trs_hard_getwriteprotect(selection));
             break;
           case MENU_CASS_BROWSE_TYPE:
-            if (trs_cass_getwriteprotect())
-              trs_protect_cass(0);
-            else
-              trs_protect_cass(1);
+            trs_protect_cass(!trs_cass_getwriteprotect());
             break;
           case MENU_WAFER_BROWSE_TYPE:
-            if (stringy_get_writeprotect(selection))
-              trs_protect_stringy(selection, 0);
-            else
-              trs_protect_stringy(selection, 1);
+            trs_protect_stringy(selection, !stringy_get_writeprotect(selection));
             break;
         }
         return selection;
