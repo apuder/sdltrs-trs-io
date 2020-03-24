@@ -2165,7 +2165,7 @@ void trs_get_event(int wait)
                 char filename[FILENAME_MAX];
 
                 if (trs_gui_file_browse(trs_disk_dir, filename, NULL, 0,
-                      " Floppy Disk Image ") != -1)
+                      "Floppy Disk Image") != -1)
                   trs_disk_insert(keysym.sym - SDLK_0, filename);
                 trs_screen_refresh();
                 trs_sdl_flush();

@@ -608,11 +608,11 @@ int trs_gui_file_browse(const char* path, char* name, const char *mask,
   trs_gui_clear_screen();
   trs_gui_frame(0, 0, 64, 16);
   if (browse_dir) {
-    snprintf(title, 63, "Choose%sDirectory", type);
+    snprintf(title, 63, "Choose %sDirectory", type);
     trs_gui_center_text("TAB selects directory", 15, 1);
   }
   else
-    snprintf(title, 63, "Select%sFile To Load", type);
+    snprintf(title, 63, "Select %s File To Load", type);
   trs_gui_write_text(title, 2, 0, 0);
 
   while (1) {
@@ -885,7 +885,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
-          if (trs_gui_file_browse(input, directory_name, NULL, 1, " ") >= 0) {
+          if (trs_gui_file_browse(input, directory_name, NULL, 1, "") >= 0) {
             snprintf(output, limit + 1, "%s", directory_name);
             pos = length = strlen(output);
             if (pos > 60)
@@ -1089,25 +1089,25 @@ int trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection)
           case MENU_FLOPPY_BROWSE_TYPE:
             if (trs_gui_file_browse(trs_disk_getfilename(selection)[0] == 0 ?
                 trs_disk_dir : trs_disk_getfilename(selection), filename, NULL,
-                0, " Floppy Disk Image ") >= 0)
+                0, "Floppy Disk Image") >= 0)
               trs_disk_insert(selection, filename);
             break;
           case MENU_HARD_BROWSE_TYPE:
             if (trs_gui_file_browse(trs_hard_getfilename(selection)[0] == 0 ?
                 trs_hard_dir : trs_hard_getfilename(selection), filename, NULL,
-                0, " Hard Disk Image ") >= 0)
+                0, "Hard Disk Image") >= 0)
               trs_hard_attach(selection, filename);
             break;
           case MENU_WAFER_BROWSE_TYPE:
             if (trs_gui_file_browse(stringy_get_name(selection)[0] == 0 ?
                 trs_cass_dir : stringy_get_name(selection), filename, NULL,
-                0, " Wafer Image ") >= 0)
+                0, "Wafer Image") >= 0)
               stringy_insert(selection, filename);
             break;
           case MENU_CASS_BROWSE_TYPE:
             if (trs_gui_file_browse(trs_cassette_getfilename()[0] == 0 ?
                 trs_cass_dir : trs_cassette_getfilename(), filename, NULL,
-                0, " Cassette Image ") >= 0)
+                0, "Cassette Image") >= 0)
               trs_cassette_insert(filename);
             break;
         }
@@ -1329,7 +1329,7 @@ void trs_gui_disk_options(void)
 
 void trs_gui_diskset_load(void)
 {
-  if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, " Disk Set ") >= 0) {
+  if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, "Disk Set") >= 0) {
     if (trs_diskset_load(filename) == -1)
       trs_gui_display_message("Error", "Failed to load Disk Set");
   }
@@ -2360,22 +2360,22 @@ void trs_gui_default_dirs(void)
     selection = trs_gui_display_menu("SDLTRS Default Directory Menu", default_menu, selection);
     switch (selection) {
       case 1:
-        trs_gui_file_browse(trs_disk_dir, trs_disk_dir, NULL, 1, " Floppy Disk ");
+        trs_gui_file_browse(trs_disk_dir, trs_disk_dir, NULL, 1, "Floppy Disk ");
         break;
       case 3:
-        trs_gui_file_browse(trs_hard_dir, trs_hard_dir, NULL, 1, " Hard Disk ");
+        trs_gui_file_browse(trs_hard_dir, trs_hard_dir, NULL, 1, "Hard Disk ");
         break;
       case 5:
-        trs_gui_file_browse(trs_cass_dir, trs_cass_dir, NULL, 1, " Cassette/Wafer ");
+        trs_gui_file_browse(trs_cass_dir, trs_cass_dir, NULL, 1, "Cassette/Wafer ");
         break;
       case 7:
-        trs_gui_file_browse(trs_disk_set_dir, trs_disk_set_dir, NULL, 1, " Disk Set ");
+        trs_gui_file_browse(trs_disk_set_dir, trs_disk_set_dir, NULL, 1, "Disk Set ");
         break;
       case 9:
-        trs_gui_file_browse(trs_state_dir, trs_state_dir, NULL, 1, " Saved State ");
+        trs_gui_file_browse(trs_state_dir, trs_state_dir, NULL, 1, "Saved State ");
         break;
       case 11:
-        trs_gui_file_browse(trs_printer_dir, trs_printer_dir, NULL, 1, " Printer Output ");
+        trs_gui_file_browse(trs_printer_dir, trs_printer_dir, NULL, 1, "Printer Output ");
         break;
       case -1:
         return;
@@ -2406,13 +2406,13 @@ void trs_gui_rom_files(void)
     selection = trs_gui_display_menu("SDLTRS ROM File Selection Menu", romfile_menu, selection);
     switch (selection) {
       case 1:
-        trs_gui_file_browse(romfile, romfile, NULL, 0, " Model 1 ROM ");
+        trs_gui_file_browse(romfile, romfile, NULL, 0, "Model 1 ROM");
         break;
       case 4:
-        trs_gui_file_browse(romfile3, romfile3, NULL, 0, " Model 3 ROM ");
+        trs_gui_file_browse(romfile3, romfile3, NULL, 0, "Model 3 ROM");
         break;
       case 7:
-        trs_gui_file_browse(romfile4p, romfile4p, NULL, 0, " Model 4P ROM ");
+        trs_gui_file_browse(romfile4p, romfile4p, NULL, 0, "Model 4P ROM");
         break;
       case -1:
         return;
@@ -2468,7 +2468,7 @@ void trs_gui_keys_sdltrs(void)
 
 void trs_gui_exec_cmd(void)
 {
-  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, " CMD (.cmd) ") >= 0) {
+  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
     if (trs_load_cmd(trs_cmd_file) == -1)
       trs_gui_display_message("Error", "Failed to load CMD file");
   }
@@ -2511,7 +2511,7 @@ void trs_gui_write_config(void)
 
 int trs_gui_read_config(void)
 {
-  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0, " Configuration (.t8c) ") >= 0) {
+  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0, "Configuration (.t8c)") >= 0) {
     if (trs_load_config_file() == 0) {
       trs_gui_new_machine();
       return 0;
@@ -2573,7 +2573,7 @@ void trs_gui_save_state(void)
 
 int trs_gui_load_state(void)
 {
-  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0, " Saved State (.t8s) ") >= 0) {
+  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0, "Saved State (.t8s)") >= 0) {
     if (trs_state_load(filename) == 0)
       return 0;
     trs_gui_display_message("Error", "Failed to load State");
