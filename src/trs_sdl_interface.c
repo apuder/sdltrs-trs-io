@@ -1791,8 +1791,7 @@ static void call_function(int function)
       trs_gui_write_config();
       break;
     case READ:
-      if (trs_gui_read_config() == 0)
-        trs_screen_init();
+      trs_gui_read_config();
       break;
     case EMULATOR:
       trs_gui_model();
