@@ -161,7 +161,7 @@ static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static int  trs_gui_config_management(void);
 static int  trs_gui_joystick_get_button(void);
-static void trs_gui_joystick_display_map(int show_active);
+static void trs_gui_joystick_display_map();
 static const char *trs_gui_get_key_name(int key);
 static int  trs_gui_virtual_keyboard(void);
 static int  trs_gui_display_question(const char *text);
@@ -1931,7 +1931,7 @@ int trs_gui_joystick_get_button(void)
   return -1;
 }
 
-void trs_gui_joystick_display_map(int show_active)
+void trs_gui_joystick_display_map(void)
 {
   int row, col, i;
   char text[10];
@@ -1955,7 +1955,7 @@ void trs_gui_joystick_display_map(int show_active)
           snprintf(text, 9, "%s", trs_gui_get_key_name(jbutton_map[i]));
           break;
       }
-      trs_gui_write_text(text, 5 + col * 12, 11 + row, show_active ? jbutton_active[i] : 0);
+      trs_gui_write_text(text, 5 + col * 12, 11 + row, jbutton_active[i]);
     }
   }
 }
@@ -2013,7 +2013,7 @@ void trs_gui_joystick_management(void)
       snprintf(&display_menu[1].title[50], 13, "Joystick %1d", gui_joystick_num);
     snprintf(&display_menu[2].title[52], 9, "%s", yes_no_choices[jaxis_mapped]);
     trs_gui_clear_screen();
-    trs_gui_joystick_display_map(0);
+    trs_gui_joystick_display_map();
 
     selection = trs_gui_display_menu("SDLTRS Joystick Setting Menu", display_menu, selection);
     switch (selection) {
@@ -2080,7 +2080,7 @@ void trs_gui_joystick_management(void)
       case 7:
         if ((button = trs_gui_joystick_get_button()) != 1) {
           jbutton_active[button] = 1;
-          trs_gui_joystick_display_map(1);
+          trs_gui_joystick_display_map();
           trs_gui_refresh();
           SDL_Delay(1000);
           jbutton_active[button] = 0;
