@@ -1928,7 +1928,6 @@ int trs_gui_joystick_get_button(void)
         return event.jbutton.button;
     }
   }
-  return -1;
 }
 
 void trs_gui_joystick_display_map(void)
