@@ -629,13 +629,13 @@ void trs_open_joystick(void)
     trs_joystick_num = -1;
 }
 
-void trs_joy_axis(unsigned char axis, short value)
+void trs_joy_axis(unsigned char axis, short value, int bounce)
 {
   int dir;
 
-  if (value < -JOY_BOUNCE)
+  if (value < -bounce)
     dir = -1;
-  else if (value > JOY_BOUNCE)
+  else if (value > bounce)
     dir = 1;
   else
     dir = 0;
