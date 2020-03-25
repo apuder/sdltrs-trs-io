@@ -2078,7 +2078,7 @@ void trs_gui_joystick_management(void)
          }
         break;
       case 7:
-        if ((button = trs_gui_joystick_get_button()) != 1) {
+        if ((button = trs_gui_joystick_get_button()) != -1) {
           jbutton_active[button] = 1;
           trs_gui_joystick_display_map();
           trs_gui_refresh();
