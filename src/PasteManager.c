@@ -9,10 +9,6 @@ static int charCount = 0;
 static char *pasteString;
 static int pasteStringLength = 0;
 
-/* Extern emulator routines */
-extern void trs_paste_started();
-extern void trs_end_copy();
-
 int PasteManagerGetChar(unsigned short *character)
 {
   if (charCount) {
@@ -31,7 +27,6 @@ int PasteManagerStartPaste(void)
   charCount = pasteStringLength;
 
   if (charCount) {
-    trs_paste_started();
     return 1;
   } else {
     free(pasteString);
@@ -43,14 +38,10 @@ int PasteManagerStartPaste(void)
 void PasteManagerStartCopy(const char *string)
 {
   SDL_SetClipboardText(string);
-  trs_end_copy();
 }
 #elif WIN32
 #include <stdio.h>
 #include "windows.h"
-
-extern void trs_paste_started();
-extern void trs_end_copy();
 
 static int charCount = 0;
 static char *pasteString;
@@ -80,7 +71,6 @@ int PasteManagerStartPaste(void)
       hClipboardData = GetClipboardData(CF_TEXT);
       pasteString = (char *)GlobalLock(hClipboardData);
       charCount = pasteStringLength = strlen(pasteString);
-      trs_paste_started();
       return TRUE;
     }
   }
@@ -104,7 +94,6 @@ void PasteManagerStartCopy(char *string)
     SetClipboardData(CF_TEXT, hCopyData);
     CloseClipboard();
   }
-  trs_end_copy();
 }
 #elif !NOX
 #include <stdio.h>
@@ -154,10 +143,6 @@ static int charCount = 0;
 static unsigned char *pasteString;
 static int pasteStringLength = 0;
 static int firstTime = 1;
-
-/* Extern emulator routines */
-extern void trs_paste_started();
-extern void trs_end_copy();
 
 static int init_scrap(void)
 {
@@ -491,7 +476,6 @@ int PasteManagerStartPaste(void)
 
   charCount = pasteStringLength;
   if (charCount) {
-    trs_paste_started();
     return 1;
   } else {
     free(pasteString);
@@ -506,13 +490,11 @@ void PasteManagerStartCopy(const char *string)
   if (firstTime) {
      result = init_scrap();
      if (result == -1) {
-       trs_end_copy();
        return;
      }
      firstTime = 0;
   }
 
   put_scrap(strlen(string) + 1, string);
-  trs_end_copy();
 }
 #endif

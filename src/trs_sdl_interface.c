@@ -1578,16 +1578,6 @@ static void ProcessCopySelection(int selectAll)
       copyStatus = COPY_IDLE;
   }
 }
-
-void trs_end_copy(void)
-{
-  copyStatus = COPY_CLEAR;
-}
-
-void trs_paste_started(void)
-{
-  paste_state = PASTE_GETNEXT;
-}
 #endif
 
 /*
@@ -2023,6 +2013,7 @@ void trs_get_event(int wait)
               break;
             case SDLK_v:
               PasteManagerStartPaste();
+              paste_state = PASTE_GETNEXT;
               break;
             case SDLK_a:
               requestSelectAll = mousepointer = TRUE;
