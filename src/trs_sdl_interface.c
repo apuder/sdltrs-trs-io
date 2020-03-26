@@ -1845,40 +1845,41 @@ void trs_get_event(int wait)
   if (cpu_panel)
     trs_screen_caption();
 
-  do {
 #if defined(SDL2) || !defined(NOX)
-    if (paste_state != PASTE_IDLE) {
-      static unsigned short paste_key;
+  if (paste_state != PASTE_IDLE) {
+    static unsigned short paste_key;
 
-      if (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN) {
-          if (paste_state == PASTE_KEYUP)
-            trs_xlate_keysym(0x10000 | paste_key);
-          paste_state = PASTE_IDLE;
-          return;
-        }
-      }
-
-      switch (paste_state) {
-        case PASTE_GETNEXT:
-          paste_lastkey = !PasteManagerGetChar(&paste_key);
-          trs_xlate_keysym(paste_key);
-          paste_state = PASTE_KEYDOWN;
-          return;
-        case PASTE_KEYDOWN:
+    if (SDL_PollEvent(&event)) {
+      if (event.type == SDL_KEYDOWN) {
+        if (paste_state == PASTE_KEYUP)
           trs_xlate_keysym(0x10000 | paste_key);
-          paste_state = PASTE_KEYUP;
-          return;
-        case PASTE_KEYUP:
-          if (paste_lastkey)
-            paste_state = PASTE_IDLE;
-          else
-            paste_state = PASTE_GETNEXT;
-          break;
+        paste_state = PASTE_IDLE;
+        return;
       }
     }
+
+    switch (paste_state) {
+      case PASTE_GETNEXT:
+        paste_lastkey = !PasteManagerGetChar(&paste_key);
+        trs_xlate_keysym(paste_key);
+        paste_state = PASTE_KEYDOWN;
+        break;
+      case PASTE_KEYDOWN:
+        trs_xlate_keysym(0x10000 | paste_key);
+        paste_state = PASTE_KEYUP;
+        break;
+      case PASTE_KEYUP:
+        if (paste_lastkey)
+          paste_state = PASTE_IDLE;
+        else
+          paste_state = PASTE_GETNEXT;
+        break;
+    }
+    return;
+  }
 #endif
 
+  do {
     if (wait) {
       SDL_WaitEvent(&event);
     } else {
