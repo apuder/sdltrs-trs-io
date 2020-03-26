@@ -1861,6 +1861,8 @@ void trs_get_event(int wait)
     switch (paste_state) {
       case PASTE_GETNEXT:
         paste_lastkey = !PasteManagerGetChar(&paste_key);
+        if (paste_key == 0xa)
+          paste_key = 0xd;
         trs_xlate_keysym(paste_key);
         paste_state = PASTE_KEYDOWN;
         break;
