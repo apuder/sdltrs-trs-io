@@ -1665,9 +1665,9 @@ void trs_sdl_cleanup(void)
 static char *trs_get_copy_data()
 {
   static char copy_data[1920]; /* =80*24 */
-  char data;
   char *curr_data = copy_data;
-  char *screen_ptr;
+  unsigned char data;
+  unsigned char *screen_ptr;
   int col, line;
   int start_col, end_col, start_line, end_line;
 
@@ -1707,11 +1707,13 @@ static char *trs_get_copy_data()
     end_line = col_chars - 1;
 
   for (line = start_line; line <= end_line; line++) {
-    screen_ptr = (char*) &trs_screen[line * row_chars + start_col];
+    screen_ptr = &trs_screen[line * row_chars + start_col];
     for (col = start_col; col <= end_col; col++, screen_ptr++) {
       data = *screen_ptr;
       if (data < 0x20)
         data += 0x40;
+      if ((currentmode & INVERSE) && (data & 0x80))
+        data -= 0x80;
       if (data >= 0x20 && data <= 0x7e)
         *curr_data++ = data;
       else
