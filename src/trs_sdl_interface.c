@@ -1664,7 +1664,7 @@ void trs_sdl_cleanup(void)
 #if defined(SDL2) || !defined(NOX)
 static char *trs_get_copy_data()
 {
-  static char copy_data[2500];
+  static char copy_data[1920]; /* =80*24 */
   char data;
   char *curr_data = copy_data;
   char *screen_ptr;
