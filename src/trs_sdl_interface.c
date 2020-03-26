@@ -2275,17 +2275,19 @@ void trs_get_event(int wait)
             break;
         }
 
-        if (keysym.sym >= 0x21 && keysym.sym <= 0xDF) {
-          scancode = keysym.scancode;
-          break;
+        if (keysym.mod & (KMOD_LSHIFT | KMOD_RALT)) {
+          if (keysym.sym >= 0x21 && keysym.sym <= 0xDF) {
+            scancode = keysym.scancode;
+            break;
+          }
         }
 #else
         if (keysym.sym < 0x100 && keysym.unicode >= 0x20 && keysym.unicode <= 0xFF) {
           last_key[keysym.scancode] = keysym.unicode;
           trs_xlate_keysym(keysym.unicode);
-        }
+        } else
 #endif
-        else if (keysym.sym) {
+        if (keysym.sym) {
           last_key[keysym.scancode] = keysym.sym;
           trs_xlate_keysym(keysym.sym);
         }
