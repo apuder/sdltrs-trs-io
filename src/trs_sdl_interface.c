@@ -1929,14 +1929,14 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F8:
-            trs_exit(!(keysym.mod & KMOD_SHIFT));
+            trs_exit(!(SDL_GetModState() & KMOD_SHIFT));
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
             keysym.sym = 0;
             break;
           case SDLK_F9:
-            if (keysym.mod & KMOD_SHIFT) {
+            if (SDL_GetModState() & KMOD_SHIFT) {
               cpu_panel = !cpu_panel;
               trs_screen_caption();
             }
@@ -1949,7 +1949,7 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F10:
-            if (keysym.mod & KMOD_SHIFT) {
+            if (SDL_GetModState() & KMOD_SHIFT) {
               trs_reset(1);
               if (trs_show_led) {
                 trs_disk_led(-1, 0);
@@ -1965,7 +1965,7 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F11:
-            if (keysym.mod & KMOD_SHIFT)
+            if (SDL_GetModState() & KMOD_SHIFT)
               call_function(SAVE_BMP);
             else
               call_function(KEYS);
@@ -2006,7 +2006,7 @@ void trs_get_event(int wait)
             break;
         }
         /* Trap the alt keys here */
-        if (keysym.mod & KMOD_LALT) {
+        if (SDL_GetModState() & KMOD_LALT) {
           switch (keysym.sym) {
 #if defined(SDL2) || !defined(NOX)
             case SDLK_c:
@@ -2154,7 +2154,7 @@ void trs_get_event(int wait)
             case SDLK_5:
             case SDLK_6:
             case SDLK_7:
-              if (keysym.mod & KMOD_SHIFT) {
+              if (SDL_GetModState() & KMOD_SHIFT) {
                 trs_disk_remove(keysym.sym - SDLK_0);
               } else {
                 char filename[FILENAME_MAX];
@@ -2183,10 +2183,10 @@ void trs_get_event(int wait)
           break;
 
         /* Make Shift + CapsLock give lower case */
-        if (((keysym.mod & (KMOD_CAPS|KMOD_LSHIFT))
-              == (KMOD_CAPS|KMOD_LSHIFT) ||
-              ((keysym.mod & (KMOD_CAPS|KMOD_RSHIFT))
-                == (KMOD_CAPS|KMOD_RSHIFT)))
+        if (((SDL_GetModState() & (KMOD_CAPS | KMOD_LSHIFT))
+              == (KMOD_CAPS | KMOD_LSHIFT) ||
+              ((SDL_GetModState() & (KMOD_CAPS | KMOD_RSHIFT))
+                == (KMOD_CAPS | KMOD_RSHIFT)))
 #ifdef SDL2
           && keysym.sym >= 'A' && keysym.sym <= 'Z')
             keysym.sym = (int) keysym.sym + 0x20;
@@ -2275,7 +2275,7 @@ void trs_get_event(int wait)
             break;
         }
 
-        if (keysym.mod & (KMOD_LSHIFT | KMOD_RALT)) {
+        if (SDL_GetModState() & (KMOD_LSHIFT | KMOD_RALT)) {
           if (keysym.sym >= 0x21 && keysym.sym <= 0xDF) {
             scancode = keysym.scancode;
             break;
@@ -2299,7 +2299,7 @@ void trs_get_event(int wait)
         debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
             keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
 #endif
-        if (keysym.mod & KMOD_LALT)
+        if (SDL_GetModState() & KMOD_LALT)
           break;
         trs_xlate_keysym(0x10000 | last_key[keysym.scancode]);
         last_key[keysym.scancode] = 0;
