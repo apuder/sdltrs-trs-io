@@ -32,6 +32,7 @@ binary-arch: build
 	$(MAKE) install prefix=`pwd`/debian/$(PACKAGE)/usr mandir='$${prefix}/share/man'
 
 	dh_install diskimages/* /usr/share/$(PACKAGE)/
+	dh_install bin/sdltrs.png /usr/share/pixmaps/
 	dh_installchangelogs
 	dh_installdocs docs/*
 	dh_installman
