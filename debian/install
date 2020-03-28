@@ -1,2 +1,3 @@
 diskimages/*		/usr/share/sdltrs/
 bin/sdltrs.png		/usr/share/pixmaps/
+sdltrs.desktop		/usr/share/applications/

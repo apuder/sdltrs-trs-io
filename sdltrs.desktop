@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=SDLTRS
+Comment=TRS-80 Emulator
+Exec=sdltrs %F
+Icon=sdltrs
+Terminal=true
