@@ -1912,6 +1912,7 @@ void trs_get_event(int wait)
             debug("Active\n");
 #endif
             trs_screen_refresh();
+            clear_key_queue();
 #if defined(SDL2) || !defined(NOX)
             copyStatus = COPY_IDLE;
 #endif
