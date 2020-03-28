@@ -1685,8 +1685,8 @@ static char *trs_get_copy_data()
   char *curr_data = copy_data;
   unsigned char data;
   unsigned char *screen_ptr;
-  int col, line;
-  int start_col, end_col, start_line, end_line;
+  int col, row;
+  int start_col, end_col, start_row, end_row;
 
   if (grafyx_enable && !grafyx_overlay) {
     copy_data[0] = 0;
@@ -1709,22 +1709,22 @@ static char *trs_get_copy_data()
     end_col = selectionEndX / cur_char_width - 1;
 
   if (selectionStartY % cur_char_height == 0)
-    start_line = selectionStartY / cur_char_height;
+    start_row = selectionStartY / cur_char_height;
   else
-    start_line = selectionStartY / cur_char_height + 1;
+    start_row = selectionStartY / cur_char_height + 1;
 
   if (selectionEndY % cur_char_height >= cur_char_height / 2)
-    end_line = selectionEndY / cur_char_height;
+    end_row = selectionEndY / cur_char_height;
   else
-    end_line = selectionEndY / cur_char_height - 1;
+    end_row = selectionEndY / cur_char_height - 1;
 
   if (end_col >= row_chars)
     end_col = row_chars - 1;
-  if (end_line >= col_chars)
-    end_line = col_chars - 1;
+  if (end_row >= col_chars)
+    end_row = col_chars - 1;
 
-  for (line = start_line; line <= end_line; line++) {
-    screen_ptr = &trs_screen[line * row_chars + start_col];
+  for (row = start_row; row <= end_row; row++) {
+    screen_ptr = &trs_screen[row * row_chars + start_col];
     for (col = start_col; col <= end_col; col++, screen_ptr++) {
       data = *screen_ptr;
       if (data < 0x20)
@@ -1736,7 +1736,7 @@ static char *trs_get_copy_data()
       else
         *curr_data++ = ' ';
     }
-    if (line != end_line) {
+    if (row != end_row) {
 #ifdef _WIN32
       *curr_data++ = 0xd;
 #endif
