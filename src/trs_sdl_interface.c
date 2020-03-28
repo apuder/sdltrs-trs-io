@@ -269,6 +269,7 @@ static void trs_opt_keystretch(char *arg, int intarg, int *stringarg);
 static void trs_opt_microlabs(char *arg, int intarg, int *stringarg);
 static void trs_opt_model(char *arg, int intarg, int *stringarg);
 static void trs_opt_printer(char *arg, int intarg, int *stringarg);
+static void trs_opt_rom(char *arg, int intarg, int *stringarg);
 static void trs_opt_samplerate(char *arg, int intarg, int *stringarg);
 static void trs_opt_scale(char *arg, int intarg, int *stringarg);
 static void trs_opt_selector(char *arg, int intarg, int *stringarg);
@@ -368,6 +369,7 @@ static const trs_opt options[] = {
   { "printerdir",      trs_opt_string,        1, 0, trs_printer_dir      },
   { "resize3",         trs_opt_value,         0, 1, &resize3             },
   { "resize4",         trs_opt_value,         0, 1, &resize4             },
+  { "rom",             trs_opt_rom,           1, 0, NULL                 },
   { "romfile",         trs_opt_string,        1, 0, romfile              },
   { "romfile3",        trs_opt_string,        1, 0, romfile3             },
   { "romfile4p",       trs_opt_string,        1, 0, romfile4p            },
@@ -886,6 +888,21 @@ static void trs_opt_model(char *arg, int intarg, int *stringarg)
     trs_model = 5;
   } else
     error("TRS-80 Model %s not supported", arg);
+}
+
+static void trs_opt_rom(char *arg, int intarg, int *stringarg)
+{
+  switch (trs_model) {
+    case 1:
+      snprintf(romfile, FILENAME_MAX, "%s", arg);
+      break;
+    case 3:
+      snprintf(romfile3, FILENAME_MAX, "%s", arg);
+      break;
+    case 5:
+      snprintf(romfile4p, FILENAME_MAX, "%s", arg);
+      break;
+   }
 }
 
 static void trs_opt_printer(char *arg, int intarg, int *stringarg)
