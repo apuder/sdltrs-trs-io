@@ -582,7 +582,7 @@ int trs_gui_file_browse(const char* path, char* name, const char *mask,
   int drawcount;
   int redraw = 1;
 
-  snprintf(current_dir, FILENAME_MAX - 1, "%s", path);
+  snprintf(current_dir, FILENAME_MAX, "%s", path);
 
   for (i = strlen(current_dir); i > 0; i--) {
     if (current_dir[i] == DIR_SLASH) {
@@ -1200,7 +1200,7 @@ void trs_gui_disk_creation(void)
       case 6:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Image, TAB selects directory",
-            trs_disk_dir, filename, FILENAME_MAX - 1, 1) == 0) {
+            trs_disk_dir, filename, FILENAME_MAX, 1) == 0) {
           if (image_type == 0)
             ret = trs_create_blank_jv1(filename);
           else if (image_type == 1)
@@ -1588,7 +1588,7 @@ void trs_gui_stringy_management(void)
       case 12:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Wafer Image, TAB selects directory",
-            trs_cass_dir, filename, FILENAME_MAX - 1, 1) == 0) {
+            trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
           if (stringy_create(filename))
             trs_gui_display_message("Error", "Error creating Stringy Wafer Image");
           else
@@ -1669,7 +1669,7 @@ void trs_gui_cassette_management(void)
       case 7:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
-            trs_cass_dir, filename, FILENAME_MAX - 1, 1) == 0) {
+            trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
           ret = 0;
           switch (image_type) {
             case 0:
@@ -2171,7 +2171,7 @@ void trs_gui_misc_management(void)
       case 8:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name,
-            filename, FILENAME_MAX - 1, 0) == 0) {
+            filename, FILENAME_MAX, 0) == 0) {
           snprintf(trs_uart_name, FILENAME_MAX, "%s", filename);
           trs_uart_init(0);
         }
@@ -2215,7 +2215,7 @@ void trs_gui_printer_management(void)
       case 3:
         filename[0] = 0;
         if (trs_gui_input_string("Enter Printer Command", trs_printer_command,
-            filename, FILENAME_MAX - 1, 0) == 0)
+            filename, FILENAME_MAX, 0) == 0)
           snprintf(trs_printer_command, FILENAME_MAX, "%s", filename);
         break;
       case -1:

@@ -1036,11 +1036,11 @@ int trs_load_config_file(void)
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
-    snprintf(trs_config_file, FILENAME_MAX - 1, "./sdltrs.t8c");
+    snprintf(trs_config_file, FILENAME_MAX, "./sdltrs.t8c");
 #else
     const char *home = getenv("HOME");
 
-    snprintf(trs_config_file, FILENAME_MAX - 1, "%s/.sdltrs.t8c", home);
+    snprintf(trs_config_file, FILENAME_MAX, "%s/.sdltrs.t8c", home);
 #endif
   }
 
@@ -1099,11 +1099,11 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     else if (strlen(argv[i]) < 4) {
     }
     else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".t8c") == 0)
-      snprintf(trs_config_file, FILENAME_MAX - 1, "%s", argv[i]);
+      snprintf(trs_config_file, FILENAME_MAX, "%s", argv[i]);
     else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".t8s") == 0)
-      snprintf(init_state_file, FILENAME_MAX - 1, "%s", argv[i]);
+      snprintf(init_state_file, FILENAME_MAX, "%s", argv[i]);
     else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".cmd") == 0)
-      snprintf(trs_cmd_file, FILENAME_MAX - 1, "%s", argv[i]);
+      snprintf(trs_cmd_file, FILENAME_MAX, "%s", argv[i]);
   }
 
   if (trs_load_config_file() == -1)

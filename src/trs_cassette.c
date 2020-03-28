@@ -568,7 +568,7 @@ trs_cassette_insert(const char *filename)
    int len = strlen(filename);
    const char *extension;
 
-   snprintf(cassette_filename, FILENAME_MAX - 1, "%s", filename);
+   snprintf(cassette_filename, FILENAME_MAX, "%s", filename);
    cassette_position = 0;
 
    if (len >= 3)
