@@ -37,10 +37,10 @@ are build on the *master* branch ...
 
 ## Screenshots
 
-![screenshot](sdltrs01.png)
-![screenshot](sdltrs02.png)
-![screenshot](sdltrs03.png)
-![screenshot](sdltrs04.png)
+![screenshot](screenshots/sdltrs01.png)
+![screenshot](screenshots/sdltrs02.png)
+![screenshot](screenshots/sdltrs03.png)
+![screenshot](screenshots/sdltrs04.png)
 
 [BUILDING.md]: BUILDING.md
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
