@@ -2361,11 +2361,11 @@ void trs_get_event(int wait)
           }
           if (trigger_keydown) {
             if (event.jaxis.axis == 0) {
-              hor_key = (value == -1 ? SDLK_LEFT : SDLK_RIGHT);
+              hor_key = (value == -1 ? 0x114 : 0x113); /* Left/Right */
               trs_xlate_keysym(hor_key);
             }
             else {
-              ver_key = (value == -1 ? SDLK_UP : SDLK_DOWN);
+              ver_key = (value == -1 ? 0x111 : 0x112); /*  Up / Down */
               trs_xlate_keysym(ver_key);
             }
           }
