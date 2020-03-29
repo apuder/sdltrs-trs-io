@@ -9,7 +9,7 @@ static int charCount = 0;
 static char *pasteString;
 static int pasteStringLength = 0;
 
-int PasteManagerGetChar(unsigned short *character)
+int PasteManagerGetChar(unsigned char *character)
 {
   if (charCount) {
     *character = pasteString[pasteStringLength - charCount];
@@ -48,7 +48,7 @@ static char *pasteString;
 static int pasteStringLength = 0;
 static HANDLE hClipboardData;
 
-int PasteManagerGetChar(unsigned short *character)
+int PasteManagerGetChar(unsigned char *character)
 {
   if (charCount) {
     *character = pasteString[pasteStringLength - charCount];
@@ -446,7 +446,7 @@ static int clipboard_filter(const SDL_Event *event)
   return 1;
 }
 
-int PasteManagerGetChar(unsigned short *character)
+int PasteManagerGetChar(unsigned char *character)
 {
   if (charCount) {
     *character = pasteString[pasteStringLength - charCount];
