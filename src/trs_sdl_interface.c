@@ -1643,7 +1643,8 @@ void trs_exit(int confirm)
   static int recursion = 0;
   SDL_Surface *buffer = NULL;
 
-  if (recursion && confirm) return;
+  if (recursion && confirm)
+    return;
   recursion = 1;
 
   if (confirm) {
@@ -1900,11 +1901,12 @@ void trs_get_event(int wait)
 #endif
 
   do {
-    if (wait) {
+    if (wait)
       SDL_WaitEvent(&event);
-    } else {
-      if (!SDL_PollEvent(&event)) return;
-    }
+    else
+      if (!SDL_PollEvent(&event))
+        return;
+
     switch (event.type) {
       case SDL_QUIT:
         trs_exit(0);
