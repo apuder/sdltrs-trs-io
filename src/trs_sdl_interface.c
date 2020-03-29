@@ -1873,9 +1873,12 @@ void trs_get_event(int wait)
     switch (paste_state) {
       case PASTE_GETNEXT:
         paste_lastkey = !PasteManagerGetChar(&paste_key);
+#ifndef _WIN32
         if (paste_key == 0xa)
           paste_key = 0xd;
-        else if (paste_key >= 0x5b && paste_key <= 0x60)
+        else
+#endif
+        if (paste_key >= 0x5b && paste_key <= 0x60)
           paste_key += 0x20;
         else if (paste_key >= 0x7b && paste_key <= 0x7e)
           paste_key -= 0x20;
