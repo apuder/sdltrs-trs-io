@@ -185,6 +185,8 @@ static int selectionStartY = 0;
 static int selectionEndX = 0;
 static int selectionEndY = 0;
 static int requestSelectAll = FALSE;
+static int timer_saved;
+static int timer_rate_saved;
 #endif
 
 /* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
@@ -1862,8 +1864,8 @@ void trs_get_event(int wait)
       if (event.type == SDL_KEYDOWN) {
         if (paste_state == PASTE_KEYUP)
           trs_xlate_keysym(0x10000 | paste_key);
-        paste_state = PASTE_IDLE;
-        return;
+        paste_state = PASTE_KEYUP;
+        paste_lastkey = TRUE;
       }
     }
 
@@ -1884,8 +1886,11 @@ void trs_get_event(int wait)
         paste_state = PASTE_KEYUP;
         break;
       case PASTE_KEYUP:
-        if (paste_lastkey)
+        if (paste_lastkey) {
           paste_state = PASTE_IDLE;
+          timer_overclock = timer_saved;
+          timer_overclock_rate = timer_rate_saved;
+        }
         else
           paste_state = PASTE_GETNEXT;
         break;
@@ -2038,6 +2043,10 @@ void trs_get_event(int wait)
               break;
             case SDLK_v:
             case SDLK_INSERT:
+              timer_saved = timer_overclock;
+              timer_rate_saved = timer_overclock_rate;
+              timer_overclock = 1;
+              timer_overclock_rate = 1000;
               PasteManagerStartPaste();
               paste_state = PASTE_GETNEXT;
               break;
