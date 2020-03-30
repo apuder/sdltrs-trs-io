@@ -109,6 +109,9 @@ int resize;
 int resize3;
 int resize4;
 int scanlines;
+#if defined(SDL2) || !defined(NOX)
+int turbo_paste = 0;
+#endif
 char romfile[FILENAME_MAX];
 char romfile3[FILENAME_MAX];
 char romfile4p[FILENAME_MAX];
@@ -366,6 +369,9 @@ static const trs_opt options[] = {
   { "nosupermem",      trs_opt_supermem,      0, 0, NULL                 },
   { "notruedam",       trs_opt_value,         0, 0, &trs_disk_truedam    },
   { "noturbo",         trs_opt_value,         0, 0, &timer_overclock     },
+#if defined(SDL2) || !defined(NOX)
+  { "noturbopaste",    trs_opt_value,         0, 0, &turbo_paste         },
+#endif
   { "printer",         trs_opt_printer,       1, 0, NULL                 },
   { "printercmd",      trs_opt_string,        1, 0, trs_printer_command  },
   { "printerdir",      trs_opt_string,        1, 0, trs_printer_dir      },
@@ -393,6 +399,9 @@ static const trs_opt options[] = {
   { "switches",        trs_opt_switches,      1, 0, NULL                 },
   { "truedam",         trs_opt_value,         0, 1, &trs_disk_truedam    },
   { "turbo",           trs_opt_value,         0, 1, &timer_overclock     },
+#if defined(SDL2) || !defined(NOX)
+  { "turbopaste",      trs_opt_value,         0, 1, &turbo_paste         },
+#endif
   { "turborate",       trs_opt_turborate,     1, 0, NULL                 },
   { "wafer0",          trs_opt_wafer,         1, 0, NULL                 },
   { "wafer1",          trs_opt_wafer,         1, 1, NULL                 },
@@ -550,6 +559,9 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file, "guiforeground=0x%x\n", gui_foreground);
   fprintf(config_file, "guibackground=0x%x\n", gui_background);
   fprintf(config_file, "%sturbo\n", timer_overclock ? "" : "no");
+#if defined(SDL2) || !defined(NOX)
+  fprintf(config_file, "%sturbopaste", turbo_paste ? "" : "no");
+#endif
   fprintf(config_file, "turborate=%d\n", timer_overclock_rate);
 
   for (i = 0; i < 8; i++) {
@@ -1892,8 +1904,10 @@ void trs_get_event(int wait)
       case PASTE_KEYUP:
         if (paste_lastkey) {
           paste_state = PASTE_IDLE;
-          timer_overclock = timer_saved;
-          timer_overclock_rate = timer_rate_saved;
+          if (turbo_paste) {
+            timer_overclock = timer_saved;
+            timer_overclock_rate = timer_rate_saved;
+          }
         }
         else
           paste_state = PASTE_GETNEXT;
@@ -2048,10 +2062,12 @@ void trs_get_event(int wait)
               break;
             case SDLK_v:
             case SDLK_INSERT:
-              timer_saved = timer_overclock;
-              timer_rate_saved = timer_overclock_rate;
-              timer_overclock = 1;
-              timer_overclock_rate = 1000;
+              if (turbo_paste) {
+                timer_saved = timer_overclock;
+                timer_rate_saved = timer_overclock_rate;
+                timer_overclock = 1;
+                timer_overclock_rate = 1000;
+              }
               PasteManagerStartPaste();
               paste_state = PASTE_GETNEXT;
               break;

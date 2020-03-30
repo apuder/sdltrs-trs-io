@@ -122,6 +122,9 @@ int jbutton_active[N_JOYBUTTONS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 int jaxis_mapped = 0;
 
 extern int  scanlines;
+#if defined(SDL2) || !defined(NOX)
+extern int  turbo_paste;
+#endif
 extern void trs_gui_write_char(int position, int char_index, int invert);
 extern int  trs_sdl_savebmp(const char *name);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
@@ -2111,6 +2114,9 @@ void trs_gui_misc_management(void)
    {"Serial Switches                                             ", MENU_NORMAL_TYPE},
    {"Serial Port Name:                                           ", MENU_TITLE_TYPE},
    {"                                                            ", MENU_NORMAL_TYPE},
+#if defined(SDL2) || !defined(NOX)
+   {"Turbo Paste                                                 ", MENU_NORMAL_TYPE},
+#endif
    {"", 0}};
   const char *on_off_choices[2] = {"      Off", "       On"};
   char input[12];
@@ -2125,6 +2131,9 @@ void trs_gui_misc_management(void)
     snprintf(&misc_menu[5].title[51], 10, "%s", on_off_choices[trs_emtsafe]);
     snprintf(&misc_menu[6].title[56], 5, "0x%02X", trs_uart_switches);
     trs_gui_limit_string(trs_uart_name, &misc_menu[8].title[2], 60);
+#if defined(SDL2) || !defined(NOX)
+    snprintf(&misc_menu[9].title[51], 10, "%s", on_off_choices[turbo_paste]);
+#endif
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Misc Settings Menu", misc_menu, selection);
@@ -2176,6 +2185,12 @@ void trs_gui_misc_management(void)
           trs_uart_init(0);
         }
         break;
+#if defined(SDL2) || !defined(NOX)
+      case 9:
+        turbo_paste = trs_gui_display_popup("Paste", on_off_choices, 2,
+            turbo_paste);
+        break;
+#endif
       case -1:
         trs_kb_bracket(trs_kb_bracket_state);
         trs_screen_caption();
