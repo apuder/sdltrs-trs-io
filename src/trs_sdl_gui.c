@@ -2105,15 +2105,15 @@ void trs_gui_joystick_management(void)
 void trs_gui_misc_management(void)
 {
   MENU_ENTRY misc_menu[] =
-  {{"Shift Bracket Emulation                                     ", MENU_NORMAL_TYPE},
+  {{"Emtsafe                                                     ", MENU_NORMAL_TYPE},
+   {"Keystretch Value                                            ", MENU_NORMAL_TYPE},
+   {"Serial Port Name:                                           ", MENU_TITLE_TYPE},
+   {"                                                            ", MENU_NORMAL_TYPE},
+   {"Serial Switches                                             ", MENU_NORMAL_TYPE},
+   {"Shift Bracket Emulation                                     ", MENU_NORMAL_TYPE},
    {"Sound Output                                                ", MENU_NORMAL_TYPE},
    {"Turbo Mode                                                  ", MENU_NORMAL_TYPE},
    {"Turbo Speed                                                 ", MENU_NORMAL_TYPE},
-   {"Keystretch Value                                            ", MENU_NORMAL_TYPE},
-   {"Emtsafe                                                     ", MENU_NORMAL_TYPE},
-   {"Serial Switches                                             ", MENU_NORMAL_TYPE},
-   {"Serial Port Name:                                           ", MENU_TITLE_TYPE},
-   {"                                                            ", MENU_NORMAL_TYPE},
 #if defined(SDL2) || !defined(NOX)
    {"Turbo Paste                                                 ", MENU_NORMAL_TYPE},
 #endif
@@ -2123,14 +2123,14 @@ void trs_gui_misc_management(void)
   int selection = 0;
 
   while (1) {
-    snprintf(&misc_menu[0].title[51], 10, "%s", on_off_choices[trs_kb_bracket_state]);
-    snprintf(&misc_menu[1].title[51], 10, "%s", on_off_choices[trs_sound]);
-    snprintf(&misc_menu[2].title[51], 10, "%s", on_off_choices[timer_overclock]);
-    snprintf(&misc_menu[3].title[50], 11, "%10d", timer_overclock_rate);
-    snprintf(&misc_menu[4].title[50], 11, "%10d", stretch_amount);
-    snprintf(&misc_menu[5].title[51], 10, "%s", on_off_choices[trs_emtsafe]);
-    snprintf(&misc_menu[6].title[56], 5, "0x%02X", trs_uart_switches);
-    trs_gui_limit_string(trs_uart_name, &misc_menu[8].title[2], 60);
+    snprintf(&misc_menu[0].title[51], 10, "%s", on_off_choices[trs_emtsafe]);
+    snprintf(&misc_menu[1].title[50], 11, "%10d", stretch_amount);
+    trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 60);
+    snprintf(&misc_menu[4].title[56], 5, "0x%02X", trs_uart_switches);
+    snprintf(&misc_menu[5].title[51], 10, "%s", on_off_choices[trs_kb_bracket_state]);
+    snprintf(&misc_menu[6].title[51], 10, "%s", on_off_choices[trs_sound]);
+    snprintf(&misc_menu[7].title[51], 10, "%s", on_off_choices[timer_overclock]);
+    snprintf(&misc_menu[8].title[50], 11, "%10d", timer_overclock_rate);
 #if defined(SDL2) || !defined(NOX)
     snprintf(&misc_menu[9].title[51], 10, "%s", on_off_choices[turbo_paste]);
 #endif
@@ -2139,26 +2139,10 @@ void trs_gui_misc_management(void)
     selection = trs_gui_display_menu("SDLTRS Misc Settings Menu", misc_menu, selection);
     switch (selection) {
       case 0:
-        trs_kb_bracket_state = trs_gui_display_popup("Bracket", on_off_choices, 2,
-            trs_kb_bracket_state);
+        trs_emtsafe = trs_gui_display_popup("Emtsafe", on_off_choices, 2,
+            trs_emtsafe);
         break;
       case 1:
-        trs_sound = trs_gui_display_popup("Sound", on_off_choices, 2,
-            trs_sound);
-        break;
-      case 2:
-        timer_overclock = trs_gui_display_popup("Turbo", on_off_choices, 2,
-            timer_overclock);
-        break;
-      case 3:
-        snprintf(input, 11, "%d", timer_overclock_rate);
-        if (trs_gui_input_string("Enter Turbo Rate Multiplier", input, input, 10, 0) == 0) {
-          timer_overclock_rate = atoi(input);
-          if (timer_overclock_rate <= 0)
-            timer_overclock_rate = 1;
-        }
-        break;
-      case 4:
         snprintf(input, 11, "%d", stretch_amount);
         if (trs_gui_input_string("Enter Keystretch in Cycles", input, input, 10, 0) == 0) {
           stretch_amount = atoi(input);
@@ -2166,23 +2150,39 @@ void trs_gui_misc_management(void)
             stretch_amount = STRETCH_AMOUNT;
         }
         break;
-      case 5:
-        trs_emtsafe = trs_gui_display_popup("Emtsafe", on_off_choices, 2,
-            trs_emtsafe);
+      case 3:
+        filename[0] = 0;
+        if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name,
+            filename, FILENAME_MAX, 0) == 0) {
+          snprintf(trs_uart_name, FILENAME_MAX, "%s", filename);
+          trs_uart_init(0);
+        }
         break;
-      case 6:
+      case 4:
         snprintf(input, 3, "%2X", trs_uart_switches);
         if (trs_gui_input_string("Enter Serial Switches (Hex, XX)", input, input, 2, 0) == 0) {
           trs_uart_switches = strtol(input, NULL, 16);
           trs_uart_init(0);
         }
         break;
+      case 5:
+        trs_kb_bracket_state = trs_gui_display_popup("Bracket", on_off_choices, 2,
+            trs_kb_bracket_state);
+        break;
+      case 6:
+        trs_sound = trs_gui_display_popup("Sound", on_off_choices, 2,
+            trs_sound);
+        break;
+      case 7:
+        timer_overclock = trs_gui_display_popup("Turbo", on_off_choices, 2,
+            timer_overclock);
+        break;
       case 8:
-        filename[0] = 0;
-        if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name,
-            filename, FILENAME_MAX, 0) == 0) {
-          snprintf(trs_uart_name, FILENAME_MAX, "%s", filename);
-          trs_uart_init(0);
+        snprintf(input, 11, "%d", timer_overclock_rate);
+        if (trs_gui_input_string("Enter Turbo Rate Multiplier", input, input, 10, 0) == 0) {
+          timer_overclock_rate = atoi(input);
+          if (timer_overclock_rate <= 0)
+            timer_overclock_rate = 1;
         }
         break;
 #if defined(SDL2) || !defined(NOX)
@@ -2202,8 +2202,8 @@ void trs_gui_misc_management(void)
 void trs_gui_printer_management(void)
 {
   MENU_ENTRY printer_menu[] =
-  {{"Printer Type                                                ", MENU_NORMAL_TYPE},
-   {"Close and Reopen Printer Output File", MENU_NORMAL_TYPE},
+  {{"Close and Reopen Printer Output File", MENU_NORMAL_TYPE},
+   {"Printer Type                                                ", MENU_NORMAL_TYPE},
    {"Printer Command:", MENU_TITLE_TYPE},
    {"   ", MENU_NORMAL_TYPE},
    {"", 0}};
@@ -2211,21 +2211,21 @@ void trs_gui_printer_management(void)
   int selection = 0;
 
   while (1) {
-    snprintf(&printer_menu[0].title[51], 10, "%s", printer_choices[trs_printer]);
+    snprintf(&printer_menu[1].title[51], 10, "%s", printer_choices[trs_printer]);
     trs_gui_limit_string(trs_printer_command, &printer_menu[3].title[2], 60);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Printer Management Menu", printer_menu, selection);
     switch (selection) {
       case 0:
-        trs_printer = trs_gui_display_popup("Printer", printer_choices, 2,
-            trs_printer);
-        break;
-      case 1:
         if (trs_printer_reset() == 0)
           trs_gui_display_message("Status", "Printer file closed, printer command ran");
         else
           trs_gui_display_message("Warning", "No Printer Output in File");
+        break;
+      case 1:
+        trs_printer = trs_gui_display_popup("Printer", printer_choices, 2,
+            trs_printer);
         break;
       case 3:
         filename[0] = 0;
