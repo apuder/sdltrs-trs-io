@@ -2643,7 +2643,6 @@ void trs_gui(void)
         break;
       case 8:
         trs_gui_rom_files();
-        trs_rom_init();
         break;
       case 9:
         trs_gui_display_management();
