@@ -78,9 +78,9 @@ unsigned int cycles_per_timer;
 
 /* Kludge: LDOS hides the date (not time) in a memory area across reboots. */
 /* We put it there on powerup, so LDOS magically knows the date! */
-#define LDOS_MONTH 0x4306
-#define LDOS_DAY   0x4307
-#define LDOS_YEAR  0x4466
+#define LDOS_MONTH  0x4306
+#define LDOS_DAY    0x4307
+#define LDOS_YEAR   0x4466
 #define LDOS3_MONTH 0x442f
 #define LDOS3_DAY   0x4457
 #define LDOS3_YEAR  0x4413
@@ -318,7 +318,7 @@ trs_nmi_mask_write(unsigned char value)
 #if IDEBUG2
   if (z80_state.nmi && !z80_state.nmi_seen) {
     debug("mask write caused nmi, mask %02x latch %02x\n",
-	  nmi_mask, nmi_latch);
+          nmi_mask, nmi_latch);
   }
 #endif
   if (!z80_state.nmi) z80_state.nmi_seen = 0;
@@ -359,9 +359,6 @@ trs_restore_delay()
 }
 #endif
 
-#define UP_F   1.50
-#define DOWN_F 0.50
-
 void
 trs_timer_event(void)
 {
@@ -374,26 +371,25 @@ trs_timer_event(void)
 
 void trs_timer_sync_with_host(void)
 {
-	Uint32 curtime;
-	Uint32 deltatime;
-    static Uint32 lasttime = 0;
+  Uint32 curtime;
+  Uint32 deltatime;
+  static Uint32 lasttime = 0;
 
-    if (timer_overclock) {
-        deltatime = 1000 / (timer_overclock_rate * timer_hz);
-    } else {
-        deltatime = 1000 / timer_hz;
-    }
+  if (timer_overclock)
+    deltatime = 1000 / (timer_overclock_rate * timer_hz);
+  else
+    deltatime = 1000 / timer_hz;
 
-	curtime = SDL_GetTicks();
+  curtime = SDL_GetTicks();
 
-	if (lasttime + deltatime > curtime) {
-		SDL_Delay(lasttime + deltatime - curtime);
-    }
-	curtime = SDL_GetTicks();
+  if (lasttime + deltatime > curtime)
+    SDL_Delay(lasttime + deltatime - curtime);
 
-	lasttime += deltatime;
-	if ((lasttime + deltatime) < curtime)
-		lasttime = curtime;
+  curtime = SDL_GetTicks();
+
+  lasttime += deltatime;
+  if ((lasttime + deltatime) < curtime)
+    lasttime = curtime;
 
   if (trs_show_led) {
     trs_disk_led(0,0);
@@ -450,9 +446,9 @@ trs_timer_init()
 
       if (trs_model >= 4) {
         extern Uchar memory[];
-	memory[LDOS4_MONTH] = lt->tm_mon + 1;
-	memory[LDOS4_DAY] = lt->tm_mday;
-	memory[LDOS4_YEAR] = lt->tm_year;
+        memory[LDOS4_MONTH] = lt->tm_mon + 1;
+        memory[LDOS4_DAY] = lt->tm_mday;
+        memory[LDOS4_YEAR] = lt->tm_year;
       }
   }
 }
@@ -475,14 +471,14 @@ trs_timer_on()
 void
 trs_timer_speed(int fast)
 {
-    if (trs_model >= 4) {
-	timer_hz = fast ? TIMER_HZ_4 : TIMER_HZ_3;
-	z80_state.clockMHz = fast ? CLOCK_MHZ_4 : CLOCK_MHZ_3;
-    } else if (trs_model == 1) {
-        /* Typical 2x clock speedup kit */
-        z80_state.clockMHz = CLOCK_MHZ_1 * ((fast&1) + 1);
-    }
-    cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
+  if (trs_model >= 4) {
+    timer_hz = fast ? TIMER_HZ_4 : TIMER_HZ_3;
+    z80_state.clockMHz = fast ? CLOCK_MHZ_4 : CLOCK_MHZ_3;
+  } else if (trs_model == 1) {
+      /* Typical 2x clock speedup kit */
+      z80_state.clockMHz = CLOCK_MHZ_1 * ((fast&1) + 1);
+  }
+  cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
 }
 
 static trs_event_func event_func = NULL;
@@ -501,16 +497,16 @@ static int event_arg;
 void
 trs_schedule_event(trs_event_func f, int arg, int countdown)
 {
-    while (event_func) {
+  while (event_func) {
 #if EDEBUG
-	warn("trying to schedule two events");
+    warn("trying to schedule two events");
 #endif
-	trs_do_event();
-    }
-    event_func = f;
-    event_arg = arg;
-    z80_state.sched = z80_state.t_count + (tstate_t) countdown;
-    if (z80_state.sched == 0) z80_state.sched--;
+    trs_do_event();
+  }
+  event_func = f;
+  event_arg = arg;
+  z80_state.sched = z80_state.t_count + (tstate_t) countdown;
+  if (z80_state.sched == 0) z80_state.sched--;
 }
 
 /*
@@ -520,12 +516,12 @@ trs_schedule_event(trs_event_func f, int arg, int countdown)
 void
 trs_do_event()
 {
-    trs_event_func f = event_func;
-    if (f) {
-	event_func = NULL;
-	z80_state.sched = 0;
-	f(event_arg);
-    }
+  trs_event_func f = event_func;
+  if (f) {
+    event_func = NULL;
+    z80_state.sched = 0;
+    f(event_arg);
+  }
 }
 
 /*
@@ -534,8 +530,8 @@ trs_do_event()
 void
 trs_cancel_event()
 {
-    event_func = NULL;
-    z80_state.sched = 0;
+  event_func = NULL;
+  z80_state.sched = 0;
 }
 
 /*
@@ -544,7 +540,7 @@ trs_cancel_event()
 trs_event_func
 trs_event_scheduled()
 {
-    return event_func;
+  return event_func;
 }
 
 void trs_interrupt_save(FILE *file)
@@ -607,49 +603,48 @@ void trs_interrupt_load(FILE *file)
 #endif
   trs_load_int(file, &event, 1);
   switch(event) {
-  case 1:
-    event_func = (trs_event_func) assert_state;
-    break;
-  case 2:
-    event_func = transition_out;
-    break;
-  case 3:
-    event_func = trs_cassette_kickoff;
-    break;
-  case 4:
-    event_func = orch90_flush;
-    break;
-  case 5:
-    event_func = trs_cassette_fall_interrupt;
-    break;
-  case 6:
-    event_func = trs_cassette_rise_interrupt;
-    break;
-  case 7:
-    event_func = trs_cassette_update;
-    break;
-  case 8:
-    event_func = trs_disk_lostdata;
-    break;
-  case 9:
-    event_func = trs_disk_done;
-    break;
-  case 10:
-    event_func = trs_disk_firstdrq;
-    break;
-  case 11:
-    event_func = trs_reset_button_interrupt;
-    break;
-  case 12:
-    event_func = trs_uart_set_avail;
-    break;
-  case 13:
-    event_func = trs_uart_set_empty;
-    break;
-  default:
-    event_func = NULL;
-    break;
+    case 1:
+      event_func = (trs_event_func) assert_state;
+      break;
+    case 2:
+      event_func = transition_out;
+      break;
+    case 3:
+      event_func = trs_cassette_kickoff;
+      break;
+    case 4:
+      event_func = orch90_flush;
+      break;
+    case 5:
+      event_func = trs_cassette_fall_interrupt;
+      break;
+    case 6:
+      event_func = trs_cassette_rise_interrupt;
+      break;
+    case 7:
+      event_func = trs_cassette_update;
+      break;
+    case 8:
+      event_func = trs_disk_lostdata;
+      break;
+    case 9:
+      event_func = trs_disk_done;
+      break;
+    case 10:
+      event_func = trs_disk_firstdrq;
+      break;
+    case 11:
+      event_func = trs_reset_button_interrupt;
+      break;
+    case 12:
+      event_func = trs_uart_set_avail;
+      break;
+    case 13:
+      event_func = trs_uart_set_empty;
+      break;
+    default:
+      event_func = NULL;
+      break;
   }
   trs_load_int(file, &event_arg, 1);
 }
-
