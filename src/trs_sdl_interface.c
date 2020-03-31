@@ -471,43 +471,26 @@ int trs_write_config_file(const char *filename)
   if ((config_file = fopen(filename, "w")) == NULL)
     return -1;
 
-  fprintf(config_file, "scale=%d\n", scale);
-  fprintf(config_file, "%sresize3\n", resize3 ? "" : "no");
-  fprintf(config_file, "%sresize4\n", resize4 ? "" : "no");
-  fprintf(config_file, "model=");
-  switch (trs_model) {
-    case 1:
-      fprintf(config_file, "1\n");
-      break;
-    case 3:
-      fprintf(config_file, "3\n");
-      break;
-    case 4:
-      fprintf(config_file, "4\n");
-      break;
-    case 5:
-      fprintf(config_file, "4P\n");
-      break;
+  fprintf(config_file, "background=0x%x\n", background);
+  fprintf(config_file, "borderwidth=%d\n", window_border_width);
+  fprintf(config_file, "cassdir=%s\n", trs_cass_dir);
+  {
+    const char *cassname = trs_cassette_getfilename();
+
+    if (cassname[0])
+      fprintf(config_file, "cassette=%s\n", cassname);
   }
   fprintf(config_file, "charset1=%s\n", charset_name(trs_charset1));
   fprintf(config_file, "charset3=%s\n", charset_name(trs_charset3));
   fprintf(config_file, "charset4=%s\n", charset_name(trs_charset4));
-  fprintf(config_file, "romfile=%s\n", romfile);
-  fprintf(config_file, "romfile3=%s\n", romfile3);
-  fprintf(config_file, "romfile4p=%s\n", romfile4p);
+  for (i = 0; i < 8; i++) {
+    const char *diskname = trs_disk_getfilename(i);
+
+    if (diskname[0])
+      fprintf(config_file, "disk%d=%s\n", i, diskname);
+  }
   fprintf(config_file, "diskdir=%s\n", trs_disk_dir);
-  fprintf(config_file, "harddir=%s\n", trs_hard_dir);
-  fprintf(config_file, "cassdir=%s\n", trs_cass_dir);
   fprintf(config_file, "disksetdir=%s\n", trs_disk_set_dir);
-  fprintf(config_file, "statedir=%s\n", trs_state_dir);
-  fprintf(config_file, "printer=%d\n", trs_printer);
-  fprintf(config_file, "printerdir=%s\n", trs_printer_dir);
-  fprintf(config_file, "printercmd=%s\n", trs_printer_command);
-  fprintf(config_file, "keystretch=%d\n", stretch_amount);
-  fprintf(config_file, "borderwidth=%d\n", window_border_width);
-  fprintf(config_file, "%sfullscreen\n", fullscreen ? "" : "no");
-  fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
-  fprintf(config_file, "%s\n", trs_show_led ? "showled" : "hideled");
   fprintf(config_file, "doubler=");
   switch (trs_disk_doubler) {
     case TRSDISK_PERCOM:
@@ -523,6 +506,65 @@ int trs_write_config_file(const char *filename)
       fprintf(config_file, "none\n");
       break;
   }
+  fprintf(config_file, "%semtsafe\n", trs_emtsafe ? "" : "no");
+  fprintf(config_file, "%sfullscreen\n", fullscreen ? "" : "no");
+  fprintf(config_file, "foreground=0x%x\n", foreground);
+  fprintf(config_file, "guibackground=0x%x\n", gui_background);
+  fprintf(config_file, "guiforeground=0x%x\n", gui_foreground);
+  for (i = 0; i < 4; i++) {
+    const char *diskname = trs_hard_getfilename(i);
+
+    if (diskname[0])
+      fprintf(config_file, "hard%d=%s\n", i, diskname);
+  }
+  fprintf(config_file, "harddir=%s\n", trs_hard_dir);
+  fprintf(config_file, "%shuffman\n", huffman_ram ? "" : "no");
+  fprintf(config_file, "%shypermem\n", hypermem ? "" : "no");
+  fprintf(config_file, "%sjoyaxismapped\n", jaxis_mapped ? "" : "no");
+  fprintf(config_file, "joybuttonmap=");
+  for (i = 0; i < N_JOYBUTTONS; i++)
+    fprintf(config_file, i < N_JOYBUTTONS - 1 ? "%d," : "%d\n", jbutton_map[i]);
+  fprintf(config_file, "joysticknum=");
+  if (trs_joystick_num == -1)
+    fprintf(config_file, "none\n");
+  else
+    fprintf(config_file, "%d\n", trs_joystick_num);
+  fprintf(config_file, "%skeypadjoy\n", trs_keypad_joystick ? "" : "no");
+  fprintf(config_file, "keystretch=%d\n", stretch_amount);
+  fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
+  fprintf(config_file, "%slower\n", lowercase ? "" : "no");
+  fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
+  fprintf(config_file, "model=");
+  switch (trs_model) {
+    case 1:
+      fprintf(config_file, "1\n");
+      break;
+    case 3:
+      fprintf(config_file, "3\n");
+      break;
+    case 4:
+      fprintf(config_file, "4\n");
+      break;
+    case 5:
+      fprintf(config_file, "4P\n");
+      break;
+  }
+  fprintf(config_file, "%smousepointer\n", mousepointer ? "" : "no");
+  fprintf(config_file, "printer=%d\n", trs_printer);
+  fprintf(config_file, "printercmd=%s\n", trs_printer_command);
+  fprintf(config_file, "printerdir=%s\n", trs_printer_dir);
+  fprintf(config_file, "%sresize3\n", resize3 ? "" : "no");
+  fprintf(config_file, "%sresize4\n", resize4 ? "" : "no");
+  fprintf(config_file, "romfile=%s\n", romfile);
+  fprintf(config_file, "romfile3=%s\n", romfile3);
+  fprintf(config_file, "romfile4p=%s\n", romfile4p);
+  fprintf(config_file, "samplerate=%d\n", cassette_default_sample_rate);
+  fprintf(config_file, "scale=%d\n", scale);
+  fprintf(config_file, "%sscanlines\n", scanlines ? "" : "no");
+  fprintf(config_file, "%sselector\n", selector ? "" : "no");
+  fprintf(config_file, "serial=%s\n", trs_uart_name);
+  fprintf(config_file, "%sshiftbracket\n", trs_kb_bracket_state ? "" : "no");
+  fprintf(config_file, "%s\n", trs_show_led ? "showled" : "hideled");
   fprintf(config_file, "sizemap=%d,%d,%d,%d,%d,%d,%d,%d\n",
           trs_disk_getsize(0),
           trs_disk_getsize(1),
@@ -532,6 +574,8 @@ int trs_write_config_file(const char *filename)
           trs_disk_getsize(5),
           trs_disk_getsize(6),
           trs_disk_getsize(7));
+  fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
+  fprintf(config_file, "statedir=%s\n", trs_state_dir);
 #ifdef __linux
   fprintf(config_file, "stepmap=%d,%d,%d,%d,%d,%d,%d,%d\n",
           trs_disk_getstep(0),            /* Corrected to trs_disk_getstep vs getsize */
@@ -543,70 +587,21 @@ int trs_write_config_file(const char *filename)
           trs_disk_getstep(6),
           trs_disk_getstep(7));
 #endif
-  fprintf(config_file, "%struedam\n", trs_disk_truedam ? "" : "no");
-  fprintf(config_file, "samplerate=%d\n", cassette_default_sample_rate);
-  fprintf(config_file, "serial=%s\n", trs_uart_name);
+  fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
+  fprintf(config_file, "%ssupermem\n", supermem ? "" : "no");
   fprintf(config_file, "switches=%d\n", trs_uart_switches);
-  fprintf(config_file, "%sshiftbracket\n", trs_kb_bracket_state ? "" : "no");
-  fprintf(config_file, "joysticknum=");
-  if (trs_joystick_num == -1)
-    fprintf(config_file, "none\n");
-  else
-    fprintf(config_file, "%d\n", trs_joystick_num);
-  fprintf(config_file, "%skeypadjoy\n", trs_keypad_joystick ? "" : "no");
-  fprintf(config_file, "foreground=0x%x\n", foreground);
-  fprintf(config_file, "background=0x%x\n", background);
-  fprintf(config_file, "guiforeground=0x%x\n", gui_foreground);
-  fprintf(config_file, "guibackground=0x%x\n", gui_background);
+  fprintf(config_file, "%struedam\n", trs_disk_truedam ? "" : "no");
   fprintf(config_file, "%sturbo\n", timer_overclock ? "" : "no");
 #if defined(SDL2) || !defined(NOX)
-  fprintf(config_file, "%sturbopaste", turbo_paste ? "" : "no");
+  fprintf(config_file, "%sturbopaste\n", turbo_paste ? "" : "no");
 #endif
   fprintf(config_file, "turborate=%d\n", timer_overclock_rate);
-
-  for (i = 0; i < 8; i++) {
-    const char *diskname = trs_disk_getfilename(i);
-
-    if (diskname[0])
-      fprintf(config_file, "disk%d=%s\n", i, diskname);
-  }
-  for (i = 0; i < 4; i++) {
-    const char *diskname = trs_hard_getfilename(i);
-
-    if (diskname[0])
-      fprintf(config_file, "hard%d=%s\n", i, diskname);
-  }
   for (i = 0; i < 8; i++) {
     const char *diskname = stringy_get_name(i);
 
     if (diskname[0])
       fprintf(config_file, "wafer%d=%s\n", i, diskname);
   }
-  {
-    const char *cassname = trs_cassette_getfilename();
-
-    if (cassname[0])
-      fprintf(config_file, "cassette=%s\n", cassname);
-  }
-
-  fprintf(config_file, "%smousepointer\n", mousepointer ? "" : "no");
-
-  fprintf(config_file, "joybuttonmap=");
-  for (i = 0; i < N_JOYBUTTONS; i++)
-    fprintf(config_file, i < N_JOYBUTTONS - 1 ? "%d," : "%d\n", jbutton_map[i]);
-
-  fprintf(config_file, "%sjoyaxismapped\n", jaxis_mapped ? "" : "no");
-
-  fprintf(config_file, "%shuffman\n", huffman_ram ? "" : "no");
-  fprintf(config_file, "%shypermem\n", hypermem ? "" : "no");
-  fprintf(config_file, "%ssupermem\n", supermem ? "" : "no");
-  fprintf(config_file, "%sselector\n", selector ? "" : "no");
-
-  fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
-  fprintf(config_file, "%slower\n", lowercase ? "" : "no");
-  fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
-  fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
-  fprintf(config_file, "%sscanlines\n", scanlines ? "" : "no");
 
   fclose(config_file);
   return 0;
