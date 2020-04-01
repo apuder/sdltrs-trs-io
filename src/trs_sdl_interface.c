@@ -2324,7 +2324,7 @@ void trs_get_event(int wait)
             break;
         }
 
-        if (SDL_GetModState() & (KMOD_LSHIFT | KMOD_RALT)) {
+        if (SDL_GetModState() & (KMOD_SHIFT | KMOD_RALT)) {
           if (keysym.sym >= 0x21 && keysym.sym <= 0xDF) {
             scancode = keysym.scancode;
             break;
