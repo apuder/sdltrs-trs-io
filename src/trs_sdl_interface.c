@@ -589,7 +589,7 @@ int trs_write_config_file(const char *filename)
 #endif
   fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
   fprintf(config_file, "%ssupermem\n", supermem ? "" : "no");
-  fprintf(config_file, "switches=%d\n", trs_uart_switches);
+  fprintf(config_file, "switches=0x%x\n", trs_uart_switches);
   fprintf(config_file, "%struedam\n", trs_disk_truedam ? "" : "no");
   fprintf(config_file, "%sturbo\n", timer_overclock ? "" : "no");
 #if defined(SDL2) || !defined(NOX)
@@ -983,7 +983,12 @@ static void trs_opt_supermem(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_switches(char *arg, int intarg, int *stringarg)
 {
-  trs_uart_switches = strtol(arg, NULL, 0);
+  int base = 10;
+
+  if (!strncasecmp(arg, "0x", 2))
+    base = 16;
+
+  trs_uart_switches = strtol(arg, NULL, base);
 }
 
 static void trs_opt_turborate(char *arg, int intarg, int *stringarg)
