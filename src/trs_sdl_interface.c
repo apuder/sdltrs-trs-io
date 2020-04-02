@@ -1163,8 +1163,6 @@ static void trs_flip_fullscreen(void)
     if (window_scale != 1)
       scale = window_scale;
   }
-
-  trs_screen_init();
 }
 
 void trs_rom_init(void)
@@ -1380,6 +1378,8 @@ void trs_screen_init(void)
 
   grafyx_redraw();
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
+  trs_screen_refresh();
+  trs_sdl_flush();
 }
 
 static void addToDrawList(SDL_Rect *rect)
@@ -2086,15 +2086,12 @@ void trs_get_event(int wait)
               break;
             case SDLK_RETURN:
               trs_flip_fullscreen();
-              trs_screen_refresh();
-              trs_sdl_flush();
+              trs_screen_init();
               break;
             case SDLK_HOME:
               fullscreen = 0;
               scale = 1;
               trs_screen_init();
-              trs_screen_refresh();
-              trs_sdl_flush();
               break;
             case SDLK_PLUS:
             case SDLK_PAGEDOWN:
@@ -2103,8 +2100,6 @@ void trs_get_event(int wait)
               if (scale > MAX_SCALE)
                 scale = 1;
               trs_screen_init();
-              trs_screen_refresh();
-              trs_sdl_flush();
               break;
             case SDLK_MINUS:
             case SDLK_PAGEUP:
@@ -2113,8 +2108,6 @@ void trs_get_event(int wait)
               if (scale < 1)
                 scale = MAX_SCALE;
               trs_screen_init();
-              trs_screen_refresh();
-              trs_sdl_flush();
               break;
             case SDLK_PERIOD:
               mousepointer = !mousepointer;
@@ -2123,8 +2116,6 @@ void trs_get_event(int wait)
             case SDLK_b:
               trs_show_led = !trs_show_led;
               trs_screen_init();
-              trs_screen_refresh();
-              trs_sdl_flush();
               break;
             case SDLK_d:
             case SDLK_f:
@@ -2151,8 +2142,6 @@ void trs_get_event(int wait)
             case SDLK_l:
               call_function(LOAD);
               trs_screen_init();
-              trs_screen_refresh();
-              trs_sdl_flush();
               break;
             case SDLK_m:
               call_function(GUI);
@@ -2539,8 +2528,8 @@ static void trs_screen_640x240(int flag)
         cur_char_height * col_chars) / 2 + border_width;
     if (left_margin > border_width || top_margin > border_width)
       SDL_FillRect(screen, NULL, background);
+    trs_screen_refresh();
   }
-  trs_screen_refresh();
 }
 
 void trs_screen_80x24(int flag)

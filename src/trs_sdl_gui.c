@@ -1769,7 +1769,6 @@ void trs_gui_display_management(void)
           if (local_background != background) {
             background = local_background;
             trs_screen_init();
-            trs_screen_refresh();
           }
         }
         break;
@@ -1780,7 +1779,6 @@ void trs_gui_display_management(void)
           if (local_foreground != foreground) {
             foreground = local_foreground;
             trs_screen_init();
-            trs_screen_refresh();
           }
         }
         break;
@@ -1791,7 +1789,6 @@ void trs_gui_display_management(void)
           if (local_gui_background != gui_background) {
             gui_background = local_gui_background;
             trs_screen_init();
-            trs_screen_refresh();
           }
         }
         break;
@@ -1802,7 +1799,6 @@ void trs_gui_display_management(void)
           if (local_gui_foreground != gui_foreground) {
             gui_foreground = local_gui_foreground;
             trs_screen_init();
-            trs_screen_refresh();
           }
         }
         break;
