@@ -1199,17 +1199,19 @@ void trs_gui_disk_creation(void)
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Disk Image, TAB selects directory",
             trs_disk_dir, filename, FILENAME_MAX, 1) == 0) {
-          if (image_type == 0)
-            ret = trs_create_blank_jv1(filename);
-          else if (image_type == 1)
-            ret = trs_create_blank_jv3(filename);
-          else
-            ret = trs_create_blank_dmk(filename, num_sides, density, eight, ignore_density);
-          if (ret)
-            trs_gui_display_message("Error", "Error creating Disk Image");
-          else if (drive_insert)
-            trs_disk_insert(drive_insert - 1, filename);
-          return;
+          if (trs_gui_file_overwrite()) {
+            if (image_type == 0)
+              ret = trs_create_blank_jv1(filename);
+            else if (image_type == 1)
+              ret = trs_create_blank_jv3(filename);
+            else
+              ret = trs_create_blank_dmk(filename, num_sides, density, eight, ignore_density);
+            if (ret)
+              trs_gui_display_message("Error", "Error creating Disk Image");
+            else if (drive_insert)
+              trs_disk_insert(drive_insert - 1, filename);
+            return;
+          }
         }
         break;
       case -1:
@@ -1337,8 +1339,10 @@ void trs_gui_diskset_save(void)
   if (trs_gui_input_string("Enter Filename for Disk Set, TAB selects directory",
       trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".set");
-    if (trs_diskset_save(filename) == -1)
-      trs_gui_display_message("Error", "Failed to save Disk Set");
+    if (trs_gui_file_overwrite()) {
+      if (trs_diskset_save(filename) == -1)
+        trs_gui_display_message("Error", "Failed to save Disk Set");
+    }
   }
 }
 
@@ -1518,12 +1522,14 @@ void trs_gui_hard_management(void)
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Hard Disk Image, TAB selects directory",
             trs_hard_dir, filename, 191, 1) == 0) {
-          if (trs_create_blank_hard(filename, cylinder_count, sector_count,
-              granularity, dir_sector))
-            trs_gui_display_message("Error", "Error creating Hard Disk Image");
-          else if (drive_insert)
-            trs_hard_attach(drive_insert - 1, filename);
-          return;
+          if (trs_gui_file_overwrite()) {
+            if (trs_create_blank_hard(filename, cylinder_count, sector_count,
+                granularity, dir_sector))
+              trs_gui_display_message("Error", "Error creating Hard Disk Image");
+            else if (drive_insert)
+              trs_hard_attach(drive_insert - 1, filename);
+            return;
+          }
         }
         break;
       case -1:
@@ -1583,12 +1589,14 @@ void trs_gui_stringy_management(void)
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Wafer Image, TAB selects directory",
             trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
-          if (stringy_create(filename))
-            trs_gui_display_message("Error", "Error creating Stringy Wafer Image");
-          else
-            if (wafer_insert)
-              stringy_insert(wafer_insert - 1, filename);
-          return;
+          if (trs_gui_file_overwrite()) {
+            if (stringy_create(filename))
+              trs_gui_display_message("Error", "Error creating Stringy Wafer Image");
+            else
+              if (wafer_insert)
+                stringy_insert(wafer_insert - 1, filename);
+            return;
+          }
         }
         break;
       case -1:
@@ -1674,20 +1682,22 @@ void trs_gui_cassette_management(void)
               trs_add_extension(filename, ".wav");
               break;
           }
-          if ((cassette_file = fopen(filename, "wb")) == NULL)
-            ret = -1;
-          else {
-            if (image_type == 2)
-              ret = create_wav_header(cassette_file);
-            fclose(cassette_file);
+          if (trs_gui_file_overwrite()) {
+            if ((cassette_file = fopen(filename, "wb")) == NULL)
+              ret = -1;
+            else {
+              if (image_type == 2)
+                ret = create_wav_header(cassette_file);
+              fclose(cassette_file);
+            }
+            if (ret)
+              trs_gui_display_message("Error", "Error creating Cassette Image");
+            else {
+              if (drive_insert)
+                trs_cassette_insert(filename);
+            }
+            return;
           }
-          if (ret)
-            trs_gui_display_message("Error", "Error creating Cassette Image");
-          else {
-            if (drive_insert)
-              trs_cassette_insert(filename);
-          }
-          return;
         }
         break;
       case -1:
