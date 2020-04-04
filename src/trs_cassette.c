@@ -134,7 +134,7 @@ static int cassette_value, cassette_next, cassette_flipflop;
 static int cassette_lastnonzero;
 static int cassette_transitionsout;
 static unsigned long cassette_delta;
-static float cassette_roundoff_error = 0.0;
+static float cassette_roundoff_error;
 
 /* For bit/byte conversion (.cas file i/o) */
 static int cassette_byte;
@@ -385,6 +385,9 @@ create_wav_header(FILE *f)
   wave_dataid_offset = WAVE_DATAID_OFFSET;
   wave_datasize_offset = WAVE_DATASIZE_OFFSET;
   wave_data_offset = WAVE_DATA_OFFSET;
+  if (cassette_position < wave_data_offset) {
+    cassette_position = wave_data_offset;
+  }
 
   if (fputs("RIFF", f) < 0) return -1;
   if (put_fourbyte(0, f) < 0) return -1; /* RIFF chunk size */
@@ -989,6 +992,7 @@ transition_in()
     ret = 1;
     break;
 
+  case DIRECT_FORMAT:
   case WAV_FORMAT:
     nsamples = 0;
     maxsamples = cassette_sample_rate / 100;
