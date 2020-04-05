@@ -2567,9 +2567,9 @@ void trs_gui_new_machine(void)
   romin = 0;
   mem_init();
   screen_init();
-  trs_screen_init();
   trs_timer_init();
   trs_rom_init();
+  trs_screen_init();
   trs_reset(1);
 }
 
