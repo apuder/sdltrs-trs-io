@@ -3040,18 +3040,23 @@ int z80_run(int continuous)
 {
     Uchar instruction;
     Ushort address; /* generic temps */
+    int cycles;
     int ret = 0;
 	tstate_t t_delta;
     trs_continuous = continuous;
 
     /* loop to do a z80 instruction */
     do {
+        if (timer_overclock)
+          cycles = cycles_per_timer * timer_overclock_rate;
+        else
+          cycles = cycles_per_timer;
     /* Speed control */
 	if (z80_state.t_count > last_t_count)
 		t_delta = z80_state.t_count - last_t_count;
 	else
 		t_delta = last_t_count - z80_state.t_count;
-    if (t_delta >= cycles_per_timer) {
+    if (t_delta >= cycles) {
 	    trs_get_event(0);
         if (trs_paused) {
           while (trs_paused)
