@@ -89,6 +89,7 @@ extern int  key_queue_entries;
 extern int  trs_gui_exit_sdltrs(void);
 extern void trs_gui_keys_sdltrs(void);
 extern void trs_gui_model(void);
+extern unsigned int cycles_per_timer;
 
 /* Public data */
 int window_border_width;
@@ -2095,7 +2096,6 @@ void trs_get_event(int wait)
               scale = 1;
               trs_screen_init();
               break;
-            case SDLK_PLUS:
             case SDLK_PAGEDOWN:
               fullscreen = 0;
               scale++;
@@ -2103,13 +2103,26 @@ void trs_get_event(int wait)
                 scale = 1;
               trs_screen_init();
               break;
-            case SDLK_MINUS:
             case SDLK_PAGEUP:
               fullscreen = 0;
               scale--;
               if (scale < 1)
                 scale = MAX_SCALE;
               trs_screen_init();
+              break;
+            case SDLK_MINUS:
+              if (z80_state.clockMHz > 0.1) {
+                z80_state.clockMHz -= 0.1;
+                cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
+                trs_screen_caption();
+              }
+              break;
+            case SDLK_PLUS:
+              if (z80_state.clockMHz < 99.0) {
+                z80_state.clockMHz += 0.1;
+                cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
+                trs_screen_caption();
+              }
               break;
             case SDLK_PERIOD:
               mousepointer = !mousepointer;
