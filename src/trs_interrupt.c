@@ -372,8 +372,13 @@ trs_timer_event(void)
 void trs_timer_sync_with_host(void)
 {
   Uint32 curtime;
-  Uint32 deltatime = 1000 / timer_hz;
+  Uint32 deltatime;
   static Uint32 lasttime = 0;
+
+  if (timer_overclock)
+    deltatime = 1000 / (timer_overclock_rate * timer_hz);
+  else
+    deltatime = 1000 / timer_hz;
 
   curtime = SDL_GetTicks();
 
