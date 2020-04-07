@@ -1621,9 +1621,10 @@ void trs_sdl_flush(void)
 {
 #if defined(SDL2) || !defined(NOX)
   if (mousepointer) {
-    if (!trs_emu_mouse)
+    if (!trs_emu_mouse && paste_state == PASTE_IDLE) {
       ProcessCopySelection(requestSelectAll);
-    requestSelectAll = FALSE;
+      requestSelectAll = FALSE;
+    }
   }
 #endif
   if (drawnRectCount == 0)
