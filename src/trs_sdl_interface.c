@@ -190,6 +190,7 @@ static int selectionEndX = 0;
 static int selectionEndY = 0;
 static int requestSelectAll = FALSE;
 static int timer_saved;
+static unsigned int cycles_saved;
 #endif
 
 /* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
@@ -1908,6 +1909,7 @@ void trs_get_event(int wait)
           paste_state = PASTE_IDLE;
           if (turbo_paste)
             timer_overclock = timer_saved;
+          cycles_per_timer = cycles_saved;
         }
         else
           paste_state = PASTE_GETNEXT;
@@ -2066,6 +2068,8 @@ void trs_get_event(int wait)
                 timer_saved = timer_overclock;
                 timer_overclock = 1;
               }
+              cycles_saved = cycles_per_timer;
+              cycles_per_timer *= 4;
               PasteManagerStartPaste();
               paste_state = PASTE_GETNEXT;
               break;
