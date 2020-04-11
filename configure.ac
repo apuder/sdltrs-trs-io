@@ -36,9 +36,14 @@ AC_ARG_ENABLE([sdl1],
   [AS_HELP_STRING([--enable-sdl1], [SDL1 version])],
   [SDL_VERS=SDL
    SDL_CONF=sdl-config],
-  [AC_DEFINE([SDL2])
-   SDL_VERS=SDL2
-   SDL_CONF=sdl2-config])
+  [SDL_VERS=SDL2
+   SDL_CONF=sdl2-config
+   AC_CHECK_PROG(SDL_CHECK, $SDL_CONF, yes)
+   AS_IF([test x"$SDL_CHECK" != x"yes"],
+     [AC_MSG_WARN([$SDL_VERS not found, falling back to SDL1])
+      SDL_VERS=SDL
+      SDL_CONF=sdl-config],
+     [AC_DEFINE([SDL2])])])
 
 CFLAGS="$CFLAGS $( $SDL_CONF --cflags )"
 LIBS="$LIBS $( $SDL_CONF --libs)"
