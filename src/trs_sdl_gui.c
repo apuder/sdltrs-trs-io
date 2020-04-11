@@ -2581,13 +2581,13 @@ void trs_gui(void)
    {"Cassette Management      (ALT-T)", MENU_NORMAL_TYPE},
    {"Stringy Wafer Management (ALT-G)", MENU_NORMAL_TYPE},
    {"Emulator Settings        (ALT-E)", MENU_NORMAL_TYPE},
-   {"Configuration/State File Management", MENU_NORMAL_TYPE},
+   {"Display Settings         (ALT-I)", MENU_NORMAL_TYPE},
+   {"Miscellaneous Settings   (ALT-O)", MENU_NORMAL_TYPE},
+   {"Configuration/State Files", MENU_NORMAL_TYPE},
    {"Printer Management", MENU_NORMAL_TYPE},
+   {"Joystick Settings", MENU_NORMAL_TYPE},
    {"Select Default Directories", MENU_NORMAL_TYPE},
    {"ROM File Selection", MENU_NORMAL_TYPE},
-   {"Display Settings         (ALT-I)", MENU_NORMAL_TYPE},
-   {"Joystick Settings", MENU_NORMAL_TYPE},
-   {"Miscellaneous Settings   (ALT-O)", MENU_NORMAL_TYPE},
    {"About SDLTRS", MENU_NORMAL_TYPE},
    {"", 0}};
   int selection = 0;
@@ -2613,26 +2613,26 @@ void trs_gui(void)
         trs_gui_model();
         break;
       case 5:
+        trs_gui_display_management();
+        break;
+      case 6:
+        trs_gui_misc_management();
+        break;
+      case 7:
         if (trs_gui_config_management())
           return;
         break;
-      case 6:
+      case 8:
         trs_gui_printer_management();
         break;
-      case 7:
-        trs_gui_default_dirs();
-        break;
-      case 8:
-        trs_gui_rom_files();
-        break;
       case 9:
-        trs_gui_display_management();
-        break;
-      case 10:
         trs_gui_joystick_management();
         break;
+      case 10:
+        trs_gui_default_dirs();
+        break;
       case 11:
-        trs_gui_misc_management();
+        trs_gui_rom_files();
         break;
       case 12:
         trs_gui_about_sdltrs();
