@@ -1,3 +1,4 @@
 diskimages/*		/usr/share/sdltrs/
 icons/sdltrs.png	/usr/share/pixmaps/
+icons/sdltrs.svg	/usr/share/icons/hicolor/scalable/apps/
 sdltrs.desktop		/usr/share/applications/
