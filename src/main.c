@@ -159,11 +159,7 @@ int SDLmain(int argc, char *argv[])
 
   /* program_name must be set first because the error
    * printing routines use it. */
-#ifdef _WIN32
-  program_name = strrchr(argv[0], '\\');
-#else
-  program_name = strrchr(argv[0], '/');
-#endif
+  program_name = strrchr(argv[0], DIR_SLASH);
   if (program_name == NULL) {
     program_name = argv[0];
   } else {
