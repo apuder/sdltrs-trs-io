@@ -44,7 +44,6 @@
 
 /*#define MOUSEDEBUG 1*/
 /*#define XDEBUG 1*/
-/*#define QDEBUG 1*/
 
 /*
  * trs_sdl_interface.c

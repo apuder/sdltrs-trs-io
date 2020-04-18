@@ -44,6 +44,7 @@
 
 /*#define KBDEBUG 1*/
 /*#define JOYDEBUG 1*/
+/*#define QDEBUG 1*/
 
 #include <SDL.h>
 #include "error.h"
