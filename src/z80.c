@@ -142,7 +142,7 @@ static Uchar subtract_half_carry_table[] =
     HALF_CARRY_MASK,
 };
 
-static int parity(unsigned value)
+static int parity(int value)
 {
     /* for parity flag, 1 = even parity, 0 = odd parity. */
     static char parity_table[256] =
