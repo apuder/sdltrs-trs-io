@@ -177,6 +177,8 @@ int SDLmain(int argc, char *argv[])
 
 #ifndef SDL2
   putenv("SDL_VIDEO_CENTERED=center");
+  /* For NumLock on SDL >= 1.2.14 */
+  putenv("SDL_DISABLE_LOCK_KEYS=1");
 
   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
   /* Enable Unicode key translations */

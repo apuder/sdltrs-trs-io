@@ -2051,6 +2051,18 @@ void trs_get_event(int wait)
 #endif
             keysym.sym = 0;
             break;
+#ifdef SDL2
+          case SDLK_NUMLOCKCLEAR:
+#else
+          case SDLK_NUMLOCK:
+#endif
+            trs_keypad_joystick = !trs_keypad_joystick;
+            trs_set_keypad_joystick();
+#ifndef SDL2
+            keysym.unicode = 0;
+#endif
+            keysym.sym = 0;
+            break;
           default:
             break;
         }
