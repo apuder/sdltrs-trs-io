@@ -1945,11 +1945,9 @@ void trs_get_event(int wait)
 #if XDEBUG
             debug("Active\n");
 #endif
-            trs_screen_refresh();
+            drawnRectCount = MAX_RECTS;
+            trs_sdl_flush();
             clear_key_queue();
-#if defined(SDL2) || !defined(NOX)
-            copyStatus = COPY_IDLE;
-#endif
           }
 #ifndef SDL2
         }
