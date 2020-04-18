@@ -1413,104 +1413,102 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
 
   SDL_LockSurface(screen);
 
-  if (screen->format->BitsPerPixel == 8) {
-    const int pitch = screen->pitch;
-    Uint8 *start8;
+  switch (screen->format->BitsPerPixel) {
+    case 8:
+    {
+      int const pitch = screen->pitch;
+      Uint8 *start8;
 
-    for (y = orig_y; y < orig_y + scale; y++) {
-      start8 = (Uint8 *) screen->pixels +
-        (y * pitch) + orig_x;
-      for (x = 0; x < (copy_x-orig_x + scale); x++, start8++)
-        *start8 ^= 0xFF;
-    }
-    if (copy_y > orig_y) {
-      for (y = copy_y; y < copy_y + scale; y++) {
-        start8 = (Uint8 *) screen->pixels +
-          (y * pitch) + orig_x;
-        for (x = 0; x < (copy_x-orig_x + scale); x++, start8++)
+      for (y = orig_y; y < orig_y + scale; y++) {
+        start8 = (Uint8 *)screen->pixels + (y * pitch) + orig_x;
+        for (x = 0; x < copy_x-orig_x + scale; x++, start8++)
           *start8 ^= 0xFF;
       }
-    }
-    for (y = orig_y + scale; y < copy_y; y++) {
-      start8 = (Uint8 *) screen->pixels +
-        (y * pitch) + orig_x;
-      for (x = 0; x < scale; x++)
-        *start8++ ^= 0xFF;
-    }
-    if (copy_x > orig_x) {
+      if (copy_y > orig_y) {
+        for (y = copy_y; y < copy_y + scale; y++) {
+          start8 = (Uint8 *)screen->pixels + (y * pitch) + orig_x;
+          for (x = 0; x < copy_x-orig_x + scale; x++, start8++)
+            *start8 ^= 0xFF;
+        }
+      }
       for (y = orig_y + scale; y < copy_y; y++) {
-        start8 = (Uint8 *) screen->pixels +
-          (y * pitch) + copy_x;
+        start8 = (Uint8 *)screen->pixels + (y * pitch) + orig_x;
         for (x = 0; x < scale; x++)
           *start8++ ^= 0xFF;
       }
-    }
-  }
-  else if (screen->format->BitsPerPixel == 16) {
-    const int pitch2 = screen->pitch / 2;
-    Uint16 *start16;
-
-    for (y = orig_y; y < orig_y + scale; y++) {
-      start16 = (Uint16 *) screen->pixels +
-        (y * pitch2) + orig_x;
-      for (x = 0; x < (copy_x-orig_x + scale); x++, start16++)
-        *start16 ^= 0xFFFF;
-    }
-    if (copy_y > orig_y) {
-      for (y = copy_y; y < copy_y + scale; y++) {
-        start16 = (Uint16 *) screen->pixels +
-          (y * pitch2) + orig_x;
-        for (x = 0; x < (copy_x-orig_x + scale); x++, start16++)
-          *start16 ^= 0xFFFF;
+      if (copy_x > orig_x) {
+        for (y = orig_y + scale; y < copy_y; y++) {
+          start8 = (Uint8 *)screen->pixels + (y * pitch) + copy_x;
+          for (x = 0; x < scale; x++)
+            *start8++ ^= 0xFF;
+        }
       }
     }
-    for (y = orig_y + scale; y < copy_y; y++) {
-      start16 = (Uint16 *) screen->pixels +
-        (y * pitch2) + orig_x;
-      for (x = 0; x < scale; x++)
-        *start16++ ^= 0xFFFF;
-    }
-    if (copy_x > orig_x) {
+    break;
+
+    case 16:
+    {
+      int const pitch2 = screen->pitch / 2;
+      Uint16 *start16;
+
+      for (y = orig_y; y < orig_y + scale; y++) {
+        start16 = (Uint16 *)screen->pixels + (y * pitch2) + orig_x;
+        for (x = 0; x < copy_x-orig_x + scale; x++, start16++)
+          *start16 ^= 0xFFFF;
+      }
+      if (copy_y > orig_y) {
+        for (y = copy_y; y < copy_y + scale; y++) {
+          start16 = (Uint16 *)screen->pixels + (y * pitch2) + orig_x;
+          for (x = 0; x < copy_x-orig_x + scale; x++, start16++)
+            *start16 ^= 0xFFFF;
+        }
+      }
       for (y = orig_y + scale; y < copy_y; y++) {
-        start16 = (Uint16 *) screen->pixels +
-          (y * pitch2) + copy_x;
+        start16 = (Uint16 *)screen->pixels + (y * pitch2) + orig_x;
         for (x = 0; x < scale; x++)
           *start16++ ^= 0xFFFF;
       }
-    }
-  }
-  else if (screen->format->BitsPerPixel == 32) {
-    const int pitch4 = screen->pitch / 4;
-    Uint32 *start32;
-
-    for (y = orig_y; y < orig_y + scale; y++) {
-      start32 = (Uint32 *) screen->pixels +
-        (y * pitch4) + orig_x;
-      for (x = 0; x < (copy_x-orig_x + scale); x++, start32++)
-        *start32 ^= 0xFFFFFFFF;
-    }
-    if (copy_y > orig_y) {
-      for (y = copy_y; y < copy_y + scale; y++) {
-        start32 = (Uint32 *) screen->pixels +
-          (y * pitch4) + orig_x;
-        for (x = 0; x < (copy_x-orig_x + scale); x++, start32++)
-          *start32 ^= 0xFFFFFFFF;
+      if (copy_x > orig_x) {
+        for (y = orig_y + scale; y < copy_y; y++) {
+          start16 = (Uint16 *)screen->pixels + (y * pitch2) + copy_x;
+          for (x = 0; x < scale; x++)
+            *start16++ ^= 0xFFFF;
+        }
       }
     }
-    for (y = orig_y + scale; y < copy_y; y++) {
-      start32 = (Uint32 *) screen->pixels +
-        (y * pitch4) + orig_x;
-      for (x = 0; x < scale; x++)
-        *start32++ ^= 0xFFFFFFFF;
-    }
-    if (copy_x > orig_x) {
+    break;
+
+    case 32:
+    {
+      int const pitch4 = screen->pitch / 4;
+      Uint32 *start32;
+
+      for (y = orig_y; y < orig_y + scale; y++) {
+        start32 = (Uint32 *)screen->pixels + (y * pitch4) + orig_x;
+        for (x = 0; x < copy_x-orig_x + scale; x++, start32++)
+          *start32 ^= 0xFFFFFFFF;
+      }
+      if (copy_y > orig_y) {
+        for (y = copy_y; y < copy_y + scale; y++) {
+          start32 = (Uint32 *)screen->pixels + (y * pitch4) + orig_x;
+          for (x = 0; x < copy_x-orig_x + scale; x++, start32++)
+            *start32 ^= 0xFFFFFFFF;
+        }
+      }
       for (y = orig_y + scale; y < copy_y; y++) {
-        start32 = (Uint32 *) screen->pixels +
-          (y * pitch4) + copy_x;
+        start32 = (Uint32 *)screen->pixels + (y * pitch4) + orig_x;
         for (x = 0; x < scale; x++)
           *start32++ ^= 0xFFFFFFFF;
       }
+      if (copy_x > orig_x) {
+        for (y = orig_y + scale; y < copy_y; y++) {
+          start32 = (Uint32 *)screen->pixels + (y * pitch4) + copy_x;
+          for (x = 0; x < scale; x++)
+            *start32++ ^= 0xFFFFFFFF;
+        }
+      }
     }
+    break;
   }
   SDL_UnlockSurface(screen);
 }
@@ -1792,57 +1790,57 @@ static void call_function(int function)
   else {
     SDL_PauseAudio(1);
     switch (function) {
-    case GUI:
-      trs_gui();
-      break;
-    case JOYGUI:
-      trs_gui_joy_gui();
-      break;
-    case KEYBRD:
-      trs_gui_get_virtual_key();
-      break;
-    case SAVE:
-      trs_gui_save_state();
-      break;
-    case LOAD:
-      trs_gui_load_state();
-      break;
-    case DISK:
-      trs_gui_disk_management();
-      break;
-    case HARD:
-      trs_gui_hard_management();
-      break;
-    case STRINGY:
-      trs_gui_stringy_management();
-      break;
-    case TAPE:
-      trs_gui_cassette_management();
-      break;
-    case WRITE:
-      trs_gui_write_config();
-      break;
-    case READ:
-      trs_gui_read_config();
-      break;
-    case EMULATOR:
-      trs_gui_model();
-      break;
-    case INTERFACE:
-      trs_gui_display_management();
-      break;
-    case OTHER:
-      trs_gui_misc_management();
-      break;
-    case KEYS:
-      trs_gui_keys_sdltrs();
-      break;
-    case EXEC:
-      trs_gui_exec_cmd();
-      break;
-    case SAVE_BMP:
-      trs_gui_save_bmp();
-      break;
+      case GUI:
+        trs_gui();
+        break;
+      case JOYGUI:
+        trs_gui_joy_gui();
+        break;
+      case KEYBRD:
+        trs_gui_get_virtual_key();
+        break;
+      case SAVE:
+        trs_gui_save_state();
+        break;
+      case LOAD:
+        trs_gui_load_state();
+        break;
+      case DISK:
+        trs_gui_disk_management();
+        break;
+      case HARD:
+        trs_gui_hard_management();
+        break;
+      case STRINGY:
+        trs_gui_stringy_management();
+        break;
+      case TAPE:
+        trs_gui_cassette_management();
+        break;
+      case WRITE:
+        trs_gui_write_config();
+        break;
+      case READ:
+        trs_gui_read_config();
+        break;
+      case EMULATOR:
+        trs_gui_model();
+        break;
+      case INTERFACE:
+        trs_gui_display_management();
+        break;
+      case OTHER:
+        trs_gui_misc_management();
+        break;
+      case KEYS:
+        trs_gui_keys_sdltrs();
+        break;
+      case EXEC:
+        trs_gui_exec_cmd();
+        break;
+      case SAVE_BMP:
+        trs_gui_save_bmp();
+        break;
     }
     SDL_PauseAudio(0);
     trs_screen_refresh();
@@ -2754,10 +2752,10 @@ void trs_screen_refresh(void)
   debug("trs_screen_refresh\n");
 #endif
   if (grafyx_enable && !grafyx_overlay) {
-    int srcx = cur_char_width * grafyx_xoffset;
-    int srcy = (scale * 2) * grafyx_yoffset;
-    int dunx = imageSize.width - srcx;
-    int duny = imageSize.height - srcy;
+    int const srcx = cur_char_width * grafyx_xoffset;
+    int const srcy = (scale * 2) * grafyx_yoffset;
+    int const dunx = imageSize.width - srcx;
+    int const duny = imageSize.height - srcy;
     SDL_Rect srcRect, destRect;
 
     srcRect.x = srcx;
@@ -2985,10 +2983,10 @@ void trs_screen_write_char(int position, int char_index)
   /* Overlay grafyx on character */
   if (grafyx_enable) {
     /* assert(grafyx_overlay); */
-    int srcx = ((col + grafyx_xoffset) % G_XSIZE) * cur_char_width;
-    int srcy = (row * cur_char_height + grafyx_yoffset * (scale * 2))
+    int const srcx = ((col + grafyx_xoffset) % G_XSIZE) * cur_char_width;
+    int const srcy = (row * cur_char_height + grafyx_yoffset * (scale * 2))
       % (G_YSIZE * (scale * 2));
-    int duny = imageSize.height - srcy;
+    int const duny = imageSize.height - srcy;
 
     srcRect.x = srcx;
     srcRect.y = srcy;
@@ -3213,7 +3211,7 @@ void grafyx_write_data(int value)
 
 int grafyx_read_data(void)
 {
-  int value = grafyx_unscaled[grafyx_y][grafyx_x % G_XSIZE];
+  int const value = grafyx_unscaled[grafyx_y][grafyx_x % G_XSIZE];
 
   if (!(grafyx_mode & G_XNOCLKR)) {
     if (grafyx_mode & G_XDEC)
@@ -3525,8 +3523,8 @@ hrg_write_data(int data)
     int const destx = (position % row_chars) * cur_char_width + left_margin;
     int const desty = (position / row_chars) * cur_char_height + top_margin
       + hrg_pixel_y[line];
-    int const *x = hrg_pixel_x[(currentmode&EXPANDED) != 0];
-    int const *w = hrg_pixel_width[(currentmode&EXPANDED) != 0];
+    int const *x = hrg_pixel_x[(currentmode & EXPANDED) != 0];
+    int const *w = hrg_pixel_width[(currentmode & EXPANDED) != 0];
     int const h = hrg_pixel_height[line];
     int n0 = 0;
     int n1 = 0;
@@ -3598,8 +3596,8 @@ hrg_update_char(int position)
 {
   int const destx = (position % row_chars) * cur_char_width + left_margin;
   int const desty = (position / row_chars) * cur_char_height + top_margin;
-  int const *x = hrg_pixel_x[(currentmode&EXPANDED) != 0];
-  int const *w = hrg_pixel_width[(currentmode&EXPANDED) != 0];
+  int const *x = hrg_pixel_x[(currentmode & EXPANDED) != 0];
+  int const *w = hrg_pixel_width[(currentmode & EXPANDED) != 0];
   int byte;
   int prev_byte = 0;
   int n = 0;
