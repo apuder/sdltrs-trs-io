@@ -125,7 +125,7 @@ extern int  scanlines;
 #if defined(SDL2) || !defined(NOX)
 extern int  turbo_paste;
 #endif
-extern void trs_gui_write_char(int position, int char_index, int invert);
+extern void trs_gui_write_char(unsigned int position, unsigned char char_index, int invert);
 extern int  trs_sdl_savebmp(const char *name);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);

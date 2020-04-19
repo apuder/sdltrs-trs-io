@@ -72,7 +72,7 @@ void trs_gui_new_machine(void);
 void trs_gui(void);
 
 void trs_gui_refresh(void);
-void trs_gui_write_char(int position, int char_index, int invert);
+void trs_gui_write_char(unsigned int position, unsigned char char_index, int invert);
 
 void trs_gui_get_virtual_key(void);
 void trs_gui_joy_gui(void);
