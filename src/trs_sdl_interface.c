@@ -2930,9 +2930,9 @@ void trs_screen_write_char(unsigned int position, unsigned char char_index)
   int row, col, destx, desty, expanded, width, height;
   SDL_Rect srcRect, destRect;
 
-  trs_screen[position] = char_index;
   if (position >= screen_chars)
     return;
+  trs_screen[position] = char_index;
   if ((currentmode & EXPANDED) && (position & 1))
     return;
   if (grafyx_enable && !grafyx_overlay)
