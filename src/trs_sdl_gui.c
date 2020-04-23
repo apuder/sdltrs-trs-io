@@ -969,16 +969,14 @@ int trs_gui_display_popup(const char *title, const char **entry,
       switch (key) {
         case SDLK_DOWN:
         case SDLK_RIGHT:
-          if (selection < entry_count - 1)
-            selection++;
-          else
+          selection++;
+          if (selection > entry_count - 1)
             selection = 0;
           break;
         case SDLK_UP:
         case SDLK_LEFT:
-          if (selection > 0)
-            selection--;
-          else
+          selection--;
+          if (selection < 0)
             selection = entry_count - 1;
           break;
         case SDLK_HOME:
@@ -1038,18 +1036,16 @@ int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
         case SDLK_DOWN:
         case SDLK_RIGHT:
           do {
-            if (selection < num)
-              selection++;
-            else
+            selection++;
+            if (selection > num)
               selection = 0;
           } while (entry[selection].type == MENU_TITLE_TYPE);
           break;
         case SDLK_UP:
         case SDLK_LEFT:
           do {
-            if (selection > 0)
-              selection--;
-            else
+            selection--;
+            if (selection < 0)
               selection = num;
           } while (entry[selection].type == MENU_TITLE_TYPE);
           break;
@@ -2683,27 +2679,23 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
     trs_gui_write_text(entry[selection], first_x + col * max_len, first_y + row, 0);
     switch (key) {
       case SDLK_DOWN:
-        if (row < rows - 1)
-          row++;
-        else
+        row++;
+        if (row > rows - 1)
           row = 0;
         break;
       case SDLK_UP:
-        if (row > 0)
-          row--;
-        else
+        row--;
+        if (row < 0)
           row = rows - 1;
         break;
       case SDLK_RIGHT:
-        if (col < cols - 1)
-          col++;
-        else
+        col++;
+        if (col > cols - 1)
           col = 0;
         break;
       case SDLK_LEFT:
-        if (col > 0)
-          col--;
-        else
+        col--;
+        if (col < 0)
           col = cols - 1;
         break;
       case SDLK_HOME:
