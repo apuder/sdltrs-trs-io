@@ -418,6 +418,7 @@ static const int num_options = sizeof(options) / sizeof(trs_opt);
 /* Private routines */
 static void bitmap_init(void);
 static void grafyx_redraw(void);
+static void grafyx_rescale(int y, int x, char byte);
 
 static void stripWhitespace(char *inputStr)
 {
@@ -3080,8 +3081,6 @@ void trs_gui_write_char(unsigned int position, unsigned char char_index, int inv
 
 static void grafyx_write_byte(int x, int y, char byte)
 {
-  char exp[MAX_SCALE];
-  int i, j;
   int const screen_x = ((x - grafyx_xoffset + G_XSIZE) % G_XSIZE);
   int const screen_y = ((y - grafyx_yoffset + G_YSIZE) % G_YSIZE);
   int const on_screen = screen_x < row_chars &&
@@ -3103,6 +3102,37 @@ static void grafyx_write_byte(int x, int y, char byte)
 
   /* Save new byte in local memory */
   grafyx_unscaled[y][x] = byte;
+  grafyx_rescale(y, x, byte);
+
+  if (grafyx_enable && on_screen) {
+    /* Draw new byte */
+    srcRect.x = x * cur_char_width;
+    srcRect.y = y * (scale * 2);
+    srcRect.w = cur_char_width;
+    srcRect.h = scale * 2;
+    destRect.x = left_margin + screen_x * cur_char_width;
+    destRect.y = top_margin + screen_y * (scale * 2);
+    destRect.w = srcRect.w;
+    destRect.h = srcRect.h;
+    TrsSoftBlit(image, &srcRect, screen, &destRect, grafyx_overlay);
+    addToDrawList(&destRect);
+  }
+}
+
+static void grafyx_redraw(void)
+{
+  int x, y;
+
+  for (y = 0; y < G_YSIZE; y++)
+    for (x = 0; x < G_XSIZE; x++)
+      grafyx_rescale(y, x, grafyx_unscaled[y][x]);
+}
+
+static void grafyx_rescale(int y, int x, char byte)
+{
+  char exp[MAX_SCALE];
+  int i, j;
+
   switch (scale) {
     case 1:
     default:
@@ -3129,66 +3159,10 @@ static void grafyx_write_byte(int x, int y, char byte)
       exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
       break;
   }
+
   for (j = 0; j < (scale * 2); j++)
     for (i = 0; i < scale; i++)
       grafyx[(y * (scale * 2) + j) * imageSize.bytes_per_line + x * scale + i] = exp[i];
-
-  if (grafyx_enable && on_screen) {
-    /* Draw new byte */
-    srcRect.x = x * cur_char_width;
-    srcRect.y = y * (scale * 2);
-    srcRect.w = cur_char_width;
-    srcRect.h = scale * 2;
-    destRect.x = left_margin + screen_x * cur_char_width;
-    destRect.y = top_margin + screen_y * (scale * 2);
-    destRect.w = srcRect.w;
-    destRect.h = srcRect.h;
-    TrsSoftBlit(image, &srcRect, screen, &destRect, grafyx_overlay);
-    addToDrawList(&destRect);
-  }
-}
-
-static void grafyx_redraw(void)
-{
-  char byte;
-  char exp[MAX_SCALE];
-  int i, j;
-  int x, y;
-
-  for (y = 0; y < G_YSIZE; y++) {
-    for (x = 0; x < G_XSIZE; x++) {
-      byte = grafyx_unscaled[y][x];
-      switch (scale) {
-        default:
-        case 1:
-          exp[0] = byte;
-          break;
-        case 2:
-          exp[1] = ((byte & 0x01) + ((byte & 0x02) << 1)
-                 + ((byte & 0x04) << 2) + ((byte & 0x08) << 3)) * 3;
-          exp[0] = (((byte & 0x10) >> 4) + ((byte & 0x20) >> 3)
-                 + ((byte & 0x40) >> 2) + ((byte & 0x80) >> 1)) * 3;
-          break;
-        case 3:
-          exp[2] = ((byte & 0x01) + ((byte & 0x02) << 2)
-                 + ((byte & 0x04) << 4)) * 7;
-          exp[1] = (((byte & 0x08) >> 2) + (byte & 0x10)
-                 + ((byte & 0x20) << 2)) * 7 + ((byte & 0x04) >> 2);
-          exp[0] = (((byte & 0x40) >> 4) + ((byte & 0x80) >> 2)) * 7
-                 + ((byte & 0x20) >> 5) * 3;
-          break;
-        case 4:
-          exp[3] = ((byte & 0x01) + ((byte & 0x02) << 3)) * 15;
-          exp[2] = (((byte & 0x04) >> 2) + ((byte & 0x08) << 1)) * 15;
-          exp[1] = (((byte & 0x10) >> 4) + ((byte & 0x20) >> 1)) * 15;
-          exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
-          break;
-      }
-      for (j = 0; j < (scale * 2); j++)
-        for (i = 0; i < scale; i++)
-          grafyx[(y * (scale * 2) + j) * imageSize.bytes_per_line + x * scale + i] = exp[i];
-    }
-  }
 }
 
 void grafyx_write_x(int value)
