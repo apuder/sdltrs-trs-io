@@ -3040,9 +3040,6 @@ void trs_gui_write_char(unsigned int position, unsigned char char_index, int inv
   int row, col;
   SDL_Rect srcRect, destRect;
 
-  if (position >= screen_chars)
-    return;
-
   row = position >> 6;
   col = position - (row << 6);
 
