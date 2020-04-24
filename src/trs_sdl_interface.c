@@ -3072,10 +3072,7 @@ void trs_gui_write_char(unsigned int position, unsigned char char_index, int inv
     if (trs_model > 1 && char_index >= 0xc0 &&
         (currentmode & (ALTERNATE + INVERSE)) == 0)
       char_index -= 0x40;
-    if (invert)
-      SDL_BlitSurface(trs_char[5][char_index], &srcRect, screen, &destRect);
-    else
-      SDL_BlitSurface(trs_char[4][char_index], &srcRect, screen, &destRect);
+    SDL_BlitSurface(trs_char[invert ? 5 : 4][char_index], &srcRect, screen, &destRect);
   }
 }
 
