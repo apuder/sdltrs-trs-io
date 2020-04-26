@@ -84,7 +84,7 @@
 #define WAV_FORMAT	3  /* wave file */
 #define DIRECT_FORMAT	4  /* direct to sound card */
 #define DEBUG_FORMAT	5  /* like cpt but in ASCII */
-static char *format_name[] = {
+static const char *format_name[] = {
   NULL, "cas", "cpt", "wav", "direct", "debug" };
 #define NOISE_FLOOR	64
 

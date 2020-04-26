@@ -80,7 +80,7 @@ int PasteManagerStartPaste(void)
   return FALSE;
 }
 
-void PasteManagerStartCopy(char *string)
+void PasteManagerStartCopy(const char *string)
 {
   HANDLE hCopyData;
   char *pchData;
