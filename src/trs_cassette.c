@@ -320,20 +320,18 @@ put_sample(Uchar sample, int convert, FILE* f)
   Uint16 two_byte;
 
   if (convert) {
+    SDL_LockAudio();
     switch (cassette_afmt) {
       case AUDIO_U8:
-        SDL_LockAudio();
         *sound_ring_write_ptr++ = sample;
         if (sound_ring_write_ptr >= sound_ring_end) {
           sound_ring_write_ptr = sound_ring;
         }
         sound_ring_count++;
-        SDL_UnlockAudio();
         break;
 #ifdef big_endian
       case AUDIO_S16MSB:
         two_byte = (sample << 8) - 0x8000;
-        SDL_LockAudio();
         *sound_ring_write_ptr++ =  two_byte >> 8;
         if (sound_ring_write_ptr >= sound_ring_end)
           sound_ring_write_ptr = sound_ring;
@@ -341,7 +339,6 @@ put_sample(Uchar sample, int convert, FILE* f)
 #else
       case AUDIO_S16:
         two_byte = (sample << 8) - 0x8000;
-        SDL_LockAudio();
         *sound_ring_write_ptr++ =  two_byte & 0xFF;
         if (sound_ring_write_ptr >= sound_ring_end)
           sound_ring_write_ptr = sound_ring;
@@ -350,12 +347,12 @@ put_sample(Uchar sample, int convert, FILE* f)
         if (sound_ring_write_ptr >= sound_ring_end)
           sound_ring_write_ptr = sound_ring;
         sound_ring_count+=2;
-        SDL_UnlockAudio();
         break;
       default:
         error("sample format 0x%x not supported", cassette_afmt);
         break;
     }
+    SDL_UnlockAudio();
     return;
   }
   putc(sample, f);
