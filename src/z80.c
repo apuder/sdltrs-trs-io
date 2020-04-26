@@ -4418,14 +4418,14 @@ void trs_z80_save(FILE *file)
   trs_save_uchar(file, &z80_state.iff1, 1);
   trs_save_uchar(file, &z80_state.iff2, 1);
   trs_save_uchar(file, &z80_state.interrupt_mode, 1);
-  trs_save_int(file,&z80_state.irq,1);
-  trs_save_int(file,&z80_state.nmi,1);
-  trs_save_int(file,&z80_state.nmi_seen,1);
-  trs_save_int(file,&z80_state.delay,1);
-  trs_save_uint64(file,(unsigned long long *)&z80_state.t_count,1);
-  trs_save_float(file,&z80_state.clockMHz,1);
-  trs_save_uint64(file,(unsigned long long *)&z80_state.sched,1);
-  trs_save_uint64(file,(unsigned long long *)&last_t_count,1);
+  trs_save_int(file, &z80_state.irq, 1);
+  trs_save_int(file, &z80_state.nmi, 1);
+  trs_save_int(file, &z80_state.nmi_seen, 1);
+  trs_save_int(file, &z80_state.delay, 1);
+  trs_save_uint64(file, (unsigned long long *)&z80_state.t_count, 1);
+  trs_save_float(file, &z80_state.clockMHz, 1);
+  trs_save_uint64(file, (unsigned long long *)&z80_state.sched, 1);
+  trs_save_uint64(file, (unsigned long long *)&last_t_count, 1);
 }
 
 void trs_z80_load(FILE *file)
@@ -4446,13 +4446,13 @@ void trs_z80_load(FILE *file)
   trs_load_uchar(file, &z80_state.iff1, 1);
   trs_load_uchar(file, &z80_state.iff2, 1);
   trs_load_uchar(file, &z80_state.interrupt_mode, 1);
-  trs_load_int(file,&z80_state.irq,1);
-  trs_load_int(file,&z80_state.nmi,1);
-  trs_load_int(file,&z80_state.nmi_seen,1);
-  trs_load_int(file,&z80_state.delay,1);
-  trs_load_uint64(file,(unsigned long long *)&z80_state.t_count,1);
-  trs_load_float(file,&z80_state.clockMHz,1);
-  trs_load_uint64(file,(unsigned long long *)&z80_state.sched,1);
-  trs_load_uint64(file,(unsigned long long *)&last_t_count,1);
+  trs_load_int(file, &z80_state.irq, 1);
+  trs_load_int(file, &z80_state.nmi, 1);
+  trs_load_int(file, &z80_state.nmi_seen, 1);
+  trs_load_int(file, &z80_state.delay, 1);
+  trs_load_uint64(file, (unsigned long long *)&z80_state.t_count, 1);
+  trs_load_float(file, &z80_state.clockMHz, 1);
+  trs_load_uint64(file, (unsigned long long *)&z80_state.sched, 1);
+  trs_load_uint64(file, (unsigned long long *)&last_t_count, 1);
 }
 

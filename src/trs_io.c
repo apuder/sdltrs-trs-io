@@ -556,17 +556,17 @@ int z80_in(int port)
 
 void trs_io_save(FILE *file)
 {
-  trs_save_int(file,&modesel,1);
-  trs_save_int(file,&modeimage,1);
-  trs_save_int(file,&ctrlimage,1);
-  trs_save_int(file,&rominimage,1);
+  trs_save_int(file, &modesel, 1);
+  trs_save_int(file, &modeimage, 1);
+  trs_save_int(file, &ctrlimage, 1);
+  trs_save_int(file, &rominimage, 1);
 }
 
 void trs_io_load(FILE *file)
 {
-  trs_load_int(file,&modesel,1);
-  trs_load_int(file,&modeimage,1);
-  trs_load_int(file,&ctrlimage,1);
-  trs_load_int(file,&rominimage,1);
+  trs_load_int(file, &modesel, 1);
+  trs_load_int(file, &modeimage, 1);
+  trs_load_int(file, &ctrlimage, 1);
+  trs_load_int(file, &rominimage, 1);
 }
 

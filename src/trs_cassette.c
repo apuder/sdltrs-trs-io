@@ -48,8 +48,6 @@
  *  85/90 sound.  "Game sound" is defined as output to the cassette
  *  port when the cassette motor is off, or output to the Model III/4
  *  sound option card (a 1-bit DAC).
- *
- *
  */
 
 #define CASSDEBUG 0
@@ -166,7 +164,7 @@ struct {
     { 748,  1 },
     { 128,  2 },
     { 128,  0 },
-    { 860, 0 },  /* normally 748; 860 after 8th bit; 1894 after a5 sync */
+    { 860, 0  }, /* normally 748; 860 after 8th bit; 1894 after a5 sync */
     { -1,  -1 }
   }}, {{
     /* High-speed zero: wide pulse */
@@ -323,40 +321,40 @@ put_sample(Uchar sample, int convert, FILE* f)
 
   if (convert) {
     switch (cassette_afmt) {
-    case AUDIO_U8:
-	  SDL_LockAudio();
-	  *sound_ring_write_ptr++ = sample;
-	  if (sound_ring_write_ptr >= sound_ring_end) {
-		sound_ring_write_ptr = sound_ring;
+      case AUDIO_U8:
+        SDL_LockAudio();
+        *sound_ring_write_ptr++ = sample;
+        if (sound_ring_write_ptr >= sound_ring_end) {
+          sound_ring_write_ptr = sound_ring;
         }
-	  sound_ring_count++;
-	  SDL_UnlockAudio();
-      break;
+        sound_ring_count++;
+        SDL_UnlockAudio();
+        break;
 #ifdef big_endian
-    case AUDIO_S16MSB:
-   	  two_byte = (sample << 8) - 0x8000;
-	  SDL_LockAudio();
-	  *sound_ring_write_ptr++ =  two_byte >> 8;
-	  if (sound_ring_write_ptr >= sound_ring_end)
-		sound_ring_write_ptr = sound_ring;
-	  *sound_ring_write_ptr++ = two_byte & 0xFF;
+      case AUDIO_S16MSB:
+        two_byte = (sample << 8) - 0x8000;
+        SDL_LockAudio();
+        *sound_ring_write_ptr++ =  two_byte >> 8;
+        if (sound_ring_write_ptr >= sound_ring_end)
+          sound_ring_write_ptr = sound_ring;
+        *sound_ring_write_ptr++ = two_byte & 0xFF;
 #else
-    case AUDIO_S16:
-   	  two_byte = (sample << 8) - 0x8000;
-	  SDL_LockAudio();
-	  *sound_ring_write_ptr++ =  two_byte & 0xFF;
-	  if (sound_ring_write_ptr >= sound_ring_end)
-		sound_ring_write_ptr = sound_ring;
-	  *sound_ring_write_ptr++ = two_byte >> 8;
+      case AUDIO_S16:
+        two_byte = (sample << 8) - 0x8000;
+        SDL_LockAudio();
+        *sound_ring_write_ptr++ =  two_byte & 0xFF;
+        if (sound_ring_write_ptr >= sound_ring_end)
+          sound_ring_write_ptr = sound_ring;
+        *sound_ring_write_ptr++ = two_byte >> 8;
 #endif
-	  if (sound_ring_write_ptr >= sound_ring_end)
-		sound_ring_write_ptr = sound_ring;
-	  sound_ring_count+=2;
-	  SDL_UnlockAudio();
-      break;
-    default:
-      error("sample format 0x%x not supported", cassette_afmt);
-      break;
+        if (sound_ring_write_ptr >= sound_ring_end)
+          sound_ring_write_ptr = sound_ring;
+        sound_ring_count+=2;
+        SDL_UnlockAudio();
+        break;
+      default:
+        error("sample format 0x%x not supported", cassette_afmt);
+        break;
     }
     return;
   }
@@ -469,41 +467,39 @@ parse_wav_header(FILE *f)
   wave_datasize_offset = ftell(f);
   if (get_fourbyte(&n4, f) < 0) return -1; /* ignore this field */
   wave_data_offset = ftell(f);
-  if (cassette_position < wave_data_offset) {
+  if (cassette_position < wave_data_offset)
     cassette_position = wave_data_offset;
-  }
   return 0;
 }
 
 static void trs_sdl_sound_update(void *userdata, Uint8 * stream, int len)
 {
   if (sound_ring_count == 0) {
-    SDL_memset (stream, cassette_silence, len);
+    SDL_memset(stream, cassette_silence, len);
   } else {
-	int num_to_read;
+    int num_to_read;
 
-	if (sound_ring_count > (unsigned int)len)
-	   num_to_read = len;
-	else
-	   num_to_read = sound_ring_count;
+    if (sound_ring_count > (unsigned int)len)
+      num_to_read = len;
+    else
+      num_to_read = sound_ring_count;
 
     if (sound_ring_read_ptr + num_to_read > sound_ring_end) {
-	  int len_to_end = sound_ring_end - sound_ring_read_ptr;
+      int len_to_end = sound_ring_end - sound_ring_read_ptr;
 
       SDL_memcpy(stream, sound_ring_read_ptr, len_to_end);
-	  SDL_memcpy(stream + len_to_end, sound_ring,  num_to_read - len_to_end);
-  	  SDL_memset(stream, cassette_silence, len - num_to_read);
+      SDL_memcpy(stream + len_to_end, sound_ring, num_to_read - len_to_end);
+      SDL_memset(stream, cassette_silence, len - num_to_read);
       sound_ring_read_ptr = sound_ring + num_to_read - len_to_end;
-	} else {
+    } else {
       SDL_memcpy(stream, sound_ring_read_ptr, num_to_read);
-  	  SDL_memset(stream, cassette_silence, len - num_to_read);
-	  sound_ring_read_ptr += num_to_read;
-	  if (sound_ring_read_ptr == sound_ring_end)
-	     sound_ring_read_ptr = sound_ring;
-	}
-	sound_ring_count -= num_to_read;
+      SDL_memset(stream, cassette_silence, len - num_to_read);
+      sound_ring_read_ptr += num_to_read;
+      if (sound_ring_read_ptr == sound_ring_end)
+        sound_ring_read_ptr = sound_ring;
+    }
+    sound_ring_count -= num_to_read;
   }
-
 }
 
 static int
@@ -526,9 +522,9 @@ set_audio_format(int state)
   desired.channels = (state == ORCH90) ? 2 : 1;
 
   if (SDL_OpenAudio(&desired, &obtained) < 0) {
-	error("couldn't open cassette sound device");
-	cassette_state = FAILED;
-	return -1;
+    error("couldn't open cassette sound device");
+    cassette_state = FAILED;
+    return -1;
   }
   soundDeviceOpen = TRUE;
   if (obtained.format != AUDIO_U8 &&
@@ -537,10 +533,10 @@ set_audio_format(int state)
 #else
       obtained.format != AUDIO_S16) {
 #endif
-      error("requested audio format 0x%x, got 0x%x",
-	        desired.format, obtained.format);
-      errno = EINVAL;
-      return -1;
+    error("requested audio format 0x%x, got 0x%x",
+          desired.format, obtained.format);
+    errno = EINVAL;
+    return -1;
   }
 
   if (obtained.channels == 1 && desired.channels == 2) {
@@ -551,7 +547,7 @@ set_audio_format(int state)
 
   if (abs(obtained.freq - desired.freq) > desired.freq / 20) {
     error("requested sample rate %d Hz, got %d Hz",
-	       desired.freq, obtained.freq);
+          desired.freq, obtained.freq);
     errno = EINVAL;
     return -1;
   }
@@ -578,14 +574,13 @@ trs_cassette_insert(const char *filename)
      extension = filename + len - 3;
    else
      extension = filename;
-   if (strcasecmp(extension,"CPT") == 0)
+   if (strcasecmp(extension, "CPT") == 0)
      cassette_format = CPT_FORMAT;
-   else if (strcasecmp(extension,"WAV") == 0) {
+   else if (strcasecmp(extension, "WAV") == 0) {
      cassette_format = WAV_FORMAT;
-     if (cassette_position < wave_data_offset) {
+     if (cassette_position < wave_data_offset)
        cassette_position = wave_data_offset;
-       }
-     }
+   }
    else
      cassette_format = CAS_FORMAT;
 }
@@ -666,10 +661,10 @@ int assert_state(int state)
     } else {
       cassette_position = ftell(cassette_file);
       if (cassette_format == WAV_FORMAT && cassette_state == WRITE) {
-      fseek(cassette_file, WAVE_RIFFSIZE_OFFSET, 0);
-	  put_fourbyte(cassette_position - WAVE_RIFF_OFFSET, cassette_file);
-      fseek(cassette_file, wave_datasize_offset, 0);
-      put_fourbyte(cassette_position - wave_data_offset, cassette_file);
+        fseek(cassette_file, WAVE_RIFFSIZE_OFFSET, 0);
+        put_fourbyte(cassette_position - WAVE_RIFF_OFFSET, cassette_file);
+        fseek(cassette_file, wave_datasize_offset, 0);
+        put_fourbyte(cassette_position - wave_data_offset, cassette_file);
       }
       fclose(cassette_file);
     }
@@ -683,7 +678,7 @@ int assert_state(int state)
     cassette_file = fopen(cassette_filename, "rb");
     if (cassette_format == WAV_FORMAT &&
         cassette_file != NULL && parse_wav_header(cassette_file) < 0) {
-	  cassette_file = NULL;
+      cassette_file = NULL;
     }
     if (cassette_file == NULL) {
       error("couldn't read %s: %s", cassette_filename, strerror(errno));
@@ -718,8 +713,8 @@ int assert_state(int state)
         }
       } else {
         if (parse_wav_header(cassette_file) < 0) {
-        fclose(cassette_file);
-        cassette_file = NULL;
+          fclose(cassette_file);
+          cassette_file = NULL;
         }
       }
       if (cassette_file != NULL) {
@@ -728,10 +723,10 @@ int assert_state(int state)
     } else if (cassette_format != DIRECT_FORMAT) {
       cassette_file = fopen(cassette_filename, "rb+");
       if (cassette_file == NULL) {
-	    cassette_file = fopen(cassette_filename, "wb");
+        cassette_file = fopen(cassette_filename, "wb");
       }
       if (cassette_file != NULL) {
-	    fseek(cassette_file, cassette_position, 0);
+        fseek(cassette_file, cassette_position, 0);
       }
       if (cassette_file == NULL) {
         error("couldn't write %s: %s", cassette_filename, strerror(errno));
@@ -801,7 +796,7 @@ transition_out(int value)
         cassette_roundoff_error = 0.0;
       }
       if (trs_event_scheduled() == transition_out ||
-		  trs_event_scheduled() == (trs_event_func) assert_state) {
+	  trs_event_scheduled() == (trs_event_func) assert_state) {
         trs_cancel_event();
       }
       if (value == FLUSH) {
@@ -819,7 +814,7 @@ transition_out(int value)
       nsamples * (1000000.0 / cassette_sample_rate) - ddelta_us;
 #if CASSDEBUG
     debug("%d %4lu %d -> %3lu\n", cassette_value,
-	  z80_state.t_count - cassette_transition, value, nsamples);
+          z80_state.t_count - cassette_transition, value, nsamples);
 #endif
     if (cassette_format == DIRECT_FORMAT && cassette_stereo) nsamples *= 2;
     while (nsamples-- > 0) {
@@ -1381,9 +1376,9 @@ trs_cassette_save(FILE *file)
   trs_save_int(file, &cassette_stereo, 1);
   trs_save_uint32(file, &cassette_silence, 1);
   trs_save_int(file, &cassette_afmt, 1);
-  trs_save_uint64(file,&last_sound,1);
-  trs_save_uint64(file,&cassette_transition,1);
-  trs_save_uint64(file,&cassette_firstoutread,1);
+  trs_save_uint64(file,&last_sound, 1);
+  trs_save_uint64(file,&cassette_transition, 1);
+  trs_save_uint64(file,&cassette_firstoutread, 1);
   trs_save_int(file, &cassette_value, 1);
   trs_save_int(file, &cassette_next, 1);
   trs_save_int(file, &cassette_flipflop, 1);
@@ -1418,9 +1413,9 @@ trs_cassette_load(FILE *file)
   trs_load_int(file, &cassette_stereo, 1);
   trs_load_uint32(file, &cassette_silence, 1);
   trs_load_int(file, &cassette_afmt, 1);
-  trs_load_uint64(file,&last_sound,1);
-  trs_load_uint64(file,&cassette_transition,1);
-  trs_load_uint64(file,&cassette_firstoutread,1);
+  trs_load_uint64(file,&last_sound, 1);
+  trs_load_uint64(file,&cassette_transition, 1);
+  trs_load_uint64(file,&cassette_firstoutread, 1);
   trs_load_int(file, &cassette_value, 1);
   trs_load_int(file, &cassette_next, 1);
   trs_load_int(file, &cassette_flipflop, 1);
@@ -1448,4 +1443,3 @@ trs_cassette_load(FILE *file)
     }
   }
 }
-

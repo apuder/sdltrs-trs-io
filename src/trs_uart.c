@@ -474,15 +474,15 @@ void trs_uart_save(FILE *file)
 {
   int inited = 0;
 
-  trs_save_filename(file,trs_uart_name);
-  trs_save_int(file,&trs_uart_switches,1);
-  trs_save_int(file,&inited,1);
+  trs_save_filename(file, trs_uart_name);
+  trs_save_int(file, &trs_uart_switches, 1);
+  trs_save_int(file, &inited, 1);
 }
 
 void trs_uart_load(FILE *file)
 {
-  trs_load_filename(file,trs_uart_name);
-  trs_load_int(file,&trs_uart_switches,1);
-  trs_load_int(file,&initialized,1);
+  trs_load_filename(file, trs_uart_name);
+  trs_load_int(file, &trs_uart_switches, 1);
+  trs_load_int(file, &initialized, 1);
 }
 
