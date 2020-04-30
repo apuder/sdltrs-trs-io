@@ -785,7 +785,7 @@ done:
         {
           snprintf(name + strlen(name), FILENAME_MAX - strlen(name),
               "%s", &new_dir[1]);
-          filename[strlen(name) - 1] = DIR_SLASH;
+          name[strlen(name) - 1] = DIR_SLASH;
         }
       }
     }
