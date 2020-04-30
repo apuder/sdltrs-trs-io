@@ -43,7 +43,6 @@
 /* $Id: trs_printer.c,v 1.3 2008/06/26 04:39:56 mann Exp $ */
 
 #include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
 #include "trs.h"
 
@@ -72,16 +71,16 @@ int trs_printer_reset(void)
 void trs_printer_open(void)
 {
   int file_num;
-  int len = strlen(trs_printer_dir);
   struct stat st;
 
   for (file_num = 0; file_num < 10000; file_num++) {
-    snprintf(printer_filename, FILENAME_MAX - 16 - len, "%s%ctrsprn%04d.txt",
-        trs_printer_dir, DIR_SLASH, file_num);
-    if (stat(printer_filename, &st) < 0) {
-      printer_open = TRUE;
-      printer = fopen(printer_filename,"w");
-      return;
+    if (snprintf(printer_filename, FILENAME_MAX, "%s%ctrsprn%04d.txt",
+        trs_printer_dir, DIR_SLASH, file_num) < FILENAME_MAX) {
+      if (stat(printer_filename, &st) < 0) {
+        printer_open = TRUE;
+        printer = fopen(printer_filename,"w");
+        return;
+      }
     }
   }
 }
