@@ -7,6 +7,7 @@ arch=(i686 x86_64)
 url="https://gitlab.com/jengun/sdltrs"
 license=('custom')
 depends=('readline' 'sdl2')
+makedepends=('autoconf' 'automake')
 source=(https://gitlab.com/jengun/sdltrs/-/archive/${pkgver}/${pkgname}-${pkgver}.tar.gz)
 md5sums=('ae6137bfe6ad60d133e7cf6c79fbc09d')
 
