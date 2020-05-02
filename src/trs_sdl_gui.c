@@ -249,7 +249,8 @@ void trs_add_extension(char *name, const char *ext)
     if (strcasecmp(&name[flen - elen], ext) == 0)
       return;
 
-  snprintf(name + flen, FILENAME_MAX - flen, "%s", ext);
+  if (flen && name[flen - 1] != DIR_SLASH)
+    snprintf(name + flen, FILENAME_MAX - flen, "%s", ext);
 }
 
 int trs_gui_get_key(void)
