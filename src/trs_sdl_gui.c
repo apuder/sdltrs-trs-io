@@ -1958,12 +1958,11 @@ int trs_gui_display_question(const char *text)
 
 int trs_gui_file_overwrite(void)
 {
-  FILE *file = fopen(filename, "r");
+  struct stat st;
 
-  if (file != NULL) {
-    fclose(file);
+  if (stat(filename, &st) == 0 && S_ISREG(st.st_mode))
     return trs_gui_display_question("Overwrite file?");
-  }
+
   return 1;
 }
 
