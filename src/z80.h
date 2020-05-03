@@ -110,7 +110,8 @@ struct z80_state_struct
     wordregister hl_prime;
 
     Uchar i;	/* interrupt-page address register */
-    /* Uchar r; */  /* no memory-refresh register, just fetch random values */
+    Uchar r;	/* memory-refresh register */
+    Uchar r7;	/* bit 7 of refresh register saved */
 
     Uchar iff1, iff2;
     Uchar interrupt_mode;
@@ -188,6 +189,8 @@ struct z80_state_struct
 #define REG_IY	(z80_state.iy.word)
 
 #define REG_I	(z80_state.i)
+#define REG_R	(z80_state.r)
+#define REG_R7	(z80_state.r7)
 
 #define HIGH(p) (((struct twobyte *)(p))->high)
 #define LOW(p) (((struct twobyte *)(p))->low)

@@ -65,8 +65,6 @@
  * have not implemented.
  */
 
-#include <stdlib.h>  /* for rand() */
-#include <time.h>    /* for time() */
 #include "error.h"
 #include "trs.h"
 #include "trs_imp_exp.h"
@@ -1067,8 +1065,7 @@ static void do_ld_a_r()
 
     set = 0;
 
-    /* Fetch a random value. */
-    REG_A = (rand() >> 8) & 0xFF;
+    REG_A = (REG_R & 0xFF) | REG_R7;
 
     if(REG_A & 0x80)
       set |= SIGN_MASK;
@@ -2777,7 +2774,8 @@ static int do_ED_instruction()
 	do_ld_a_r();  T_COUNT(9);
 	break;
       case 0x4F:	/* ld r, a */
-	/* unimplemented; ignore */
+	REG_R = REG_A;
+	REG_R7 = REG_A & 0x80;
 	T_COUNT(9);
 	break;
 
@@ -3059,6 +3057,7 @@ int z80_run(int continuous)
 		}
 
 	instruction = mem_read(REG_PC++);
+	REG_R++;
 
 	switch(instruction)
 	{
@@ -4390,14 +4389,13 @@ void z80_reset()
     REG_F = 0xFF;
     REG_SP = 0xFFFF;
     z80_state.i = 0;
+    z80_state.r = 0;
+    z80_state.r7 = 0;
     z80_state.iff1 = 0;
     z80_state.iff2 = 0;
     z80_state.interrupt_mode = 0;
     z80_state.irq = z80_state.nmi = FALSE;
     z80_state.sched = 0;
-
-    /* z80_state.r = 0; */
-    srand(time(NULL));  /* Seed the RNG, for reading the refresh register */
 }
 
 void trs_z80_save(FILE *file)
