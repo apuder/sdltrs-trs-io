@@ -117,7 +117,7 @@ static const short parity_table[256] =
  * Tables and routines for computing various flag values:
  */
 
-static Uchar sign_carry_overflow_table[] =
+static const Uchar sign_carry_overflow_table[] =
 {
     0,
     OVERFLOW_MASK | SIGN_MASK,
@@ -129,7 +129,7 @@ static Uchar sign_carry_overflow_table[] =
     CARRY_MASK | SIGN_MASK,
 };
 
-static Uchar half_carry_table[] =
+static const Uchar half_carry_table[] =
 {
     0,
     0,
@@ -141,7 +141,7 @@ static Uchar half_carry_table[] =
     HALF_CARRY_MASK,
 };
 
-static Uchar subtract_sign_carry_overflow_table[] =
+static const Uchar subtract_sign_carry_overflow_table[] =
 {
     0,
     CARRY_MASK | SIGN_MASK,
@@ -153,7 +153,7 @@ static Uchar subtract_sign_carry_overflow_table[] =
     CARRY_MASK | SIGN_MASK,
 };
 
-static Uchar subtract_half_carry_table[] =
+static const Uchar subtract_half_carry_table[] =
 {
     0,
     HALF_CARRY_MASK,
