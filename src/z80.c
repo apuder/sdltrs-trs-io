@@ -2666,6 +2666,7 @@ static void do_indexed_instruction(Ushort *ixp)
       default:
 	/* Ignore DD or FD prefix and retry as normal instruction;
 	   this is a correct emulation. [undocumented, timing guessed] */
+	REG_R--;
 	REG_PC--;
 	T_COUNT(4);
 	break;
@@ -3056,21 +3057,25 @@ int z80_run(int continuous)
 		last_t_count = z80_state.t_count;
 		}
 
-	instruction = mem_read(REG_PC++);
 	REG_R++;
+	instruction = mem_read(REG_PC++);
 
 	switch(instruction)
 	{
 	  case 0xCB:	/* CB.. extended instruction */
+	    REG_R++;
 	    do_CB_instruction();
 	    break;
 	  case 0xDD:	/* DD.. extended instruction */
+	    REG_R++;
 	    do_indexed_instruction(&REG_IX);
 	    break;
 	  case 0xED:	/* ED.. extended instruction */
+	    REG_R++;
 	    ret = do_ED_instruction();
 	    break;
 	  case 0xFD:	/* FD.. extended instruction */
+	    REG_R++;
 	    do_indexed_instruction(&REG_IY);
 	    break;
 
