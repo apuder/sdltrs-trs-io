@@ -291,6 +291,8 @@ void trs_reset(int poweron)
 	trs_reset_button_interrupt(1);
 	trs_schedule_event(trs_reset_button_interrupt, 0, 2000);
     }
+    /* Clear screen */
+    screen_init();
 }
 
 void mem_map(int which)
