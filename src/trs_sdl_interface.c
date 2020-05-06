@@ -64,15 +64,15 @@
 #include <SDL.h>
 #include "blit.h"
 #include "error.h"
-#include "trs_iodefs.h"
 #include "trs.h"
+#include "trs_cassette.h"
 #include "trs_disk.h"
+#include "trs_iodefs.h"
+#include "trs_sdl_gui.h"
+#include "trs_sdl_keyboard.h"
+#include "trs_state_save.h"
 #include "trs_stringy.h"
 #include "trs_uart.h"
-#include "trs_state_save.h"
-#include "trs_sdl_gui.h"
-#include "trs_cassette.h"
-#include "trs_sdl_keyboard.h"
 
 #define KEY_QUEUE_SIZE 32
 #define MAX_RECTS      2048
