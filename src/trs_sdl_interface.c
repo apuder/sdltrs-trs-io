@@ -2926,7 +2926,7 @@ void trs_turbo_led(void)
   addToDrawList(&rect);
 }
 
-void trs_screen_write_char(unsigned int position, unsigned char char_index)
+void trs_screen_write_char(int position, unsigned char char_index)
 {
   int row, col, destx, desty, expanded, width, height;
   SDL_Rect srcRect, destRect;

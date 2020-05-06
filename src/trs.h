@@ -107,7 +107,7 @@ extern int trs_load_config_file(void);
 extern void trs_screen_init(void);
 extern void screen_init(void);
 extern void trs_rom_init(void);
-extern void trs_screen_write_char(unsigned int position, unsigned char char_index);
+extern void trs_screen_write_char(int position, unsigned char char_index);
 extern void trs_screen_expanded(int flag);
 extern void trs_screen_alternate(int flag);
 extern void trs_screen_80x24(int flag);
