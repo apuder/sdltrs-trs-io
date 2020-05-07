@@ -557,7 +557,7 @@ void trs_interrupt_save(FILE *file)
 #if SUSPEND_DELAY
   trs_save_int(file, &saved_delay, 1);
 #endif
-  if (event_func == (trs_event_func) assert_state)
+  if (event_func == (trs_event_func) (void *)assert_state)
     event = 1;
   else if (event_func == transition_out)
     event = 2;
@@ -605,7 +605,7 @@ void trs_interrupt_load(FILE *file)
   trs_load_int(file, &event, 1);
   switch(event) {
     case 1:
-      event_func = (trs_event_func) assert_state;
+      event_func = (trs_event_func) (void *)assert_state;
       break;
     case 2:
       event_func = transition_out;
