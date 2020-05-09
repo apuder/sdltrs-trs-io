@@ -464,226 +464,6 @@ static const char *charset_name(int charset)
   }
 }
 
-int trs_write_config_file(const char *filename)
-{
-  FILE *config_file;
-  int i;
-
-  if ((config_file = fopen(filename, "w")) == NULL)
-    return -1;
-
-  fprintf(config_file, "background=0x%x\n", background);
-  fprintf(config_file, "borderwidth=%d\n", window_border_width);
-  fprintf(config_file, "cassdir=%s\n", trs_cass_dir);
-  {
-    const char *cassname = trs_cassette_getfilename();
-
-    if (cassname[0])
-      fprintf(config_file, "cassette=%s\n", cassname);
-  }
-  fprintf(config_file, "charset1=%s\n", charset_name(trs_charset1));
-  fprintf(config_file, "charset3=%s\n", charset_name(trs_charset3));
-  fprintf(config_file, "charset4=%s\n", charset_name(trs_charset4));
-  for (i = 0; i < 8; i++) {
-    const char *diskname = trs_disk_getfilename(i);
-
-    if (diskname[0])
-      fprintf(config_file, "disk%d=%s\n", i, diskname);
-  }
-  fprintf(config_file, "diskdir=%s\n", trs_disk_dir);
-  fprintf(config_file, "disksetdir=%s\n", trs_disk_set_dir);
-  fprintf(config_file, "doubler=");
-  switch (trs_disk_doubler) {
-    case TRSDISK_PERCOM:
-      fprintf(config_file, "percom\n");
-      break;
-    case TRSDISK_TANDY:
-      fprintf(config_file, "tandy\n");
-      break;
-    case TRSDISK_BOTH:
-      fprintf(config_file, "both\n");
-      break;
-    case TRSDISK_NODOUBLER:
-      fprintf(config_file, "none\n");
-      break;
-  }
-  fprintf(config_file, "%semtsafe\n", trs_emtsafe ? "" : "no");
-  fprintf(config_file, "%sfullscreen\n", fullscreen ? "" : "no");
-  fprintf(config_file, "foreground=0x%x\n", foreground);
-  fprintf(config_file, "guibackground=0x%x\n", gui_background);
-  fprintf(config_file, "guiforeground=0x%x\n", gui_foreground);
-  for (i = 0; i < 4; i++) {
-    const char *diskname = trs_hard_getfilename(i);
-
-    if (diskname[0])
-      fprintf(config_file, "hard%d=%s\n", i, diskname);
-  }
-  fprintf(config_file, "harddir=%s\n", trs_hard_dir);
-  fprintf(config_file, "%shuffman\n", huffman_ram ? "" : "no");
-  fprintf(config_file, "%shypermem\n", hypermem ? "" : "no");
-  fprintf(config_file, "%sjoyaxismapped\n", jaxis_mapped ? "" : "no");
-  fprintf(config_file, "joybuttonmap=");
-  for (i = 0; i < N_JOYBUTTONS; i++)
-    fprintf(config_file, i < N_JOYBUTTONS - 1 ? "%d," : "%d\n", jbutton_map[i]);
-  fprintf(config_file, "joysticknum=");
-  if (trs_joystick_num == -1)
-    fprintf(config_file, "none\n");
-  else
-    fprintf(config_file, "%d\n", trs_joystick_num);
-  fprintf(config_file, "%skeypadjoy\n", trs_keypad_joystick ? "" : "no");
-  fprintf(config_file, "keystretch=%d\n", stretch_amount);
-  fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
-  fprintf(config_file, "%slower\n", lowercase ? "" : "no");
-  fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
-  fprintf(config_file, "model=");
-  switch (trs_model) {
-    case 1:
-      fprintf(config_file, "1\n");
-      break;
-    case 3:
-      fprintf(config_file, "3\n");
-      break;
-    case 4:
-      fprintf(config_file, "4\n");
-      break;
-    case 5:
-      fprintf(config_file, "4P\n");
-      break;
-  }
-  fprintf(config_file, "%smousepointer\n", mousepointer ? "" : "no");
-  fprintf(config_file, "printer=%d\n", trs_printer);
-  fprintf(config_file, "printercmd=%s\n", trs_printer_command);
-  fprintf(config_file, "printerdir=%s\n", trs_printer_dir);
-  fprintf(config_file, "%sresize3\n", resize3 ? "" : "no");
-  fprintf(config_file, "%sresize4\n", resize4 ? "" : "no");
-  fprintf(config_file, "romfile=%s\n", romfile);
-  fprintf(config_file, "romfile3=%s\n", romfile3);
-  fprintf(config_file, "romfile4p=%s\n", romfile4p);
-  fprintf(config_file, "samplerate=%d\n", cassette_default_sample_rate);
-  fprintf(config_file, "scale=%d\n", scale);
-  fprintf(config_file, "%sscanlines\n", scanlines ? "" : "no");
-  fprintf(config_file, "%sselector\n", selector ? "" : "no");
-  fprintf(config_file, "serial=%s\n", trs_uart_name);
-  fprintf(config_file, "%sshiftbracket\n", trs_kb_bracket_state ? "" : "no");
-  fprintf(config_file, "%s\n", trs_show_led ? "showled" : "hideled");
-  fprintf(config_file, "sizemap=%d,%d,%d,%d,%d,%d,%d,%d\n",
-          trs_disk_getsize(0),
-          trs_disk_getsize(1),
-          trs_disk_getsize(2),
-          trs_disk_getsize(3),
-          trs_disk_getsize(4),
-          trs_disk_getsize(5),
-          trs_disk_getsize(6),
-          trs_disk_getsize(7));
-  fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
-  fprintf(config_file, "statedir=%s\n", trs_state_dir);
-#ifdef __linux
-  fprintf(config_file, "stepmap=%d,%d,%d,%d,%d,%d,%d,%d\n",
-          trs_disk_getstep(0),            /* Corrected to trs_disk_getstep vs getsize */
-          trs_disk_getstep(1),            /* Corrected by Larry Kraemer 08-01-2011 */
-          trs_disk_getstep(2),
-          trs_disk_getstep(3),
-          trs_disk_getstep(4),
-          trs_disk_getstep(5),
-          trs_disk_getstep(6),
-          trs_disk_getstep(7));
-#endif
-  fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
-  fprintf(config_file, "%ssupermem\n", supermem ? "" : "no");
-  fprintf(config_file, "switches=0x%x\n", trs_uart_switches);
-  fprintf(config_file, "%struedam\n", trs_disk_truedam ? "" : "no");
-  fprintf(config_file, "%sturbo\n", timer_overclock ? "" : "no");
-#if defined(SDL2) || !defined(NOX)
-  fprintf(config_file, "%sturbopaste\n", turbo_paste ? "" : "no");
-#endif
-  fprintf(config_file, "turborate=%d\n", timer_overclock_rate);
-  for (i = 0; i < 8; i++) {
-    const char *diskname = stringy_get_name(i);
-
-    if (diskname[0])
-      fprintf(config_file, "wafer%d=%s\n", i, diskname);
-  }
-
-  fclose(config_file);
-  return 0;
-}
-
-static void trs_set_to_defaults(void)
-{
-  int i;
-
-  for (i = 0; i < 8; i++)
-    trs_disk_remove(i);
-
-  for (i = 0; i < 4; i++)
-    trs_hard_remove(i);
-
-  for (i = 0; i < 8; i++)
-    stringy_remove(i);
-
-  trs_cassette_remove();
-
-  scale = 1;
-  resize3 = 1;
-  resize4 = 0;
-  fullscreen = 0;
-  scanlines = 0;
-  trs_model = 1;
-  lowercase = 1;
-  trs_charset = 3;
-  trs_charset1 = 3;
-  trs_charset3 = 4;
-  trs_charset4 = 8;
-  strcpy(romfile, "level2.rom");
-  strcpy(romfile3, "model3.rom");
-  strcpy(romfile4p, "model4p.rom");
-  trs_disk_dir[0] = 0;
-  trs_hard_dir[0] = 0;
-  trs_cass_dir[0] = 0;
-  trs_disk_set_dir[0] = 0;
-  trs_state_dir[0] = 0;
-  trs_printer_dir[0] = 0;
-#ifdef _WIN32
-  strcpy(trs_printer_command, "notepad %s");
-#else
-  strcpy(trs_printer_command, "lpr %s");
-#endif
-  stretch_amount = STRETCH_AMOUNT;
-  window_border_width = 2;
-  grafyx_set_microlabs(FALSE);
-  trs_show_led = TRUE;
-  trs_disk_doubler = TRSDISK_BOTH;
-  disksizes[0] = 5;            /* Disk Sizes are 5" or 8" for all Eight Default Drives */
-  disksizes[1] = 5;            /* Corrected by Larry Kraemer 08-01-2011 */
-  disksizes[2] = 5;
-  disksizes[3] = 5;
-  disksizes[4] = 8;
-  disksizes[5] = 8;
-  disksizes[6] = 8;
-  disksizes[7] = 8;
-#ifdef __linux
-  disksteps[0] = 1;            /* Disk Steps are 1 for Single Step, 2 for Double Step for all Eight Default Drives */
-  disksteps[1] = 1;            /* Corrected by Larry Kraemer 08-01-2011 */
-  disksteps[2] = 1;
-  disksteps[3] = 1;
-  disksteps[4] = 1;
-  disksteps[5] = 1;
-  disksteps[6] = 1;
-  disksteps[7] = 1;
-#endif
-  trs_disk_truedam = 0;
-  cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
-  trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
-  trs_kb_bracket(FALSE);
-  trs_keypad_joystick = TRUE;
-  trs_joystick_num = 0;
-  foreground = WHITE;
-  background = BLACK;
-  gui_foreground = WHITE;
-  gui_background = GREEN;
-  trs_emtsafe = 1;
-}
-
 static void trs_opt_borderwidth(char *arg, int intarg, int *stringarg)
 {
   window_border_width = strtol(arg, NULL, 0);
@@ -815,7 +595,7 @@ static void trs_opt_doublestep(char *arg, int intarg, int *stringarg)
 {
   int i;
 
-  for (i = 0; i <= 7; i++)
+  for (i = 0; i < 8; i++)
     disksteps[i] = intarg;
 }
 
@@ -1013,7 +793,7 @@ static void trs_disk_setsizes(void)
 {
   unsigned int j;
 
-  for (j = 0; j <= 7; j++) {
+  for (j = 0; j < 8; j++) {
     if (disksizes[j] == 5 || disksizes[j] == 8)
       trs_disk_setsize(j, disksizes[j]);
     else
@@ -1027,7 +807,7 @@ static void trs_disk_setsteps(void)
   unsigned int j;
 
   /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
-  for (j = 0; j <= 7; j++) {
+  for (j = 0; j < 8; j++) {
     if (disksteps[j] == 1 || disksteps[j] == 2)
       trs_disk_setstep(j, disksteps[j]);
     else
@@ -1035,6 +815,82 @@ static void trs_disk_setsteps(void)
   }
 }
 #endif
+
+static void trs_set_to_defaults(void)
+{
+  int i;
+
+  for (i = 0; i < 8; i++)
+    trs_disk_remove(i);
+
+  for (i = 0; i < 4; i++)
+    trs_hard_remove(i);
+
+  for (i = 0; i < 8; i++)
+    stringy_remove(i);
+
+  trs_cassette_remove();
+
+  scale = 1;
+  resize3 = 1;
+  resize4 = 0;
+  fullscreen = 0;
+  scanlines = 0;
+  trs_model = 1;
+  lowercase = 1;
+  trs_charset = 3;
+  trs_charset1 = 3;
+  trs_charset3 = 4;
+  trs_charset4 = 8;
+  strcpy(romfile, "level2.rom");
+  strcpy(romfile3, "model3.rom");
+  strcpy(romfile4p, "model4p.rom");
+  trs_disk_dir[0] = 0;
+  trs_hard_dir[0] = 0;
+  trs_cass_dir[0] = 0;
+  trs_disk_set_dir[0] = 0;
+  trs_state_dir[0] = 0;
+  trs_printer_dir[0] = 0;
+#ifdef _WIN32
+  strcpy(trs_printer_command, "notepad %s");
+#else
+  strcpy(trs_printer_command, "lpr %s");
+#endif
+  stretch_amount = STRETCH_AMOUNT;
+  window_border_width = 2;
+  grafyx_set_microlabs(FALSE);
+  trs_show_led = TRUE;
+  trs_disk_doubler = TRSDISK_BOTH;
+  disksizes[0] = 5;            /* Disk Sizes are 5" or 8" for all Eight Default Drives */
+  disksizes[1] = 5;            /* Corrected by Larry Kraemer 08-01-2011 */
+  disksizes[2] = 5;
+  disksizes[3] = 5;
+  disksizes[4] = 8;
+  disksizes[5] = 8;
+  disksizes[6] = 8;
+  disksizes[7] = 8;
+#ifdef __linux
+  disksteps[0] = 1;            /* Disk Steps are 1 for Single Step, 2 for Double Step for all Eight Default Drives */
+  disksteps[1] = 1;            /* Corrected by Larry Kraemer 08-01-2011 */
+  disksteps[2] = 1;
+  disksteps[3] = 1;
+  disksteps[4] = 1;
+  disksteps[5] = 1;
+  disksteps[6] = 1;
+  disksteps[7] = 1;
+#endif
+  trs_disk_truedam = 0;
+  cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
+  trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
+  trs_kb_bracket(FALSE);
+  trs_keypad_joystick = TRUE;
+  trs_joystick_num = 0;
+  foreground = WHITE;
+  background = BLACK;
+  gui_foreground = WHITE;
+  gui_background = GREEN;
+  trs_emtsafe = 1;
+}
 
 int trs_load_config_file(void)
 {
@@ -1150,20 +1006,148 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
 #endif
 }
 
-static void trs_flip_fullscreen(void)
+int trs_write_config_file(const char *filename)
 {
-  static unsigned int window_scale = 1;
+  FILE *config_file;
+  int i;
 
-  fullscreen = !fullscreen;
-  if (fullscreen) {
-    window_scale = scale;
-    if (scale != 1)
-      scale = 1;
+  if ((config_file = fopen(filename, "w")) == NULL)
+    return -1;
+
+  fprintf(config_file, "background=0x%x\n", background);
+  fprintf(config_file, "borderwidth=%d\n", window_border_width);
+  fprintf(config_file, "cassdir=%s\n", trs_cass_dir);
+  {
+    const char *cassname = trs_cassette_getfilename();
+
+    if (cassname[0])
+      fprintf(config_file, "cassette=%s\n", cassname);
   }
-  else {
-    if (window_scale != 1)
-      scale = window_scale;
+  fprintf(config_file, "charset1=%s\n", charset_name(trs_charset1));
+  fprintf(config_file, "charset3=%s\n", charset_name(trs_charset3));
+  fprintf(config_file, "charset4=%s\n", charset_name(trs_charset4));
+  for (i = 0; i < 8; i++) {
+    const char *diskname = trs_disk_getfilename(i);
+
+    if (diskname[0])
+      fprintf(config_file, "disk%d=%s\n", i, diskname);
   }
+  fprintf(config_file, "diskdir=%s\n", trs_disk_dir);
+  fprintf(config_file, "disksetdir=%s\n", trs_disk_set_dir);
+  fprintf(config_file, "doubler=");
+  switch (trs_disk_doubler) {
+    case TRSDISK_PERCOM:
+      fprintf(config_file, "percom\n");
+      break;
+    case TRSDISK_TANDY:
+      fprintf(config_file, "tandy\n");
+      break;
+    case TRSDISK_BOTH:
+      fprintf(config_file, "both\n");
+      break;
+    case TRSDISK_NODOUBLER:
+      fprintf(config_file, "none\n");
+      break;
+  }
+  fprintf(config_file, "%semtsafe\n", trs_emtsafe ? "" : "no");
+  fprintf(config_file, "%sfullscreen\n", fullscreen ? "" : "no");
+  fprintf(config_file, "foreground=0x%x\n", foreground);
+  fprintf(config_file, "guibackground=0x%x\n", gui_background);
+  fprintf(config_file, "guiforeground=0x%x\n", gui_foreground);
+  for (i = 0; i < 4; i++) {
+    const char *diskname = trs_hard_getfilename(i);
+
+    if (diskname[0])
+      fprintf(config_file, "hard%d=%s\n", i, diskname);
+  }
+  fprintf(config_file, "harddir=%s\n", trs_hard_dir);
+  fprintf(config_file, "%shuffman\n", huffman_ram ? "" : "no");
+  fprintf(config_file, "%shypermem\n", hypermem ? "" : "no");
+  fprintf(config_file, "%sjoyaxismapped\n", jaxis_mapped ? "" : "no");
+  fprintf(config_file, "joybuttonmap=");
+  for (i = 0; i < N_JOYBUTTONS; i++)
+    fprintf(config_file, i < N_JOYBUTTONS - 1 ? "%d," : "%d\n", jbutton_map[i]);
+  fprintf(config_file, "joysticknum=");
+  if (trs_joystick_num == -1)
+    fprintf(config_file, "none\n");
+  else
+    fprintf(config_file, "%d\n", trs_joystick_num);
+  fprintf(config_file, "%skeypadjoy\n", trs_keypad_joystick ? "" : "no");
+  fprintf(config_file, "keystretch=%d\n", stretch_amount);
+  fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
+  fprintf(config_file, "%slower\n", lowercase ? "" : "no");
+  fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
+  fprintf(config_file, "model=");
+  switch (trs_model) {
+    case 1:
+      fprintf(config_file, "1\n");
+      break;
+    case 3:
+      fprintf(config_file, "3\n");
+      break;
+    case 4:
+      fprintf(config_file, "4\n");
+      break;
+    case 5:
+      fprintf(config_file, "4P\n");
+      break;
+  }
+  fprintf(config_file, "%smousepointer\n", mousepointer ? "" : "no");
+  fprintf(config_file, "printer=%d\n", trs_printer);
+  fprintf(config_file, "printercmd=%s\n", trs_printer_command);
+  fprintf(config_file, "printerdir=%s\n", trs_printer_dir);
+  fprintf(config_file, "%sresize3\n", resize3 ? "" : "no");
+  fprintf(config_file, "%sresize4\n", resize4 ? "" : "no");
+  fprintf(config_file, "romfile=%s\n", romfile);
+  fprintf(config_file, "romfile3=%s\n", romfile3);
+  fprintf(config_file, "romfile4p=%s\n", romfile4p);
+  fprintf(config_file, "samplerate=%d\n", cassette_default_sample_rate);
+  fprintf(config_file, "scale=%d\n", scale);
+  fprintf(config_file, "%sscanlines\n", scanlines ? "" : "no");
+  fprintf(config_file, "%sselector\n", selector ? "" : "no");
+  fprintf(config_file, "serial=%s\n", trs_uart_name);
+  fprintf(config_file, "%sshiftbracket\n", trs_kb_bracket_state ? "" : "no");
+  fprintf(config_file, "%s\n", trs_show_led ? "showled" : "hideled");
+  fprintf(config_file, "sizemap=%d,%d,%d,%d,%d,%d,%d,%d\n",
+          trs_disk_getsize(0),
+          trs_disk_getsize(1),
+          trs_disk_getsize(2),
+          trs_disk_getsize(3),
+          trs_disk_getsize(4),
+          trs_disk_getsize(5),
+          trs_disk_getsize(6),
+          trs_disk_getsize(7));
+  fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
+  fprintf(config_file, "statedir=%s\n", trs_state_dir);
+#ifdef __linux
+  fprintf(config_file, "stepmap=%d,%d,%d,%d,%d,%d,%d,%d\n",
+          trs_disk_getstep(0),            /* Corrected to trs_disk_getstep vs getsize */
+          trs_disk_getstep(1),            /* Corrected by Larry Kraemer 08-01-2011 */
+          trs_disk_getstep(2),
+          trs_disk_getstep(3),
+          trs_disk_getstep(4),
+          trs_disk_getstep(5),
+          trs_disk_getstep(6),
+          trs_disk_getstep(7));
+#endif
+  fprintf(config_file, "%sstringy\n", stringy ? "" : "no");
+  fprintf(config_file, "%ssupermem\n", supermem ? "" : "no");
+  fprintf(config_file, "switches=0x%x\n", trs_uart_switches);
+  fprintf(config_file, "%struedam\n", trs_disk_truedam ? "" : "no");
+  fprintf(config_file, "%sturbo\n", timer_overclock ? "" : "no");
+#if defined(SDL2) || !defined(NOX)
+  fprintf(config_file, "%sturbopaste\n", turbo_paste ? "" : "no");
+#endif
+  fprintf(config_file, "turborate=%d\n", timer_overclock_rate);
+  for (i = 0; i < 8; i++) {
+    const char *diskname = stringy_get_name(i);
+
+    if (diskname[0])
+      fprintf(config_file, "wafer%d=%s\n", i, diskname);
+  }
+
+  fclose(config_file);
+  return 0;
 }
 
 void trs_rom_init(void)
@@ -1379,8 +1363,8 @@ void trs_screen_init(void)
     trs_turbo_led();
   }
 
-  grafyx_redraw();
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
+  grafyx_redraw();
   trs_screen_refresh();
   trs_sdl_flush();
 }
@@ -1530,15 +1514,15 @@ static void ProcessCopySelection(int selectAll)
       DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
     orig_x = 0;
     orig_y = 0;
+    DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
     copy_x = end_x = screen->w - scale;
     copy_y = end_y = screen_height - scale;
-    DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
-    drawnRectCount = MAX_RECTS;
-    copyStatus = COPY_DEFINED;
     selectionStartX = orig_x - left_margin;
     selectionStartY = orig_y - top_margin;
     selectionEndX = copy_x - left_margin;
     selectionEndY = copy_y - top_margin;
+    drawnRectCount = MAX_RECTS;
+    copyStatus = COPY_DEFINED;
   } else {
     mouse = SDL_GetMouseState(&copy_x, &copy_y);
     if (copy_x > screen->w - scale)
@@ -1554,22 +1538,22 @@ static void ProcessCopySelection(int selectAll)
   switch (copyStatus) {
     case COPY_IDLE:
       if (selectAll) {
-        copyStatus = COPY_DEFINED;
         orig_x = 0;
         orig_y = 0;
+        DrawSelectionRectangle(orig_x, orig_y, copy_x, copy_y);
         selectionStartX = orig_x - left_margin;
         selectionStartY = orig_y - top_margin;
         selectionEndX = copy_x - left_margin;
         selectionEndY = copy_y - top_margin;
-        DrawSelectionRectangle(orig_x, orig_y, copy_x, copy_y);
         drawnRectCount = MAX_RECTS;
+        copyStatus = COPY_DEFINED;
       }
       else if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT) ) {
-        copyStatus = COPY_STARTED;
         orig_x = copy_x;
         orig_y = copy_y;
         DrawSelectionRectangle(orig_x, orig_y, copy_x, copy_y);
         drawnRectCount = MAX_RECTS;
+        copyStatus = COPY_STARTED;
       }
       end_x = copy_x;
       end_y = copy_y;
@@ -1586,22 +1570,22 @@ static void ProcessCopySelection(int selectAll)
           copyStatus = COPY_IDLE;
         } else {
           DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
-          copyStatus = COPY_DEFINED;
           selectionStartX = orig_x - left_margin;
           selectionStartY = orig_y - top_margin;
           selectionEndX = copy_x - left_margin;
           selectionEndY = copy_y - top_margin;
+          copyStatus = COPY_DEFINED;
         }
       }
       break;
     case COPY_DEFINED:
       if (mouse & (SDL_BUTTON(SDL_BUTTON_LEFT) | SDL_BUTTON(SDL_BUTTON_RIGHT))) {
-        copyStatus = COPY_STARTED;
         DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
         orig_x = end_x = copy_x;
         orig_y = end_y = copy_y;
         DrawSelectionRectangle(orig_x, orig_y, copy_x, copy_y);
         drawnRectCount = MAX_RECTS;
+        copyStatus = COPY_STARTED;
       }
       break;
     case COPY_CLEAR:
@@ -1697,6 +1681,22 @@ void trs_sdl_cleanup(void)
   SDL_DestroyWindow(window);
 #endif
   SDL_Quit(); /* Will free screen */
+}
+
+static void trs_flip_fullscreen(void)
+{
+  static unsigned int window_scale = 1;
+
+  fullscreen = !fullscreen;
+  if (fullscreen) {
+    window_scale = scale;
+    if (scale != 1)
+      scale = 1;
+  }
+  else {
+    if (window_scale != 1)
+      scale = window_scale;
+  }
 }
 
 #if defined(SDL2) || !defined(NOX)
@@ -3260,7 +3260,7 @@ void grafyx_set_microlabs(int on_off)
 }
 
 /* Model III MicroLabs support */
-void grafyx_m3_reset()
+void grafyx_m3_reset(void)
 {
   if (grafyx_microlabs) grafyx_m3_write_mode(0);
 }
