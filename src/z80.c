@@ -3412,9 +3412,7 @@ int z80_run(int continuous)
 	    /* Zaks says no flag changes. */
 	    if(--REG_B != 0)
 	    {
-		signed char byte_value;
-		byte_value = (signed char) mem_read(REG_PC++);
-		REG_PC += byte_value;
+		REG_PC += (signed char) mem_read(REG_PC) + 1;
 		T_COUNT(13);
 	    }
 	    else
@@ -3661,20 +3659,14 @@ int z80_run(int continuous)
 	    break;
 
 	  case 0x18:	/* jr offset */
-	  {
-	      signed char byte_value;
-	      byte_value = (signed char) mem_read(REG_PC++);
-	      REG_PC += byte_value;
-	  }
+	    REG_PC += (signed char) mem_read(REG_PC) + 1;
 	    T_COUNT(12);
 	    break;
 
 	  case 0x20:	/* jr nz, offset */
 	    if(!ZERO_FLAG)
 	    {
-		signed char byte_value;
-		byte_value = (signed char) mem_read(REG_PC++);
-		REG_PC += byte_value;
+		REG_PC += (signed char) mem_read(REG_PC) + 1;
 		T_COUNT(12);
 	    }
 	    else
@@ -3686,9 +3678,7 @@ int z80_run(int continuous)
 	  case 0x28:	/* jr z, offset */
 	    if(ZERO_FLAG)
 	    {
-		signed char byte_value;
-		byte_value = (signed char) mem_read(REG_PC++);
-		REG_PC += byte_value;
+		REG_PC += (signed char) mem_read(REG_PC) + 1;
 		T_COUNT(12);
 	    }
 	    else
@@ -3700,9 +3690,7 @@ int z80_run(int continuous)
 	  case 0x30:	/* jr nc, offset */
 	    if(!CARRY_FLAG)
 	    {
-		signed char byte_value;
-		byte_value = (signed char) mem_read(REG_PC++);
-		REG_PC += byte_value;
+		REG_PC += (signed char) mem_read(REG_PC) + 1;
 		T_COUNT(12);
 	    }
 	    else
@@ -3714,9 +3702,7 @@ int z80_run(int continuous)
 	  case 0x38:	/* jr c, offset */
 	    if(CARRY_FLAG)
 	    {
-		signed char byte_value;
-		byte_value = (signed char) mem_read(REG_PC++);
-		REG_PC += byte_value;
+		REG_PC += (signed char) mem_read(REG_PC) + 1;
 		T_COUNT(12);
 	    }
 	    else
