@@ -31,9 +31,7 @@ binary-arch: build
 	# Add here commands to install the files into debian/$(PACKAGE)
 	$(MAKE) install prefix=`pwd`/debian/$(PACKAGE)/usr mandir='$${prefix}/share/man'
 
-	dh_install
 	dh_installchangelogs
-	dh_installdocs docs/*
 	dh_installman
 	dh_installmenu
 

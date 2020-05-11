@@ -22,22 +22,6 @@ package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
 
-  # Install documentation
-  install -d "${pkgdir}/usr/share/doc/${pkgname}/images"
-  install -D docs/*.html "${pkgdir}/usr/share/doc/${pkgname}/"
-  install -D docs/images/*.png "${pkgdir}/usr/share/doc/${pkgname}/images/"
-
   # Install license
   install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-
-  # Install desktop entry
-  install -D -m644 ${pkgname}.desktop "${pkgdir}/usr/share/applications/${pkgname}.desktop"
-
-  # Install icons
-  install -D -m644 icons/${pkgname}.png "${pkgdir}/usr/share/pixmaps/${pkgname}.png"
-  install -D -m644 icons/${pkgname}.svg "${pkgdir}/usr/share/hicolor/scalable/apps/${pkgname}.svg"
-
-  # Install disk images
-  install -d "${pkgdir}/usr/share/${pkgname}/"
-  install -D -m644 diskimages/*.dsk "${pkgdir}/usr/share/${pkgname}/"
 }
