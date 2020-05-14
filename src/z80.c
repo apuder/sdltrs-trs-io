@@ -553,6 +553,7 @@ static void do_cpi()
     T_COUNT(16);
 }
 
+#ifdef FAST_MEM
 static void do_cpdr()
 {
     int oldcarry = REG_F & CARRY_MASK;
@@ -602,6 +603,25 @@ static void do_cpir()
 
     T_COUNT(-5);
 }
+#else
+static void do_cpdr()
+{
+    do_cpd();
+    if(OVERFLOW_FLAG && !ZERO_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
+}
+
+static void do_cpir()
+{
+    do_cpi();
+    if(OVERFLOW_FLAG && !ZERO_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
+}
+#endif
 
 #if 1
 /* The following passes ZEXALL and matches Yaze, but if you believe
@@ -1190,6 +1210,7 @@ static void do_ind()
     T_COUNT(15);
 }
 
+#ifdef FAST_MEM
 static void do_indr()
 {
     do
@@ -1204,6 +1225,16 @@ static void do_indr()
     SET_ZERO();
     SET_SUBTRACT();
 }
+#else
+static void do_indr()
+{
+    do_ind();
+    if (!ZERO_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
+}
+#endif
 
 static void do_ini()
 {
@@ -1220,6 +1251,7 @@ static void do_ini()
     T_COUNT(15);
 }
 
+#ifdef FAST_MEM
 static void do_inir()
 {
     do
@@ -1234,6 +1266,16 @@ static void do_inir()
     SET_ZERO();
     SET_SUBTRACT();
 }
+#else
+static void do_inir()
+{
+    do_ini();
+    if(!ZERO_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
+}
+#endif
 
 static int in_with_flags(int port)
 {
@@ -1280,6 +1322,7 @@ static void do_outd()
     T_COUNT(15);
 }
 
+#ifdef FAST_MEM
 static void do_outdr()
 {
     do
@@ -1294,6 +1337,16 @@ static void do_outdr()
     SET_ZERO();
     SET_SUBTRACT();
 }
+#else
+static void do_outdr()
+{
+    do_outd();
+    if(!ZERO_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
+}
+#endif
 
 static void do_outi()
 {
@@ -1310,6 +1363,7 @@ static void do_outi()
     T_COUNT(15);
 }
 
+#ifdef FAST_MEM
 static void do_outir()
 {
     do
@@ -1324,6 +1378,16 @@ static void do_outir()
     SET_ZERO();
     SET_SUBTRACT();
 }
+#else
+static void do_outir()
+{
+    do_outi();
+    if (!ZERO_FLAG) {
+      REG_PC -= 2;
+      T_COUNT(5);
+    }
+}
+#endif
 
 
 /*
