@@ -95,7 +95,7 @@ brew install autoconf automake libtool llvm readline sdl2
 should download and install the required packages to build **SDL2TRS**.
 In the main directory of the source, execute the following commands:
 ```sh
-./autogen
+./autogen.sh
 ./configure --enable-readline
 make
 ```
