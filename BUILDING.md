@@ -10,7 +10,7 @@ which will generate the `configure` script. Installation of `aclocal`,
 
 To enable faster but not accurate Z80 block moves, execute:
 ```sh
-./configure --enable-fastmem
+./configure --enable-fastmove
 ```
 To enable `readline` support for the zbx debugger, execute:
 ```sh

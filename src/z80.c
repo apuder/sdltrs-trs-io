@@ -553,7 +553,7 @@ static void do_cpi()
     T_COUNT(16);
 }
 
-#ifdef FAST_MEM
+#ifdef FAST_MOVE
 static void do_cpdr()
 {
     int oldcarry = REG_F & CARRY_MASK;
@@ -1004,7 +1004,7 @@ static void do_ldi()
     T_COUNT(16);
 }
 
-#ifdef FAST_MEM
+#ifdef FAST_MOVE
 static void do_ldir()
 {
     int moved, undoc;
@@ -1210,7 +1210,7 @@ static void do_ind()
     T_COUNT(15);
 }
 
-#ifdef FAST_MEM
+#ifdef FAST_MOVE
 static void do_indr()
 {
     do
@@ -1251,7 +1251,7 @@ static void do_ini()
     T_COUNT(15);
 }
 
-#ifdef FAST_MEM
+#ifdef FAST_MOVE
 static void do_inir()
 {
     do
@@ -1322,7 +1322,7 @@ static void do_outd()
     T_COUNT(15);
 }
 
-#ifdef FAST_MEM
+#ifdef FAST_MOVE
 static void do_outdr()
 {
     do
@@ -1363,7 +1363,7 @@ static void do_outi()
     T_COUNT(15);
 }
 
-#ifdef FAST_MEM
+#ifdef FAST_MOVE
 static void do_outir()
 {
     do

@@ -21,9 +21,9 @@ case $host_os in
     ;;
 esac
 
-AC_ARG_ENABLE([fastmem],
-  [AS_HELP_STRING([--enable-fastmem], [faster but not accurate Z80 block moves])],
-  [AC_DEFINE([FAST_MEM])
+AC_ARG_ENABLE([fastmove],
+  [AS_HELP_STRING([--enable-fastmove], [faster but not accurate Z80 block moves])],
+  [AC_DEFINE([FAST_MOVE])
    AC_MSG_NOTICE([faster but not accurate Z80 block moves enabled])])
 
 AC_ARG_ENABLE([readline],
