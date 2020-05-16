@@ -32,6 +32,9 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include <SDL.h>
 #include "error.h"
 #include "trs.h"
@@ -44,10 +47,6 @@
 #include "trs_state_save.h"
 #include "trs_stringy.h"
 #include "trs_uart.h"
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
 #define LEFT_VERT_LINE      149
 #define RIGHT_VERT_LINE     170
