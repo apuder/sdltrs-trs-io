@@ -1,2 +1,2 @@
 ?package(sdltrs):needs="x11" section="Applications/Emulators" \
-	title="SDLTRS" command="sdltrs" icon="/usr/share/pixmaps/sdltrs.png"
+	title="SDLTRS" command="sdltrs" icon="/usr/share/pixmaps/sdltrs.xpm"
