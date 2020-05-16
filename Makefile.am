@@ -47,5 +47,8 @@ desktop_DATA=	sdltrs.desktop
 docdir=		$(datadir)/doc/@PACKAGE@
 nobase_doc_DATA=html/*.html html/images/*.png
 
+icondir=	$(datadir)/icons/hicolor/48x48/apps
+icon_DATA=	icons/sdltrs.png
+
 pixmapdir=	$(datadir)/pixmaps
-pixmap_DATA=	icons/sdltrs.png icons/sdltrs.xpm
+pixmap_DATA=	icons/sdltrs.xpm
