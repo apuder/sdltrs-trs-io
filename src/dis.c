@@ -64,11 +64,11 @@
 
 #define arglen(a) ((signed char)((a)&0xff))
 
-static char undefined[] = "undefined";
+static const char undefined[] = "undefined";
 
 struct opcode {
-	char	*name;
-	int	args;
+	const char	*name;
+	const int	args;
 };
 
 static struct opcode major[256] = {
