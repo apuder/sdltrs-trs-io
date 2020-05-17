@@ -1,6 +1,6 @@
 # Maintainer: Jens Guenther <dbotw@gmx.net>
 pkgname=sdltrs
-pkgver=1.2.9a
+pkgver=master
 pkgrel=1
 pkgdesc="TRS-80 Model I/III/4/4P emulator for SDL2"
 arch=(i686 x86_64)
@@ -9,7 +9,7 @@ license=('custom')
 depends=('readline' 'sdl2')
 makedepends=('autoconf' 'automake')
 source=(${url}/-/archive/${pkgver}/${pkgname}-${pkgver}.tar.gz)
-md5sums=('ae6137bfe6ad60d133e7cf6c79fbc09d')
+md5sums=('SKIP')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
