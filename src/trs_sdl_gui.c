@@ -932,7 +932,7 @@ int trs_gui_display_popup(const char *title, const char **entry,
                           int entry_count, int selection)
 {
   int i, key;
-  int first_x, first_y;
+  int x, y;
   int const saved_selection = selection;
   unsigned int max_len = 0;
 
@@ -940,20 +940,20 @@ int trs_gui_display_popup(const char *title, const char **entry,
     if (strlen(entry[i]) > max_len)
       max_len = strlen(entry[i]);
   }
-  first_x = (64 - max_len) / 2;
-  first_y = (16 - entry_count) / 2;
+  x = (64 - max_len) / 2;
+  y = (16 - entry_count) / 2;
 
-  trs_gui_frame(first_x - 1, first_y - 1, max_len + 2, entry_count + 2);
-  trs_gui_write_text(title, first_x + 1, first_y - 1, 0);
+  trs_gui_frame(x - 1, y - 1, max_len + 2, entry_count + 2);
+  trs_gui_write_text(title, x + 1, y - 1, 0);
 
   for (i = 0; i < entry_count; i++)
-    trs_gui_write_text(entry[i], first_x, first_y + i, 0);
+    trs_gui_write_text(entry[i], x, y + i, 0);
 
   while (1) {
-    trs_gui_write_text(entry[selection], first_x, selection + first_y, 1);
+    trs_gui_write_text(entry[selection], x, selection + y, 1);
     trs_gui_refresh();
     key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], first_x, selection + first_y, 0);
+    trs_gui_write_text(entry[selection], x, selection + y, 0);
     if (entry_count == 2) {
       if (tolower(key) == 'n')
         return 0;
@@ -2650,7 +2650,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   int row, col;
   int entry_count = rows * cols;
   int i, j, key;
-  int width, first_x, first_y;
+  int width, x, y;
   unsigned int max_len = 0;
 
   if (selection < 0)
@@ -2666,22 +2666,22 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
       max_len = strlen(entry[i]) + 1;
 
   width = cols * max_len - 1;
-  first_x = (64 - width) / 2;
-  first_y = (16 - rows) / 2;
+  x = (64 - width) / 2;
+  y = (16 - rows) / 2;
 
-  trs_gui_frame(first_x - 1, first_y - 1, width + 2, rows + 2);
-  trs_gui_clear_rect(first_x, first_y, width, rows);
-  trs_gui_write_text(title, first_x + 1, first_y - 1, 0);
+  trs_gui_frame(x - 1, y - 1, width + 2, rows + 2);
+  trs_gui_clear_rect(x, y, width, rows);
+  trs_gui_write_text(title, x + 1, y - 1, 0);
   for (i = 0; i < rows; i++)
     for (j = 0; j < cols; j++)
-      trs_gui_write_text(entry[i * cols + j], first_x + j * max_len, first_y + i, 0);
+      trs_gui_write_text(entry[i * cols + j], x + j * max_len, y + i, 0);
 
   while (1) {
     selection = row * cols + col;
-    trs_gui_write_text(entry[selection], first_x + col * max_len, first_y + row, 1);
+    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 1);
     trs_gui_refresh();
     key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], first_x + col * max_len, first_y + row, 0);
+    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 0);
     switch (key) {
       case SDLK_DOWN:
         row++;
