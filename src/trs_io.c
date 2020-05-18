@@ -162,7 +162,8 @@ void z80_out(int port, int value)
       break;
     case 0xFE:
       /* Typical location for clock speedup kits */
-      trs_timer_speed(value);
+      if (speedup)
+        trs_timer_speed(value);
       break;
     case 0xFF:
       /* screen mode select is on D3 line */
