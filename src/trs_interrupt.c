@@ -70,6 +70,7 @@ static unsigned char nmi_mask = M3_RESET_BIT;
 int timer_hz;
 int timer_overclock = 0;
 int timer_overclock_rate = 5;
+int speedup = 1;
 unsigned int cycles_per_timer;
 
 #define CLOCK_MHZ_1 1.77408
@@ -474,12 +475,12 @@ trs_timer_speed(int fast)
   if (trs_model >= 4) {
     timer_hz = fast ? TIMER_HZ_4 : TIMER_HZ_3;
     z80_state.clockMHz = fast ? CLOCK_MHZ_4 : CLOCK_MHZ_3;
-  } else if (trs_model == 1) {
+    trs_screen_caption();
+  } else if (trs_model == 1 && speedup) {
       /* Typical 2x clock speedup kit */
       z80_state.clockMHz = CLOCK_MHZ_1 * ((fast&1) + 1);
+      trs_screen_caption();
   }
-  cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
-  trs_screen_caption();
 }
 
 static trs_event_func event_func = NULL;

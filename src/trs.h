@@ -284,6 +284,7 @@ int trs_get_mouse_type(void);
 extern int timer_hz;
 extern int timer_overclock_rate;
 extern int timer_overclock;
+extern int speedup;
 
 int put_twobyte(Ushort n, FILE* f);
 int put_fourbyte(Uint n, FILE* f);
