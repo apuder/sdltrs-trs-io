@@ -2222,7 +2222,7 @@ void trs_gui_model(void)
    {"", MENU_TITLE_TYPE},
    {"Lowercase Modification for Model I                          ", MENU_NORMAL_TYPE},
    {"Exatron Stringy Floppy Emulation for Model I                ", MENU_NORMAL_TYPE},
-   {"Speedup kit (Archbold/Holmes) for Model I                   ", MENU_NORMAL_TYPE},
+   {"Speedup Kit Emulation for Model I                           ", MENU_NORMAL_TYPE},
    {"", MENU_TITLE_TYPE},
    {"Lowe Electronics LE18 Graphics Emulation                    ", MENU_NORMAL_TYPE},
    {"Micro Labs Grafyx Solution Graphics Emulation               ", MENU_NORMAL_TYPE},
@@ -2236,6 +2236,7 @@ void trs_gui_model(void)
                                    "TRS-80 Model III",
                                    "  TRS-80 Model 4",
                                    " TRS-80 Model 4P"};
+  const char *speed_choices[3] =  {"    None", "Archbold", "Sprinter"};
   const char *on_off_choices[2] = {"        Off", "         On"};
   int selection = 0;
   int model_selection;
@@ -2250,7 +2251,7 @@ void trs_gui_model(void)
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
     snprintf(&model_menu[2].title[49], 12, "%s", on_off_choices[lowercase]);
     snprintf(&model_menu[3].title[49], 12, "%s", on_off_choices[stringy]);
-    snprintf(&model_menu[4].title[49], 12, "%s", on_off_choices[speedup]);
+    snprintf(&model_menu[4].title[52], 9, "%s", speed_choices[speedup]);
     snprintf(&model_menu[6].title[49], 12, "%s", on_off_choices[lowe_le18]);
     snprintf(&model_menu[7].title[49], 12, "%s", on_off_choices[grafyx_get_microlabs()]);
     snprintf(&model_menu[9].title[49], 12, "%s", on_off_choices[huffman_ram]);
@@ -2275,7 +2276,7 @@ void trs_gui_model(void)
         stringy = trs_gui_display_popup("Stringy", on_off_choices, 2, stringy);
         break;
       case 4:
-        speedup = trs_gui_display_popup("Speedup", on_off_choices, 2, speedup);
+        speedup = trs_gui_display_popup("Speedup", speed_choices, 3, speedup);
         break;
       case 6:
         lowe_le18 = trs_gui_display_popup("Lowe LE18", on_off_choices, 2, lowe_le18);

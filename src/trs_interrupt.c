@@ -476,8 +476,14 @@ trs_timer_speed(int fast)
     timer_hz = fast ? TIMER_HZ_4 : TIMER_HZ_3;
     z80_state.clockMHz = fast ? CLOCK_MHZ_4 : CLOCK_MHZ_3;
   } else if (trs_model == 1) {
-      /* Typical 2x clock speedup kit */
-      z80_state.clockMHz = CLOCK_MHZ_1 * ((fast&1) + 1);
+      switch (speedup) {
+        case 1: /*Archbold*/
+          z80_state.clockMHz = CLOCK_MHZ_1 * ((fast & 1) + 1);
+          break;
+        case 2: /*Sprinter*/
+          z80_state.clockMHz = 10.6445 / (((fast + 4) & 7) + 2);
+          break;
+        }
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
   trs_screen_caption();

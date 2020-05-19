@@ -343,10 +343,6 @@ will be executed upon startup of the emulator.</p>
     <td>Disable the Sound Output at startup of the emulator.</td>
   </tr>
   <tr>
-    <td><code>-nospeedup</code></td>
-    <td>Disable emulation of Speedup kits for the Model I.</td>
-  </tr>
-  <tr>
     <td><code>-nostringy</code></td>
     <td>Do not emulate the Exatron Stringy Floppy Drive in Model I mode.
         This is the default.</td>
@@ -475,11 +471,11 @@ will be executed upon startup of the emulator.</p>
         <B>Alt-U</B> in the emulator.</td>
   </tr>
   <tr>
-    <td><code>-speedup</code></td>
-    <td>Enable Speedup kits like "Archbold Speedup Board" or the "Holmes
-        Sprinter" for the Model I. The CPU speed can be controlled
-        through the I/O port <code>0xfe</code> (<code>254</code>).
-        This option is the default.</td>
+    <td><code>-speedup kit</code></td>
+    <td>Emulate the specified Speedup Kit for the TRS-80 Model I: this can
+        be <code>none</code>, <code>archbold</code> for "Archbold Electronics
+        Speed-Up Board" or <code>sprinter</code> for the "Holmes Engineering
+        Sprinter II". <code>archbold</code> is the default setting.
   </tr>
   <tr>
     <td><code>-statedir dir</code></td>

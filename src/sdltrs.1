@@ -220,10 +220,6 @@ Default for Model I and III.
 .TP
 .B \-nosound
 Disable Sound Output at startup.
-.TP
-.B \-nospeedup
-Disable emulation of Speedup kits on port 0xfe for Model I.
-.TP
 .B \-nostringy
 Do not emulate Exatron Stringy Floppy Drive for Model I (Default).
 .TP
@@ -303,8 +299,10 @@ Selectively set whether drives are emulated as 5-inch or 8-inch.
 .B \-sound
 Enable Sound Output (Default).
 .TP
-.B \-speedup
-Emulate Speedup kits on port 0xfe for Model I (Default).
+.B \-speedup \fIkit\fP
+Select Speedup Kit for Model I:
+\fIn(one)\fP | \fIa(rchbold)\fP | \fIs(printer)\fP.
+Default: \fIarchbold\fP
 .TP
 .B \-statedir \fIdir\fP
 Specify directory containing saved emulator state files.

@@ -280,6 +280,7 @@ static void trs_opt_scale(char *arg, int intarg, int *stringarg);
 static void trs_opt_selector(char *arg, int intarg, int *stringarg);
 static void trs_opt_shiftbracket(char *arg, int intarg, int *stringarg);
 static void trs_opt_sizemap(char *arg, int intarg, int *stringarg);
+static void trs_opt_speedup(char *arg, int intarg, int *stringarg);
 #ifdef __linux
 static void trs_opt_stepmap(char *arg, int intarg, int *stringarg);
 #endif
@@ -365,7 +366,6 @@ static const trs_opt options[] = {
   { "noselector",      trs_opt_selector,      0, 0, NULL                 },
   { "noshiftbracket",  trs_opt_shiftbracket,  0, 0, NULL                 },
   { "nosound",         trs_opt_value,         0, 0, &trs_sound           },
-  { "nospeedup",       trs_opt_value,         0, 0, &speedup             },
   { "nostringy",       trs_opt_value,         0, 0, &stringy             },
   { "nosupermem",      trs_opt_supermem,      0, 0, NULL                 },
   { "notruedam",       trs_opt_value,         0, 0, &trs_disk_truedam    },
@@ -391,7 +391,7 @@ static const trs_opt options[] = {
   { "showled",         trs_opt_value,         0, 1, &trs_show_led        },
   { "sizemap",         trs_opt_sizemap,       1, 0, NULL                 },
   { "sound",           trs_opt_value,         0, 1, &trs_sound           },
-  { "speedup",         trs_opt_value,         0, 1, &speedup             },
+  { "speedup",         trs_opt_speedup,       1, 0, NULL                 },
   { "statedir",        trs_opt_string,        1, 0, trs_state_dir        },
 #ifdef __linux
   { "stepmap",         trs_opt_stepmap,       1, 0, NULL                 },
@@ -750,6 +750,23 @@ static void trs_opt_sizemap(char *arg, int intarg, int *stringarg)
   sscanf(arg, "%d,%d,%d,%d,%d,%d,%d,%d",
          &disksizes[0], &disksizes[1], &disksizes[2], &disksizes[3],
          &disksizes[4], &disksizes[5], &disksizes[6], &disksizes[7]);
+}
+
+static void trs_opt_speedup(char *arg, int intarg, int *stringarg)
+{
+  switch (tolower((int)*arg)) {
+    case 'n': /*None*/
+      speedup = 0;
+      break;
+    case 'a': /*Archbold*/
+      speedup = 1;
+      break;
+    case 's': /*Sprinter*/
+      speedup = 2;
+      break;
+    default:
+      error("unknown speedup kit: %s", arg);
+  }
 }
 
 static void trs_opt_string(char *arg, int intarg, int *stringarg)
@@ -1120,7 +1137,19 @@ int trs_write_config_file(const char *filename)
           trs_disk_getsize(6),
           trs_disk_getsize(7));
   fprintf(config_file, "%ssound\n", trs_sound ? "" : "no");
-  fprintf(config_file, "%sspeedup\n", speedup ? "" : "no");
+  fprintf(config_file, "speedup=");
+  switch (speedup) {
+    case 0:
+    default:
+      fprintf(config_file, "none\n");
+      break;
+    case 1:
+      fprintf(config_file, "archbold\n");
+      break;
+    case 2:
+      fprintf(config_file, "sprinter\n");
+      break;
+  }
   fprintf(config_file, "statedir=%s\n", trs_state_dir);
 #ifdef __linux
   fprintf(config_file, "stepmap=%d,%d,%d,%d,%d,%d,%d,%d\n",
