@@ -327,8 +327,8 @@ void debug_print_registers()
     printf("H L: %.2x %.2x    SP: %.4x    HL': %.4x\n",
 	   REG_H, REG_L, REG_SP, REG_HL_PRIME);
 
-    printf("\nT-state counter: %" TSTATE_T_LEN "    ", z80_state.t_count);
-    printf("Delay setting: %d\n", z80_state.delay);
+    printf("\nT-state counter: %" TSTATE_T_LEN "", z80_state.t_count);
+    printf("\nZ80 Clock Speed: %.2f MHz\n", z80_state.clockMHz);
 }
 
 
