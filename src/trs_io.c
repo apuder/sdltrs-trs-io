@@ -184,6 +184,10 @@ void z80_out(int port, int value)
       if (trs_model == 3)
           mem_bank_base(value);
       break;
+    case 0x5f: /* Sprinter III */
+      if (trs_model == 3)
+          trs_timer_speed(value);
+      break;
     case 0x79: /* Orchestra-90 left channel */
       trs_orch90_out(1, value);
       break;
@@ -280,7 +284,8 @@ void z80_out(int port, int value)
       /* alternate char set is on D3 */
       trs_screen_alternate(!((modeimage & 0x08) >> 3));
       /* clock speed is on D6; it affects timer HZ too */
-      trs_timer_speed((modeimage & 0x40) >> 6);
+      if (trs_model >= 4)
+        trs_timer_speed((modeimage & 0x40) >> 6);
       break;
     case TRSDISK3_COMMAND: /* 0xF0 */
       trs_disk_command_write(value);

@@ -483,7 +483,10 @@ trs_timer_speed(int fast)
         case 2: /*Sprinter*/
           z80_state.clockMHz = 10.6445 / (((fast + 4) & 7) + 2);
           break;
-        }
+      }
+  } else if (trs_model == 3) {
+    /* Switch to fastest possible speed of Sprinter III */
+    z80_state.clockMHz = (fast & 1) ? 5.07 /* 3.4 */ : CLOCK_MHZ_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
   trs_screen_caption();
