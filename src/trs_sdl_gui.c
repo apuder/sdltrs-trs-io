@@ -2236,7 +2236,7 @@ void trs_gui_model(void)
                                    "TRS-80 Model III",
                                    "  TRS-80 Model 4",
                                    " TRS-80 Model 4P"};
-  const char *speed_choices[3] =  {"    None", "Archbold", "Sprinter"};
+  const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
   const char *on_off_choices[2] = {"        Off", "         On"};
   int selection = 0;
   int model_selection;
@@ -2251,7 +2251,7 @@ void trs_gui_model(void)
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
     snprintf(&model_menu[2].title[49], 12, "%s", on_off_choices[lowercase]);
     snprintf(&model_menu[3].title[49], 12, "%s", on_off_choices[stringy]);
-    snprintf(&model_menu[4].title[52], 9, "%s", speed_choices[speedup]);
+    snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
     snprintf(&model_menu[6].title[49], 12, "%s", on_off_choices[lowe_le18]);
     snprintf(&model_menu[7].title[49], 12, "%s", on_off_choices[grafyx_get_microlabs()]);
     snprintf(&model_menu[9].title[49], 12, "%s", on_off_choices[huffman_ram]);
