@@ -409,7 +409,6 @@ static void hard_seek(int cmd)
 static int open_drive(int drive)
 {
   Drive *d = &state.d[drive];
-  char diskname[1024];
   ReedHardHeader rhh;
   size_t res;
 
@@ -426,7 +425,7 @@ static int open_drive(int drive)
     if (d->file == NULL) {
 #if HARDDEBUG3
       error("trs_hard: could not open hard drive image %s: %s",
-	    diskname, strerror(errno));
+	    d->filename, strerror(errno));
 #endif
       goto fail;
     }
@@ -438,7 +437,7 @@ static int open_drive(int drive)
   /* Read in the Reed header and check some basic magic numbers (not all) */
   res = fread(&rhh, sizeof(rhh), 1, d->file);
   if (res != 1 || rhh.id1 != 0x56 || rhh.id2 != 0xcb || rhh.ver != 0x10) {
-    error("trs_hard: unrecognized hard drive image %s", diskname);
+    error("trs_hard: unrecognized hard drive image %s", d->filename);
     goto fail;
   }
   if (rhh.flag1 & 0x80) d->writeprot = 1;
@@ -455,7 +454,7 @@ static int open_drive(int drive)
 
   if ((rhh.sec % d->secs) != 0 ||
       d->heads <= 0 || d->heads > TRS_HARD_MAXHEADS) {
-    error("trs_hard: unusable geometry in image %s", diskname);
+    error("trs_hard: unusable geometry in image %s", d->filename);
     goto fail;
   }
 
