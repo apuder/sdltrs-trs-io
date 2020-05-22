@@ -788,6 +788,7 @@ trs_disk_insert(int drive, const char *diskname)
     d->file = NULL;
     d->filename[0] = 0;
     d->writeprot = 0;
+    error("failed to open disk image %s: %s", diskname, strerror(errno));
     return;
   }
   #if __linux
