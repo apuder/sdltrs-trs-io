@@ -40,6 +40,7 @@
  * mapped at ports 0xc8-0xcf, plus control registers at 0xc0-0xc1.
  */
 
+#include <string.h>
 #include <errno.h>
 #include "error.h"
 #include "trs.h"
@@ -51,7 +52,6 @@
 
 /*#define HARDDEBUG1 1*/  /* show detail on all port i/o */
 /*#define HARDDEBUG2 1*/  /* show all commands */
-/*#define HARDDEBUG3 1*/  /* show failure to open a drive */
 
 /* Private types and data */
 
@@ -423,10 +423,8 @@ static int open_drive(int drive)
     /* No luck, try for reading only */
     d->file = fopen(d->filename, "rb");
     if (d->file == NULL) {
-#if HARDDEBUG3
       error("trs_hard: could not open hard drive image %s: %s",
 	    d->filename, strerror(errno));
-#endif
       goto fail;
     }
     d->writeprot = 1;
