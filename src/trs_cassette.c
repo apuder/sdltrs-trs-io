@@ -358,14 +358,6 @@ put_sample(Uchar sample, int convert, FILE* f)
   putc(sample, f);
 }
 
-/* Get an 8-byte unsigned sample, if necessary converting from a
- * different sample format and/or reducing stereo to mono.  */
-static int
-get_sample(int convert, FILE* f)
-{
-  return getc(f);
-}
-
 /* Write a new .wav file header to a file.  Return -1 on error. */
 int
 create_wav_header(FILE *f)
@@ -984,17 +976,11 @@ transition_in()
     ret = 1;
     break;
 
-  case DIRECT_FORMAT:
   case WAV_FORMAT:
     nsamples = 0;
     maxsamples = cassette_sample_rate / 100;
     do {
-      int direct = (cassette_format == DIRECT_FORMAT);
-      c = get_sample(direct, cassette_file);
-      if (direct && cassette_stereo) {
-	/* Discard right channel */
-	(void) get_sample(direct, cassette_file);
-      }
+      c = getc(cassette_file);
       if (c == EOF) goto fail;
       if (c > 127 + cassette_noisefloor) {
 	next = 1;
