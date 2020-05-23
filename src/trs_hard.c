@@ -136,7 +136,7 @@ void trs_hard_attach(int drive, const char *diskname)
   if (state.d[drive].file != NULL)
     fclose(state.d[drive].file);
   snprintf(state.d[drive].filename, FILENAME_MAX, "%s", diskname);
-  if (open_drive(drive) == 0) {
+  if (open_drive(drive) < 0) {
     trs_hard_remove(drive);
   }
   trs_impexp_xtrshard_attach(drive, diskname);
@@ -235,7 +235,7 @@ void trs_hard_out(int port, int value)
     if ((value & TRS_HARD_DEVICE_ENABLE) && state.present == 0) {
       int i;
       for (i = 0; i < TRS_HARD_MAXDRIVES; i++) {
-	if (open_drive(i)) state.present = 1;
+	if (open_drive(i) == 0) state.present = 1;
       }
     }
     state.control = value;
@@ -265,7 +265,7 @@ void trs_hard_out(int port, int value)
     state.drive = (value & TRS_HARD_DRIVEMASK) >> TRS_HARD_DRIVESHIFT;
     state.head = (value & TRS_HARD_HEADMASK) >> TRS_HARD_HEADSHIFT;
 #if 0
-    if (!open_drive(state.drive)) state.status &= ~TRS_HARD_READY;
+    if (open_drive(state.drive) < 0) state.status &= ~TRS_HARD_READY;
 #else
     /* Ready, but perhaps not able!  This way seems to work better; it
      * avoids a long delay in the Model 4P boot ROM when there is no
@@ -404,27 +404,36 @@ static void hard_seek(int cmd)
  * 2) If newly opening the file, establish the hardware write protect
  * status and geometry in the Drive structure.
  *
- * 3) Return 1 if all OK.
+ * 3) Set the hardware write protect status and geometry in the Drive
+ * structure.
+ *
+ * 4) Return 0 if OK, -1 if invalid header, errno value otherwise.
  */
 static int open_drive(int drive)
 {
   Drive *d = &state.d[drive];
   ReedHardHeader rhh;
   size_t res;
+  int err = 0;
 
-  if (d->file != NULL)
-   return 1;
+  if (d->file != NULL) {
+    fclose(d->file);
+    d->file = NULL;
+  }
   if (d->filename[0] == 0)
     goto fail;
 
   /* First try opening for reading and writing */
-  d->file = fopen(d->filename, "rb+");
+  d->file = fopen(d->filename, "r+");
   if (d->file == NULL) {
+    if (errno == EACCES || errno == EROFS) {
     /* No luck, try for reading only */
-    d->file = fopen(d->filename, "rb");
+      d->file = fopen(d->filename, "r");
+    }
     if (d->file == NULL) {
       error("trs_hard: could not open hard drive image %s: %s",
 	    d->filename, strerror(errno));
+      err = errno;
       goto fail;
     }
     d->writeprot = 1;
@@ -436,6 +445,7 @@ static int open_drive(int drive)
   res = fread(&rhh, sizeof(rhh), 1, d->file);
   if (res != 1 || rhh.id1 != 0x56 || rhh.id2 != 0xcb || rhh.ver != 0x10) {
     error("trs_hard: unrecognized hard drive image %s", d->filename);
+    err = -1;
     goto fail;
   }
   if (rhh.flag1 & 0x80) d->writeprot = 1;
@@ -453,18 +463,19 @@ static int open_drive(int drive)
   if ((rhh.sec % d->secs) != 0 ||
       d->heads <= 0 || d->heads > TRS_HARD_MAXHEADS) {
     error("trs_hard: unusable geometry in image %s", d->filename);
+    err = -1;
     goto fail;
   }
 
   state.status = TRS_HARD_READY | TRS_HARD_SEEKDONE;
-  return 1;
+  return 0;
 
  fail:
   if (d->file) fclose(d->file);
   d->file = NULL;
   state.status = TRS_HARD_READY | TRS_HARD_SEEKDONE | TRS_HARD_ERR;
   state.error = TRS_HARD_NFERR;
-  return 0;
+  return err;
 }
 
 /*
