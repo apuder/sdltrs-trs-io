@@ -664,6 +664,11 @@ int assert_state(int state)
 
   switch (state) {
   case READ:
+    if (cassette_filename[0] == 0) {
+      error("no cassette inserted");
+      cassette_state = FAILED;
+      return -1;
+    }
     cassette_file = fopen(cassette_filename, "rb");
     if (cassette_format == WAV_FORMAT &&
         cassette_file != NULL && parse_wav_header(cassette_file) < 0) {
