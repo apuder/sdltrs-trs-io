@@ -1734,144 +1734,147 @@ void trs_gui_display_management(void)
                                      "         Bold"};
   const char *scale_choices[4] =    {"  None", "   2 x", "   3 x", "   4 x"};
   char input[8];
+  int redraw = 0;
   int selection = 0;
-  int local_trs_charset1 = trs_charset1;
-  int local_trs_charset3 = trs_charset3 - 4;
-  int local_trs_charset4 = trs_charset4 - 7;
-  unsigned int local_foreground = foreground;
-  unsigned int local_background = background;
-  unsigned int local_gui_foreground = gui_foreground;
-  unsigned int local_gui_background = gui_background;
-  int gui_show_led = trs_show_led;
-  int gui_resize3 = resize3;
-  int gui_resize4 = resize4;
-  int gui_scale = scale;
-  int gui_scanlines = scanlines;
-  int gui_border_width = window_border_width;
-
-  if (local_trs_charset1 >= 10)
-    local_trs_charset1 -= 6;
+  int value = 0;
+  int gui_charset1 = trs_charset1 >= 10 ? trs_charset1 -= 6 : trs_charset1;
+  unsigned int rgb_color = 0;
 
   while (1) {
-    snprintf(&display_menu[0].title[52], 9, "0x%06X", local_background);
-    snprintf(&display_menu[1].title[52], 9, "0x%06X", local_foreground);
-    snprintf(&display_menu[2].title[52], 9, "0x%06X", local_gui_background);
-    snprintf(&display_menu[3].title[52], 9, "0x%06X", local_gui_foreground);
-    snprintf(&display_menu[4].title[49], 12, "%s", font1_choices[local_trs_charset1]);
-    snprintf(&display_menu[5].title[47], 14, "%s", font34_choices[local_trs_charset3]);
-    snprintf(&display_menu[6].title[47], 14, "%s", font34_choices[local_trs_charset4]);
-    snprintf(&display_menu[7].title[52], 9, "%8d", gui_border_width);
-    snprintf(&display_menu[8].title[50], 11, "%s", yes_no_choices[gui_resize3]);
-    snprintf(&display_menu[9].title[50], 11, "%s", yes_no_choices[gui_resize4]);
-    snprintf(&display_menu[10].title[54], 7, "%s", scale_choices[gui_scale - 1]);
-    snprintf(&display_menu[11].title[50], 11, "%s", yes_no_choices[gui_show_led]);
-    snprintf(&display_menu[12].title[50], 11, "%s", yes_no_choices[gui_scanlines]);
+    snprintf(&display_menu[0].title[52], 9, "0x%06X", background);
+    snprintf(&display_menu[1].title[52], 9, "0x%06X", foreground);
+    snprintf(&display_menu[2].title[52], 9, "0x%06X", gui_background);
+    snprintf(&display_menu[3].title[52], 9, "0x%06X", gui_foreground);
+    snprintf(&display_menu[4].title[49], 12, "%s", font1_choices[gui_charset1]);
+    snprintf(&display_menu[5].title[47], 14, "%s", font34_choices[trs_charset3 - 4]);
+    snprintf(&display_menu[6].title[47], 14, "%s", font34_choices[trs_charset4 - 7]);
+    snprintf(&display_menu[7].title[52], 9, "%8d", window_border_width);
+    snprintf(&display_menu[8].title[50], 11, "%s", yes_no_choices[resize3]);
+    snprintf(&display_menu[9].title[50], 11, "%s", yes_no_choices[resize4]);
+    snprintf(&display_menu[10].title[54], 7, "%s", scale_choices[scale - 1]);
+    snprintf(&display_menu[11].title[50], 11, "%s", yes_no_choices[trs_show_led]);
+    snprintf(&display_menu[12].title[50], 11, "%s", yes_no_choices[scanlines]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Display Setting Menu", display_menu, selection);
     switch (selection) {
       case 0:
-        snprintf(input, 7, "%06X", local_background);
+        snprintf(input, 7, "%06X", background);
         if (trs_gui_input_string("Enter Background RGB color (Hex, RRGGBB)", input, input, 6, 0) == 0) {
-          local_background = strtol(input, NULL, 16);
-          if (local_background != background) {
-            background = local_background;
-            trs_screen_init();
+          rgb_color = strtol(input, NULL, 16);
+          if (rgb_color != background) {
+            background = rgb_color;
+            redraw = 1;
           }
         }
         break;
       case 1:
-        snprintf(input, 7, "%06X", local_foreground);
+        snprintf(input, 7, "%06X", foreground);
         if (trs_gui_input_string("Enter Foreground RGB color (Hex, RRGGBB)", input, input, 6, 0) == 0) {
-          local_foreground = strtol(input, NULL, 16);
-          if (local_foreground != foreground) {
-            foreground = local_foreground;
-            trs_screen_init();
+          rgb_color = strtol(input, NULL, 16);
+          if (rgb_color != foreground) {
+            foreground = rgb_color;
+            redraw = 1;
           }
         }
         break;
       case 2:
-        snprintf(input, 7, "%06X", local_gui_background);
+        snprintf(input, 7, "%06X", gui_background);
         if (trs_gui_input_string("Enter GUI Background RGB color (Hex, RRGGBB)", input, input, 6, 0) == 0) {
-          local_gui_background = strtol(input, NULL, 16);
-          if (local_gui_background != gui_background) {
-            gui_background = local_gui_background;
-            trs_screen_init();
+          rgb_color = strtol(input, NULL, 16);
+          if (rgb_color != gui_background) {
+            gui_background = rgb_color;
+            redraw = 1;
           }
         }
         break;
       case 3:
-        snprintf(input, 7, "%06X", local_gui_foreground);
+        snprintf(input, 7, "%06X", gui_foreground);
         if (trs_gui_input_string("Enter GUI Foreground RGB color (Hex, RRGGBB)", input, input, 6, 0) == 0) {
-          local_gui_foreground = strtol(input, NULL, 16);
-          if (local_gui_foreground != gui_foreground) {
-            gui_foreground = local_gui_foreground;
-            trs_screen_init();
+          rgb_color = strtol(input, NULL, 16);
+          if (rgb_color != gui_foreground) {
+            gui_foreground = rgb_color;
+            redraw = 1;
           }
         }
         break;
       case 4:
-        local_trs_charset1 = trs_gui_display_popup("Charset 1", font1_choices, 7, local_trs_charset1);
+        value = trs_gui_display_popup("Charset 1", font1_choices, 7, gui_charset1);
+        if (value != gui_charset1) {
+          gui_charset1 = value;
+          trs_charset1 = value >= 4 ? value += 6 : value;
+          redraw = 1;
+        }
         break;
       case 5:
-        local_trs_charset3 = trs_gui_display_popup("Charset 3", font34_choices, 3, local_trs_charset3);
+        value = trs_gui_display_popup("Charset 3", font34_choices, 3, trs_charset3 - 4) + 4;
+        if (value != trs_charset3) {
+          trs_charset3 = value;
+          redraw = 1;
+        }
         break;
       case 6:
-        local_trs_charset4 = trs_gui_display_popup("Charset 4/4P", font34_choices, 3, local_trs_charset4);
+        value = trs_gui_display_popup("Charset 4/4P", font34_choices, 3, trs_charset4 - 7) + 7;
+        if (value != trs_charset4) {
+          trs_charset4 = value;
+          redraw = 1;
+        }
         break;
       case 7:
-        snprintf(input, 3, "%d", gui_border_width);
+        snprintf(input, 3, "%d", window_border_width);
         if (trs_gui_input_string("Enter Window border width in pixels", input, input, 2, 0) == 0) {
-          gui_border_width = atol(input);
-          if (gui_border_width < 0)
-            gui_border_width = 2;
+          value = atol(input);
+          if (value != window_border_width) {
+            window_border_width = value;
+            if (window_border_width < 0)
+              window_border_width = 2;
+            redraw = 1;
+          }
         }
         break;
       case 8:
-        gui_resize3 = trs_gui_display_popup("Resize 3", yes_no_choices, 2, gui_resize3);
+        value = trs_gui_display_popup("Resize 3", yes_no_choices, 2, resize3);
+        if (value != resize3) {
+          resize3 = value;
+          redraw = 1;
+        }
         break;
       case 9:
-        gui_resize4 = trs_gui_display_popup("Resize 4", yes_no_choices, 2, gui_resize4);
+        value = trs_gui_display_popup("Resize 4", yes_no_choices, 2, resize4);
+        if (value != resize4) {
+          resize4 = value;
+          redraw = 1;
+        }
         break;
       case 10:
-        gui_scale = trs_gui_display_popup("Scale", scale_choices, 4, gui_scale - 1) + 1;
+        value = trs_gui_display_popup("Scale", scale_choices, 4, scale - 1) + 1;
+        if (value != scale) {
+          scale = value;
+          fullscreen = 0;
+          redraw = 1;
+        }
         break;
       case 11:
-        gui_show_led = trs_gui_display_popup("LEDs", yes_no_choices, 2, gui_show_led);
+        value = trs_gui_display_popup("LEDs", yes_no_choices, 2, trs_show_led);
+        if (value != trs_show_led) {
+          trs_show_led = value;
+          redraw = 1;
+        }
         break;
       case 12:
-        gui_scanlines = trs_gui_display_popup("Scanlines", yes_no_choices, 2, gui_scanlines);
+        value = trs_gui_display_popup("Scanlines", yes_no_choices, 2, scanlines);
+        if (value != scanlines) {
+          scanlines = value;
+          redraw = 1;
+        }
         break;
       case -1:
-        if (local_trs_charset1 >= 4)
-          local_trs_charset1 += 6;
-        local_trs_charset3 += 4;
-        local_trs_charset4 += 7;
-
-        if ((trs_charset1 != local_trs_charset1) ||
-            (trs_charset3 != local_trs_charset3) ||
-            (trs_charset4 != local_trs_charset4) ||
-            (gui_show_led != trs_show_led) ||
-            (gui_resize3 != resize3) ||
-            (gui_resize4 != resize4) ||
-            (gui_scale != scale) ||
-            (gui_scanlines != scanlines) ||
-            (gui_border_width != window_border_width)) {
-          trs_charset1 = local_trs_charset1;
-          trs_charset3 = local_trs_charset3;
-          trs_charset4 = local_trs_charset4;
-          trs_show_led = gui_show_led;
-          resize3 = gui_resize3;
-          resize4 = gui_resize4;
-          if (gui_scale != scale) {
-            fullscreen = 0;
-            scale = gui_scale;
-          }
-          scanlines = gui_scanlines;
-          window_border_width = gui_border_width;
-          trs_screen_init();
-        }
         return;
+    }
+
+    if (redraw) {
+      trs_screen_init();
+      redraw = 0;
     }
   }
 }
