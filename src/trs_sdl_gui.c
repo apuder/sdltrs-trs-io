@@ -1737,7 +1737,7 @@ void trs_gui_display_management(void)
   int redraw = 0;
   int selection = 0;
   int value = 0;
-  int gui_charset1 = trs_charset1 >= 10 ? trs_charset1 -= 6 : trs_charset1;
+  int gui_charset1 = trs_charset1 >= 10 ? trs_charset1 - 6 : trs_charset1;
   unsigned int rgb_color = 0;
 
   while (1) {
