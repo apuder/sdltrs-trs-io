@@ -1,6 +1,6 @@
 # Maintainer: Jens Guenther <dbotw@gmx.net>
 pkgname=sdltrs
-pkgver=master
+pkgver=1.2.10
 pkgrel=1
 pkgdesc="TRS-80 Model I/III/4/4P emulator for SDL2"
 arch=(i686 x86_64)
