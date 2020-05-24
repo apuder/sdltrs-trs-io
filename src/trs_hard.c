@@ -424,11 +424,11 @@ static int open_drive(int drive)
     goto fail;
 
   /* First try opening for reading and writing */
-  d->file = fopen(d->filename, "r+");
+  d->file = fopen(d->filename, "rb+");
   if (d->file == NULL) {
     if (errno == EACCES || errno == EROFS) {
     /* No luck, try for reading only */
-      d->file = fopen(d->filename, "r");
+      d->file = fopen(d->filename, "rb");
     }
     if (d->file == NULL) {
       error("trs_hard: could not open hard drive image %s: %s",
