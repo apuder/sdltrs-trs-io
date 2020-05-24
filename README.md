@@ -12,6 +12,8 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
   * Save screenshot of the Emulator window as BMP file ...
   * Show Z80 registers in the window title bar ...
   * Adjust speed of Z80 CPU on the fly ...
+  * Emulate Z80 memory refresh register ...
+  * Support for Sprinter II/III speed-up kits ...
 
 ## Binaries
 
@@ -28,7 +30,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
   * [sdltrs_1.2.10-1_amd64.deb]   (64-bit, SDL)
   * [sdl2trs_1.2.10-1_amd64.deb]  (64-bit, SDL2)
 
-(Build on Debian 9/i386 & Ubuntu 18.04LTS/amd64)
+(Build on Debian 9/i386 & Linux Mint 19.3/amd64)
 
 ## SDL2
 
