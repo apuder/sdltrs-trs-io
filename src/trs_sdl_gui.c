@@ -2233,7 +2233,7 @@ void trs_gui_model(void)
    {"Dave Huffman (and other) Memory Expansion                   ", MENU_NORMAL_TYPE},
    {"Alpha Technologies HyperMem Memory Expansion                ", MENU_NORMAL_TYPE},
    {"Alpha Technologies SuperMem Memory Expansion                ", MENU_NORMAL_TYPE},
-   {"TRS80 Users Society Selector Memory Expansion               ", MENU_NORMAL_TYPE},
+   {"TRS-80 Users Society Selector Memory Expansion              ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *model_choices[4] =  {"  TRS-80 Model I",
                                    "TRS-80 Model III",
