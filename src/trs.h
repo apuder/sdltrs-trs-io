@@ -160,11 +160,6 @@ extern void trs_printer_write(int value);
 extern int trs_printer_read(void);
 extern int trs_printer_reset(void);
 
-#ifdef SUSPEND_DELAY
-void trs_suspend_delay(void);
-void trs_restore_delay(void);
-#endif
-
 extern void trs_cassette_motor(int value);
 extern void trs_cassette_out(int value);
 extern int trs_cassette_in(void);

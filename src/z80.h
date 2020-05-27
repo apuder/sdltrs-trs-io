@@ -139,9 +139,6 @@ struct z80_state_struct
      */
     int nmi, nmi_seen;
 
-    /* Speed control.  0 = full speed */
-    int delay;
-
     /* Cyclic T-state counter */
     tstate_t t_count;
 
