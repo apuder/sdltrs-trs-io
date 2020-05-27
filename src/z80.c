@@ -4455,6 +4455,8 @@ void z80_reset()
 
 void trs_z80_save(FILE *file)
 {
+  unsigned short r = z80_state.r, r7 = z80_state.r7;
+
   trs_save_uint16(file, &z80_state.af.word, 1);
   trs_save_uint16(file, &z80_state.bc.word, 1);
   trs_save_uint16(file, &z80_state.de.word, 1);
@@ -4474,7 +4476,8 @@ void trs_z80_save(FILE *file)
   trs_save_int(file, &z80_state.irq, 1);
   trs_save_int(file, &z80_state.nmi, 1);
   trs_save_int(file, &z80_state.nmi_seen, 1);
-  trs_save_int(file, &z80_state.delay, 1);
+  trs_save_uint16(file, &r, 1);
+  trs_save_uint16(file, &r7, 1);
   trs_save_uint64(file, (unsigned long long *)&z80_state.t_count, 1);
   trs_save_float(file, &z80_state.clockMHz, 1);
   trs_save_uint64(file, (unsigned long long *)&z80_state.sched, 1);
@@ -4483,6 +4486,8 @@ void trs_z80_save(FILE *file)
 
 void trs_z80_load(FILE *file)
 {
+  unsigned short r, r7;
+
   trs_load_uint16(file, &z80_state.af.word, 1);
   trs_load_uint16(file, &z80_state.bc.word, 1);
   trs_load_uint16(file, &z80_state.de.word, 1);
@@ -4502,10 +4507,14 @@ void trs_z80_load(FILE *file)
   trs_load_int(file, &z80_state.irq, 1);
   trs_load_int(file, &z80_state.nmi, 1);
   trs_load_int(file, &z80_state.nmi_seen, 1);
-  trs_load_int(file, &z80_state.delay, 1);
+  trs_load_uint16(file, &r, 1);
+  trs_load_uint16(file, &r7, 1);
   trs_load_uint64(file, (unsigned long long *)&z80_state.t_count, 1);
   trs_load_float(file, &z80_state.clockMHz, 1);
   trs_load_uint64(file, (unsigned long long *)&z80_state.sched, 1);
   trs_load_uint64(file, (unsigned long long *)&last_t_count, 1);
+
+  z80_state.r = r;
+  z80_state.r7 = r7;
 }
 
