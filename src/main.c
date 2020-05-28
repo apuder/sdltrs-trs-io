@@ -99,6 +99,9 @@ int trs_load_rom(const char *filename)
   FILE *program;
   int c;
 
+  if (filename[0] == 0)
+    return -1;
+
   if ((program = fopen(filename, "rb")) == NULL) {
     error("failed to load ROM file %s: %s", filename, strerror(errno));
     return -1;

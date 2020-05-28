@@ -1186,26 +1186,17 @@ void trs_rom_init(void)
 {
   switch (trs_model) {
     case 1:
-      if (romfile[0]) {
-        if (trs_load_rom(romfile) == 0)
-          break;
-      }
-      trs_load_compiled_rom(trs_rom1_size, trs_rom1);
+      if (trs_load_rom(romfile) != 0)
+        trs_load_compiled_rom(trs_rom1_size, trs_rom1);
       break;
     case 3:
     case 4:
-      if (romfile3[0]) {
-        if (trs_load_rom(romfile3) == 0)
-          break;
-      }
-      trs_load_compiled_rom(trs_rom3_size, trs_rom3);
+      if (trs_load_rom(romfile3) != 0)
+        trs_load_compiled_rom(trs_rom3_size, trs_rom3);
       break;
     case 5:
-      if (romfile4p[0]) {
-        if (trs_load_rom(romfile4p) == 0)
-          break;
-      }
-      trs_load_compiled_rom(trs_rom4p_size, trs_rom4p);
+      if (trs_load_rom(romfile4p) != 0)
+        trs_load_compiled_rom(trs_rom4p_size, trs_rom4p);
       break;
   }
 
