@@ -77,6 +77,9 @@ typedef struct menu_entry_type {
   int const type;
 } MENU_ENTRY;
 
+static const char *on_off_choices[2] =  {"       Off", "        On"};
+static const char *yes_no_choices[2] =  {"        No", "       Yes"};
+
 static const char *function_choices[8] = {
   "      GUI       ", "Virtual Keyboard",
   "   Save State   ", "   Load State   ",
@@ -1151,7 +1154,6 @@ void trs_gui_disk_creation(void)
   const char *num_sides_choices[2] =  {"     1", "     2"};
   const char *density_choices[2] =    {"Single", "Double"};
   const char *size_choices[2] =       {"5 Inch", "8 Inch"};
-  const char *ignore_choices[2] =     {"    No", "   Yes"};
   const char *drive_choices[9] =      {"  None", "Disk 0", "Disk 1", "Disk 2",
                                        "Disk 3", "Disk 4", "Disk 5", "Disk 6",
                                        "Disk 7"};
@@ -1169,7 +1171,7 @@ void trs_gui_disk_creation(void)
     snprintf(&disk_creation_menu[1].title[54], 7, "%s", num_sides_choices[num_sides - 1]);
     snprintf(&disk_creation_menu[2].title[54], 7, "%s", density_choices[density - 1]);
     snprintf(&disk_creation_menu[3].title[54], 7, "%s", size_choices[eight]);
-    snprintf(&disk_creation_menu[4].title[54], 7, "%s", ignore_choices[ignore_density]);
+    snprintf(&disk_creation_menu[4].title[50], 11, "%s", yes_no_choices[ignore_density]);
     snprintf(&disk_creation_menu[5].title[54], 7, "%s", drive_choices[drive_insert]);
     trs_gui_clear_screen();
 
@@ -1188,7 +1190,7 @@ void trs_gui_disk_creation(void)
         eight = trs_gui_display_popup("Size", size_choices, 2, eight);
         break;
       case 4:
-        ignore_density = trs_gui_display_popup("Ignore", ignore_choices, 2, ignore_density);
+        ignore_density = trs_gui_display_popup("Ignore", yes_no_choices, 2, ignore_density);
         break;
       case 5:
         drive_insert = trs_gui_display_popup("Disk", drive_choices, 9, drive_insert);
@@ -1292,7 +1294,6 @@ void trs_gui_disk_options(void)
    {"Set Drive Steps", MENU_NORMAL_TYPE},
 #endif
    {"", 0}};
-  const char *on_off_choices[2] =  {"       Off", "        On"};
   const char *doubler_choices[4] = {"      None", "    Percom", "     Tandy", "      Both"};
   int selection = 0;
 
@@ -1616,7 +1617,6 @@ void trs_gui_cassette_management(void)
    {"Create Blank Cassette Image with Above Parameters", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *image_type_choices[3] = {"   CAS", "   CPT", "   WAV"};
-  const char *drive_choices[2]  =     {"      No", "     Yes"};
   static int image_type = 0;
   static int drive_insert = 1;
   char input[12];
@@ -1637,7 +1637,7 @@ void trs_gui_cassette_management(void)
     snprintf(&cass_menu[2].title[36], 25, "%10d of %10d", trs_get_cassette_position(), trs_get_cassette_length());
     snprintf(&cass_menu[3].title[50], 11, "%10d", cassette_default_sample_rate);
     snprintf(&cass_menu[5].title[54], 7, "%s", image_type_choices[image_type]);
-    snprintf(&cass_menu[6].title[52], 9, "%s", drive_choices[drive_insert]);
+    snprintf(&cass_menu[6].title[50], 11, "%s", yes_no_choices[drive_insert]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Cassette Menu", cass_menu, selection);
@@ -1662,7 +1662,7 @@ void trs_gui_cassette_management(void)
         image_type = trs_gui_display_popup("Type", image_type_choices, 3, image_type);
         break;
       case 6:
-        drive_insert = trs_gui_display_popup("Insert", drive_choices, 2, drive_insert);
+        drive_insert = trs_gui_display_popup("Insert", yes_no_choices, 2, drive_insert);
         break;
       case 7:
         filename[0] = 0;
@@ -1721,7 +1721,6 @@ void trs_gui_display_management(void)
    {"LED Display for Disks and Turbo Mode                        ", MENU_NORMAL_TYPE},
    {"Display Scanlines to simulate old CRT                       ", MENU_NORMAL_TYPE},
    {"", 0}};
-  const char *yes_no_choices[2] =   {"        No", "       Yes"};
   const char *font1_choices[7] =    {"      Early",
                                      "      Stock",
                                      "      LCmod",
@@ -1982,7 +1981,6 @@ void trs_gui_joystick_management(void)
    {"Unmap All Buttons", MENU_NORMAL_TYPE},
    {"Check Button Mapping", MENU_NORMAL_TYPE},
    {"", 0}};
-  const char *yes_no_choices[2] =     {"      No", "     Yes"};
   char *joystick_choices[MAX_JOYSTICKS + 1];
   char joystick_strings[MAX_JOYSTICKS + 1][64];
   int selection = 0;
@@ -1995,12 +1993,12 @@ void trs_gui_joystick_management(void)
     joystick_choices[i] = joystick_strings[i];
 
   while (1) {
-    snprintf(&display_menu[0].title[52], 9, "%s", yes_no_choices[gui_keypad_joystick]);
+    snprintf(&display_menu[0].title[50], 11, "%s", yes_no_choices[gui_keypad_joystick]);
     if (gui_joystick_num == -1)
       snprintf(&display_menu[1].title[48], 13, "        None");
     else
       snprintf(&display_menu[1].title[50], 13, "Joystick %1d", gui_joystick_num);
-    snprintf(&display_menu[2].title[52], 9, "%s", yes_no_choices[jaxis_mapped]);
+    snprintf(&display_menu[2].title[50], 11, "%s", yes_no_choices[jaxis_mapped]);
     trs_gui_clear_screen();
     trs_gui_joystick_display_map();
 
@@ -2103,21 +2101,20 @@ void trs_gui_misc_management(void)
    {"Turbo Paste                                                 ", MENU_NORMAL_TYPE},
 #endif
    {"", 0}};
-  const char *on_off_choices[2] = {"      Off", "       On"};
   char input[12];
   int selection = 0;
 
   while (1) {
-    snprintf(&misc_menu[0].title[51], 10, "%s", on_off_choices[trs_emtsafe]);
+    snprintf(&misc_menu[0].title[50], 11, "%s", on_off_choices[trs_emtsafe]);
     snprintf(&misc_menu[1].title[50], 11, "%10d", stretch_amount);
     trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 60);
     snprintf(&misc_menu[4].title[56], 5, "0x%02X", trs_uart_switches);
-    snprintf(&misc_menu[5].title[51], 10, "%s", on_off_choices[trs_kb_bracket_state]);
-    snprintf(&misc_menu[6].title[51], 10, "%s", on_off_choices[trs_sound]);
-    snprintf(&misc_menu[7].title[51], 10, "%s", on_off_choices[timer_overclock]);
+    snprintf(&misc_menu[5].title[50], 11, "%s", on_off_choices[trs_kb_bracket_state]);
+    snprintf(&misc_menu[6].title[50], 11, "%s", on_off_choices[trs_sound]);
+    snprintf(&misc_menu[7].title[50], 11, "%s", on_off_choices[timer_overclock]);
     snprintf(&misc_menu[8].title[50], 11, "%10d", timer_overclock_rate);
 #if defined(SDL2) || !defined(NOX)
-    snprintf(&misc_menu[9].title[51], 10, "%s", on_off_choices[turbo_paste]);
+    snprintf(&misc_menu[9].title[50], 11, "%s", on_off_choices[turbo_paste]);
 #endif
     trs_gui_clear_screen();
 
@@ -2240,7 +2237,6 @@ void trs_gui_model(void)
                                    "  TRS-80 Model 4",
                                    " TRS-80 Model 4P"};
   const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
-  const char *on_off_choices[2] = {"        Off", "         On"};
   int selection = 0;
   int model_selection;
   int grafyx;
@@ -2252,15 +2248,15 @@ void trs_gui_model(void)
     else
       model_selection = local_trs_model - 2;
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
-    snprintf(&model_menu[2].title[49], 12, "%s", on_off_choices[lowercase]);
-    snprintf(&model_menu[3].title[49], 12, "%s", on_off_choices[stringy]);
+    snprintf(&model_menu[2].title[50], 11, "%s", on_off_choices[lowercase]);
+    snprintf(&model_menu[3].title[50], 11, "%s", on_off_choices[stringy]);
     snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
-    snprintf(&model_menu[6].title[49], 12, "%s", on_off_choices[lowe_le18]);
-    snprintf(&model_menu[7].title[49], 12, "%s", on_off_choices[grafyx_get_microlabs()]);
-    snprintf(&model_menu[9].title[49], 12, "%s", on_off_choices[huffman_ram]);
-    snprintf(&model_menu[10].title[49], 12, "%s", on_off_choices[hypermem]);
-    snprintf(&model_menu[11].title[49], 12, "%s", on_off_choices[supermem]);
-    snprintf(&model_menu[12].title[49], 12, "%s", on_off_choices[selector]);
+    snprintf(&model_menu[6].title[50], 11, "%s", on_off_choices[lowe_le18]);
+    snprintf(&model_menu[7].title[50], 11, "%s", on_off_choices[grafyx_get_microlabs()]);
+    snprintf(&model_menu[9].title[50], 11, "%s", on_off_choices[huffman_ram]);
+    snprintf(&model_menu[10].title[50], 11, "%s", on_off_choices[hypermem]);
+    snprintf(&model_menu[11].title[50], 11, "%s", on_off_choices[supermem]);
+    snprintf(&model_menu[12].title[50], 11, "%s", on_off_choices[selector]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu", model_menu, selection);
