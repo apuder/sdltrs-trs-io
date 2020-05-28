@@ -791,8 +791,8 @@ Uchar *mem_pointer(int address, int writing)
 	if (address < 0x4000)
 	  return trs80_model1_mmio_addr(address, writing);
 	return trs80_model1_ram_addr(address);
-      case 0x17: /* Model 1: Described in the selector doc as 'not useful' */        return NULL;	/* Not clear what really happens */
-        return NULL;
+      case 0x17: /* Model 1: Described in the selector doc as 'not useful' */
+	return NULL;	/* Not clear what really happens */
       case 0x30: /* Model III reading */
         if (trs_model < 4 && address >= 32768)
 	    return &memory[address + bank_base];
