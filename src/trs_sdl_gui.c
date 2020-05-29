@@ -77,7 +77,6 @@ typedef struct menu_entry_type {
   int const type;
 } MENU_ENTRY;
 
-static const char *on_off_choices[2] =  {"       Off", "        On"};
 static const char *yes_no_choices[2] =  {"        No", "       Yes"};
 
 static const char *function_choices[8] = {
@@ -1299,7 +1298,7 @@ void trs_gui_disk_options(void)
 
   while (1) {
     snprintf(&disk_menu[0].title[50], 11, "%s", doubler_choices[trs_disk_doubler]);
-    snprintf(&disk_menu[1].title[50], 11, "%s", on_off_choices[trs_disk_truedam]);
+    snprintf(&disk_menu[1].title[50], 11, "%s", yes_no_choices[trs_disk_truedam]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Options Menu", disk_menu, selection);
@@ -1308,7 +1307,7 @@ void trs_gui_disk_options(void)
         trs_disk_doubler = trs_gui_display_popup("Doubler", doubler_choices, 4, trs_disk_doubler);
         break;
       case 1:
-        trs_disk_truedam = trs_gui_display_popup("True DAM", on_off_choices, 2, trs_disk_truedam);
+        trs_disk_truedam = trs_gui_display_popup("True DAM", yes_no_choices, 2, trs_disk_truedam);
         break;
       case 2:
         trs_gui_disk_sizes();
@@ -2105,23 +2104,23 @@ void trs_gui_misc_management(void)
   int selection = 0;
 
   while (1) {
-    snprintf(&misc_menu[0].title[50], 11, "%s", on_off_choices[trs_emtsafe]);
+    snprintf(&misc_menu[0].title[50], 11, "%s", yes_no_choices[trs_emtsafe]);
     snprintf(&misc_menu[1].title[50], 11, "%10d", stretch_amount);
     trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 60);
     snprintf(&misc_menu[4].title[56], 5, "0x%02X", trs_uart_switches);
-    snprintf(&misc_menu[5].title[50], 11, "%s", on_off_choices[trs_kb_bracket_state]);
-    snprintf(&misc_menu[6].title[50], 11, "%s", on_off_choices[trs_sound]);
-    snprintf(&misc_menu[7].title[50], 11, "%s", on_off_choices[timer_overclock]);
+    snprintf(&misc_menu[5].title[50], 11, "%s", yes_no_choices[trs_kb_bracket_state]);
+    snprintf(&misc_menu[6].title[50], 11, "%s", yes_no_choices[trs_sound]);
+    snprintf(&misc_menu[7].title[50], 11, "%s", yes_no_choices[timer_overclock]);
     snprintf(&misc_menu[8].title[50], 11, "%10d", timer_overclock_rate);
 #if defined(SDL2) || !defined(NOX)
-    snprintf(&misc_menu[9].title[50], 11, "%s", on_off_choices[turbo_paste]);
+    snprintf(&misc_menu[9].title[50], 11, "%s", yes_no_choices[turbo_paste]);
 #endif
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Misc Settings Menu", misc_menu, selection);
     switch (selection) {
       case 0:
-        trs_emtsafe = trs_gui_display_popup("Emtsafe", on_off_choices, 2, trs_emtsafe);
+        trs_emtsafe = trs_gui_display_popup("Emtsafe", yes_no_choices, 2, trs_emtsafe);
         break;
       case 1:
         snprintf(input, 11, "%d", stretch_amount);
@@ -2147,13 +2146,13 @@ void trs_gui_misc_management(void)
         }
         break;
       case 5:
-        trs_kb_bracket_state = trs_gui_display_popup("Bracket", on_off_choices, 2, trs_kb_bracket_state);
+        trs_kb_bracket_state = trs_gui_display_popup("Bracket", yes_no_choices, 2, trs_kb_bracket_state);
         break;
       case 6:
-        trs_sound = trs_gui_display_popup("Sound", on_off_choices, 2, trs_sound);
+        trs_sound = trs_gui_display_popup("Sound", yes_no_choices, 2, trs_sound);
         break;
       case 7:
-        timer_overclock = trs_gui_display_popup("Turbo", on_off_choices, 2, timer_overclock);
+        timer_overclock = trs_gui_display_popup("Turbo", yes_no_choices, 2, timer_overclock);
         break;
       case 8:
         snprintf(input, 11, "%d", timer_overclock_rate);
@@ -2165,7 +2164,7 @@ void trs_gui_misc_management(void)
         break;
 #if defined(SDL2) || !defined(NOX)
       case 9:
-        turbo_paste = trs_gui_display_popup("Paste", on_off_choices, 2, turbo_paste);
+        turbo_paste = trs_gui_display_popup("Paste", yes_no_choices, 2, turbo_paste);
         break;
 #endif
       case -1:
@@ -2248,15 +2247,15 @@ void trs_gui_model(void)
     else
       model_selection = local_trs_model - 2;
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
-    snprintf(&model_menu[2].title[50], 11, "%s", on_off_choices[lowercase]);
-    snprintf(&model_menu[3].title[50], 11, "%s", on_off_choices[stringy]);
+    snprintf(&model_menu[2].title[50], 11, "%s", yes_no_choices[lowercase]);
+    snprintf(&model_menu[3].title[50], 11, "%s", yes_no_choices[stringy]);
     snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
-    snprintf(&model_menu[6].title[50], 11, "%s", on_off_choices[lowe_le18]);
-    snprintf(&model_menu[7].title[50], 11, "%s", on_off_choices[grafyx_get_microlabs()]);
-    snprintf(&model_menu[9].title[50], 11, "%s", on_off_choices[huffman_ram]);
-    snprintf(&model_menu[10].title[50], 11, "%s", on_off_choices[hypermem]);
-    snprintf(&model_menu[11].title[50], 11, "%s", on_off_choices[supermem]);
-    snprintf(&model_menu[12].title[50], 11, "%s", on_off_choices[selector]);
+    snprintf(&model_menu[6].title[50], 11, "%s", yes_no_choices[lowe_le18]);
+    snprintf(&model_menu[7].title[50], 11, "%s", yes_no_choices[grafyx_get_microlabs()]);
+    snprintf(&model_menu[9].title[50], 11, "%s", yes_no_choices[huffman_ram]);
+    snprintf(&model_menu[10].title[50], 11, "%s", yes_no_choices[hypermem]);
+    snprintf(&model_menu[11].title[50], 11, "%s", yes_no_choices[supermem]);
+    snprintf(&model_menu[12].title[50], 11, "%s", yes_no_choices[selector]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Emulator Setting Menu", model_menu, selection);
@@ -2269,38 +2268,38 @@ void trs_gui_model(void)
           local_trs_model = model_selection + 2;
         break;
       case 2:
-        lowercase = trs_gui_display_popup("Lowercase", on_off_choices, 2, lowercase);
+        lowercase = trs_gui_display_popup("Lowercase", yes_no_choices, 2, lowercase);
         break;
       case 3:
-        stringy = trs_gui_display_popup("Stringy", on_off_choices, 2, stringy);
+        stringy = trs_gui_display_popup("Stringy", yes_no_choices, 2, stringy);
         break;
       case 4:
         speedup = trs_gui_display_popup("Speedup", speed_choices, 3, speedup);
         break;
       case 6:
-        lowe_le18 = trs_gui_display_popup("Lowe LE18", on_off_choices, 2, lowe_le18);
+        lowe_le18 = trs_gui_display_popup("Lowe LE18", yes_no_choices, 2, lowe_le18);
         break;
       case 7:
-        grafyx = trs_gui_display_popup("Grafyx", on_off_choices, 2, grafyx_get_microlabs());
+        grafyx = trs_gui_display_popup("Grafyx", yes_no_choices, 2, grafyx_get_microlabs());
         grafyx_set_microlabs(grafyx);
         break;
       case 9:
-        huffman_ram = trs_gui_display_popup("Huffman", on_off_choices, 2, huffman_ram);
+        huffman_ram = trs_gui_display_popup("Huffman", yes_no_choices, 2, huffman_ram);
         if (huffman_ram)
           hypermem = 0;
         break;
       case 10:
-        hypermem = trs_gui_display_popup("HyperMem", on_off_choices, 2, hypermem);
+        hypermem = trs_gui_display_popup("HyperMem", yes_no_choices, 2, hypermem);
         if (hypermem)
           huffman_ram = 0;
         break;
       case 11:
-        supermem = trs_gui_display_popup("SuperMem", on_off_choices, 2, supermem);
+        supermem = trs_gui_display_popup("SuperMem", yes_no_choices, 2, supermem);
         if (supermem)
           selector = 0;
         break;
       case 12:
-        selector = trs_gui_display_popup("Selector", on_off_choices, 2, selector);
+        selector = trs_gui_display_popup("Selector", yes_no_choices, 2, selector);
         if (selector)
           supermem = 0;
         break;
