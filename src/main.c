@@ -175,7 +175,7 @@ int SDLmain(int argc, char *argv[])
   SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
 #endif
 
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     fatal("failed to initialize SDL: %s", SDL_GetError());
 
 #ifndef SDL2
