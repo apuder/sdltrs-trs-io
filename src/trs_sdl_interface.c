@@ -258,7 +258,7 @@ static void trs_opt_cass(char *arg, int intarg, int *stringarg);
 static void trs_opt_charset1(char *arg, int intarg, int *stringarg);
 static void trs_opt_charset3(char *arg, int intarg, int *stringarg);
 static void trs_opt_charset4(char *arg, int intarg, int *stringarg);
-static void trs_opt_clock4(char *arg, int intarg, int *stringarg);
+static void trs_opt_clock(char *arg, int intarg, int *stringarg);
 static void trs_opt_color(char *arg, int intarg, int *color);
 static void trs_opt_disk(char *arg, int intarg, int *stringarg);
 static void trs_opt_diskset(char *arg, int intarg, int *stringarg);
@@ -301,7 +301,9 @@ static const trs_opt options[] = {
   { "charset1",        trs_opt_charset1,      1, 0, NULL                 },
   { "charset3",        trs_opt_charset3,      1, 0, NULL                 },
   { "charset4",        trs_opt_charset4,      1, 0, NULL                 },
-  { "clock4",          trs_opt_clock4,        1, 0, NULL                 },
+  { "clock1",          trs_opt_clock,         1, 1, NULL                 },
+  { "clock3",          trs_opt_clock,         1, 3, NULL                 },
+  { "clock4",          trs_opt_clock,         1, 4, NULL                 },
   { "debug",           trs_opt_value,         0, 1, &debugger            },
   { "disk0",           trs_opt_disk,          1, 0, NULL                 },
   { "disk1",           trs_opt_disk,          1, 1, NULL                 },
@@ -558,11 +560,23 @@ static void trs_opt_charset4(char *arg, int intarg, int *stringarg)
   }
 }
 
-static void trs_opt_clock4(char *arg, int intarg, int *stringarg)
+static void trs_opt_clock(char *arg, int intarg, int *stringarg)
 {
-  clock_mhz_4 = strtof(arg, NULL);
-  if (clock_mhz_4 < 0.0 || clock_mhz_4 > 99.0)
-    clock_mhz_4 = 4.05504;
+  float clock_mhz = strtof(arg, NULL);
+
+  if (clock_mhz >= 0.1 && clock_mhz <= 99.0) {
+    switch (intarg) {
+      case 1:
+        clock_mhz_1 = clock_mhz;
+        break;
+      case 3:
+        clock_mhz_3 = clock_mhz;
+        break;
+      case 4:
+        clock_mhz_4 = clock_mhz;
+        break;
+    }
+  }
 }
 
 static void trs_opt_color(char *arg, int intarg, int *color)
@@ -1054,6 +1068,8 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file, "charset1=%s\n", charset_name(trs_charset1));
   fprintf(config_file, "charset3=%s\n", charset_name(trs_charset3));
   fprintf(config_file, "charset4=%s\n", charset_name(trs_charset4));
+  fprintf(config_file, "clock1=%f\n", clock_mhz_1);
+  fprintf(config_file, "clock3=%f\n", clock_mhz_3);
   fprintf(config_file, "clock4=%f\n", clock_mhz_4);
   for (i = 0; i < 8; i++) {
     const char *diskname = trs_disk_getfilename(i);

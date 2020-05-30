@@ -280,6 +280,8 @@ extern int timer_hz;
 extern int timer_overclock_rate;
 extern int timer_overclock;
 extern int speedup;
+extern float clock_mhz_1;
+extern float clock_mhz_3;
 extern float clock_mhz_4;
 
 int put_twobyte(Ushort n, FILE* f);

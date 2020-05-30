@@ -73,10 +73,9 @@ int timer_overclock_rate = 5;
 int speedup = 1;
 unsigned int cycles_per_timer;
 
-#define CLOCK_MHZ_1 1.77408
-#define CLOCK_MHZ_3 2.02752
-#define CLOCK_MHZ_4 4.05504
-float clock_mhz_4 = CLOCK_MHZ_4;
+float clock_mhz_1 = 1.77408;
+float clock_mhz_3 = 2.02752;
+float clock_mhz_4 = 4.05504;
 
 /* Kludge: LDOS hides the date (not time) in a memory area across reboots. */
 /* We put it there on powerup, so LDOS magically knows the date! */
@@ -373,11 +372,11 @@ trs_timer_init()
 
   if (trs_model == 1) {
       timer_hz = TIMER_HZ_1;
-      z80_state.clockMHz = CLOCK_MHZ_1;
+      z80_state.clockMHz = clock_mhz_1;
   } else {
       /* initially... */
       timer_hz = TIMER_HZ_3;
-      z80_state.clockMHz = CLOCK_MHZ_3;
+      z80_state.clockMHz = clock_mhz_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
 
@@ -440,11 +439,11 @@ trs_timer_speed(int fast)
 {
   if (trs_model >= 4) {
     timer_hz = fast ? TIMER_HZ_4 : TIMER_HZ_3;
-    z80_state.clockMHz = fast ? clock_mhz_4 : CLOCK_MHZ_3;
+    z80_state.clockMHz = fast ? clock_mhz_4 : clock_mhz_3;
   } else if (trs_model == 1) {
       switch (speedup) {
         case 1: /*Archbold*/
-          z80_state.clockMHz = CLOCK_MHZ_1 * ((fast & 1) + 1);
+          z80_state.clockMHz = clock_mhz_1 * ((fast & 1) + 1);
           break;
         case 2: /*Sprinter*/
           z80_state.clockMHz = 10.6445 / (((fast + 4) & 7) + 2);
@@ -452,7 +451,7 @@ trs_timer_speed(int fast)
       }
   } else if (trs_model == 3) {
     /* Switch to fastest possible speed of Sprinter III */
-    z80_state.clockMHz = (fast & 1) ? 5.07 /* 3.4 */ : CLOCK_MHZ_3;
+    z80_state.clockMHz = (fast & 1) ? 5.07 /* 3.4 */ : clock_mhz_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
   trs_screen_caption();
