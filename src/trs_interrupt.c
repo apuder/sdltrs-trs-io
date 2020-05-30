@@ -76,6 +76,7 @@ unsigned int cycles_per_timer;
 #define CLOCK_MHZ_1 1.77408
 #define CLOCK_MHZ_3 2.02752
 #define CLOCK_MHZ_4 4.05504
+float clock_mhz_4 = CLOCK_MHZ_4;
 
 /* Kludge: LDOS hides the date (not time) in a memory area across reboots. */
 /* We put it there on powerup, so LDOS magically knows the date! */
@@ -439,7 +440,7 @@ trs_timer_speed(int fast)
 {
   if (trs_model >= 4) {
     timer_hz = fast ? TIMER_HZ_4 : TIMER_HZ_3;
-    z80_state.clockMHz = fast ? CLOCK_MHZ_4 : CLOCK_MHZ_3;
+    z80_state.clockMHz = fast ? clock_mhz_4 : CLOCK_MHZ_3;
   } else if (trs_model == 1) {
       switch (speedup) {
         case 1: /*Archbold*/
