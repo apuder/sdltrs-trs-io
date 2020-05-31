@@ -1352,6 +1352,10 @@ void trs_screen_init(void)
   SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
   SDL_ShowWindow(window);
   screen = SDL_GetWindowSurface(window);
+  if (screen == NULL) {
+    trs_sdl_cleanup();
+    fatal("failed SDL_GetWindowSurface: %s", SDL_GetError());
+  }
 #else
   screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, fullscreen ?
                             SDL_ANYFORMAT | SDL_FULLSCREEN : SDL_ANYFORMAT);
