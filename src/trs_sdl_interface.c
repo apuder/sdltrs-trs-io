@@ -1355,7 +1355,7 @@ void trs_screen_init(void)
   screen = SDL_GetWindowSurface(window);
   if (screen == NULL) {
     trs_sdl_cleanup();
-    fatal("failed SDL_GetWindowSurface: %s", SDL_GetError());
+    fatal("failed to get window surface: %s", SDL_GetError());
   }
 #else
   screen = SDL_SetVideoMode(OrigWidth, OrigHeight, 0, fullscreen ?
