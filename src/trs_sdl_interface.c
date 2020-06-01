@@ -712,6 +712,7 @@ static void trs_opt_rom(char *arg, int intarg, int *stringarg)
       snprintf(romfile, FILENAME_MAX, "%s", arg);
       break;
     case 3:
+    case 4:
       snprintf(romfile3, FILENAME_MAX, "%s", arg);
       break;
     case 5:
