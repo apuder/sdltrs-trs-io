@@ -248,7 +248,7 @@ static void set_trap(int address, int flag)
 
     if(num_traps == MAX_TRAPS)
     {
-	printf("Cannot set another trap.\n");
+	printf("Cannot set more than %d traps.\n", MAX_TRAPS);
     }
     else
     {
@@ -367,7 +367,7 @@ static void print_memory(Ushort address, int num_bytes)
 	printf("%.4x:\t", address);
 	for(i = 0; i < bytes_to_print; ++i)
 	{
-	    printf("%.2x ", mem_read((address + i) & 0xffff));
+	    printf("%.2x ", mem_read(address + i));
 	}
 	for(i = bytes_to_print; i < 16; ++i)
 	{
@@ -376,7 +376,7 @@ static void print_memory(Ushort address, int num_bytes)
 	printf("    ");
 	for(i = 0; i < bytes_to_print; ++i)
 	{
-	    byte = mem_read((address + i) & 0xffff);
+	    byte = mem_read(address + i);
 	    if(isprint(byte))
 	    {
 		printf("%c", byte);
@@ -524,6 +524,7 @@ void debug_shell()
 	}
 #else
 	printf("(zbx) ");  fflush(stdout);
+
 	if (fgets(input, MAXLINE, stdin) == NULL) break;
 #endif
 
