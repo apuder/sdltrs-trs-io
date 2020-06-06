@@ -276,13 +276,9 @@ void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
   int srcskip, dstskip;
 
   /* Lock the destination if it's in hardware */
-  dst_locked = 0;
-  if (SDL_MUSTLOCK(dst)) {
-    if (SDL_LockSurface(dst) < 0) {
+  if ((dst_locked = SDL_MUSTLOCK(dst))) {
+    if (SDL_LockSurface(dst) < 0)
       return;
-    } else {
-      dst_locked = 1;
-    }
   }
 
   /* Set up the blit information */
@@ -335,7 +331,6 @@ void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
       break;
   }
 
-  if (dst_locked) {
+  if (dst_locked)
     SDL_UnlockSurface(dst);
-  }
 }
