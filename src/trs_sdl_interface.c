@@ -3044,8 +3044,6 @@ void trs_screen_write_char(int position, unsigned char char_index)
     srcRect.h = height;
     dstRect.x = destx;
     dstRect.y = desty;
-    dstRect.w = srcRect.w;
-    dstRect.h = srcRect.h;
     TrsSoftBlit(image, &srcRect, screen, &dstRect, 1);
     addToDrawList(&dstRect);
     /* Draw wrapped portion if any */
@@ -3056,8 +3054,6 @@ void trs_screen_write_char(int position, unsigned char char_index)
       srcRect.h = height - duny;
       dstRect.x = destx;
       dstRect.y = desty + duny;
-      dstRect.w = srcRect.w;
-      dstRect.h = srcRect.h;
       TrsSoftBlit(image, &srcRect, screen, &dstRect, 1);
       addToDrawList(&dstRect);
     }
@@ -3126,8 +3122,6 @@ static void grafyx_write_byte(int x, int y, char byte)
     srcRect.h = scale * 2;
     dstRect.x = left_margin + screen_x * cur_char_width;
     dstRect.y = top_margin + screen_y * (scale * 2);
-    dstRect.w = srcRect.w;
-    dstRect.h = srcRect.h;
     /* Erase old byte, preserving text */
     TrsSoftBlit(image, &srcRect, screen, &dstRect, 1);
   }
@@ -3144,8 +3138,6 @@ static void grafyx_write_byte(int x, int y, char byte)
     srcRect.h = scale * 2;
     dstRect.x = left_margin + screen_x * cur_char_width;
     dstRect.y = top_margin + screen_y * (scale * 2);
-    dstRect.w = srcRect.w;
-    dstRect.h = srcRect.h;
     TrsSoftBlit(image, &srcRect, screen, &dstRect, grafyx_overlay);
     addToDrawList(&dstRect);
   }

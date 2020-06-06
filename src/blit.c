@@ -290,6 +290,8 @@ void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
     (Uint16)srcrect->y * src->pitch +
     ((Uint16)srcrect->x * src->format->BitsPerPixel) / 8;
   srcskip = src->pitch - (((int)srcrect->w) * src->format->BitsPerPixel) / 8;
+  dstrect->h = srcrect->h;
+  dstrect->w = srcrect->w;
   dstpix = (Uint8 *)dst->pixels +
     (Uint16)dstrect->y * dst->pitch +
     (Uint16)dstrect->x * dst->format->BytesPerPixel;
