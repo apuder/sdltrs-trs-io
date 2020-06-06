@@ -8,6 +8,10 @@ From the main directory, execute:
 which will generate the `configure` script. Installation of `aclocal`,
 `autoconf` and `automake` is needed for this.
 
+To configure the build system, execute:
+```sh
+./configure
+```
 To enable faster but not accurate Z80 block moves, execute:
 ```sh
 ./configure --enable-fastmove
@@ -24,6 +28,7 @@ To build with SDL 1.2 only (no *X11* and no *PasteManager*), execute:
 ```sh
 ./configure --enable-sdl1 --without-x
 ```
+
 Start build of the program in the main directory by executing:
 ```sh
 make
