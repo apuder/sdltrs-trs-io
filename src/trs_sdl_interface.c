@@ -473,7 +473,7 @@ static const char *charset_name(int charset)
 static void trs_opt_borderwidth(char *arg, int intarg, int *stringarg)
 {
   window_border_width = strtol(arg, NULL, 0);
-  if (window_border_width < 0 || window_border_width > 99)
+  if (window_border_width < 0 || window_border_width > 50)
     window_border_width = 2;
 }
 

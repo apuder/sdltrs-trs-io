@@ -1820,11 +1820,12 @@ void trs_gui_display_management(void)
         break;
       case 7:
         snprintf(input, 3, "%d", window_border_width);
-        if (trs_gui_input_string("Enter Window border width in pixels", input, input, 2, 0) == 0) {
+        if (trs_gui_input_string("Enter Window border width in pixels (0 to 50)",
+            input, input, 2, 0) == 0) {
           value = atol(input);
           if (value != window_border_width) {
             window_border_width = value;
-            if (window_border_width < 0)
+            if (window_border_width < 0 || window_border_width > 50)
               window_border_width = 2;
             redraw = 1;
           }
