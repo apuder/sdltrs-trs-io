@@ -34,9 +34,9 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 ## SDL2
 
-The [SDL2] branch contains only the SDL2 version with texture rendering support.
-It should be considered as *experimental*, so the SDL2 binaries and packages above
-are build on the *master* branch ...
+The [SDL2] branch contains the SDL2 version with hardware rendering support.
+Altough considered as *experimental*, it is recommended for 64-bit operating
+systems (SDL2 binaries and packages above are build on the *master* branch).
 
 ## Screenshots
 
