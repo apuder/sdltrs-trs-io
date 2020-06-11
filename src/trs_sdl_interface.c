@@ -3156,12 +3156,14 @@ static void grafyx_rescale(int y, int x, char byte)
 {
   char exp[MAX_SCALE];
   int i, j;
+  int p = y * scale * 2 * imageSize.bytes_per_line + x * scale;
 
   switch (scale) {
     case 1:
     default:
-      exp[0] = byte;
-      break;
+      grafyx[p] = byte;
+      grafyx[p + imageSize.bytes_per_line] = byte;
+      return;
     case 2:
       exp[1] = ((byte & 0x01) + ((byte & 0x02) << 1)
              + ((byte & 0x04) << 2) + ((byte & 0x08) << 3)) * 3;
@@ -3184,9 +3186,11 @@ static void grafyx_rescale(int y, int x, char byte)
       break;
   }
 
-  for (j = 0; j < (scale * 2); j++)
+  for (j = 0; j < scale * 2; j++) {
     for (i = 0; i < scale; i++)
-      grafyx[(y * (scale * 2) + j) * imageSize.bytes_per_line + x * scale + i] = exp[i];
+      grafyx[p++] = exp[i];
+    p += imageSize.bytes_per_line - i;
+  }
 }
 
 void grafyx_write_x(int value)
