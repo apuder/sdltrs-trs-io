@@ -2984,8 +2984,8 @@ void trs_screen_write_char(int position, unsigned char char_index)
     return;
 
   if (row_chars == 64) {
-    row = position >> 6;
-    col = position - (row << 6);
+    row = position / 64;
+    col = position - (row * 64);
   } else {
     row = position / 80;
     col = position - (row * 80);
@@ -3076,8 +3076,8 @@ void trs_gui_write_char(unsigned int position, unsigned char char_index, int inv
   int row, col;
   SDL_Rect srcRect, dstRect;
 
-  row = position >> 6;
-  col = position - (row << 6);
+  row = position / 64;
+  col = position - (row * 64);
 
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
@@ -3310,8 +3310,8 @@ void grafyx_m3_write_mode(int value)
 int grafyx_m3_write_byte(int position, int byte)
 {
   if (grafyx_microlabs && (grafyx_mode & G3_COORD)) {
-    int const x = position - ((position >> 6) << 6);
-    int const y = (position >> 6) * 12 + grafyx_y;
+    int const x = (position % 64);
+    int const y = (position / 64) * 12 + grafyx_y;
 
     grafyx_write_byte(x, y, byte);
     return 1;
@@ -3322,8 +3322,8 @@ int grafyx_m3_write_byte(int position, int byte)
 unsigned char grafyx_m3_read_byte(int position)
 {
   if (grafyx_microlabs && (grafyx_mode & G3_COORD)) {
-    int const x = position - ((position >> 6) << 6);
-    int const y = (position >> 6) * 12 + grafyx_y;
+    int const x = (position % 64);
+    int const y = (position / 64) * 12 + grafyx_y;
 
     return grafyx_unscaled[y][x];
   } else
