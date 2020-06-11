@@ -472,7 +472,7 @@ static const char *charset_name(int charset)
 
 static void trs_opt_borderwidth(char *arg, int intarg, int *stringarg)
 {
-  window_border_width = strtol(arg, NULL, 0);
+  window_border_width = atol(arg);
   if (window_border_width < 0 || window_border_width > 50)
     window_border_width = 2;
 }
@@ -562,7 +562,7 @@ static void trs_opt_charset4(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_clock(char *arg, int intarg, int *stringarg)
 {
-  float clock_mhz = strtof(arg, NULL);
+  float clock_mhz = atof(arg);
 
   if (clock_mhz >= 0.1 && clock_mhz <= 99.0) {
     switch (intarg) {
@@ -677,7 +677,7 @@ static void trs_opt_joysticknum(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_keystretch(char *arg, int intarg, int *stringarg)
 {
-  stretch_amount = strtol(arg, NULL, 0);
+  stretch_amount = atol(arg);
   if (stretch_amount < 0)
     stretch_amount = STRETCH_AMOUNT;
 }
@@ -742,7 +742,7 @@ static void trs_opt_printer(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_samplerate(char *arg, int intarg, int *stringarg)
 {
-  cassette_default_sample_rate = strtol(arg, NULL, 0);
+  cassette_default_sample_rate = atol(arg);
   if (cassette_default_sample_rate < 0 ||
       cassette_default_sample_rate > DEFAULT_SAMPLE_RATE)
     cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
