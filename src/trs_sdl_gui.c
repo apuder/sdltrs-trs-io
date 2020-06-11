@@ -2223,7 +2223,7 @@ void trs_gui_model(void)
 {
   MENU_ENTRY model_menu[] =
   {{"Model                                                       ", MENU_NORMAL_TYPE},
-   {"", MENU_TITLE_TYPE},
+   {"CPU Clock Speed in MHz                                      ", MENU_NORMAL_TYPE},
    {"Lowercase Modification for Model I                          ", MENU_NORMAL_TYPE},
    {"Exatron Stringy Floppy Emulation for Model I                ", MENU_NORMAL_TYPE},
    {"Speedup Kit Emulation for Model I                           ", MENU_NORMAL_TYPE},
@@ -2241,10 +2241,13 @@ void trs_gui_model(void)
                                    "  TRS-80 Model 4",
                                    " TRS-80 Model 4P"};
   const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
+  char input[8];
   int selection = 0;
   int model_selection;
   int grafyx;
   int local_trs_model = trs_model;
+  float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
+  float value;
 
   while (1) {
     if (local_trs_model == 1)
@@ -2252,6 +2255,7 @@ void trs_gui_model(void)
     else
       model_selection = local_trs_model - 2;
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
+    snprintf(&model_menu[1].title[56], 5, "%4.2f", clock_mhz[model_selection]);
     snprintf(&model_menu[2].title[50], 11, "%s", yes_no_choices[lowercase]);
     snprintf(&model_menu[3].title[50], 11, "%s", yes_no_choices[stringy]);
     snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
@@ -2271,6 +2275,31 @@ void trs_gui_model(void)
           local_trs_model = 1;
         else
           local_trs_model = model_selection + 2;
+        break;
+      case 1:
+        snprintf(input, 5, "%4.2f", clock_mhz[model_selection]);
+        if (trs_gui_input_string("Enter CPU Clock Speed in MHz",
+            input, input, 6, 0) == 0) {
+          value = atof(input);
+          if (value >= 0.1 && value <= 99.0) {
+            clock_mhz[model_selection] = value;
+            switch (model_selection) {
+              case 0:
+              default:
+                clock_mhz_1 = value;
+                break;
+              case 1:
+                clock_mhz_3 = value;
+                break;
+              case 2:
+              case 3:
+                clock_mhz_4 = value;
+                break;
+            }
+            trs_timer_init();
+            trs_screen_caption();
+          }
+        }
         break;
       case 2:
         lowercase = trs_gui_display_popup("Lowercase", yes_no_choices, 2, lowercase);
