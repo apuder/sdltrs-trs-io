@@ -2243,17 +2243,12 @@ void trs_gui_model(void)
   const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
   char input[8];
   int selection = 0;
-  int model_selection;
+  int model_selection = trs_model == 1 ? 0 : trs_model - 2;
   int grafyx;
-  int local_trs_model = trs_model;
   float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
   float value;
 
   while (1) {
-    if (local_trs_model == 1)
-      model_selection = 0;
-    else
-      model_selection = local_trs_model - 2;
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
     snprintf(&model_menu[1].title[56], 5, "%4.2f", clock_mhz[model_selection]);
     snprintf(&model_menu[2].title[50], 11, "%s", yes_no_choices[lowercase]);
@@ -2271,10 +2266,6 @@ void trs_gui_model(void)
     switch (selection) {
       case 0:
         model_selection = trs_gui_display_popup("Model", model_choices, 4, model_selection);
-        if (model_selection == 0)
-          local_trs_model = 1;
-        else
-          local_trs_model = model_selection + 2;
         break;
       case 1:
         snprintf(input, 5, "%4.2f", clock_mhz[model_selection]);
@@ -2338,8 +2329,8 @@ void trs_gui_model(void)
           supermem = 0;
         break;
       case -1:
-        if (trs_model != local_trs_model) {
-          trs_model = local_trs_model;
+        if (trs_model != (model_selection == 0 ? 1 : model_selection + 2)) {
+          trs_model = (model_selection == 0 ? 1 : model_selection + 2);
           trs_gui_new_machine();
         }
         return;
