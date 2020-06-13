@@ -2223,7 +2223,7 @@ void trs_gui_model(void)
 {
   MENU_ENTRY model_menu[] =
   {{"Model                                                       ", MENU_NORMAL_TYPE},
-   {"CPU Clock Speed in MHz                                      ", MENU_NORMAL_TYPE},
+   {"CPU Clock Speed                                             ", MENU_NORMAL_TYPE},
    {"Lowercase Modification for Model I                          ", MENU_NORMAL_TYPE},
    {"Exatron Stringy Floppy Emulation for Model I                ", MENU_NORMAL_TYPE},
    {"Speedup Kit Emulation for Model I                           ", MENU_NORMAL_TYPE},
@@ -2250,7 +2250,7 @@ void trs_gui_model(void)
 
   while (1) {
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
-    snprintf(&model_menu[1].title[56], 5, "%4.2f", clock_mhz[model_selection]);
+    snprintf(&model_menu[1].title[50], 11, "%6.2f MHz", clock_mhz[model_selection]);
     snprintf(&model_menu[2].title[50], 11, "%s", yes_no_choices[lowercase]);
     snprintf(&model_menu[3].title[50], 11, "%s", yes_no_choices[stringy]);
     snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
@@ -2268,7 +2268,7 @@ void trs_gui_model(void)
         model_selection = trs_gui_display_popup("Model", model_choices, 4, model_selection);
         break;
       case 1:
-        snprintf(input, 5, "%4.2f", clock_mhz[model_selection]);
+        snprintf(input, 6, "%.2f", clock_mhz[model_selection]);
         if (trs_gui_input_string("Enter CPU Clock Speed in MHz",
             input, input, 6, 0) == 0) {
           value = atof(input);
