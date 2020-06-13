@@ -2077,10 +2077,14 @@ void trs_get_event(int wait)
             keysym.sym = 0;
             break;
           case SDLK_F12:
-            timer_overclock = !timer_overclock;
+            if (SDL_GetModState() & KMOD_SHIFT)
+              trs_timer_init();
+            else {
+              timer_overclock = !timer_overclock;
+              if (trs_show_led)
+                trs_turbo_led();
+            }
             trs_screen_caption();
-            if (trs_show_led)
-              trs_turbo_led();
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
