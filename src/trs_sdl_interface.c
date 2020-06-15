@@ -1368,9 +1368,9 @@ void trs_screen_init(void)
 #endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
+  grafyx_redraw();
   if (image)
     SDL_FreeSurface(image);
-  memset(grafyx, 0, (2 * G_YSIZE * MAX_SCALE) * (G_XSIZE * MAX_SCALE));
   image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1,
                                    imageSize.bytes_per_line, 1, 1, 1, 0);
 
@@ -1415,7 +1415,6 @@ void trs_screen_init(void)
   }
 
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
-  grafyx_redraw();
   trs_screen_refresh();
   trs_sdl_flush();
 }
@@ -2631,6 +2630,8 @@ void screen_init(void)
   /* initially, screen is blank (i.e. full of spaces) */
   for (i = 0; i < sizeof(trs_screen); i++)
     trs_screen[i] = ' ';
+
+  memset(grafyx, 0, (2 * G_YSIZE * MAX_SCALE) * (G_XSIZE * MAX_SCALE));
 }
 
 static void
