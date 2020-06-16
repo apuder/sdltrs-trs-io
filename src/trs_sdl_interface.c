@@ -1123,21 +1123,8 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
   fprintf(config_file, "%slower\n", lowercase ? "" : "no");
   fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
-  fprintf(config_file, "model=");
-  switch (trs_model) {
-    case 1:
-      fprintf(config_file, "1\n");
-      break;
-    case 3:
-      fprintf(config_file, "3\n");
-      break;
-    case 4:
-      fprintf(config_file, "4\n");
-      break;
-    case 5:
-      fprintf(config_file, "4P\n");
-      break;
-  }
+  fprintf(config_file, "model=%d%s\n",
+          trs_model == 5 ? 4 : trs_model, trs_model == 5 ? "P" : "");
   fprintf(config_file, "%smousepointer\n", mousepointer ? "" : "no");
   fprintf(config_file, "printer=%d\n", trs_printer);
   fprintf(config_file, "printercmd=%s\n", trs_printer_command);
