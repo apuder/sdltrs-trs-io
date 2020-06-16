@@ -1414,7 +1414,6 @@ void trs_screen_init(void)
     trs_turbo_led();
   }
 
-  drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
   trs_screen_refresh();
   trs_sdl_flush();
 }
