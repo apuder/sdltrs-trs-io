@@ -1274,10 +1274,7 @@ void trs_screen_init(void)
   else
     trs_charset = trs_charset4;
 
-  if (trs_model >= 4)
-    resize = resize4;
-  else
-    resize = resize3;
+  resize = (trs_model >= 4) ? resize4 : resize3;
 
   if (trs_model == 1) {
     if (trs_charset < 3)
@@ -1297,16 +1294,8 @@ void trs_screen_init(void)
   imageSize.height = 2 * G_YSIZE * scale;
   imageSize.bytes_per_line = G_XSIZE * scale;
 
-  if (fullscreen)
-    border_width = 0;
-  else
-    border_width = window_border_width;
-
-  if (trs_show_led)
-    led_width = 8;
-  else
-    led_width = 0;
-
+  border_width = fullscreen ? 0 : window_border_width;
+  led_width = trs_show_led ? 0 : 8;
   led_height = led_width * scale;
 
   if (trs_model >= 3  && !resize) {
