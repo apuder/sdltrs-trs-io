@@ -223,17 +223,6 @@ static unsigned char grafyx_xoffset = 0, grafyx_yoffset = 0;
 #define G3_COMMAND  0x20
 #define G3_YLOW(v)  (((v) & 0x1e) >> 1)
 
-typedef struct image_size_type {
-  unsigned int width;
-  unsigned int height;
-  unsigned int bytes_per_line;
-} IMAGE_SIZE_TYPE;
-
-IMAGE_SIZE_TYPE imageSize = {
-  /*width, height*/    8 * G_XSIZE, 2 * G_YSIZE,  /* if scale = 1 */
-  /*bytes_per_line*/   G_XSIZE,  /* if scale = 1 */
-};
-
 #define HRG_MEMSIZE (1024 * 12)        /* 12k * 8 bit graphics memory */
 static unsigned char hrg_screen[HRG_MEMSIZE];
 static int hrg_pixel_x[2][6 + 1];
@@ -1290,10 +1279,6 @@ void trs_screen_init(void)
       cur_char_height = TRS_CHAR_HEIGHT * (scale * 2);
   }
 
-  imageSize.width = 8 * G_XSIZE * scale;
-  imageSize.height = 2 * G_YSIZE * scale;
-  imageSize.bytes_per_line = G_XSIZE * scale;
-
   border_width = fullscreen ? 0 : window_border_width;
   led_width = trs_show_led ? 0 : 8;
   led_height = led_width * scale;
@@ -1347,8 +1332,8 @@ void trs_screen_init(void)
   grafyx_redraw();
   if (image)
     SDL_FreeSurface(image);
-  image = SDL_CreateRGBSurfaceFrom(grafyx, imageSize.width, imageSize.height, 1,
-                                   imageSize.bytes_per_line, 1, 1, 1, 0);
+  image = SDL_CreateRGBSurfaceFrom(grafyx, G_XSIZE * scale * 8, G_YSIZE * scale * 2,
+                                   1, G_XSIZE * scale, 1, 1, 1, 0);
 
 #if defined(big_endian) && !defined(__linux)
   colors[0].r   = (background) & 0xFF;
@@ -2796,8 +2781,8 @@ void trs_screen_refresh(void)
   if (grafyx_enable && !grafyx_overlay) {
     int const srcx = cur_char_width * grafyx_xoffset;
     int const srcy = (scale * 2) * grafyx_yoffset;
-    int const dunx = imageSize.width - srcx;
-    int const duny = imageSize.height - srcy;
+    int const dunx = (G_XSIZE * scale * 8) - srcx;
+    int const duny = (G_YSIZE * scale * 2) - srcy;
     SDL_Rect srcRect, dstRect;
 
     srcRect.x = srcx;
@@ -3016,7 +3001,7 @@ void trs_screen_write_char(int position, unsigned char char_index)
     int const srcx = ((col + grafyx_xoffset) % G_XSIZE) * cur_char_width;
     int const srcy = (row * cur_char_height + grafyx_yoffset * (scale * 2))
       % (G_YSIZE * (scale * 2));
-    int const duny = imageSize.height - srcy;
+    int const duny = (G_YSIZE * scale * 2) - srcy;
 
     srcRect.x = srcx;
     srcRect.y = srcy;
@@ -3136,13 +3121,14 @@ static void grafyx_rescale(int y, int x, char byte)
 {
   char exp[MAX_SCALE];
   int i, j;
-  int p = y * scale * 2 * imageSize.bytes_per_line + x * scale;
+  int p = y * (scale * 2) * (G_XSIZE * scale) + x * scale;
+  int s;
 
   switch (scale) {
     case 1:
     default:
       grafyx[p] = byte;
-      grafyx[p + imageSize.bytes_per_line] = byte;
+      grafyx[p + G_XSIZE] = byte;
       return;
     case 2:
       exp[1] = ((byte & 0x01) + ((byte & 0x02) << 1)
@@ -3166,10 +3152,12 @@ static void grafyx_rescale(int y, int x, char byte)
       break;
   }
 
+  s = (G_XSIZE * scale) - scale;
+
   for (j = 0; j < scale * 2; j++) {
     for (i = 0; i < scale; i++)
       grafyx[p++] = exp[i];
-    p += imageSize.bytes_per_line - i;
+    p += s;
   }
 }
 
