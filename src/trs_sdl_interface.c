@@ -866,36 +866,8 @@ int trs_load_config_file(void)
 
   trs_cassette_remove();
 
-  scale = 1;
-  resize3 = 1;
-  resize4 = 0;
-  fullscreen = 0;
-  scanlines = 0;
-  trs_model = 1;
-  lowercase = 1;
-  trs_charset = 3;
-  trs_charset1 = 3;
-  trs_charset3 = 4;
-  trs_charset4 = 8;
-  strcpy(romfile, "level2.rom");
-  strcpy(romfile3, "model3.rom");
-  strcpy(romfile4p, "model4p.rom");
-  trs_disk_dir[0] = 0;
-  trs_hard_dir[0] = 0;
-  trs_cass_dir[0] = 0;
-  trs_disk_set_dir[0] = 0;
-  trs_state_dir[0] = 0;
-  trs_printer_dir[0] = 0;
-#ifdef _WIN32
-  strcpy(trs_printer_command, "notepad %s");
-#else
-  strcpy(trs_printer_command, "lpr %s");
-#endif
-  stretch_amount = STRETCH_AMOUNT;
-  window_border_width = 2;
-  grafyx_set_microlabs(FALSE);
-  trs_show_led = TRUE;
-  trs_disk_doubler = TRSDISK_BOTH;
+  background = BLACK;
+  cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
   disksizes[0] = 5;            /* Disk Sizes are 5" or 8" for all Eight Default Drives */
   disksizes[1] = 5;            /* Corrected by Larry Kraemer 08-01-2011 */
   disksizes[2] = 5;
@@ -916,17 +888,45 @@ int trs_load_config_file(void)
   disksteps[7] = 1;
   trs_disk_setsteps();
 #endif
+  foreground = WHITE;
+  fullscreen = 0;
+  grafyx_set_microlabs(FALSE);
+  gui_background = GREEN;
+  gui_foreground = WHITE;
+  lowercase = 1;
+  resize3 = 1;
+  resize4 = 0;
+  scale = 1;
+  scanlines = 0;
+  strcpy(romfile, "level2.rom");
+  strcpy(romfile3, "model3.rom");
+  strcpy(romfile4p, "model4p.rom");
+#ifdef _WIN32
+  strcpy(trs_printer_command, "notepad %s");
+#else
+  strcpy(trs_printer_command, "lpr %s");
+#endif
+  stretch_amount = STRETCH_AMOUNT;
+  trs_cass_dir[0] = 0;
+  trs_charset = 3;
+  trs_charset1 = 3;
+  trs_charset3 = 4;
+  trs_charset4 = 8;
+  trs_disk_dir[0] = 0;
+  trs_disk_doubler = TRSDISK_BOTH;
+  trs_disk_set_dir[0] = 0;
   trs_disk_truedam = 0;
-  cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
-  trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
+  trs_emtsafe = 1;
+  trs_hard_dir[0] = 0;
+  trs_joystick_num = 0;
   trs_kb_bracket(FALSE);
   trs_keypad_joystick = TRUE;
-  trs_joystick_num = 0;
-  foreground = WHITE;
-  background = BLACK;
-  gui_foreground = WHITE;
-  gui_background = GREEN;
-  trs_emtsafe = 1;
+  trs_model = 1;
+  trs_printer_dir[0] = 0;
+  trs_show_led = TRUE;
+  trs_state_dir[0] = 0;
+  trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
+  window_border_width = 2;
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
