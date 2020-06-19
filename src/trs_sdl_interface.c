@@ -1367,14 +1367,8 @@ void trs_screen_init(void)
 
   TrsBlitMap(image->format->palette, screen->format);
   bitmap_init();
+
   trs_screen_caption();
-
-  if (trs_show_led) {
-    trs_disk_led(-1, 0);
-    trs_hard_led(-1, 0);
-    trs_turbo_led();
-  }
-
   trs_screen_refresh();
   trs_sdl_flush();
 }
