@@ -901,6 +901,7 @@ static void trs_set_to_defaults(void)
   disksizes[5] = 8;
   disksizes[6] = 8;
   disksizes[7] = 8;
+  trs_disk_setsizes();
 #ifdef __linux
   disksteps[0] = 1;            /* Disk Steps are 1 for Single Step, 2 for Double Step for all Eight Default Drives */
   disksteps[1] = 1;            /* Corrected by Larry Kraemer 08-01-2011 */
@@ -910,6 +911,7 @@ static void trs_set_to_defaults(void)
   disksteps[5] = 1;
   disksteps[6] = 1;
   disksteps[7] = 1;
+  trs_disk_setsteps();
 #endif
   trs_disk_truedam = 0;
   cassette_default_sample_rate = DEFAULT_SAMPLE_RATE;
@@ -932,10 +934,6 @@ int trs_load_config_file(void)
   int i;
 
   trs_set_to_defaults();
-  trs_disk_setsizes();
-#ifdef __linux
-  trs_disk_setsteps();
-#endif
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
