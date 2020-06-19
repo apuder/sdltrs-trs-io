@@ -3119,45 +3119,45 @@ static void grafyx_redraw(void)
 
 static void grafyx_rescale(int y, int x, char byte)
 {
-  char exp[MAX_SCALE];
-  int i, j;
-  int p = y * (scale * 2) * (G_XSIZE * scale) + x * scale;
-  int s;
+  if (scale == 1) {
+    int const p = y * 2 * G_XSIZE + x;
 
-  switch (scale) {
-    case 1:
-    default:
-      grafyx[p] = byte;
-      grafyx[p + G_XSIZE] = byte;
-      return;
-    case 2:
-      exp[1] = ((byte & 0x01) + ((byte & 0x02) << 1)
-             + ((byte & 0x04) << 2) + ((byte & 0x08) << 3)) * 3;
-      exp[0] = (((byte & 0x10) >> 4) + ((byte & 0x20) >> 3)
-             + ((byte & 0x40) >> 2) + ((byte & 0x80) >> 1)) * 3;
-      break;
-    case 3:
-      exp[2] = ((byte & 0x01) + ((byte & 0x02) << 2)
-             + ((byte & 0x04) << 4)) * 7;
-      exp[1] = (((byte & 0x08) >> 2) + (byte & 0x10)
-             + ((byte & 0x20) << 2)) * 7 + ((byte & 0x04) >> 2);
-      exp[0] = (((byte & 0x40) >> 4) + ((byte & 0x80) >> 2)) * 7
-             + ((byte & 0x20) >> 5) * 3;
-      break;
-    case 4:
-      exp[3] = ((byte & 0x01) + ((byte & 0x02) << 3)) * 15;
-      exp[2] = (((byte & 0x04) >> 2) + ((byte & 0x08) << 1)) * 15;
-      exp[1] = (((byte & 0x10) >> 4) + ((byte & 0x20) >> 1)) * 15;
-      exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
-      break;
-  }
+    grafyx[p] = byte;
+    grafyx[p + G_XSIZE] = byte;
+  } else {
+    char exp[scale];
+    int i, j;
+    int p = y * (scale * 2) * (G_XSIZE * scale) + x * scale;
+    int const s = (G_XSIZE * scale) - scale;
 
-  s = (G_XSIZE * scale) - scale;
+    switch (scale) {
+      case 2:
+        exp[1] =  ((byte & 0x01)       + ((byte & 0x02) << 1)
+               +  ((byte & 0x04) << 2) + ((byte & 0x08) << 3)) * 3;
+        exp[0] = (((byte & 0x10) >> 4) + ((byte & 0x20) >> 3)
+               +  ((byte & 0x40) >> 2) + ((byte & 0x80) >> 1)) * 3;
+        break;
+      case 3:
+        exp[2] =  ((byte & 0x01)            + ((byte & 0x02) << 2)
+               +  ((byte & 0x04) << 4)) * 7;
+        exp[1] = (((byte & 0x08) >> 2)      +  (byte & 0x10)
+               +  ((byte & 0x20) << 2)) * 7 + ((byte & 0x04) >> 2);
+        exp[0] = (((byte & 0x40) >> 4)      + ((byte & 0x80) >> 2)) * 7
+               +  ((byte & 0x20) >> 5) * 3;
+        break;
+      case 4:
+        exp[3] =  ((byte & 0x01)       + ((byte & 0x02) << 3)) * 15;
+        exp[2] = (((byte & 0x04) >> 2) + ((byte & 0x08) << 1)) * 15;
+        exp[1] = (((byte & 0x10) >> 4) + ((byte & 0x20) >> 1)) * 15;
+        exp[0] = (((byte & 0x40) >> 6) + ((byte & 0x80) >> 3)) * 15;
+        break;
+    }
 
-  for (j = 0; j < scale * 2; j++) {
-    for (i = 0; i < scale; i++)
-      grafyx[p++] = exp[i];
-    p += s;
+    for (j = 0; j < scale * 2; j++) {
+      for (i = 0; i < scale; i++)
+        grafyx[p++] = exp[i];
+      p += s;
+    }
   }
 }
 
