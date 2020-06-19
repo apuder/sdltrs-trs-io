@@ -848,8 +848,11 @@ static void trs_disk_setsteps(void)
 }
 #endif
 
-static void trs_set_to_defaults(void)
+int trs_load_config_file(void)
 {
+  char line[FILENAME_MAX];
+  char *arg;
+  FILE *config_file;
   int i;
 
   for (i = 0; i < 8; i++)
@@ -924,16 +927,6 @@ static void trs_set_to_defaults(void)
   gui_foreground = WHITE;
   gui_background = GREEN;
   trs_emtsafe = 1;
-}
-
-int trs_load_config_file(void)
-{
-  char line[FILENAME_MAX];
-  char *arg;
-  FILE *config_file;
-  int i;
-
-  trs_set_to_defaults();
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
