@@ -205,11 +205,8 @@ int SDLmain(int argc, char *argv[])
   if (stat(trs_printer_dir, &st) < 0)
     trs_printer_dir[0] = 0;
 
-  mem_init();
-  screen_init();
-  trs_timer_init();
-  trs_screen_init();
   trs_reset(1);
+  trs_screen_init();
 
   if (init_state_file[0]) {
     trs_state_load(init_state_file);

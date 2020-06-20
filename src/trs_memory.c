@@ -287,8 +287,10 @@ void trs_reset(int poweron)
     if (poweron || trs_model >= 4) {
         /* Reset processor */
 	z80_reset();
-	/* Initialize ROM */
+	/* Initialize memory, ROM & timer */
+	mem_init();
 	trs_rom_init();
+	trs_timer_init();
     } else {
 	/* Signal a nonmaskable interrupt. */
 	trs_reset_button_interrupt(1);
