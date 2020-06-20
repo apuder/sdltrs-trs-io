@@ -83,9 +83,9 @@
 /* We allow for 2MB of banked memory via port 0x94. That is the extreme limit
    of the port mods rather than anything normal (512K might be more 'normal' */
 Uchar memory[0x200001]; /* +1 so strings from mem_pointer are NUL-terminated */
-Uchar *rom = NULL;
+Uchar rom[MAX_ROM_SIZE + 1];
+Uchar video[MAX_VIDEO_SIZE + 1];
 int trs_rom_size;
-Uchar *video = NULL;
 int trs_video_size;
 
 int memory_map = 0;
@@ -311,12 +311,11 @@ void mem_romin(int state)
 
 void mem_init()
 {
+    /* Initialize RAM, ROM & Video memory */
     memset(&memory, 0, sizeof(memory));
-    /* +1 so strings from mem_pointer are NUL-terminated */
-    if (rom == NULL)
-        rom = (Uchar *) calloc(MAX_ROM_SIZE + 1, 1);
-    if (video == NULL)
-        video = (Uchar *) calloc(MAX_VIDEO_SIZE + 1, 1);
+    memset(&rom, 0, sizeof(rom));
+    memset(&video, 0, sizeof(video));
+
     if (trs_model < 4)
         trs_video_size = 1024;
     else
