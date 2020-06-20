@@ -52,6 +52,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include "error.h"
 #include "trs.h"
 #include "trs_disk.h"
@@ -310,6 +311,7 @@ void mem_romin(int state)
 
 void mem_init()
 {
+    memset(&memory, 0, sizeof(memory));
     /* +1 so strings from mem_pointer are NUL-terminated */
     if (rom == NULL)
         rom = (Uchar *) calloc(MAX_ROM_SIZE + 1, 1);
