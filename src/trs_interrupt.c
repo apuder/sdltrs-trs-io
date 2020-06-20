@@ -379,6 +379,7 @@ trs_timer_init()
       z80_state.clockMHz = clock_mhz_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
+  trs_screen_caption();
 
   trs_timer_event();
 
