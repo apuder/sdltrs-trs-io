@@ -2814,10 +2814,6 @@ void trs_gui_joy_gui(void)
       break;
     case RESET:
       trs_reset(1);
-      if (trs_show_led) {
-        trs_disk_led(-1, 0);
-        trs_hard_led(-1, 0);
-      }
       break;
     case EXIT:
       trs_exit(1);

@@ -291,6 +291,11 @@ void trs_reset(int poweron)
 	mem_init();
 	trs_rom_init();
 	trs_timer_init();
+	if (trs_show_led) {
+	  trs_disk_led(-1, 0);
+	  trs_hard_led(-1, 0);
+	  trs_turbo_led();
+	}
     } else {
 	/* Signal a nonmaskable interrupt. */
 	trs_reset_button_interrupt(1);
