@@ -39,6 +39,7 @@ unsigned short const crc16_table[256] = {
   0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 };
 
+#if 0
 /* Slow way, not using table */
 unsigned short CALC_CRC1a(unsigned short crc, unsigned char byte)
 {
@@ -50,6 +51,7 @@ unsigned short CALC_CRC1a(unsigned short crc, unsigned char byte)
   }
   return crc;
 }
+#endif
 
 /* Fast way, using table */
 #define CALC_CRC1b(crc, c) (((crc) << 8) ^ crc16_table[((crc) >> 8) ^ (c)])
@@ -58,6 +60,8 @@ unsigned short CALC_CRC1a(unsigned short crc, unsigned char byte)
 #define calc_crc1 CALC_CRC1b
 #endif
 
+#if TEST
+#include <stdio.h>
 /* Recompute the CRC with len bytes appended. */
 unsigned short calc_crc(unsigned short crc,
 			unsigned char const *buf, int len)
@@ -68,8 +72,6 @@ unsigned short calc_crc(unsigned short crc,
   return crc;
 }
 
-#if TEST
-#include <stdio.h>
 int
 main(int argc, char **argv)
 {
