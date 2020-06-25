@@ -32,6 +32,8 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 (Build on Debian 9/i386 & Linux Mint 19.3/amd64)
 
+Thanks to Tércio Martins a package for Arch Linux is available in the [AUR].
+
 ## SDL2
 
 The [SDL2] branch contains the SDL2 version with hardware rendering support.
@@ -45,6 +47,7 @@ systems (SDL2 binaries and packages above are build on the *master* branch).
 ![screenshot](screenshots/sdltrs03.png)
 ![screenshot](screenshots/sdltrs04.png)
 
+[AUR]: https://aur.archlinux.org/packages/sdltrs
 [BUILDING.md]: BUILDING.md
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
 [SDL2]: https://gitlab.com/jengun/sdltrs/-/tree/sdl2
