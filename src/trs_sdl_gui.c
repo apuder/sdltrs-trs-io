@@ -2503,7 +2503,7 @@ void trs_gui_save_bmp(void)
 void trs_gui_write_config(void)
 {
   filename[0] = 0;
-  if (trs_gui_input_string("Write Configuration File, TAB selects directory",
+  if (trs_gui_input_string("Write Configuration, TAB selects directory",
       trs_config_file, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8c");
     if (trs_gui_file_overwrite()) {
@@ -2531,10 +2531,10 @@ int trs_gui_read_config(void)
 static int trs_gui_config_management(void)
 {
   MENU_ENTRY misc_menu[] =
-  {{"Save Emulator State      (ALT-S)", MENU_NORMAL_TYPE},
-   {"Load Emulator State      (ALT-L)", MENU_NORMAL_TYPE},
-   {"Write Configuration File (ALT-W)", MENU_NORMAL_TYPE},
-   {"Read Configuration File  (ALT-R)", MENU_NORMAL_TYPE},
+  {{"Save Emulator State (ALT-S)", MENU_NORMAL_TYPE},
+   {"Load Emulator State (ALT-L)", MENU_NORMAL_TYPE},
+   {"Write Configuration (ALT-W)", MENU_NORMAL_TYPE},
+   {"Read Configuration  (ALT-R)", MENU_NORMAL_TYPE},
    {"", 0}};
   int selection = 0;
 
