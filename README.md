@@ -40,6 +40,8 @@ The [SDL2] branch contains the SDL2 version with hardware rendering support.
 Altough considered as *experimental*, it is recommended for 64-bit operating
 systems (SDL2 binaries and packages above are build on the *master* branch).
 
+The SDL2 version is available in Valerio Lupi's fork of the [RetroPie-Setup].
+
 ## Screenshots
 
 ![screenshot](screenshots/sdltrs01.png)
@@ -50,6 +52,7 @@ systems (SDL2 binaries and packages above are build on the *master* branch).
 [AUR]: https://aur.archlinux.org/packages/sdltrs
 [BUILDING.md]: BUILDING.md
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
+[RetroPie-Setup]: https://github.com/valerino/RetroPie-Setup
 [SDL2]: https://gitlab.com/jengun/sdltrs/-/tree/sdl2
 [SDL.DLL]: https://www.libsdl.org/download-1.2.php
 [SDL2.DLL]: https://www.libsdl.org/download-2.0.php
