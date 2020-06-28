@@ -1,3 +1,10 @@
+## Version 1.2.11 Release 06-28-2020:
+
+  * Added CPU clock speed selection.
+  * Added R register to state file.
+  * Fixed issue #2 "Spurious return characters" (reported by David Barr).
+  * Internal improvements.
+
 ## Version 1.2.10 Release 05-24-2020:
 
   * Added Z80 refresh register.
