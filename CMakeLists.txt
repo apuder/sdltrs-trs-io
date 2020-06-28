@@ -91,7 +91,7 @@ else ()
 	find_package(SDL2 QUIET)
 	if (${SDL2_FOUND})
 		# Comply to policy CMP0004:
-		string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
+		string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 		# Set empty variable (needed for Arch Linux):
 		if ("${SDL2_LIBRARIES}" STREQUAL "")
 			set(SDL2_LIBRARIES "SDL2::SDL2")
