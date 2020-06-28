@@ -49,7 +49,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <SDL.h>
-
 #include "error.h"
 #include "load_cmd.h"
 #include "trs.h"
@@ -205,8 +204,9 @@ int SDLmain(int argc, char *argv[])
   if (stat(trs_printer_dir, &st) < 0)
     trs_printer_dir[0] = 0;
 
-  trs_reset(1);
+  screen_init();
   trs_screen_init();
+  trs_reset(1);
 
   if (init_state_file[0]) {
     trs_state_load(init_state_file);
