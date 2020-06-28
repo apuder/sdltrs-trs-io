@@ -27,13 +27,13 @@
   <li><a href="#Cassette_Management">Cassette Management</a></li>
   <li><a href="#Stringy_Wafer_Management">Stringy Wafer Management</a></li>
   <li><a href="#Emulator_Settings">Emulator Settings</a></li>
-  <li><a href="#ConfigurationState">Configuration/State File Management</a></li>
-  <li><a href="#Printer_Management">Printer Management</a></li>
-  <li><a href="#Default_Directories">Default Directories</a></li>
-  <li><a href="#ROM_Files">ROM Files</a></li>
   <li><a href="#Display_Settings">Display Settings</a></li>
-  <li><a href="#Joystick_Settings">Joystick Settings</a></li>
   <li><a href="#Miscellaneous_Settings">Miscellaneous Settings</a></li>
+  <li><a href="#ConfigurationState">Configuration/State Files</a></li>
+  <li><a href="#Printer_Management">Printer Management</a></li>
+  <li><a href="#Joystick_Settings">Joystick Settings</a></li>
+  <li><a href="#Default_Directories">Default Directories</a></li>
+  <li><a href="#ROM_File_Selection">ROM File_Selection</a></li>
 </ul>
 
 <h2><a name="Main_Menu"></a><u>Main Menu</u></h2>
@@ -244,13 +244,19 @@ create new wafer images with default parameters.</p>
 
 <p>Specifies what TRS-80 model to emulate.</p>
 
-<h3>Lowercase:</h3>
+<h3>CPU Clock Speed:</h3>
 
-<p>Emulate a "Lowercase Modification Kit" for the TRS-80 Model I.</p>
+<p>The default CPU speed of the selected TRS-80 model can be changed here,
+but use this with CAUTION: overclocking the Z80 will result in all forms of
+"timing-errors"!</p>
 
 <h3>Exatron Stringy Floppy:</h3>
 
 <p>Emulates up to 8 Stringy Floppy Drives for the TRS-80 Model I.</p>
+
+<h3>Lowercase:</h3>
+
+<p>Emulate a "Lowercase Modification Kit" for the TRS-80 Model I.</p>
 
 <h3>Speedup Kit Emulation:</h3>
 
@@ -271,86 +277,6 @@ different from one another.</p>
 <h3>Memory Expansions:</h3>
 
 <p>Various memory expansions can be emulated for a total of 2 MB RAM.</p>
-
-<h2><a name="ConfigurationState"></a><u>Configuration/State File Management</u></h2>
-
-<p><img alt="" src="images/TextGUIConfigFilesMenu.png"></p>
-
-<h3>Save State (Alt-S):</h3>
-
-<p>This menu item allows you to save the state of the emulator, so that it
-may be loaded later with the Load State command. Disk images inserted into
-the computer are stored in the state file.</p>
-
-<h3>Load State (Alt-L):</h3>
-
-<p>This menu item allows you load a state file (<code>.t8s</code>) previous
-saved with the Save State command.</p>
-
-<h3>Write Configuration (Alt-W):</h3>
-
-<p>This menu item allows you to save the configuration of the emulator, so
-that it may be loaded later with the Load Configuration command.
-Configuration files (<code>.t8c</code>) are discussed further on the <a
-href="Features.html#Configuration_Files">Features</a> page.</p>
-
-<h3>Read Configuration (Alt-R):</h3>
-
-<p>This menu item allows you load a Configuration file (<code>.t8c</code>)
-previous saved with the Save Configuration command.</p>
-
-<h2><a name="Printer_Management"></a><u>Printer Management</u></h2>
-
-<p><img alt="" src="images/TextGUIPrinterMenu.png"></p>
-
-<h3>Close and Reopen Printer Output File:</h3>
-
-<p>Selecting this option will cause the printer output file to be closed, and
-the printer command to be executed using the file name.</p>
-
-<h3>Printer Type:</h3>
-
-<p>Controls the type of printer emulation that is used for outputting to the
-TRS-80 printer: <b>None</b> and <b>Text</b>.</p>
-
-<p><b>Text</b> simply sends the printer output to a text file (automatically
-created from <code>trsprn0000.txt</code> to <code>trsprn9999.txt</code>)
-with optional script processing.</p>
-
-<h3>Print Command:</h3>
-
-<p>The only option for the text printer type is the command used to print.
-Within the command, <code>%s</code> is used to represent the file name of the
-temporary file generated during printing. On UNIX like systems this defaults
-to <code>lpr %s</code> and on Windows to <code>notepad %s</code>. The
-<code>%s</code> in the printer command will be replaced with the name of the
-printer output file.</p>
-
-<h2><a name="Default_Directories"></a><u>Default Directories</u></h2>
-
-<p><img alt="" src="images/TextGUIDirectoryMenu.png"></p>
-
-<p>This menu allows the user to specify the default directories used for
-loading/saving various types of file used by the emulator. To choose the
-directory, press <b>Enter</b> when the appropriate entry is highlighted. That
-will bring up the Directory select screen. The arrow keys, page up/down and
-Home/End may be used to scroll through the list of directories. Pressing
-<b>Enter</b> on the &lt;..&gt; item will take you to the parent directory. On
-Windows, the Drive letters are listed as the last items in the menu, and you
-can change drives by pressing <b>Enter</b> on those items. The directory is
-selected by pressing the <b>Tab</b> key.</p>
-
-<p><img alt="" src="images/TextGUIDirectorySelect.png"></p>
-
-<h2><a name="ROM_Files"></a><u>ROM Files Menu</u></h2>
-
-<p><img alt="" src="images/TextGUIROMMenu.png"></p>
-
-<p>This menu allows you to chose the ROM files used in the emulation of the
-TRS-80. These files are not provided with the emulator. To select the file,
-press <b>Enter</b> when the appropriate item is highlighted, and the file
-selection menu will appear. It's operation is explained in the Floppy Disk
-section above.</p>
 
 <h2><a name="Display_Settings"></a><u>Display Settings</u></h2>
 
@@ -437,30 +363,6 @@ Turbo Mode LED are shown in the TRS-80 Emulator window (lower edge).</p>
 background color to roughly simulate the pixel resolution of an old CRT
 monitor.</p>
 
-<h2><a name="Joystick_Settings"></a><u>Joystick Settings Menu</u></h2>
-
-<p><img alt="" src="images/TextGUIJoystickMenu.png"></p>
-
-<h3>Use Keypad for Joystick:</h3>
-
-<p>This item determines if the numeric keypad is used for emulation of a
-joystick.</p>
-
-<h3>USB Joystick/Gamepad:</h3>
-
-<p>This item allows the user to select which USB joystick, if any, is used
-for emulation of the TRS-80 Joystick. It will bring up a list of the USB
-joysticks that SDL is aware of as shown below:</p>
-
-<p><img alt="" src="images/TextGUIJoystickSelectMenu.png"></p>
-
-<h3>Map Button to Key/Function:</h3>
-
-<p><img alt="" src="images/TextGUIJoystickMap.png"></p>
-
-<p>These options allows the user to map keys or functions of SDLTRS to Joystick
-buttons. Use "Write Configuration File" in the <a href="#ConfigurationState">
-Configuration/State File Management</a> menu to save the mapping.</p>
 
 <h2><a name="Miscellaneous_Settings"></a><u>Miscellaneous Settings</u></h2>
 
@@ -529,6 +431,110 @@ on the emulator, so use higher values with caution.</p>
 
 <p>While pasting from the clipboard to the TRS-80 emulator, Turbo mode is
 temporarily activated.</p>
+
+<h2><a name="ConfigurationState"></a><u>Configuration/State Files</u></h2>
+
+<p><img alt="" src="images/TextGUIConfigFilesMenu.png"></p>
+
+<h3>Save State (Alt-S):</h3>
+
+<p>This menu item allows you to save the state of the emulator, so that it
+may be loaded later with the Load State command. Disk images inserted into
+the computer are stored in the state file.</p>
+
+<h3>Load State (Alt-L):</h3>
+
+<p>This menu item allows you load a state file (<code>.t8s</code>) previous
+saved with the Save State command.</p>
+
+<h3>Write Configuration (Alt-W):</h3>
+
+<p>This menu item allows you to save the configuration of the emulator, so
+that it may be loaded later with the Load Configuration command.
+Configuration files (<code>.t8c</code>) are discussed further on the <a
+href="Features.html#Configuration_Files">Features</a> page.</p>
+
+<h3>Read Configuration (Alt-R):</h3>
+
+<p>This menu item allows you load a Configuration file (<code>.t8c</code>)
+previous saved with the Save Configuration command.</p>
+
+<h2><a name="Printer_Management"></a><u>Printer Management</u></h2>
+
+<p><img alt="" src="images/TextGUIPrinterMenu.png"></p>
+
+<h3>Close and Reopen Printer Output File:</h3>
+
+<p>Selecting this option will cause the printer output file to be closed, and
+the printer command to be executed using the file name.</p>
+
+<h3>Printer Type:</h3>
+
+<p>Controls the type of printer emulation that is used for outputting to the
+TRS-80 printer: <b>None</b> and <b>Text</b>.</p>
+
+<p><b>Text</b> simply sends the printer output to a text file (automatically
+created from <code>trsprn0000.txt</code> to <code>trsprn9999.txt</code>)
+with optional script processing.</p>
+
+<h3>Print Command:</h3>
+
+<p>The only option for the text printer type is the command used to print.
+Within the command, <code>%s</code> is used to represent the file name of the
+temporary file generated during printing. On UNIX like systems this defaults
+to <code>lpr %s</code> and on Windows to <code>notepad %s</code>. The
+<code>%s</code> in the printer command will be replaced with the name of the
+printer output file.</p>
+
+<h2><a name="Joystick_Settings"></a><u>Joystick Settings</u></h2>
+
+<p><img alt="" src="images/TextGUIJoystickMenu.png"></p>
+
+<h3>Use Keypad for Joystick:</h3>
+
+<p>This item determines if the numeric keypad is used for emulation of a
+joystick.</p>
+
+<h3>USB Joystick/Gamepad:</h3>
+
+<p>This item allows the user to select which USB joystick, if any, is used
+for emulation of the TRS-80 Joystick. It will bring up a list of the USB
+joysticks that SDL is aware of as shown below:</p>
+
+<p><img alt="" src="images/TextGUIJoystickSelectMenu.png"></p>
+
+<h3>Map Button to Key/Function:</h3>
+
+<p><img alt="" src="images/TextGUIJoystickMap.png"></p>
+
+<p>These options allows the user to map keys or functions of SDLTRS to Joystick
+buttons. Use "Write Configuration File" in the <a href="#ConfigurationState">
+Configuration/State File Management</a> menu to save the mapping.</p>
+<h2><a name="Default_Directories"></a><u>Default Directories</u></h2>
+
+<p><img alt="" src="images/TextGUIDirectoryMenu.png"></p>
+
+<p>This menu allows the user to specify the default directories used for
+loading/saving various types of file used by the emulator. To choose the
+directory, press <b>Enter</b> when the appropriate entry is highlighted. That
+will bring up the Directory select screen. The arrow keys, page up/down and
+Home/End may be used to scroll through the list of directories. Pressing
+<b>Enter</b> on the &lt;..&gt; item will take you to the parent directory. On
+Windows, the Drive letters are listed as the last items in the menu, and you
+can change drives by pressing <b>Enter</b> on those items. The directory is
+selected by pressing the <b>Tab</b> key.</p>
+
+<p><img alt="" src="images/TextGUIDirectorySelect.png"></p>
+
+<h2><a name="ROM_File_Selection"></a><u>ROM File Selection</u></h2>
+
+<p><img alt="" src="images/TextGUIROMMenu.png"></p>
+
+<p>This menu allows you to chose the ROM files used in the emulation of the
+TRS-80. These files are not provided with the emulator. To select the file,
+press <b>Enter</b> when the appropriate item is highlighted, and the file
+selection menu will appear. It's operation is explained in the Floppy Disk
+section above.</p>
 
 </body>
 </html>

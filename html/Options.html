@@ -105,20 +105,13 @@ will be executed upon startup of the emulator.</p>
         The name of the character set may be abbreviated to one character.</td>
   </tr>
   <tr>
-    <td><code>-clock1 MHz</code>
-    <td>Set clock speed in MHz for TRS-80 Model I.
-        Default: <code>1.77408</code> MHz. (<b>USE WITH CAUTION</b>)</td>
-    </td>
-  </tr>
-  <tr>
-    <td><code>-clock3 MHz</code>
-    <td>Set clock speed in MHz for TRS-80 Model III.
-        Default: <code>2.02752</code> MHz. (<b>USE WITH CAUTION</b>)</td>
-  </tr>
-  <tr>
-    <td><code>-clock4 MHz</code>
-    <td>Set clock speed in MHz for TRS-80 Model 4/4P.
-        Default: <code>4.05504 MHz</code>. (<b>USE WITH CAUTION</b>)</td>
+    <td><code>-clock1 MHz<br>
+              -clock3 MHz<br>
+              -clock4 MHz</code></td>
+    <td>Set the CPU clock speed in MHz for the specified TRS-80 Model. Use with
+        <b>CAUTION</b>: overclocking the Z80 CPU will result in timing-errors!<br>
+        Defaults are: <code>1.77408</code> MHz for Model I, <code>2.02752</code>
+        MHz for Model III, <code>4.05504</code> MHz for Model 4 and 4P.</td>
   </tr>
   <tr>
     <td><code>-debug</code></td>
@@ -491,7 +484,7 @@ will be executed upon startup of the emulator.</p>
     <td>Emulate the specified Speedup Kit for the TRS-80 Model I: this can
         be <code>none</code>, <code>archbold</code> for "Archbold Electronics
         Speed-Up Board" or <code>sprinter</code> for the "Holmes Engineering
-        Sprinter II". <code>archbold</code> is the default setting.
+        Sprinter II". <code>archbold</code> is the default setting.</td>
   </tr>
   <tr>
     <td><code>-statedir dir</code></td>
