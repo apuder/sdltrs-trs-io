@@ -334,7 +334,7 @@ void z80_out(int port, int value)
 /*ARGSUSED*/
 int z80_in(int port)
 {
-  int value = 0xff; // value returned for nonexistent ports
+  int value = 0xff; /* value returned for nonexistent ports */
 
   /* First, ports common to all models */
 

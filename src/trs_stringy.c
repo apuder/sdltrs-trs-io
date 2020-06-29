@@ -46,9 +46,9 @@
 
 #define STRINGY_MAX_UNITS 8
 
-#define STRINGY_CELL_WIDTH 124 // in t-states
-#define STRINGY_LEN_DEFAULT (64 * 1024 * 2 * 9 / 8) // 64K + gaps/leaders XXX?
-#define STRINGY_EOT_DEFAULT 60 // a good value per MKR
+#define STRINGY_CELL_WIDTH 124 /* in t-states */
+#define STRINGY_LEN_DEFAULT (64 * 1024 * 2 * 9 / 8) /* 64K + gaps/leaders XXX? */
+#define STRINGY_EOT_DEFAULT 60 /* a good value per MKR */
 
 #define STRINGY_FMT_DEBUG 1
 #define STRINGY_FMT_ESF 2
@@ -71,7 +71,7 @@ typedef struct {
   Uchar in_port;
   Uchar out_port;
   Uchar format;
-  // for esf format:
+  /* for esf format: */
   long esf_bytelen;
   long esf_bytepos;
   Uchar esf_bytebuf;
@@ -121,8 +121,8 @@ stringy_state(int out_port)
 int
 stringy_create_with(const char *name,
 		    int format,
-		    Uint lengthBytes, // data length in bytes
-		    Uint eotCells,    // leader length in bit cells
+		    Uint lengthBytes, /* data length in bytes */
+		    Uint eotCells,    /* leader length in bit cells */
 		    int writeProt)
 {
   FILE *f;
@@ -301,7 +301,7 @@ stringy_change(int unit)
 
   s->pos = 0;
   s->pos_time = z80_state.t_count;
-  //XXX is the following right?
+  /* XXX is the following right? */
   s->flux_change_pos = 0;
   s->flux_change_to = 1;
 
@@ -615,7 +615,7 @@ stringy_out(int unit, int value)
     }
 
     s->pos_time = z80_state.t_count;
-    // XXX Is the following right?
+    /* XXX Is the following right? */
     s->in_port &= ~STRINGY_FLUX;
     s->flux_change_pos = s->pos;
     s->flux_change_to = 1;
@@ -624,13 +624,13 @@ stringy_out(int unit, int value)
   if (old_state != STRINGY_WRITING &&
       new_state == STRINGY_WRITING) {
     if (s->format == STRINGY_FMT_DEBUG) {
-      // Debug format can't handle overwriting
+      /* Debug format can't handle overwriting */
       fflush(s->file);
       res = ftruncate(fileno(s->file), ftell(s->file));
       assert(res == 0);
     }
     fseek(s->file, 0, SEEK_CUR);
-    stringy_flux_write(s, 1, 0); //XXX needed?  bad?
+    stringy_flux_write(s, 1, 0); /* XXX needed?  bad? */
   }
 
   if (old_state == STRINGY_WRITING) {
