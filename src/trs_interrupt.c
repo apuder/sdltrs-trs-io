@@ -373,10 +373,12 @@ trs_timer_init()
   if (trs_model == 1) {
       timer_hz = TIMER_HZ_1;
       z80_state.clockMHz = clock_mhz_1;
-  } else {
-      /* initially... */
+  } else if (trs_model == 3) {
       timer_hz = TIMER_HZ_3;
       z80_state.clockMHz = clock_mhz_3;
+  } else {
+      timer_hz = TIMER_HZ_4;
+      z80_state.clockMHz = clock_mhz_4;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
   trs_screen_caption();
