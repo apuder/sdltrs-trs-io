@@ -2231,9 +2231,9 @@ void trs_gui_model(void)
    {"Grafyx Solution (Micro-Labs) Graphics Emulation             ", MENU_NORMAL_TYPE},
    {"LE18 (Lowe Electronics) Graphics Emulation                  ", MENU_NORMAL_TYPE},
    {"", MENU_TITLE_TYPE},
-   {"Alpha Technologies HyperMem Memory Expansion                ", MENU_NORMAL_TYPE},
-   {"Alpha Technologies SuperMem Memory Expansion                ", MENU_NORMAL_TYPE},
    {"Dave Huffman (and other) Memory Expansion                   ", MENU_NORMAL_TYPE},
+   {"HyperMem (Anitek Software) Memory Expansion                 ", MENU_NORMAL_TYPE},
+   {"SuperMem (Alpha Technology) Memory Expansion                ", MENU_NORMAL_TYPE},
    {"TRS-80 Users Society Selector Memory Expansion              ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *model_choices[4] =  {"  TRS-80 Model I",
@@ -2256,9 +2256,9 @@ void trs_gui_model(void)
     snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
     snprintf(&model_menu[6].title[50], 11, "%s", yes_no_choices[grafyx_get_microlabs()]);
     snprintf(&model_menu[7].title[50], 11, "%s", yes_no_choices[lowe_le18]);
-    snprintf(&model_menu[9].title[50], 11, "%s", yes_no_choices[hypermem]);
-    snprintf(&model_menu[10].title[50], 11, "%s", yes_no_choices[supermem]);
-    snprintf(&model_menu[11].title[50], 11, "%s", yes_no_choices[huffman_ram]);
+    snprintf(&model_menu[9].title[50], 11, "%s", yes_no_choices[huffman_ram]);
+    snprintf(&model_menu[10].title[50], 11, "%s", yes_no_choices[hypermem]);
+    snprintf(&model_menu[11].title[50], 11, "%s", yes_no_choices[supermem]);
     snprintf(&model_menu[12].title[50], 11, "%s", yes_no_choices[selector]);
     trs_gui_clear_screen();
 
@@ -2308,19 +2308,19 @@ void trs_gui_model(void)
         lowe_le18 = trs_gui_display_popup("Lowe LE18", yes_no_choices, 2, lowe_le18);
         break;
       case 9:
+        huffman_ram = trs_gui_display_popup("Huffman", yes_no_choices, 2, huffman_ram);
+        if (huffman_ram)
+          hypermem = 0;
+        break;
+      case 10:
         hypermem = trs_gui_display_popup("HyperMem", yes_no_choices, 2, hypermem);
         if (hypermem)
           huffman_ram = 0;
         break;
-      case 10:
+      case 11:
         supermem = trs_gui_display_popup("SuperMem", yes_no_choices, 2, supermem);
         if (supermem)
           selector = 0;
-        break;
-      case 11:
-        huffman_ram = trs_gui_display_popup("Huffman", yes_no_choices, 2, huffman_ram);
-        if (huffman_ram)
-          hypermem = 0;
         break;
       case 12:
         selector = trs_gui_display_popup("Selector", yes_no_choices, 2, selector);
