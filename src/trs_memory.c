@@ -330,7 +330,7 @@ void mem_init()
 
     /* We map the SuperMem separately, otherwise it can get really
        confusing when combining with other stuff */
-    if (supermem && supermem_ram == NULL)
+    if (supermem_ram == NULL)
         supermem_ram = (Uchar *) calloc(MAX_SUPERMEM_SIZE + 1, 1);
     mem_map(0);
     mem_bank(0);
