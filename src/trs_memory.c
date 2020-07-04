@@ -332,6 +332,8 @@ void mem_init()
        confusing when combining with other stuff */
     if (supermem_ram == NULL)
         supermem_ram = (Uchar *) calloc(MAX_SUPERMEM_SIZE + 1, 1);
+    else
+       memset(supermem_ram, 0, MAX_SUPERMEM_SIZE + 1);
     mem_map(0);
     mem_bank(0);
     mem_video_page(0);
