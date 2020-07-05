@@ -59,7 +59,7 @@ if (FASTMOVE)
 endif ()
 
 if (READLINE)
-	find_package(Curses)
+	find_package(Curses QUIET)
 	find_path(Readline_ROOT_DIR
 		NAMES include/readline/readline.h
 	)
@@ -71,9 +71,13 @@ if (READLINE)
 		NAMES readline
 		HINTS ${Readline_ROOT_DIR}/lib
 	)
-	add_definitions(-DREADLINE)
-	include_directories(${Readline_INCLUDE_DIR})
-	target_link_libraries(sdltrs ${Readline_LIBRARY})
+	if (Readline_LIBRARY)
+		add_definitions(-DREADLINE)
+		include_directories(${Readline_INCLUDE_DIR})
+		target_link_libraries(sdltrs ${Readline_LIBRARY})
+	else ()
+		message("-- Readline NOT FOUND")
+	endif ()
 endif ()
 
 if (SDL1 OR NOX)
