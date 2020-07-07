@@ -2304,6 +2304,9 @@ void trs_get_event(int wait)
           case SDLK_PAGEDOWN:
             keysym.sym = 0x119;
             break;
+          case SDLK_CAPSLOCK:
+            keysym.sym = 0x11d;
+            break;
           case SDLK_SCROLLLOCK:
             keysym.sym = 0x11e;
             break;
