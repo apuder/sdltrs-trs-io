@@ -2758,45 +2758,47 @@ void trs_screen_refresh(void)
   debug("trs_screen_refresh\n");
 #endif
   if (grafyx_enable && !grafyx_overlay) {
-    int const srcx = cur_char_width * grafyx_xoffset;
-    int const srcy = (scale * 2) * grafyx_yoffset;
-    int const dunx = (G_XSIZE * scale * 8) - srcx;
-    int const duny = (G_YSIZE * scale * 2) - srcy;
+    int const srcx   = cur_char_width * grafyx_xoffset;
+    int const srcy   = (scale * 2) * grafyx_yoffset;
+    int const dunx   = (G_XSIZE * scale * 8) - srcx;
+    int const duny   = (G_YSIZE * scale * 2) - srcy;
+    int const height = cur_char_height * col_chars;
+    int const width  = cur_char_width  * row_chars;
     SDL_Rect srcRect, dstRect;
 
     srcRect.x = srcx;
     srcRect.y = srcy;
-    srcRect.w = cur_char_width * row_chars;
-    srcRect.h = cur_char_height * col_chars;
+    srcRect.w = width;
+    srcRect.h = height;
     dstRect.x = left_margin;
     dstRect.y = top_margin;
     SDL_BlitSurface(image, &srcRect, screen, &dstRect);
     addToDrawList(&dstRect);
     /* Draw wrapped portions if any */
-    if (dunx < cur_char_width * row_chars) {
+    if (dunx < width) {
       srcRect.x = 0;
       srcRect.y = srcy;
-      srcRect.w = cur_char_width * row_chars - dunx;
-      srcRect.h = cur_char_height * col_chars;
+      srcRect.w = width - dunx;
+      srcRect.h = height;
       dstRect.x = left_margin + dunx;
       dstRect.y = top_margin;
       SDL_BlitSurface(image, &srcRect, screen, &dstRect);
       addToDrawList(&dstRect);
     }
-    if (duny < cur_char_height * col_chars) {
+    if (duny < height) {
       srcRect.x = srcx;
       srcRect.y = 0;
-      srcRect.w = cur_char_width * row_chars;
-      srcRect.h = cur_char_height * col_chars - duny;
+      srcRect.w = width;
+      srcRect.h = height - duny;
       dstRect.x = left_margin;
       dstRect.y = top_margin + duny;
       SDL_BlitSurface(image, &srcRect, screen, &dstRect);
       addToDrawList(&dstRect);
-      if (dunx < cur_char_width * row_chars) {
+      if (dunx < width) {
         srcRect.x = 0;
         srcRect.y = 0;
-        srcRect.w = cur_char_width * row_chars - dunx;
-        srcRect.h = cur_char_height * col_chars - duny;
+        srcRect.w = width - dunx;
+        srcRect.h = height - duny;
         dstRect.x = left_margin + dunx;
         dstRect.y = top_margin + duny;
         SDL_BlitSurface(image, &srcRect, screen, &dstRect);
