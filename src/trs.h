@@ -51,6 +51,10 @@
 
 #include "z80.h"
 
+#ifdef _WIN32
+#undef  ALTERNATE
+#endif
+
 #define NORMAL 0
 #define EXPANDED 1
 #define INVERSE 2

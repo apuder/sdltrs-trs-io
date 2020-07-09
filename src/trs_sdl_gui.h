@@ -27,6 +27,9 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
+#ifdef _WIN32
+#undef  INTERFACE
+#endif
 #define GUI          1
 #define KEYBRD       2
 #define SAVE         3
