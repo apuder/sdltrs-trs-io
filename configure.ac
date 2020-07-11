@@ -46,7 +46,7 @@ AC_ARG_ENABLE([sdl1],
      [AC_DEFINE([SDL2])])])
 
 CFLAGS="$CFLAGS $( $SDL_CONF --cflags )"
-LIBS="$LIBS $( $SDL_CONF --libs)"
+LIBS="$LIBS $( $SDL_CONF --libs | sed 's/ -mwindows//' )"
 
 AC_CHECK_LIB([$SDL_VERS], [SDL_Init], [:],
   AC_MSG_ERROR([Unable to find SDL_Init function in $SDL_VERS]))
