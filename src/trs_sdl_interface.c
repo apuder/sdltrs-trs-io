@@ -973,7 +973,7 @@ int trs_load_config_file(void)
 
 void trs_parse_command_line(int argc, char **argv, int *debug)
 {
-  int i, j;
+  int i, j, len;
 
   /* Check for config or state files on the command line */
   trs_config_file[0] = 0;
@@ -990,14 +990,14 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
         }
       }
     }
-    else if (strlen(argv[i]) < 4) {
+    else if ((len = strlen(argv[i]) - 4) > 0) {
+      if (strcasecmp(&argv[i][len], ".t8c") == 0)
+        snprintf(trs_config_file, FILENAME_MAX, "%s", argv[i]);
+      else if (strcasecmp(&argv[i][len], ".t8s") == 0)
+        snprintf(init_state_file, FILENAME_MAX, "%s", argv[i]);
+      else if (strcasecmp(&argv[i][len], ".cmd") == 0)
+        snprintf(trs_cmd_file, FILENAME_MAX, "%s", argv[i]);
     }
-    else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".t8c") == 0)
-      snprintf(trs_config_file, FILENAME_MAX, "%s", argv[i]);
-    else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".t8s") == 0)
-      snprintf(init_state_file, FILENAME_MAX, "%s", argv[i]);
-    else if (strcasecmp(&argv[i][strlen(argv[i]) - 4], ".cmd") == 0)
-      snprintf(trs_cmd_file, FILENAME_MAX, "%s", argv[i]);
   }
 
   if (trs_load_config_file() == -1)
