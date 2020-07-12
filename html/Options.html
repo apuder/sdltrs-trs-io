@@ -111,7 +111,7 @@ will be executed upon startup of the emulator.</p>
     <td>Set the CPU clock speed in MHz for the specified TRS-80 Model. Use with
         <b>CAUTION</b>: overclocking the Z80 CPU will result in timing-errors!<br>
         Defaults are: <code>1.77408</code> MHz for Model I, <code>2.02752</code>
-        MHz for Model III, <code>4.05504</code> MHz for Model 4 and 4P.</td>
+        MHz for Model III and <code>4.05504</code> MHz for Model 4/4P.</td>
   </tr>
   <tr>
     <td><code>-debug</code></td>
@@ -257,7 +257,7 @@ will be executed upon startup of the emulator.</p>
               -m3<br>
               -m4<br>
               -m4p</code></td>
-    <td>Select the TRS-80 model to emulate: 1, 3, 4 or 4P.</td>
+    <td>Select the TRS-80 model to emulate: I, III, 4 or 4P.</td>
   </tr>
   <tr>
     <td><code>-model m</code></td>
@@ -324,10 +324,10 @@ will be executed upon startup of the emulator.</p>
   <tr>
     <td><code>-noresize3<br>
               -noresize4</code></td>
-    <td>In Model 3 (<code>-noresize3</code>) or 4/4P (<code>-noresize4)</code>,
-        always keep the emulator window large enough for 80x24 text or 640x240
-        graphics, putting a blank margin around the outside when the emulated
-        display mode is 64x16 text or 512x192 graphics.
+    <td>In Model III (<code>-noresize3</code>) or 4/4P (<code>-noresize4)
+        </code>, always keep the emulator window large enough for 80x24 text
+        or 640x240 graphics, putting a blank margin around the outside when
+        the emulated display mode is 64x16 text or 512x192 graphics.
         Default is <code>-resize3 -noresize4</code>.</td>
   </tr>
   <tr>
@@ -397,7 +397,7 @@ will be executed upon startup of the emulator.</p>
   <tr>
     <td><code>-resize3<br>
               -resize4</code></td>
-    <td>In Model 3 (<code>-resize3</code>) or 4/4P (<code>-resize4</code>)
+    <td>In Model III (<code>-resize3</code>) or 4/4P (<code>-resize4</code>)
         mode, resize the window whenever the emulated display mode changes
         between 64x16 text (or 512x192 graphics) and 80x24 text (or 640x240
         graphics). Default is <code>-resize3 -noresize4</code>.</td>

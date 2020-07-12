@@ -52,16 +52,13 @@ Select Model III/4/4P charset:
 \fIk(atakana)\fP | \fIi(nternational)\fP | \fIb(old)\fP.
 .TP
 .B \-clock1 \fIMHz\fP
-Set clock speed in MHz for TRS-80 Model I.
-Default: \fI1.77408\fP
-.TP
+.TQ
 .B \-clock3 \fIMHz\fP
-Set clock speed in MHz for TRS-80 Model III.
-Default: \fI2.02752\fP
-.TP
+.TQ
 .B \-clock4 \fIMHz\fP
-Set clock speed in MHz for TRS-80 Model 4/4P.
-Default: \fI4.05504\fP
+Set clock speed rate in MHz for the specified TRS-80 Model.
+Defaults are: \fI1.77408\fP MHz for Model I, \fI2.02752\fP MHz for
+Model III and \fI4.05504\fP MHz for Model 4/4P.
 .TP
 .B \-debug
 Enter zbx debugger.
@@ -162,7 +159,7 @@ graphics card.
 .B \-m4
 .TQ
 .B \-m4p
-Select TRS-80 model to emulate: 1, 3, 4 or 4P.
+Select TRS-80 model to emulate: I, III, 4 or 4P.
 .TP
 .B \-model \fIm\fP
 Specifies TRS-80 model to emulate: \fI1\fP (or \fII\fP) | \fI3\fP
@@ -214,7 +211,7 @@ Hide mouse pointer in emulator window.
 .B \-noresize3
 .TQ
 .B \-noresize4
-Model 3 or 4/4P: always keep SDL window large enough for 80x24
+Model III or 4/4P: always keep SDL window large enough for 80x24
 text (640x240) putting a blank margin around outside.
 .RS
 Default: \fB\-resize3 \-noresize4\fP
@@ -260,7 +257,7 @@ Default: current directory.
 .B \-resize3
 .TQ
 .B \-resize4
-Model 3 or 4/4P: resize window whenever emulated display mode
+Model III or 4/4P: resize window whenever emulated display mode
 changes between 64x16 text (512x192) and 80x24 text (640x240).
 .RS
 Default: \fB\-resize3 \-noresize4\fP
@@ -488,7 +485,7 @@ Copy from TRS-80 Emulator to clipboard
 Floppy Disk Management
 .TQ
 .B Alt-E
-Emulator Setting Menu
+Emulator Settings
 .TQ
 .B Alt-G
 Stringy Floppy Wafer Management
@@ -497,7 +494,7 @@ Stringy Floppy Wafer Management
 Hard Disk Management
 .TQ
 .B Alt-I
-Display (Interface) Setting Menu
+Display (Interface) Settings
 .TQ
 .B Alt-J
 Joystick GUI
@@ -524,7 +521,7 @@ Pause/Unpause Emulator
 Exit SDLTRS
 .TQ
 .B Alt-R
-Read Configuration File
+Read Configuration
 .TQ
 .B Alt-S
 Save Emulator State
@@ -539,7 +536,7 @@ Toggle Sound Output (mUte/Unmute)
 Paste from clipboard to TRS-80 Emulator
 .TQ
 .B Alt-W
-Write Configuration File
+Write Configuration
 .TQ
 .B Alt-X
 Execute selected CMD file
