@@ -227,7 +227,7 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
 {
   Uint8 *map;
   int i;
-  int  bpp;
+  int bpp;
   unsigned alpha;
   Uint32 mapValue;
 
@@ -246,7 +246,7 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
         src->colors[i].g,
         src->colors[i].b,
         alpha);
-    switch (dst->BytesPerPixel) {
+    switch (bpp) {
       case 1:
         map[i * bpp] = (Uint8)mapValue;
         break;
@@ -306,10 +306,10 @@ void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
     case 2:
       if (xor)
         XorBlitImageTo2Byte(dstrect->w, dstrect->h, srcpix, srcskip,
-            (Uint16 *) dstpix, dstskip / 2, (Uint16 *)blitMap);
+            (Uint16 *)dstpix, dstskip / 2, (Uint16 *)blitMap);
       else
         CopyBlitImageTo2Byte(dstrect->w, dstrect->h, srcpix, srcskip,
-            (Uint16 *) dstpix, dstskip / 2, (Uint16 *)blitMap);
+            (Uint16 *)dstpix, dstskip / 2, (Uint16 *)blitMap);
       break;
     case 3:
       if (xor)
@@ -322,10 +322,10 @@ void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
     case 4:
       if (xor)
         XorBlitImageTo4Byte(dstrect->w, dstrect->h, srcpix, srcskip,
-            (Uint32 *) dstpix, dstskip / 4, (Uint32 *)blitMap);
+            (Uint32 *)dstpix, dstskip / 4, (Uint32 *)blitMap);
       else
         CopyBlitImageTo4Byte(dstrect->w, dstrect->h, srcpix, srcskip,
-            (Uint32 *) dstpix, dstskip / 4, (Uint32 *)blitMap);
+            (Uint32 *)dstpix, dstskip / 4, (Uint32 *)blitMap);
       break;
     default:
       break;
