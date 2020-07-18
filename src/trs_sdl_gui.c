@@ -2030,10 +2030,7 @@ void trs_gui_joystick_management(void)
           joy_index = gui_joystick_num + 1;
         joy_index = trs_gui_display_popup("Joystick", (const char**)joystick_choices,
             num_joysticks + 1, joy_index);
-        if (joy_index == 0)
-          gui_joystick_num = -1;
-        else
-          gui_joystick_num = joy_index - 1;
+        gui_joystick_num = joy_index - 1;
         break;
       case 2:
         jaxis_mapped = trs_gui_display_popup("Stick", yes_no_choices, 2, jaxis_mapped);
