@@ -227,15 +227,13 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
 {
   Uint8 *map;
   int i;
-  int bpp;
   unsigned alpha;
   Uint32 mapValue;
 
   if (blitMap != NULL)
     free(blitMap);
 
-  bpp = dst->BytesPerPixel;
-  map = (Uint8 *)malloc(src->ncolors * bpp);
+  map = (Uint8 *)malloc(src->ncolors * dst->BytesPerPixel);
   if (map == NULL) {
     return;
   }
@@ -246,20 +244,20 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
         src->colors[i].g,
         src->colors[i].b,
         alpha);
-    switch (bpp) {
+    switch (dst->BytesPerPixel) {
       case 1:
-        map[i * bpp] = (Uint8)mapValue;
+        map[i] = (Uint8)mapValue;
         break;
       case 2:
-        *((Uint16 *)(&map[i * bpp])) = (Uint16)mapValue;
+        *((Uint16 *)(&map[i * 2])) = (Uint16)mapValue;
         break;
       case 3:
-        map[i * bpp] = mapValue >> 16;
-        map[i * bpp + 1] = mapValue >> 8;
-        map[i * bpp + 2] = mapValue & 0xFF;
+        map[i * 3] = mapValue >> 16;
+        map[i * 3 + 1] = mapValue >> 8;
+        map[i * 3 + 2] = mapValue & 0xFF;
         break;
       case 4:
-        *((Uint32 *)(&map[i * bpp])) = (Uint32)mapValue;
+        *((Uint32 *)(&map[i * 4])) = (Uint32)mapValue;
         break;
     }
   }
