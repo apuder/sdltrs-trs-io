@@ -2236,7 +2236,6 @@ void trs_gui_model(void)
   char input[8];
   int selection = 0;
   int model_selection = trs_model == 1 ? 0 : trs_model - 2;
-  int grafyx;
   float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
   float value;
 
@@ -2293,8 +2292,8 @@ void trs_gui_model(void)
         speedup = trs_gui_display_popup("Speedup", speed_choices, 3, speedup);
         break;
       case 6:
-        grafyx = trs_gui_display_popup("Grafyx", yes_no_choices, 2, grafyx_get_microlabs());
-        grafyx_set_microlabs(grafyx);
+        grafyx_set_microlabs(trs_gui_display_popup("Grafyx", yes_no_choices, 2,
+            grafyx_get_microlabs()));
         break;
       case 7:
         lowe_le18 = trs_gui_display_popup("Lowe LE18", yes_no_choices, 2, lowe_le18);
