@@ -119,7 +119,6 @@ static int const key_syms_shifted[N_KEYS] = {
 };
 
 int jbutton_map[N_JOYBUTTONS]    = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-int jbutton_active[N_JOYBUTTONS] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int jaxis_mapped = 0;
 
 extern int  scanlines;
@@ -165,7 +164,7 @@ static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static int  trs_gui_config_management(void);
 static int  trs_gui_joystick_get_button(void);
-static void trs_gui_joystick_display_map();
+static void trs_gui_joystick_display_map(int button);
 static const char *trs_gui_get_key_name(int key);
 static int  trs_gui_virtual_keyboard(void);
 static int  trs_gui_display_question(const char *text);
@@ -1919,7 +1918,7 @@ int trs_gui_joystick_get_button(void)
   }
 }
 
-void trs_gui_joystick_display_map(void)
+void trs_gui_joystick_display_map(int button)
 {
   int row, col, i;
   char text[10];
@@ -1943,7 +1942,7 @@ void trs_gui_joystick_display_map(void)
           snprintf(text, 9, "%s", trs_gui_get_key_name(jbutton_map[i]));
           break;
       }
-      trs_gui_write_text(text, 5 + col * 12, 11 + row, jbutton_active[i]);
+      trs_gui_write_text(text, 5 + col * 12, 11 + row, button == i);
     }
   }
 }
@@ -1999,7 +1998,7 @@ void trs_gui_joystick_management(void)
       snprintf(&display_menu[1].title[50], 13, "Joystick %1d", gui_joystick_num);
     snprintf(&display_menu[2].title[50], 11, "%s", yes_no_choices[jaxis_mapped]);
     trs_gui_clear_screen();
-    trs_gui_joystick_display_map();
+    trs_gui_joystick_display_map(-1);
 
     selection = trs_gui_display_menu("SDLTRS Joystick Settings", display_menu, selection);
     switch (selection) {
@@ -2060,11 +2059,9 @@ void trs_gui_joystick_management(void)
         break;
       case 7:
         if ((button = trs_gui_joystick_get_button()) != -1) {
-          jbutton_active[button] = 1;
-          trs_gui_joystick_display_map();
+          trs_gui_joystick_display_map(button);
           trs_gui_refresh();
           SDL_Delay(1000);
-          jbutton_active[button] = 0;
         }
         break;
       case -1:
