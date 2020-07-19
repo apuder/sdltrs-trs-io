@@ -186,12 +186,7 @@ void trs_gui_write_text(const char *text, int x, int y, int invert)
 
 void trs_gui_center_text(const char *text, int y, int invert)
 {
-  int const length = strlen(text);
-  int const position = (64 - length) / 2 + y * 64;
-  int i;
-
-  for (i = 0; i < length; i++)
-    trs_gui_write_char(position + i, text[i], invert);
+  trs_gui_write_text(text, (64 - strlen(text)) / 2, y, invert);
 }
 
 void trs_gui_frame(int x, int y, int w, int h)
