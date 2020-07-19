@@ -640,34 +640,30 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
       } else if (i + 13 > filenamecount) {
         current_first = filenamecount - 13;
         selection = i - current_first;
-      } else {
+      } else
         current_first = i - selection;
-      }
       redraw = 1;
     } else {
       switch (key) {
         case SDLK_DOWN:
         case SDLK_RIGHT:
-          if (selection < drawcount - 1) {
+          if (selection < drawcount - 1)
             selection++;
-          } else {
+          else
             if (current_first < filenamecount - drawcount) {
               current_first++;
               redraw = 1;
             }
-          }
           break;
         case SDLK_UP:
         case SDLK_LEFT:
-          if (selection > 0) {
+          if (selection > 0)
             selection--;
-          }
-          else {
+          else
             if (current_first > 0) {
               current_first--;
               redraw = 1;
             }
-          }
           break;
         case SDLK_PAGEUP:
           current_first -= drawcount;
