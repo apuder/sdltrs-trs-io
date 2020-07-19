@@ -153,7 +153,6 @@ static int  trs_gui_display_popup_matrix(const char *title, const char **entry,
                                          int rows, int cols, int selection);
 static int  trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
 static void trs_gui_disk_creation(void);
-static void trs_gui_disk_sizes(void);
 #ifdef __linux
 static void trs_gui_disk_steps(void);
 #endif
@@ -1212,37 +1211,6 @@ void trs_gui_disk_creation(void)
   }
 }
 
-void trs_gui_disk_sizes(void)
-{
-  MENU_ENTRY disk_sizes_menu[] =
-  {{"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", MENU_NORMAL_TYPE},
-   {"", 0}};
-  const char *size_choices[2] = {"5 Inch", "8 Inch"};
-  int selection = 0;
-  int i, size;
-
-  while (1) {
-    for (i = 0; i < 8; i++) {
-      snprintf(disk_sizes_menu[i].title, 63,
-          "Disk Drive Number %d Size                              %s",
-          i, size_choices[trs_disk_getsize(i) == 5 ? 0 : 1]);
-    }
-    trs_gui_clear_screen();
-    if ((selection = trs_gui_display_menu("SDLTRS Floppy Disk Size",
-        disk_sizes_menu, selection)) == -1)
-      return;
-    size = trs_gui_display_popup("Size", size_choices, 2, trs_disk_getsize(selection) == 8);
-    trs_disk_setsize(selection, size == 0 ? 5 : 8);
-  }
-}
-
 #ifdef __linux
 void trs_gui_disk_steps(void)
 {
@@ -1279,34 +1247,51 @@ void trs_gui_disk_steps(void)
 void trs_gui_disk_options(void)
 {
   MENU_ENTRY disk_menu[] =
-  {{"Doubler Type                                                ", MENU_NORMAL_TYPE},
+  {{"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_NORMAL_TYPE},
+   {"", MENU_TITLE_TYPE},
+   {"Doubler Type                                                ", MENU_NORMAL_TYPE},
    {"True DAM Emulation                                          ", MENU_NORMAL_TYPE},
-   {"Set Drive Sizes", MENU_NORMAL_TYPE},
 #ifdef __linux
+   {"", MENU_TITLE_TYPE},
    {"Set Drive Steps", MENU_NORMAL_TYPE},
 #endif
    {"", 0}};
-  const char *doubler_choices[4] = {"      None", "    Percom", "     Tandy", "      Both"};
+  const char *doubler_choices[4] = {"     None", "   Percom", "    Tandy", "     Both"};
+  const char *size_choices[2] = {"5 Inch", "8 Inch"};
   int selection = 0;
+  int i, size;
 
   while (1) {
-    snprintf(&disk_menu[0].title[50], 11, "%s", doubler_choices[trs_disk_doubler]);
-    snprintf(&disk_menu[1].title[50], 11, "%s", yes_no_choices[trs_disk_truedam]);
+    for (i = 0; i < 8; i++) {
+      snprintf(disk_menu[i].title, 63,
+          "Disk Drive Number %d Size                              %s",
+          i, size_choices[trs_disk_getsize(i) == 5 ? 0 : 1]);
+    }
+    snprintf(&disk_menu[9].title[51], 10, "%s", doubler_choices[trs_disk_doubler]);
+    snprintf(&disk_menu[10].title[50], 11, "%s", yes_no_choices[trs_disk_truedam]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Floppy Disk Options", disk_menu, selection);
-    switch (selection) {
-      case 0:
+    if (selection >= 0 && selection < 8) {
+      size = trs_gui_display_popup("Size", size_choices, 2, trs_disk_getsize(selection) == 8);
+      trs_disk_setsize(selection, size == 0 ? 5 : 8);
+    }
+    else switch (selection) {
+      case 9:
         trs_disk_doubler = trs_gui_display_popup("Doubler", doubler_choices, 4, trs_disk_doubler);
         break;
-      case 1:
+      case 10:
         trs_disk_truedam = trs_gui_display_popup("True DAM", yes_no_choices, 2, trs_disk_truedam);
         break;
-      case 2:
-        trs_gui_disk_sizes();
-        break;
 #ifdef __linux
-      case 3:
+      case 12:
         trs_gui_disk_steps();
         break;
 #endif
