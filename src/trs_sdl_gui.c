@@ -2237,7 +2237,6 @@ void trs_gui_model(void)
   int selection = 0;
   int model_selection = trs_model == 1 ? 0 : trs_model - 2;
   float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
-  float value;
 
   while (1) {
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
@@ -2262,7 +2261,8 @@ void trs_gui_model(void)
         snprintf(input, 6, "%.2f", clock_mhz[model_selection]);
         if (trs_gui_input_string("Enter CPU Clock Speed in MHz",
             input, input, 6, 0) == 0) {
-          value = atof(input);
+          float value = atof(input);
+
           if (value >= 0.1 && value <= 99.0) {
             clock_mhz[model_selection] = value;
             switch (model_selection) {
