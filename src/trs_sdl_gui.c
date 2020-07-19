@@ -1992,9 +1992,9 @@ void trs_gui_joystick_management(void)
   while (1) {
     snprintf(&display_menu[0].title[50], 11, "%s", yes_no_choices[gui_keypad_joystick]);
     if (gui_joystick_num == -1)
-      snprintf(&display_menu[1].title[48], 13, "        None");
+      snprintf(&display_menu[1].title[50], 11, "      None");
     else
-      snprintf(&display_menu[1].title[50], 13, "Joystick %1d", gui_joystick_num);
+      snprintf(&display_menu[1].title[50], 11, "Joystick %1d", gui_joystick_num);
     snprintf(&display_menu[2].title[50], 11, "%s", yes_no_choices[jaxis_mapped]);
     trs_gui_clear_screen();
     trs_gui_joystick_display_map(-1);
