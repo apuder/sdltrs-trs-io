@@ -77,7 +77,10 @@ typedef struct menu_entry_type {
   int const type;
 } MENU_ENTRY;
 
-static const char *yes_no_choices[2] =  {"        No", "       Yes"};
+static const char *yes_no_choices[2] = {
+  "        No",
+  "       Yes"
+};
 
 static const char *function_choices[8] = {
   "      GUI       ", "Virtual Keyboard",
@@ -118,7 +121,7 @@ static int const key_syms_shifted[N_KEYS] = {
   -1,           0x5a,          0x58,      0x43,        0x56, 0x42,           0x4e,       0x4d,           SDLK_LESS,       SDLK_GREATER,    SDLK_QUESTION, 0xd6,        0xf6
 };
 
-int jbutton_map[N_JOYBUTTONS]    = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+int jbutton_map[N_JOYBUTTONS] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int jaxis_mapped = 0;
 
 extern int  scanlines;
@@ -923,9 +926,9 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
 int trs_gui_display_popup(const char *title, const char **entry,
                           int entry_count, int selection)
 {
+  int const saved_selection = selection;
   int i, key;
   int x, y;
-  int const saved_selection = selection;
   unsigned int max_len = 0;
 
   for (i = 0; i < entry_count; i++) {
@@ -1146,14 +1149,14 @@ void trs_gui_disk_creation(void)
   const char *drive_choices[9] =      {"  None", "Disk 0", "Disk 1", "Disk 2",
                                        "Disk 3", "Disk 4", "Disk 5", "Disk 6",
                                        "Disk 7"};
-  int selection = 6;
-  int ret;
   static int image_type = 1;
   static int num_sides = 1;
   static int density = 1;
   static int eight = 0;
   static int ignore_density = 0;
   static int drive_insert = 0;
+  int selection = 6;
+  int ret;
 
   while (1) {
     snprintf(&disk_creation_menu[0].title[54], 7, "%s", image_type_choices[image_type]);
@@ -1403,12 +1406,12 @@ void trs_gui_hard_management(void)
    {"Insert Created Disk Into This Drive                         ", MENU_NORMAL_TYPE},
    {"Create Hard Disk Image with Above Parameters", MENU_NORMAL_TYPE},
    {"", 0}};
+  const char *drive_choices[5] = {"  None", "Hard 0", "Hard 1", "Hard 2", "Hard 3"};
   static int cylinder_count = 202;
   static int sector_count = 256;
   static int granularity = 8;
   static int dir_sector = 1;
   static int drive_insert = 0;
-  const char *drive_choices[5] = {"  None", "Hard 0", "Hard 1", "Hard 2", "Hard 3"};
   char input[4];
   int selection = 0;
   int i, value;
@@ -1545,9 +1548,9 @@ void trs_gui_stringy_management(void)
    {"", 0}};
   const char *wafer_choices[9] = {"   None", "Wafer 0", "Wafer 1", "Wafer 2", "Wafer 3",
                                   "Wafer 4", "Wafer 5", "Wafer 6", "Wafer 7"};
+  static int wafer_insert = 0;
   int selection = 0;
   int i;
-  static int wafer_insert = 0;
 
   while (1) {
     for (i = 0; i < 8; i++) {
@@ -1608,11 +1611,11 @@ void trs_gui_cassette_management(void)
   const char *image_type_choices[3] = {"   CAS", "   CPT", "   WAV"};
   static int image_type = 0;
   static int drive_insert = 1;
+  FILE *cassette_file;
   char input[12];
   int selection = 0;
   int ret;
   int value;
-  FILE *cassette_file;
 
   while (1) {
     const char *cass_name = trs_cassette_getfilename();
@@ -1657,7 +1660,6 @@ void trs_gui_cassette_management(void)
         filename[0] = 0;
         if (trs_gui_input_string("Enter Filename for Cassette Image, TAB selects directory",
             trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
-          ret = 0;
           switch (image_type) {
             case 0:
               trs_add_extension(filename, ".cas");
@@ -1669,6 +1671,7 @@ void trs_gui_cassette_management(void)
               trs_add_extension(filename, ".wav");
               break;
           }
+          ret = 0;
           if (trs_gui_file_overwrite()) {
             if ((cassette_file = fopen(filename, "wb")) == NULL)
               ret = -1;
@@ -2226,10 +2229,10 @@ void trs_gui_model(void)
                                    "  TRS-80 Model 4",
                                    " TRS-80 Model 4P"};
   const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
+  float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
   char input[8];
   int selection = 0;
   int model_selection = trs_model == 1 ? 0 : trs_model - 2;
-  float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
 
   while (1) {
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
@@ -2653,8 +2656,8 @@ void trs_gui(void)
 int trs_gui_display_popup_matrix(const char* title, const char **entry,
                                  int rows, int cols, int selection)
 {
+  int const entry_count = rows * cols;
   int row, col;
-  int entry_count = rows * cols;
   int i, j, key;
   int width, x, y;
   unsigned int max_len = 0;
