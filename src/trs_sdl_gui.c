@@ -507,6 +507,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
   char pathname[FILENAME_MAX];
   char *name;
   char *name_pos;
+  int  dirname_len;
   struct dirent *dir_entry;
   struct stat st;
 
@@ -522,10 +523,10 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
         continue;
 
       snprintf(name_pos, FILENAME_MAX, "%s", dir_entry->d_name);
+      dirname_len = strlen(dir_entry->d_name);
+
       stat(pathname, &st);
       if ((st.st_mode & S_IFMT) == S_IFDIR) {
-        int const dirname_len = strlen(dir_entry->d_name);
-
         if ( (name = (char *)malloc(dirname_len + 3)) )
           snprintf(name, dirname_len + 3, "<%s>", dir_entry->d_name);
       }
@@ -533,9 +534,9 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
         continue;
       } else {
         if (mask != NULL) {
-          if (strlen(dir_entry->d_name) < 4)
+          if (dirname_len < 4)
             continue;
-          if (strcasecmp(&dir_entry->d_name[strlen(dir_entry->d_name) - 4], mask) != 0)
+          if (strcasecmp(&dir_entry->d_name[dirname_len - 4], mask) != 0)
             continue;
         }
         name = (char *) strdup(dir_entry->d_name);
