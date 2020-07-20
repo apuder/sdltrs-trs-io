@@ -270,11 +270,9 @@ int trs_gui_get_key(void)
         break;
 #ifdef SDL2
       case SDL_WINDOWEVENT:
-#else
-      case SDL_ACTIVEEVENT:
-#endif
         trs_gui_refresh();
         break;
+#endif
       case SDL_MOUSEBUTTONDOWN:
         if (event.button.button == SDL_BUTTON_LEFT)
           return SDLK_RETURN;
