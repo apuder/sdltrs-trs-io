@@ -128,7 +128,6 @@ extern int  scanlines;
 #if defined(SDL2) || !defined(NOX)
 extern int  turbo_paste;
 #endif
-extern void trs_gui_write_char(unsigned int position, unsigned char char_index, int invert);
 extern int  trs_sdl_savebmp(const char *name);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
@@ -178,11 +177,10 @@ int  trs_gui_exit_sdltrs(void);
 void trs_gui_write_text(const char *text, int x, int y, int invert)
 {
   int const length = strlen(text);
-  int const position = x + y * 64;
   int i;
 
   for (i = 0; i < (length <= 62 - x ? length : 62 - x); i++)
-    trs_gui_write_char(position + i, text[i], invert);
+    trs_gui_write_char(x + i, y, text[i], invert);
 }
 
 void trs_gui_center_text(const char *text, int y, int invert)
@@ -197,35 +195,32 @@ void trs_gui_frame(int x, int y, int w, int h)
   w--;
   h--;
 
-  for (i = (x + 1) + 64 * y; i < (x + w) + 64 * y; i++) {
-    trs_gui_write_char(i, TOP_HORIZ_LINE, 0);
-    trs_gui_write_char(i + h * 64, BOTTOM_HORIZ_LINE, 0);
+  for (i = x + 1; i < x + w; i++) {
+    trs_gui_write_char(i, y, TOP_HORIZ_LINE, 0);
+    trs_gui_write_char(i, y + h, BOTTOM_HORIZ_LINE, 0);
   }
-  for (i = x + 64 * (y + 1); i < x + 64 * (y + h); i += 64) {
-    trs_gui_write_char(i, LEFT_VERT_LINE, 0);
-    trs_gui_write_char(i + w, RIGHT_VERT_LINE, 0);
+  for (i = y + 1; i < y + h; i++) {
+    trs_gui_write_char(x, i, LEFT_VERT_LINE, 0);
+    trs_gui_write_char(x + w, i, RIGHT_VERT_LINE, 0);
   }
-  trs_gui_write_char(x + 64 * y, TOP_LEFT_CORNER, 0);
-  trs_gui_write_char((x + w) + 64 * y, TOP_RIGHT_CORNER, 0);
-  trs_gui_write_char(x + 64 * (y + h), BOTTOM_LEFT_CORNER, 0);
-  trs_gui_write_char((x + w) + 64 * (y + h), BOTTOM_RIGHT_CORNER, 0);
+  trs_gui_write_char(x, y, TOP_LEFT_CORNER, 0);
+  trs_gui_write_char(x + w, y, TOP_RIGHT_CORNER, 0);
+  trs_gui_write_char(x, y + h, BOTTOM_LEFT_CORNER, 0);
+  trs_gui_write_char(x + w, y + h, BOTTOM_RIGHT_CORNER, 0);
 }
 
 void trs_gui_clear_rect(int x, int y, int w, int h)
 {
   int i, j;
 
-  for (i = y * 64 + x; i < (y + h) * 64 + x; i += 64)
-    for (j = i; j < i + w; j++)
-      trs_gui_write_char(j, ' ', 0);
+  for (i = y; i < y + h; i++)
+    for (j = x; j < x + w; j++)
+      trs_gui_write_char(j, i, ' ', 0);
 }
 
 void trs_gui_clear_screen(void)
 {
-  unsigned int i;
-
-  for (i = 0; i < 1024; i++)
-    trs_gui_write_char(i, ' ', 0);
+  trs_gui_clear_rect(0, 0, 63, 15);
 }
 
 void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
@@ -817,7 +812,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
     for (i = 0; i < 60; i++) {
       unsigned int cur_pos = first_disp + i;
 
-      trs_gui_write_char(450 + i,
+      trs_gui_write_char(i + 2, 7,
           (cur_pos >= length) ? ' ' : output[cur_pos],
           (cur_pos == pos));
     }

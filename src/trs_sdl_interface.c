@@ -2995,13 +2995,9 @@ void trs_gui_refresh(void)
 #endif
 }
 
-void trs_gui_write_char(unsigned int position, unsigned char char_index, int invert)
+void trs_gui_write_char(int col, int row, unsigned char char_index, int invert)
 {
-  int row, col;
   SDL_Rect srcRect, dstRect;
-
-  row = position / 64;
-  col = position - (row * 64);
 
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
