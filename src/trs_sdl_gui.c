@@ -194,18 +194,21 @@ void trs_gui_frame(int x, int y, int w, int h)
 {
   int i;
 
-  for (i = (x + 1) + 64 * y; i < (x + w - 1) + 64 * y; i++)
+  w--;
+  h--;
+
+  for (i = (x + 1) + 64 * y; i < (x + w) + 64 * y; i++) {
     trs_gui_write_char(i, TOP_HORIZ_LINE, 0);
-  for (i = (x + 1) + 64 * (y + h - 1); i < (x + w - 1) + 64 * (y + h - 1); i++)
-    trs_gui_write_char(i, BOTTOM_HORIZ_LINE, 0);
-  for (i = x + 64 * (y + 1); i < x + 64 * (y + h - 1); i += 64)
+    trs_gui_write_char(i + h * 64, BOTTOM_HORIZ_LINE, 0);
+  }
+  for (i = x + 64 * (y + 1); i < x + 64 * (y + h); i += 64) {
     trs_gui_write_char(i, LEFT_VERT_LINE, 0);
-  for (i = (x + w - 1) + 64 * (y + 1); i < (x + w - 1) + 64 * (y + h - 1); i += 64)
-    trs_gui_write_char(i, RIGHT_VERT_LINE, 0);
+    trs_gui_write_char(i + w, RIGHT_VERT_LINE, 0);
+  }
   trs_gui_write_char(x + 64 * y, TOP_LEFT_CORNER, 0);
-  trs_gui_write_char((x + w - 1) + 64 * y, TOP_RIGHT_CORNER, 0);
-  trs_gui_write_char(x + 64 * (y + h - 1), BOTTOM_LEFT_CORNER, 0);
-  trs_gui_write_char((x + w - 1) + 64 * (y + h - 1), BOTTOM_RIGHT_CORNER, 0);
+  trs_gui_write_char((x + w) + 64 * y, TOP_RIGHT_CORNER, 0);
+  trs_gui_write_char(x + 64 * (y + h), BOTTOM_LEFT_CORNER, 0);
+  trs_gui_write_char((x + w) + 64 * (y + h), BOTTOM_RIGHT_CORNER, 0);
 }
 
 void trs_gui_clear_rect(int x, int y, int w, int h)
