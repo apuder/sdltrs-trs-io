@@ -791,7 +791,6 @@ done:
 int trs_gui_input_string(const char *title, const char* input, char* output,
                          unsigned int limit, int file)
 {
-  char directory_name[FILENAME_MAX];
   int key;
   int insert = 1;
   int invert;
@@ -878,6 +877,8 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       case SDLK_TAB:
       case SDLK_UP:
         if (file) {
+          char directory_name[FILENAME_MAX];
+
           if (trs_gui_file_browse(input, directory_name, NULL, 1, "") >= 0) {
             snprintf(output, limit + 1, "%s", directory_name);
             pos = length = strlen(output);
