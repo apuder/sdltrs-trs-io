@@ -794,7 +794,6 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
 {
   int key;
   int insert = 1;
-  int invert;
   unsigned int i, pos;
   unsigned int length;
   unsigned int first_disp;
@@ -813,11 +812,11 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
 
   while (1) {
     for (i = 0; i < 60; i++) {
-      invert = (first_disp + i == pos);
-      if (first_disp + i >= length)
-        trs_gui_write_char(450 + i, ' ', invert);
-      else
-        trs_gui_write_char(450 + i, output[first_disp + i], invert);
+      unsigned int cur_pos = first_disp + i;
+
+      trs_gui_write_char(450 + i,
+          (cur_pos >= length) ? ' ' : output[cur_pos],
+          (cur_pos == pos));
     }
     trs_gui_write_text((insert ? " INS " : " OVR "), 56, 8, 1);
     trs_gui_refresh();
