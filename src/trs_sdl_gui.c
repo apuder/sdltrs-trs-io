@@ -626,11 +626,12 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
     key = trs_gui_get_key();
     trs_gui_write_text(filenamelist[current_first + selection], 2, selection + 2, 0);
     if (key >= '0' && key <= 'z') {
+      key = tolower(key);
       i = j = current_first + selection;
       do {
         if (++i > filenamecount - 1)
           i = 0;
-      } while (i != j && (tolower((int)*filenamelist[i]) != tolower(key)));
+      } while (i != j && (tolower((int)*filenamelist[i]) != key));
       if (i < 13) {
         current_first = 0;
         selection = i;
@@ -951,8 +952,9 @@ int trs_gui_display_popup(const char *title, const char **entry,
         return 1;
     }
     if (key >= '0' && key <= 'z') {
+      key = toupper(key);
       for (i = 0; i < entry_count; i++) {
-        if (strchr(entry[i], toupper(key))) {
+        if (strchr(entry[i], key)) {
           selection = i;
           break;
         }
@@ -1014,11 +1016,12 @@ int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
         selection = key;
     } else
     if (key >= 'A' && key <= 'z') {
+      key = toupper(key);
       i = selection;
       do {
         if (++selection > num)
           selection = 0;
-      } while (selection != i && (int)*entry[selection].title != toupper(key));
+      } while (selection != i && (int)*entry[selection].title != key);
       while (entry[selection].type == MENU_TITLE_TYPE) {
         if (selection < num)
           selection++;
