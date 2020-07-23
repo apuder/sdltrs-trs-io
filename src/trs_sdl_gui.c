@@ -128,11 +128,11 @@ extern int  scanlines;
 #if defined(SDL2) || !defined(NOX)
 extern int  turbo_paste;
 #endif
+extern void trs_gui_clear_rect(int x, int y, int w, int h);
 extern int  trs_sdl_savebmp(const char *name);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
 static void trs_gui_frame(int x1, int y1, int x2, int y2);
-static void trs_gui_clear_rect(int x1, int y1, int x2, int y2);
 static void trs_gui_clear_screen(void);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
 static void trs_add_extension(char *name, const char *ext);
@@ -204,15 +204,6 @@ void trs_gui_frame(int x1, int y1, int x2, int y2)
   trs_gui_write_char(x2, y1, TOP_RIGHT_CORNER, 0);
   trs_gui_write_char(x1, y2, BOTTOM_LEFT_CORNER, 0);
   trs_gui_write_char(x2, y2, BOTTOM_RIGHT_CORNER, 0);
-}
-
-void trs_gui_clear_rect(int x1, int y1, int x2, int y2)
-{
-  int x, y;
-
-  for (y = y1; y < y2; y++)
-    for (x = x1; x < x2; x++)
-      trs_gui_write_char(x, y, ' ', 0);
 }
 
 void trs_gui_clear_screen(void)
@@ -381,7 +372,7 @@ int trs_gui_get_key(void)
 void trs_gui_display_message(const char* title, const char *message)
 {
   trs_gui_frame(1, 6, 62, 8);
-  trs_gui_clear_rect(2, 7, 62, 8);
+  trs_gui_clear_rect(2, 7, 60, 1);
   trs_gui_write_text(title, 3, 6, 0);
   trs_gui_write_text(message, 5, 7, 0);
   trs_gui_write_text(" Press ENTER to continue ", 36, 8, 1);
@@ -399,7 +390,7 @@ void trs_gui_display_message(const char* title, const char *message)
 void trs_gui_display_pause(void)
 {
   trs_gui_frame(1, 6, 62, 8);
-  trs_gui_clear_rect(2, 7, 62, 8);
+  trs_gui_clear_rect(2, 7, 60, 1);
   trs_gui_center_text("Emulation Paused", 7, 0);
   trs_gui_refresh();
 }
@@ -610,7 +601,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
 
   while (1) {
     if (redraw) {
-      trs_gui_clear_rect(2, 1, 62, 15);
+      trs_gui_clear_rect(2, 1, 60, 14);
       trs_gui_center_text(limited_dir, 1, 0);
       for (i = 0; i < drawcount; i++)
         trs_gui_write_text(filenamelist[current_first + i], 2, i + 2, 0);
@@ -2657,7 +2648,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   y = (16 - rows) / 2;
 
   trs_gui_frame(x - 1, y - 1, x + width, y + rows);
-  trs_gui_clear_rect(x, y, x + width, y + rows);
+  trs_gui_clear_rect(x, y, width, rows);
   trs_gui_write_text(title, x + 1, y - 1, 0);
   for (i = 0; i < rows; i++)
     for (j = 0; j < cols; j++)

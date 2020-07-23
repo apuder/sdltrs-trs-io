@@ -2986,6 +2986,24 @@ void trs_screen_write_char(int position, unsigned char char_index)
     hrg_update_char(position);
 }
 
+void trs_gui_clear_rect(int x, int y, int w, int h)
+{
+  SDL_Rect rect;
+
+  /* Add offsets if we are in 80x24 mode */
+  if (row_chars != 64) {
+    x += 4;
+    y += 8;
+  }
+
+  rect.x = x * cur_char_width + left_margin;
+  rect.y = y * cur_char_height + top_margin;
+  rect.w = w * cur_char_width;
+  rect.h = h * cur_char_height;
+
+  SDL_FillRect(screen, &rect, gui_background);
+}
+
 void trs_gui_refresh(void)
 {
 #ifdef SDL2
