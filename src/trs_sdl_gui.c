@@ -48,15 +48,6 @@
 #include "trs_stringy.h"
 #include "trs_uart.h"
 
-#define LEFT_VERT_LINE      149
-#define RIGHT_VERT_LINE     170
-#define TOP_HORIZ_LINE      131
-#define BOTTOM_HORIZ_LINE   176
-#define TOP_LEFT_CORNER     151
-#define TOP_RIGHT_CORNER    171
-#define BOTTOM_LEFT_CORNER  181
-#define BOTTOM_RIGHT_CORNER 186
-
 #define MENU_NORMAL_TYPE        1
 #define MENU_TITLE_TYPE         2
 #define MENU_FLOPPY_BROWSE_TYPE 3
@@ -193,17 +184,17 @@ void trs_gui_frame(int x1, int y1, int x2, int y2)
   int i;
 
   for (i = x1 + 1; i < x2; i++) {
-    trs_gui_write_char(i, y1, TOP_HORIZ_LINE, 0);
-    trs_gui_write_char(i, y2, BOTTOM_HORIZ_LINE, 0);
+    trs_gui_write_char(i, y1, 131, 0);
+    trs_gui_write_char(i, y2, 176, 0);
   }
   for (i = y1 + 1; i < y2; i++) {
-    trs_gui_write_char(x1, i, LEFT_VERT_LINE, 0);
-    trs_gui_write_char(x2, i, RIGHT_VERT_LINE, 0);
+    trs_gui_write_char(x1, i, 149, 0);
+    trs_gui_write_char(x2, i, 170, 0);
   }
-  trs_gui_write_char(x1, y1, TOP_LEFT_CORNER, 0);
-  trs_gui_write_char(x2, y1, TOP_RIGHT_CORNER, 0);
-  trs_gui_write_char(x1, y2, BOTTOM_LEFT_CORNER, 0);
-  trs_gui_write_char(x2, y2, BOTTOM_RIGHT_CORNER, 0);
+  trs_gui_write_char(x1, y1, 151, 0);
+  trs_gui_write_char(x2, y1, 171, 0);
+  trs_gui_write_char(x1, y2, 181, 0);
+  trs_gui_write_char(x2, y2, 186, 0);
 }
 
 void trs_gui_clear_screen(void)
