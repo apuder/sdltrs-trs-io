@@ -2992,8 +2992,8 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
 
   /* Add offsets if we are in 80x24 mode */
   if (row_chars != 64) {
-    x += 4;
-    y += 8;
+    x += 8;
+    y += 4;
   }
 
   rect.x = x * cur_char_width + left_margin;
