@@ -131,8 +131,8 @@ extern int  turbo_paste;
 extern int  trs_sdl_savebmp(const char *name);
 static void trs_gui_write_text(const char *text, int x, int y, int invert);
 static void trs_gui_center_text(const char *text, int y, int invert);
-static void trs_gui_frame(int x, int y, int w, int h);
-static void trs_gui_clear_rect(int x, int y, int w, int h);
+static void trs_gui_frame(int x1, int y1, int x2, int y2);
+static void trs_gui_clear_rect(int x1, int y1, int x2, int y2);
 static void trs_gui_clear_screen(void);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
 static void trs_add_extension(char *name, const char *ext);
@@ -188,39 +188,36 @@ void trs_gui_center_text(const char *text, int y, int invert)
   trs_gui_write_text(text, (64 - strlen(text)) / 2, y, invert);
 }
 
-void trs_gui_frame(int x, int y, int w, int h)
+void trs_gui_frame(int x1, int y1, int x2, int y2)
 {
   int i;
 
-  w--;
-  h--;
-
-  for (i = x + 1; i < x + w; i++) {
-    trs_gui_write_char(i, y, TOP_HORIZ_LINE, 0);
-    trs_gui_write_char(i, y + h, BOTTOM_HORIZ_LINE, 0);
+  for (i = x1 + 1; i < x2; i++) {
+    trs_gui_write_char(i, y1, TOP_HORIZ_LINE, 0);
+    trs_gui_write_char(i, y2, BOTTOM_HORIZ_LINE, 0);
   }
-  for (i = y + 1; i < y + h; i++) {
-    trs_gui_write_char(x, i, LEFT_VERT_LINE, 0);
-    trs_gui_write_char(x + w, i, RIGHT_VERT_LINE, 0);
+  for (i = y1 + 1; i < y2; i++) {
+    trs_gui_write_char(x1, i, LEFT_VERT_LINE, 0);
+    trs_gui_write_char(x2, i, RIGHT_VERT_LINE, 0);
   }
-  trs_gui_write_char(x, y, TOP_LEFT_CORNER, 0);
-  trs_gui_write_char(x + w, y, TOP_RIGHT_CORNER, 0);
-  trs_gui_write_char(x, y + h, BOTTOM_LEFT_CORNER, 0);
-  trs_gui_write_char(x + w, y + h, BOTTOM_RIGHT_CORNER, 0);
+  trs_gui_write_char(x1, y1, TOP_LEFT_CORNER, 0);
+  trs_gui_write_char(x2, y1, TOP_RIGHT_CORNER, 0);
+  trs_gui_write_char(x1, y2, BOTTOM_LEFT_CORNER, 0);
+  trs_gui_write_char(x2, y2, BOTTOM_RIGHT_CORNER, 0);
 }
 
-void trs_gui_clear_rect(int x, int y, int w, int h)
+void trs_gui_clear_rect(int x1, int y1, int x2, int y2)
 {
-  int i, j;
+  int x, y;
 
-  for (i = y; i < y + h; i++)
-    for (j = x; j < x + w; j++)
-      trs_gui_write_char(j, i, ' ', 0);
+  for (y = y1; y < y2; y++)
+    for (x = x1; x < x2; x++)
+      trs_gui_write_char(x, y, ' ', 0);
 }
 
 void trs_gui_clear_screen(void)
 {
-  trs_gui_clear_rect(0, 0, 63, 15);
+  trs_gui_clear_rect(0, 0, 64, 16);
 }
 
 void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
@@ -383,8 +380,8 @@ int trs_gui_get_key(void)
 
 void trs_gui_display_message(const char* title, const char *message)
 {
-  trs_gui_frame(1, 6, 62, 3);
-  trs_gui_clear_rect(2, 7, 60, 1);
+  trs_gui_frame(1, 6, 62, 8);
+  trs_gui_clear_rect(2, 7, 62, 8);
   trs_gui_write_text(title, 3, 6, 0);
   trs_gui_write_text(message, 5, 7, 0);
   trs_gui_write_text(" Press ENTER to continue ", 36, 8, 1);
@@ -401,8 +398,8 @@ void trs_gui_display_message(const char* title, const char *message)
 
 void trs_gui_display_pause(void)
 {
-  trs_gui_frame(1, 6, 62, 3);
-  trs_gui_clear_rect(2, 7, 60, 1);
+  trs_gui_frame(1, 6, 62, 8);
+  trs_gui_clear_rect(2, 7, 62, 8);
   trs_gui_center_text("Emulation Paused", 7, 0);
   trs_gui_refresh();
 }
@@ -600,7 +597,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
 
   trs_gui_limit_string(current_dir, limited_dir, 58);
   trs_gui_clear_screen();
-  trs_gui_frame(0, 0, 64, 16);
+  trs_gui_frame(0, 0, 63, 15);
   if (browse_dir) {
     snprintf(title, 63, "Choose %sDirectory", type);
     trs_gui_center_text("TAB selects directory", 15, 1);
@@ -613,7 +610,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
 
   while (1) {
     if (redraw) {
-      trs_gui_clear_rect(2, 1, 60, 14);
+      trs_gui_clear_rect(2, 1, 62, 15);
       trs_gui_center_text(limited_dir, 1, 0);
       for (i = 0; i < drawcount; i++)
         trs_gui_write_text(filenamelist[current_first + i], 2, i + 2, 0);
@@ -805,7 +802,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   else
     first_disp = 0;
 
-  trs_gui_frame(1, 6, 62, 3);
+  trs_gui_frame(1, 6, 62, 8);
   trs_gui_write_text(title, 3, 6, 0);
 
   while (1) {
@@ -885,7 +882,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
             else
               first_disp = 0;
           }
-          trs_gui_frame(1, 6, 62, 3);
+          trs_gui_frame(1, 6, 62, 8);
           trs_gui_write_text(title, 3, 6, 0);
         }
         break;
@@ -931,7 +928,7 @@ int trs_gui_display_popup(const char *title, const char **entry,
   x = (64 - max_len) / 2;
   y = (16 - entry_count) / 2;
 
-  trs_gui_frame(x - 1, y - 1, max_len + 2, entry_count + 2);
+  trs_gui_frame(x - 1, y - 1, x + max_len, y + entry_count);
   trs_gui_write_text(title, x + 1, y - 1, 0);
 
   for (i = 0; i < entry_count; i++)
@@ -993,7 +990,7 @@ int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
 {
   int num = 0, i, key;
 
-  trs_gui_frame(0, 0, 64, 16);
+  trs_gui_frame(0, 0, 63, 15);
   trs_gui_write_text(title, 2, 0, 0);
 
   while (entry[num].type != 0) {
@@ -1860,7 +1857,7 @@ int trs_gui_joystick_get_button(void)
 {
   SDL_Event event;
 
-  trs_gui_frame(20, 1, 23, 3);
+  trs_gui_frame(20, 1, 43, 3);
   trs_gui_write_text("Press Joystick Button", 21, 2, 0);
   trs_gui_refresh();
 
@@ -2010,7 +2007,7 @@ void trs_gui_joystick_management(void)
         jaxis_mapped = trs_gui_display_popup("Stick", yes_no_choices, 2, jaxis_mapped);
         break;
       case 3:
-        trs_gui_frame(20, 1, 23, 3);
+        trs_gui_frame(20, 1, 43, 3);
         trs_gui_write_text("     Select Key      ", 21, 2, 0);
         trs_gui_refresh();
         if ((key = trs_gui_virtual_keyboard()) != -1) {
@@ -2019,7 +2016,7 @@ void trs_gui_joystick_management(void)
         }
         break;
       case 4:
-        trs_gui_frame(20, 1, 23, 3);
+        trs_gui_frame(20, 1, 43, 3);
         trs_gui_write_text("   Select Function   ", 21, 2, 0);
         trs_gui_refresh();
         if ((key = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0)) != -1) {
@@ -2400,7 +2397,7 @@ void trs_gui_rom_files(void)
 void trs_gui_about_sdltrs(void)
 {
   trs_gui_clear_screen();
-  trs_gui_frame(0, 0, 64, 16);
+  trs_gui_frame(0, 0, 63, 15);
   trs_gui_write_text("About SDLTRS", 2, 0, 0);
   trs_gui_center_text("SDLTRS", 3, 0);
   trs_gui_center_text("Version 1.2.11", 4, 0);
@@ -2418,7 +2415,7 @@ void trs_gui_about_sdltrs(void)
 void trs_gui_keys_sdltrs(void)
 {
   trs_gui_clear_screen();
-  trs_gui_frame(0, 0, 64, 16);
+  trs_gui_frame(0, 0, 63, 15);
   trs_gui_write_text("Keys in SDLTRS", 2, 0, 0);
   trs_gui_write_text("F1-F3: Functions Keys F1/F2/F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
   trs_gui_write_text("F4: F4/CapsLock on TRS-80 4/4P  Insert: TRS-80 Underscore   ", 2, 2, 0);
@@ -2659,8 +2656,8 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   x = (64 - width) / 2;
   y = (16 - rows) / 2;
 
-  trs_gui_frame(x - 1, y - 1, width + 2, rows + 2);
-  trs_gui_clear_rect(x, y, width, rows);
+  trs_gui_frame(x - 1, y - 1, x + width, y + rows);
+  trs_gui_clear_rect(x, y, x + width, y + rows);
   trs_gui_write_text(title, x + 1, y - 1, 0);
   for (i = 0; i < rows; i++)
     for (j = 0; j < cols; j++)
