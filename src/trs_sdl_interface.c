@@ -1703,7 +1703,7 @@ static void trs_flip_fullscreen(void)
 #if defined(SDL2) || !defined(NOX)
 static char *trs_get_copy_data()
 {
-  static char copy_data[1920]; /* =80*24 */
+  static char copy_data[2048];
   char *curr_data = copy_data;
   unsigned char data;
   unsigned char *screen_ptr;
