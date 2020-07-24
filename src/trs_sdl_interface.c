@@ -1515,9 +1515,9 @@ static void ProcessCopySelection(int selectAll)
       DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
     orig_x = 0;
     orig_y = 0;
-    DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
     copy_x = end_x = screen->w - scale;
     copy_y = end_y = screen_height - scale;
+    DrawSelectionRectangle(orig_x, orig_y, end_x, end_y);
     selectionStartX = orig_x - left_margin;
     selectionStartY = orig_y - top_margin;
     selectionEndX = copy_x - left_margin;
