@@ -2278,69 +2278,27 @@ void trs_get_event(int wait)
         else
         /* Convert arrow/control/function/shift keys */
         switch (keysym.sym) {
-          case SDLK_KP_0:
-            keysym.sym = 0x100;
-            break;
-          case SDLK_UP:
-            keysym.sym = 0x111;
-            break;
-          case SDLK_DOWN:
-            keysym.sym = 0x112;
-            break;
-          case SDLK_RIGHT:
-            keysym.sym = 0x113;
-            break;
-          case SDLK_LEFT:
-            keysym.sym = 0x114;
-            break;
-          case SDLK_INSERT:
-            keysym.sym = 0x115;
-            break;
-          case SDLK_HOME:
-            keysym.sym = 0x116;
-            break;
-          case SDLK_END:
-            keysym.sym = 0x117;
-            break;
-          case SDLK_PAGEUP:
-            keysym.sym = 0x118;
-            break;
-          case SDLK_PAGEDOWN:
-            keysym.sym = 0x119;
-            break;
-          case SDLK_CAPSLOCK:
-            keysym.sym = 0x11d;
-            break;
-          case SDLK_SCROLLLOCK:
-            keysym.sym = 0x11e;
-            break;
-          case SDLK_F1:
-            keysym.sym = 0x11a;
-            break;
-          case SDLK_F2:
-            keysym.sym = 0x11b;
-            break;
-          case SDLK_F3:
-            keysym.sym = 0x11c;
-            break;
-          case SDLK_F4:
-            keysym.sym = 0x11d;
-            break;
-          case SDLK_F5:
-            keysym.sym = 0x11e;
-            break;
-          case SDLK_F6:
-            keysym.sym = 0x11f;
-            break;
-          case SDLK_RSHIFT:
-            keysym.sym = 0x12f;
-            break;
-          case SDLK_LSHIFT:
-            keysym.sym = 0x130;
-            break;
-          case SDLK_LCTRL:
-            keysym.sym = 0x132;
-            break;
+          case SDLK_KP_0:       keysym.sym = 0x100; break;
+          case SDLK_UP:         keysym.sym = 0x111; break;
+          case SDLK_DOWN:       keysym.sym = 0x112; break;
+          case SDLK_RIGHT:      keysym.sym = 0x113; break;
+          case SDLK_LEFT:       keysym.sym = 0x114; break;
+          case SDLK_INSERT:     keysym.sym = 0x115; break;
+          case SDLK_HOME:       keysym.sym = 0x116; break;
+          case SDLK_END:        keysym.sym = 0x117; break;
+          case SDLK_PAGEUP:     keysym.sym = 0x118; break;
+          case SDLK_PAGEDOWN:   keysym.sym = 0x119; break;
+          case SDLK_CAPSLOCK:   keysym.sym = 0x11d; break;
+          case SDLK_SCROLLLOCK: keysym.sym = 0x11e; break;
+          case SDLK_F1:         keysym.sym = 0x11a; break;
+          case SDLK_F2:         keysym.sym = 0x11b; break;
+          case SDLK_F3:         keysym.sym = 0x11c; break;
+          case SDLK_F4:         keysym.sym = 0x11d; break;
+          case SDLK_F5:         keysym.sym = 0x11e; break;
+          case SDLK_F6:         keysym.sym = 0x11f; break;
+          case SDLK_RSHIFT:     keysym.sym = 0x12f; break;
+          case SDLK_LSHIFT:     keysym.sym = 0x130; break;
+          case SDLK_LCTRL:      keysym.sym = 0x132; break;
           default:
             break;
         }
@@ -2693,33 +2651,29 @@ static void bitmap_init(void)
       free(trs_char[0][i]->pixels);
       SDL_FreeSurface(trs_char[0][i]);
     }
-    trs_char[0][i] =
-      CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          foreground, background, scale, scale * 2);
+    trs_char[0][i] = CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
+        foreground, background, scale, scale * 2);
 
     if (trs_char[1][i]) {
       free(trs_char[1][i]->pixels);
       SDL_FreeSurface(trs_char[1][i]);
     }
-    trs_char[1][i] =
-      CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          foreground, background, scale * 2, scale * 2);
+    trs_char[1][i] = CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
+        foreground, background, scale * 2, scale * 2);
 
     if (trs_char[2][i]) {
       free(trs_char[2][i]->pixels);
       SDL_FreeSurface(trs_char[2][i]);
     }
-    trs_char[2][i] =
-      CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          background, foreground, scale, scale * 2);
+    trs_char[2][i] = CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
+        background, foreground, scale, scale * 2);
 
     if (trs_char[3][i]) {
       free(trs_char[3][i]->pixels);
       SDL_FreeSurface(trs_char[3][i]);
     }
-    trs_char[3][i] =
-      CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-          background, foreground, scale * 2, scale * 2);
+    trs_char[3][i] = CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
+        background, foreground, scale * 2, scale * 2);
 
     if (trs_char[4][i]) {
       free(trs_char[4][i]->pixels);
@@ -2727,26 +2681,22 @@ static void bitmap_init(void)
     }
     /* For the GUI, make sure we have brackets, backslash and block graphics */
     if ((i >= '[' && i <= ']') || i >= 128)
-      trs_char[4][i] =
-        CreateSurfaceFromDataScale(trs_char_data[0][i],
-            gui_foreground, gui_background, scale, scale * 2);
+      trs_char[4][i] = CreateSurfaceFromDataScale(trs_char_data[0][i],
+          gui_foreground, gui_background, scale, scale * 2);
     else
-      trs_char[4][i] =
-        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-            gui_foreground, gui_background, scale, scale * 2);
+      trs_char[4][i] = CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
+          gui_foreground, gui_background, scale, scale * 2);
 
     if (trs_char[5][i]) {
       free(trs_char[5][i]->pixels);
       SDL_FreeSurface(trs_char[5][i]);
     }
     if ((i >= '[' && i <= ']') || i >= 128)
-      trs_char[5][i] =
-        CreateSurfaceFromDataScale(trs_char_data[0][i],
-            gui_background, gui_foreground, scale, scale * 2);
+      trs_char[5][i] = CreateSurfaceFromDataScale(trs_char_data[0][i],
+          gui_background, gui_foreground, scale, scale * 2);
     else
-      trs_char[5][i] =
-        CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
-            gui_background, gui_foreground, scale, scale * 2);
+      trs_char[5][i] = CreateSurfaceFromDataScale(trs_char_data[trs_charset][i],
+          gui_background, gui_foreground, scale, scale * 2);
   }
   boxes_init(foreground, background,
       cur_char_width, TRS_CHAR_HEIGHT * (scale * 2), 0);
