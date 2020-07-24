@@ -1776,8 +1776,12 @@ static void call_function(int function)
   if (function == PAUSE) {
     trs_paused = !trs_paused;
     trs_screen_caption();
-    if (!trs_paused)
+    if (!trs_paused) {
+#ifdef SDL2
+      screen = SDL_GetWindowSurface(window);
+#endif
       trs_screen_refresh();
+    }
   }
   else if (function == RESET)
     trs_reset(1);
