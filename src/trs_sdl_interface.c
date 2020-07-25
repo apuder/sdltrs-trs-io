@@ -2775,7 +2775,7 @@ void trs_disk_led(int drive, int on_off)
   SDL_Rect rect;
 
   rect.w = 16 * scale;
-  rect.h = 2 * (scale * 2);
+  rect.h = 4 * scale;
   rect.y = OrigHeight - rect.h;
 
   if (drive == -1) {
@@ -2815,7 +2815,7 @@ void trs_hard_led(int drive, int on_off)
   SDL_Rect rect;
 
   rect.w = 16 * scale;
-  rect.h = 2 * (scale * 2);
+  rect.h = 4 * scale;
   rect.y = OrigHeight - rect.h;
 
   if (drive == -1) {
@@ -2852,7 +2852,7 @@ void trs_turbo_led(void)
   SDL_Rect rect;
 
   rect.w = 16 * scale;
-  rect.h = 2 * (scale * 2);
+  rect.h = 4 * scale;
   rect.x = (OrigWidth - border_width) / 2 - 8 * scale;
   rect.y = OrigHeight - rect.h;
 
