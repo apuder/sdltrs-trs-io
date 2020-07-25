@@ -1379,7 +1379,10 @@ static void addToDrawList(SDL_Rect *rect)
 #if defined(SDL2) || !defined(NOX)
 static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_y)
 {
-  int x, y;
+  int const bpp   = screen->format->BytesPerPixel;
+  int const pitch = screen->pitch;
+  int x, y, z;
+  Uint8 *pixel;
 
   if (copy_x < orig_x) {
     int swap_x;
@@ -1398,103 +1401,35 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
 
   SDL_LockSurface(screen);
 
-  switch (screen->format->BitsPerPixel) {
-    case 8:
-    {
-      int const pitch = screen->pitch;
-      Uint8 *start8;
-
-      for (y = orig_y; y < orig_y + scale; y++) {
-        start8 = (Uint8 *)screen->pixels + (y * pitch) + orig_x;
-        for (x = 0; x < copy_x-orig_x + scale; x++, start8++)
-          *start8 ^= 0xFF;
-      }
-      if (copy_y > orig_y) {
-        for (y = copy_y; y < copy_y + scale; y++) {
-          start8 = (Uint8 *)screen->pixels + (y * pitch) + orig_x;
-          for (x = 0; x < copy_x-orig_x + scale; x++, start8++)
-            *start8 ^= 0xFF;
-        }
-      }
-      for (y = orig_y + scale; y < copy_y; y++) {
-        start8 = (Uint8 *)screen->pixels + (y * pitch) + orig_x;
-        for (x = 0; x < scale; x++)
-          *start8++ ^= 0xFF;
-      }
-      if (copy_x > orig_x) {
-        for (y = orig_y + scale; y < copy_y; y++) {
-          start8 = (Uint8 *)screen->pixels + (y * pitch) + copy_x;
-          for (x = 0; x < scale; x++)
-            *start8++ ^= 0xFF;
-        }
-      }
-    }
-    break;
-
-    case 16:
-    {
-      int const pitch2 = screen->pitch / 2;
-      Uint16 *start16;
-
-      for (y = orig_y; y < orig_y + scale; y++) {
-        start16 = (Uint16 *)screen->pixels + (y * pitch2) + orig_x;
-        for (x = 0; x < copy_x-orig_x + scale; x++, start16++)
-          *start16 ^= 0xFFFF;
-      }
-      if (copy_y > orig_y) {
-        for (y = copy_y; y < copy_y + scale; y++) {
-          start16 = (Uint16 *)screen->pixels + (y * pitch2) + orig_x;
-          for (x = 0; x < copy_x-orig_x + scale; x++, start16++)
-            *start16 ^= 0xFFFF;
-        }
-      }
-      for (y = orig_y + scale; y < copy_y; y++) {
-        start16 = (Uint16 *)screen->pixels + (y * pitch2) + orig_x;
-        for (x = 0; x < scale; x++)
-          *start16++ ^= 0xFFFF;
-      }
-      if (copy_x > orig_x) {
-        for (y = orig_y + scale; y < copy_y; y++) {
-          start16 = (Uint16 *)screen->pixels + (y * pitch2) + copy_x;
-          for (x = 0; x < scale; x++)
-            *start16++ ^= 0xFFFF;
-        }
-      }
-    }
-    break;
-
-    case 32:
-    {
-      int const pitch4 = screen->pitch / 4;
-      Uint32 *start32;
-
-      for (y = orig_y; y < orig_y + scale; y++) {
-        start32 = (Uint32 *)screen->pixels + (y * pitch4) + orig_x;
-        for (x = 0; x < copy_x-orig_x + scale; x++, start32++)
-          *start32 ^= 0xFFFFFFFF;
-      }
-      if (copy_y > orig_y) {
-        for (y = copy_y; y < copy_y + scale; y++) {
-          start32 = (Uint32 *)screen->pixels + (y * pitch4) + orig_x;
-          for (x = 0; x < copy_x-orig_x + scale; x++, start32++)
-            *start32 ^= 0xFFFFFFFF;
-        }
-      }
-      for (y = orig_y + scale; y < copy_y; y++) {
-        start32 = (Uint32 *)screen->pixels + (y * pitch4) + orig_x;
-        for (x = 0; x < scale; x++)
-          *start32++ ^= 0xFFFFFFFF;
-      }
-      if (copy_x > orig_x) {
-        for (y = orig_y + scale; y < copy_y; y++) {
-          start32 = (Uint32 *)screen->pixels + (y * pitch4) + copy_x;
-          for (x = 0; x < scale; x++)
-            *start32++ ^= 0xFFFFFFFF;
-        }
-      }
-    }
-    break;
+  for (y = orig_y; y < orig_y + scale; y++) {
+    pixel = (Uint8 *)screen->pixels + (y * pitch) + orig_x * bpp;
+    for (x = 0; x < copy_x - orig_x + scale; x++)
+      for (z = 0; z < bpp; z++)
+        *pixel++ ^= 0xFF;
   }
+  if (copy_y > orig_y) {
+    for (y = copy_y; y < copy_y + scale; y++) {
+      pixel = (Uint8 *)screen->pixels + (y * pitch) + orig_x * bpp;
+      for (x = 0; x < copy_x - orig_x + scale; x++)
+        for (z = 0; z < bpp; z++)
+          *pixel++ ^= 0xFF;
+    }
+  }
+  for (y = orig_y + scale; y < copy_y; y++) {
+    pixel = (Uint8 *)screen->pixels + (y * pitch) + orig_x * bpp;
+    for (x = 0; x < scale; x++)
+      for (z = 0; z < bpp; z++)
+        *pixel++ ^= 0xFF;
+  }
+  if (copy_x > orig_x) {
+    for (y = orig_y + scale; y < copy_y; y++) {
+      pixel = (Uint8 *)screen->pixels + (y * pitch) + copy_x * bpp;
+        for (x = 0; x < scale; x++)
+          for (z = 0; z < bpp; z++)
+            *pixel++ ^= 0xFF;
+    }
+  }
+
   SDL_UnlockSurface(screen);
 }
 
