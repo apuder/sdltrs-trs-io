@@ -1994,8 +1994,6 @@ void trs_get_event(int wait)
 #endif
             keysym.sym = 0;
             break;
-          default:
-            break;
         }
         /* Trap the alt keys here */
         if (SDL_GetModState() & KMOD_LALT) {
@@ -2168,8 +2166,6 @@ void trs_get_event(int wait)
                 trs_sdl_flush();
               }
               break;
-            default:
-              break;
           }
 #ifndef SDL2
           keysym.unicode = 0;
@@ -2234,8 +2230,6 @@ void trs_get_event(int wait)
           case SDLK_RSHIFT:     keysym.sym = 0x12f; break;
           case SDLK_LSHIFT:     keysym.sym = 0x130; break;
           case SDLK_LCTRL:      keysym.sym = 0x132; break;
-          default:
-            break;
         }
 
         if (SDL_GetModState() & (KMOD_SHIFT | KMOD_RALT)) {
