@@ -2894,7 +2894,10 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
   rect.w = w * cur_char_width;
   rect.h = h * cur_char_height;
 
-  SDL_FillRect(screen, &rect, gui_background);
+  SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format,
+      (gui_background >> 16) & 0xFF,
+      (gui_background >> 8) & 0xFF,
+      (gui_background & 0xFF)));
 }
 
 void trs_gui_refresh(void)
