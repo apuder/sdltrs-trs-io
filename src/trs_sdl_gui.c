@@ -208,10 +208,8 @@ void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit)
     int const len_first_part = (limit - 3) / 2;
     int const pos_second_part = strlen(orig) - (limit - len_first_part - 3);
 
-    strncpy(limited, orig, len_first_part);
-    limited[len_first_part] = '\0';
-    snprintf(limited + len_first_part, limit - len_first_part + 1,
-        "...%s", orig + pos_second_part);
+    snprintf(limited, limit + 1, "%.*s...%s", len_first_part, orig,
+        orig + pos_second_part);
   } else
     snprintf(limited, limit + 1, "%s", orig);
 }
