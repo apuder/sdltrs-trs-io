@@ -2057,7 +2057,7 @@ void trs_gui_misc_management(void)
   while (1) {
     snprintf(&misc_menu[0].title[50], 11, "%s", yes_no_choices[trs_emtsafe]);
     snprintf(&misc_menu[1].title[50], 11, "%10d", stretch_amount);
-    trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 60);
+    trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 58);
     snprintf(&misc_menu[4].title[56], 5, "0x%02X", trs_uart_switches);
     snprintf(&misc_menu[5].title[50], 11, "%s", yes_no_choices[trs_kb_bracket_state]);
     snprintf(&misc_menu[6].title[50], 11, "%s", yes_no_choices[trs_sound]);
@@ -2139,7 +2139,7 @@ void trs_gui_printer_management(void)
 
   while (1) {
     snprintf(&printer_menu[1].title[51], 10, "%s", printer_choices[trs_printer]);
-    trs_gui_limit_string(trs_printer_command, &printer_menu[3].title[2], 60);
+    trs_gui_limit_string(trs_printer_command, &printer_menu[3].title[2], 58);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Printer Management", printer_menu, selection);
@@ -2303,12 +2303,12 @@ void trs_gui_default_dirs(void)
 
   while (1) {
     /* print current defaults */
-    trs_gui_limit_string(trs_disk_dir, &default_menu[1].title[2], 59);
-    trs_gui_limit_string(trs_hard_dir, &default_menu[3].title[2], 59);
-    trs_gui_limit_string(trs_cass_dir, &default_menu[5].title[2], 59);
-    trs_gui_limit_string(trs_disk_set_dir, &default_menu[7].title[2], 59);
-    trs_gui_limit_string(trs_state_dir, &default_menu[9].title[2], 59);
-    trs_gui_limit_string(trs_printer_dir, &default_menu[11].title[2], 59);
+    trs_gui_limit_string(trs_disk_dir, &default_menu[1].title[2], 58);
+    trs_gui_limit_string(trs_hard_dir, &default_menu[3].title[2], 58);
+    trs_gui_limit_string(trs_cass_dir, &default_menu[5].title[2], 58);
+    trs_gui_limit_string(trs_disk_set_dir, &default_menu[7].title[2], 58);
+    trs_gui_limit_string(trs_state_dir, &default_menu[9].title[2], 58);
+    trs_gui_limit_string(trs_printer_dir, &default_menu[11].title[2], 58);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Default Directories", default_menu, selection);
