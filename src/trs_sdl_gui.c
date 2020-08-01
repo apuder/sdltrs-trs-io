@@ -909,7 +909,7 @@ int trs_gui_display_popup(const char *title, const char **entry,
   y = (16 - entry_count) / 2;
 
   trs_gui_frame(x - 1, y - 1, x + max_len, y + entry_count);
-  trs_gui_write_text(title, x + 1, y - 1, 0);
+  trs_gui_center_text(title, y - 1, 0);
 
   for (i = 0; i < entry_count; i++)
     trs_gui_write_text(entry[i], x, y + i, 0);
