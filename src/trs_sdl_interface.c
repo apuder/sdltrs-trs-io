@@ -1381,6 +1381,7 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
 {
   int const bpp   = screen->format->BytesPerPixel;
   int const pitch = screen->pitch;
+  int const width = scale * pitch;
   Uint8 *pixels   = screen->pixels;
   Uint8 *pixel;
   int x, y, z;
@@ -1403,22 +1404,24 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
 
   SDL_LockSurface(screen);
 
-  dist_x = orig_x * bpp;
-  for (y = orig_y * pitch; y < (orig_y + scale) * pitch; y += pitch) {
+  dist_x  = orig_x * bpp;
+  copy_y *= pitch;
+  orig_y *= pitch;
+  for (y = orig_y; y < orig_y + width; y += pitch) {
     pixel = pixels + y + dist_x;
     for (x = 0; x < copy_x - orig_x + scale; x++)
       for (z = 0; z < bpp; z++)
         *pixel++ ^= 0xFF;
   }
   if (copy_y > orig_y) {
-    for (y = copy_y * pitch; y < (copy_y + scale) * pitch; y += pitch) {
+    for (y = copy_y; y < copy_y + width; y += pitch) {
       pixel = pixels + y + dist_x;
       for (x = 0; x < copy_x - orig_x + scale; x++)
         for (z = 0; z < bpp; z++)
           *pixel++ ^= 0xFF;
     }
   }
-  for (y = (orig_y + scale) * pitch; y < copy_y * pitch; y += pitch) {
+  for (y = orig_y + width; y < copy_y; y += pitch) {
     pixel = pixels + y + dist_x;
     for (x = 0; x < scale; x++)
       for (z = 0; z < bpp; z++)
@@ -1426,7 +1429,7 @@ static void DrawSelectionRectangle(int orig_x, int orig_y, int copy_x, int copy_
   }
   if (copy_x > orig_x) {
     dist_x = copy_x * bpp;
-    for (y = (orig_y + scale) * pitch; y < copy_y * pitch; y += pitch) {
+    for (y = orig_y + width; y < copy_y; y += pitch) {
       pixel = pixels + y + dist_x;
         for (x = 0; x < scale; x++)
           for (z = 0; z < bpp; z++)
