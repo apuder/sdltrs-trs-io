@@ -553,7 +553,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
   int selection = 0;
   int current_first = 0;
   int drawcount;
-  int redraw = 1;
+  int redraw;
 
   snprintf(current_dir, FILENAME_MAX, "%s", path);
 
@@ -572,12 +572,17 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
   if (current_dir[strlen(current_dir) - 1] != DIR_SLASH)
     snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir),
         "%c", DIR_SLASH);
+
+read_directory:
+  trs_gui_delete_filename_list();
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return -1;
 
   trs_gui_limit_string(current_dir, limited_dir, 58);
   trs_gui_clear_screen();
   trs_gui_frame(0, 0, 63, 15);
+  trs_gui_center_text(limited_dir, 1, 0);
+
   if (browse_dir) {
     snprintf(title, 63, "Choose %sDirectory", type);
     trs_gui_center_text("TAB selects directory", 15, 1);
@@ -587,11 +592,11 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
   trs_gui_write_text(title, 2, 0, 0);
 
   drawcount = filenamecount < 13 ? filenamecount : 13;
+  redraw = 1;
 
   while (1) {
     if (redraw) {
-      trs_gui_clear_rect(2, 1, 60, 14);
-      trs_gui_center_text(limited_dir, 1, 0);
+      trs_gui_clear_rect(2, 2, 60, 13);
       for (i = 0; i < drawcount; i++)
         trs_gui_write_text(filenamelist[current_first + i], 2, i + 2, 0);
       redraw = 0;
@@ -694,14 +699,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
                   FILENAME_MAX - strlen(current_dir), "%s", &new_dir[1]);
               current_dir[strlen(current_dir) - 1] = DIR_SLASH;
             }
-
-            trs_gui_delete_filename_list();
-            if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
-              return -1;
-
-            trs_gui_limit_string(current_dir, limited_dir, 58);
-            drawcount = filenamecount < 13 ? filenamecount : 13;
-            redraw = 1;
+            goto read_directory;
           }
 #ifdef _WIN32
           /* Select a new drive */
@@ -713,14 +711,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
             current_dir[1] = new_dir[2];
             current_dir[2] = '\\';
             current_dir[3] = 0;
-
-            trs_gui_delete_filename_list();
-            if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
-              return -1;
-
-            trs_gui_limit_string(current_dir, limited_dir, 58);
-            drawcount = filenamecount < 13 ? filenamecount : 13;
-            redraw = 1;
+            goto read_directory;
           }
 #endif
           else
