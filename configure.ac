@@ -45,8 +45,16 @@ AC_ARG_ENABLE([sdl1],
       SDL_CONF=sdl-config],
      [AC_DEFINE([SDL2])])])
 
+AC_ARG_ENABLE([zbx],
+  [AS_HELP_STRING([--enable-zbx], [build with integrated Z80 debugger zbx])],
+  [AC_DEFINE([ZBX])])
+
 CFLAGS="$CFLAGS $( $SDL_CONF --cflags )"
-LIBS="$LIBS $( $SDL_CONF --libs | sed 's/ -mwindows//' )"
+LIBS="$LIBS $( $SDL_CONF --libs )"
+
+AS_IF([test "x$enable_zbx" = "xyes"],
+  [LIBS="$( echo $LIBS | sed 's/ -mwindows//' )"],
+  [AC_MSG_NOTICE([integrated Z80 debugger zbx DISABLED])])
 
 AC_CHECK_LIB([$SDL_VERS], [SDL_Init], [:],
   AC_MSG_ERROR([Unable to find SDL_Init function in $SDL_VERS]))

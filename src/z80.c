@@ -3082,7 +3082,9 @@ static int do_ED_instruction()
 	break;
 
       default:
+#ifdef ZBX
 	disassemble(REG_PC - 2);
+#endif
 	error("unsupported instruction");
     }
 

@@ -220,9 +220,11 @@ int SDLmain(int argc, char *argv[])
     /* Run continuously until exit or request to enter debugger */
     z80_run(TRUE);
   }
+#ifdef ZBX
   printf("Entering debugger.\n");
   debug_init();
   debug_shell();
+#endif
 
   trs_sdl_cleanup();
   printf("Quitting.\n");

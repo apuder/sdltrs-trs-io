@@ -547,9 +547,11 @@ void do_emt_misc()
   case 1:
     trs_exit(0);
     break;
+#ifdef ZBX
   case 2:
     trs_debug();
     break;
+#endif
   case 3:
     trs_reset(0);
     break;

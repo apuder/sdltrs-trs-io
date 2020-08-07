@@ -51,6 +51,7 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
+#ifdef ZBX
 #include "z80.h"
 
 /* Argument printing */
@@ -2158,3 +2159,4 @@ int disassemble(unsigned short pc)
     pc += arglen(code->args);
     return pc;  /* return the location of the next instruction */
 }
+#endif

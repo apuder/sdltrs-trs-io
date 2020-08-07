@@ -42,6 +42,7 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
+#ifdef ZBX
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -981,4 +982,5 @@ test_all()
     }
 }
 
+#endif
 #endif

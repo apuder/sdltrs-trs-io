@@ -10,7 +10,7 @@ build-arch: build-stamp
 build-stamp:
 	dh_testdir
 	./autogen.sh
-	./configure --prefix=/usr --enable-readline
+	./configure --prefix=/usr --enable-readline --enable-zbx
 	touch build-stamp
 
 clean:

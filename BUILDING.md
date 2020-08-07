@@ -16,10 +16,6 @@ To enable faster but not accurate Z80 block moves, execute:
 ```sh
 ./configure --enable-fastmove
 ```
-To enable `readline` support for the zbx debugger, execute:
-```sh
-./configure --enable-readline
-```
 To build the old SDL 1.2 version (see below) of **SDLTRS**, execute:
 ```sh
 ./configure --enable-sdl1
@@ -27,6 +23,14 @@ To build the old SDL 1.2 version (see below) of **SDLTRS**, execute:
 To build with SDL 1.2 only (no *X11* and no *PasteManager*), execute:
 ```sh
 ./configure --enable-sdl1 --without-x
+```
+To build with the integrated Z80 debugger zbx, execute:
+```
+./configure --enable-zbx
+```
+To enable `readline` support for the zbx debugger, execute:
+```sh
+./configure --enable-zbx --enable-readline
 ```
 
 Start build of the program in the main directory by executing:

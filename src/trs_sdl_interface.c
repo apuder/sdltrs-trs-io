@@ -293,7 +293,9 @@ static const trs_opt options[] = {
   { "clock1",          trs_opt_clock,         1, 1, NULL                 },
   { "clock3",          trs_opt_clock,         1, 3, NULL                 },
   { "clock4",          trs_opt_clock,         1, 4, NULL                 },
+#ifdef ZBX
   { "debug",           trs_opt_value,         0, 1, &debugger            },
+#endif
   { "disk0",           trs_opt_disk,          1, 0, NULL                 },
   { "disk1",           trs_opt_disk,          1, 1, NULL                 },
   { "disk2",           trs_opt_disk,          1, 2, NULL                 },
@@ -339,7 +341,9 @@ static const trs_opt options[] = {
   { "m4p",             trs_opt_value,         0, 5, &trs_model           },
   { "model",           trs_opt_model,         1, 0, NULL                 },
   { "mousepointer",    trs_opt_value,         0, 1, &mousepointer        },
+#ifdef ZBX
   { "nodebug",         trs_opt_value,         0, 0, &debugger            },
+#endif
 #ifdef __linux
   { "nodoublestep",    trs_opt_doublestep,    0, 1, NULL                 },
 #endif
@@ -1932,9 +1936,11 @@ void trs_get_event(int wait)
               cpu_panel = !cpu_panel;
               trs_screen_caption();
             }
+#ifdef ZBX
             else
               if (!fullscreen)
                 trs_debug();
+#endif
 #ifndef SDL2
             keysym.unicode = 0;
 #endif
@@ -2151,10 +2157,12 @@ void trs_get_event(int wait)
               trs_screen_refresh();
               trs_sdl_flush();
               break;
+#ifdef ZBX
             case SDLK_z:
               if (!fullscreen)
                 trs_debug();
               break;
+#endif
             case SDLK_0:
             case SDLK_1:
             case SDLK_2:
