@@ -1637,13 +1637,10 @@ static void trs_flip_fullscreen(void)
   fullscreen = !fullscreen;
   if (fullscreen) {
     window_scale = scale;
-    if (scale != 1)
-      scale = 1;
-  }
-  else {
-    if (window_scale != 1)
-      scale = window_scale;
-  }
+    scale = 1;
+  } else
+    scale = window_scale;
+
   trs_screen_init();
 }
 
