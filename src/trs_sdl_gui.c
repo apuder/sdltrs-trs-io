@@ -1898,8 +1898,8 @@ void trs_gui_joystick_display_map(int button)
 int trs_gui_display_question(const char *text)
 {
   const char *answer_choices[] = {
-    "          No           ",
-    "          Yes          "
+    "       No        ",
+    "       Yes       "
   };
 
   return trs_gui_display_popup(text, answer_choices, 2, 0);
