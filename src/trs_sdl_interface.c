@@ -1875,7 +1875,6 @@ void trs_get_event(int wait)
 #ifdef SDL2
       case SDL_WINDOWEVENT:
         if (event.window.event & SDL_WINDOWEVENT_EXPOSED) {
-          SDL_FlushEvent(SDL_KEYDOWN);
           if ((screen = SDL_GetWindowSurface(window)) == NULL) {
             trs_sdl_cleanup();
             fatal("failed to get window surface: %s", SDL_GetError());
