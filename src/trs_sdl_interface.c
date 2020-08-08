@@ -1363,12 +1363,6 @@ void trs_screen_init(void)
   TrsBlitMap(image->format->palette, screen->format);
   bitmap_init();
 
-  if (trs_show_led) {
-    trs_disk_led(-1, 0);
-    trs_hard_led(-1, 0);
-    trs_turbo_led();
-  }
-
   trs_screen_caption();
   trs_screen_refresh();
   trs_sdl_flush();
@@ -2715,6 +2709,12 @@ void trs_screen_refresh(void)
 
     for (i = 0; i < screen_chars; i++)
       trs_screen_write_char(i, trs_screen[i]);
+  }
+
+  if (trs_show_led) {
+    trs_disk_led(-1, 0);
+    trs_hard_led(-1, 0);
+    trs_turbo_led();
   }
   drawnRectCount = MAX_RECTS; /* Will force redraw of whole screen */
 }
