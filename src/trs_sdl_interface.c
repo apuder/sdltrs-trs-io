@@ -1720,12 +1720,8 @@ static void call_function(int function)
   if (function == PAUSE) {
     trs_paused = !trs_paused;
     trs_screen_caption();
-    if (!trs_paused) {
-#ifdef SDL2
-      screen = SDL_GetWindowSurface(window);
-#endif
+    if (!trs_paused)
       trs_screen_refresh();
-    }
   }
   else if (function == RESET)
     trs_reset(1);
@@ -1880,15 +1876,20 @@ void trs_get_event(int wait)
       case SDL_WINDOWEVENT:
         if (event.window.event & SDL_WINDOWEVENT_EXPOSED) {
           SDL_FlushEvent(SDL_KEYDOWN);
+          if ((screen = SDL_GetWindowSurface(window)) == NULL) {
+            trs_sdl_cleanup();
+            fatal("failed to get window surface: %s", SDL_GetError());
+          }
+          trs_screen_refresh();
 #else
       case SDL_ACTIVEEVENT:
         if (event.active.state & SDL_APPACTIVE) {
           if (event.active.gain) {
+            drawnRectCount = MAX_RECTS;
 #endif
 #if XDEBUG
             debug("Active\n");
 #endif
-            drawnRectCount = MAX_RECTS;
             trs_sdl_flush();
             if (trs_model == 1)
               clear_key_queue();
