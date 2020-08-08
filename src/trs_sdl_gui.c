@@ -2394,7 +2394,13 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Alt PgUp/PgDn: Scale Window ", 2, 4, 0);
   trs_gui_write_text("F7/Alt M: Main Menu of SDLTRS   Alt Enter: Toggle Fullscreen", 2, 5, 0);
   trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt A/C/V: Select/Copy/Paste", 2, 6, 0);
-  trs_gui_write_text("F9/Alt Z: Enter debugger (zbx)  Alt D/F: Floppy Disk Menu   ", 2, 7, 0);
+  trs_gui_write_text("F9/Alt Z:"
+#ifdef ZBX
+  " Enter debugger (zbx)  "
+#else
+  " Toggle Fullscreen     "
+#endif
+  "Alt D/F: Floppy Disk Menu   ", 2, 7, 0);
   trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt H: Hard Disk Menu       ", 2, 8, 0);
   trs_gui_write_text("F11/Alt K: Show this key help   Alt T: Cassette/Tape Menu   ", 2, 9, 0);
   trs_gui_write_text("F12/Alt N: Switch Turbo On/Off  Alt L/S: Load / Save State  ", 2, 10, 0);
