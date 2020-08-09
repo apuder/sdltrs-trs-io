@@ -1883,12 +1883,10 @@ void trs_get_event(int wait)
       case SDL_ACTIVEEVENT:
         if (event.active.state & SDL_APPACTIVE) {
           if (event.active.gain) {
-            drawnRectCount = MAX_RECTS;
 #endif
 #if XDEBUG
             debug("Active\n");
 #endif
-            trs_sdl_flush();
             if (trs_model == 1)
               clear_key_queue();
           }
