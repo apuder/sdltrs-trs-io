@@ -746,7 +746,7 @@ static void trs_opt_scale(char *arg, int intarg, int *stringarg)
   scale = atoi(arg);
   if (scale <= 0)
     scale = 1;
-  if (scale > MAX_SCALE)
+  else if (scale > MAX_SCALE)
     scale = MAX_SCALE;
 }
 
