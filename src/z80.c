@@ -2245,7 +2245,9 @@ static void do_CB_instruction()
 	break;
 
       default:
+#ifdef ZBX
 	disassemble(REG_PC - 2);
+#endif
 	error("unsupported instruction");
     }
 }
@@ -4396,7 +4398,9 @@ int z80_run(int continuous)
 	    break;
 
 	  default:
+#ifdef ZBX
 	    disassemble(REG_PC - 1);
+#endif
 	    error("unsupported instruction");
 	}
 
