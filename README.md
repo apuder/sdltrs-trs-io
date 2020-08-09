@@ -42,6 +42,7 @@ systems (SDL2 binaries and packages above are build on the *master* branch,
 which uses software rendering).
 
 The SDL2 version is available in Valerio Lupi's fork of the [RetroPie-Setup].
+It has also been merged to the upstream of [RetroPie] since version 4.6.6 ...
 
 ## Screenshots
 
@@ -53,6 +54,7 @@ The SDL2 version is available in Valerio Lupi's fork of the [RetroPie-Setup].
 [AUR]: https://aur.archlinux.org/packages/sdltrs
 [BUILDING.md]: BUILDING.md
 [EtchedPixels]: https://www.github.com/EtchedPixels/xtrs
+[RetroPie]: https://github.com/RetroPie
 [RetroPie-Setup]: https://github.com/valerino/RetroPie-Setup
 [SDL2]: https://gitlab.com/jengun/sdltrs/-/tree/sdl2
 [SDL.DLL]: https://www.libsdl.org/download-1.2.php
