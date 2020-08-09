@@ -2732,7 +2732,7 @@ void trs_disk_led(int drive, int on_off)
   if (drive == -1) {
     for (i = 0; i < 8; i++) {
       rect.x = border_width + 24 * scale * i;
-      SDL_FillRect(screen, &rect, light_red);
+      SDL_FillRect(screen, &rect, countdown[i] ? bright_red : light_red);
       addToDrawList(&rect);
     }
   }
@@ -2772,7 +2772,7 @@ void trs_hard_led(int drive, int on_off)
   if (drive == -1) {
     for (i = 0; i < 4; i++) {
       rect.x = drive0_led_x + 24 * scale * i;
-      SDL_FillRect(screen, &rect, light_red);
+      SDL_FillRect(screen, &rect, countdown[i] ? bright_red : light_red);
       addToDrawList(&rect);
     }
   }
