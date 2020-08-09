@@ -1868,12 +1868,17 @@ void trs_get_event(int wait)
         break;
 #ifdef SDL2
       case SDL_WINDOWEVENT:
-        if (event.window.event & SDL_WINDOWEVENT_EXPOSED) {
+        if (event.window.event == SDL_WINDOWEVENT_EXPOSED) {
           if ((screen = SDL_GetWindowSurface(window)) == NULL) {
             trs_sdl_cleanup();
             fatal("failed to get window surface: %s", SDL_GetError());
           }
           trs_screen_refresh();
+          if (copyStatus == COPY_DEFINED) {
+            copyStatus = COPY_CLEAR;
+            ProcessCopySelection(0);
+            copyStatus = COPY_DEFINED;
+          }
 #else
       case SDL_ACTIVEEVENT:
         if (event.active.state & SDL_APPACTIVE) {
