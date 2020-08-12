@@ -911,10 +911,14 @@ int trs_gui_display_popup(const char *title, const char **entry,
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection], x, selection + y, 0);
     if (entry_count == 2) {
-      if (tolower(key) == 'n')
-        return 0;
-      if (tolower(key) == 'y')
-        return 1;
+      switch (key) {
+        case 'n':
+        case 'N':
+          return 0;
+        case 'y':
+        case 'Y':
+          return 1;
+      }
     }
     if (key >= '0' && key <= 'z') {
       key = toupper(key);
