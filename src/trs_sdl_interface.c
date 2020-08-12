@@ -76,9 +76,19 @@
 
 #define KEY_QUEUE_SIZE 32
 #define MAX_RECTS      2048
+#define MAX_SCALE      4
 #define WHITE          0xe0e0ff
 #define BLACK          0
 #define GREEN          0x344843
+
+/* currentmode values */
+#ifdef _WIN32
+#undef  ALTERNATE
+#endif
+#define NORMAL    0
+#define EXPANDED  1
+#define INVERSE   2
+#define ALTERNATE 4
 
 extern char *program_name;
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];

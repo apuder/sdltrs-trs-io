@@ -51,23 +51,9 @@
 
 #include "z80.h"
 
-#ifdef _WIN32
-#undef  ALTERNATE
-#endif
 
-#define NORMAL 0
-#define EXPANDED 1
-#define INVERSE 2
-#define ALTERNATE 4
-
-#define NO_PRINTER   0
-#define TEXT_PRINTER 1
-
-
-#define MAX_SCALE 4
 #define STRETCH_AMOUNT 4000
 #define DEFAULT_SAMPLE_RATE 44100  /* samples/sec to use for .wav files */
-#define MAX_JOYSTICKS 8
 
 #ifdef _WIN32
 #define DIR_SLASH '\\'

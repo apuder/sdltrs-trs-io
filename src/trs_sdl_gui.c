@@ -55,6 +55,8 @@
 #define MENU_WAFER_BROWSE_TYPE  5
 #define MENU_CASS_BROWSE_TYPE   6
 
+#define MAX_JOYSTICKS 8
+
 #define N_KEYS        52
 #define SHIFT         39
 

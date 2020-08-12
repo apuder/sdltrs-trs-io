@@ -46,6 +46,9 @@
 #include <sys/stat.h>
 #include "trs.h"
 
+#define NO_PRINTER   0
+#define TEXT_PRINTER 1
+
 static FILE *printer = NULL;
 static char printer_filename[FILENAME_MAX];
 static int printer_open = FALSE;
