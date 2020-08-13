@@ -174,6 +174,8 @@ static void trs_gui_default_dirs(void);
 static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static void trs_gui_keys_sdltrs(void);
+static void trs_gui_exec_cmd(void);
+static void trs_gui_save_bmp(void);
 static void trs_gui(void);
 int trs_gui_exit_sdltrs(void);
 
