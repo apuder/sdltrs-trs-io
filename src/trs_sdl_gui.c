@@ -146,6 +146,7 @@ static int  trs_gui_display_popup_matrix(const char *title, const char **entry,
                                          int rows, int cols, int selection);
 static int  trs_gui_display_question(const char *text);
 static int  trs_gui_file_overwrite(void);
+static void trs_gui_new_machine(void);
 static void trs_gui_disk_creation(void);
 #ifdef __linux
 static void trs_gui_disk_steps(void);
@@ -153,6 +154,13 @@ static void trs_gui_disk_steps(void);
 static void trs_gui_disk_options(void);
 static void trs_gui_diskset_load(void);
 static void trs_gui_diskset_save(void);
+static void trs_gui_disk_management(void);
+static void trs_gui_hard_management(void);
+static void trs_gui_stringy_management(void);
+static void trs_gui_cassette_management(void);
+static void trs_gui_model(void);
+static void trs_gui_display_management(void);
+static void trs_gui_misc_management(void);
 static int  trs_gui_config_management(void);
 static void trs_gui_printer_management(void);
 static int  trs_gui_joystick_get_button(void);
@@ -161,11 +169,11 @@ static void trs_gui_joystick_management(void);
 static void trs_gui_default_dirs(void);
 static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
+static void trs_gui_keys_sdltrs(void);
+static void trs_gui(void);
 static const char *trs_gui_get_key_name(int key);
 static int  trs_gui_virtual_keyboard(void);
-void trs_gui_model(void);
-void trs_gui_keys_sdltrs(void);
-int  trs_gui_exit_sdltrs(void);
+int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text(const char *text, int x, int y, int invert)
 {
@@ -1191,6 +1199,14 @@ int trs_gui_file_overwrite(void)
     return trs_gui_display_question("Overwrite file?");
 
   return 1;
+}
+
+void trs_gui_new_machine(void)
+{
+  trs_screen_var_reset();
+  romin = 0;
+  trs_screen_init();
+  trs_reset(1);
 }
 
 void trs_gui_disk_creation(void)
@@ -2551,27 +2567,6 @@ void trs_gui_about_sdltrs(void)
   trs_gui_get_key();
 }
 
-void trs_gui_display_pause(void)
-{
-  trs_gui_frame(1, 6, 62, 8);
-  trs_gui_clear_rect(2, 7, 60, 1);
-  trs_gui_center_text("Emulation Paused", 7, 0);
-  trs_gui_refresh();
-}
-
-void trs_gui_exec_cmd(void)
-{
-  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
-    if (trs_load_cmd(trs_cmd_file) == -1)
-      trs_gui_display_message("Error", "Failed to load CMD file");
-  }
-}
-
-int trs_gui_exit_sdltrs(void)
-{
-  return trs_gui_display_question("Exit SDLTRS?");
-}
-
 void trs_gui_keys_sdltrs(void)
 {
   trs_gui_clear_screen();
@@ -2602,12 +2597,25 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_get_key();
 }
 
-void trs_gui_new_machine(void)
+void trs_gui_display_pause(void)
 {
-  trs_screen_var_reset();
-  romin = 0;
-  trs_screen_init();
-  trs_reset(1);
+  trs_gui_frame(1, 6, 62, 8);
+  trs_gui_clear_rect(2, 7, 60, 1);
+  trs_gui_center_text("Emulation Paused", 7, 0);
+  trs_gui_refresh();
+}
+
+void trs_gui_exec_cmd(void)
+{
+  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
+    if (trs_load_cmd(trs_cmd_file) == -1)
+      trs_gui_display_message("Error", "Failed to load CMD file");
+  }
+}
+
+int trs_gui_exit_sdltrs(void)
+{
+  return trs_gui_display_question("Exit SDLTRS?");
 }
 
 void trs_gui_save_bmp(void)
@@ -2766,4 +2774,77 @@ void trs_gui_joy_gui(void)
       trs_exit(1);
       break;
   }
+}
+
+void call_function(int function)
+{
+  SDL_PauseAudio(1);
+  if (function == PAUSE) {
+    trs_paused = !trs_paused;
+    trs_screen_caption();
+    if (!trs_paused)
+      trs_screen_refresh();
+  }
+  else if (function == RESET)
+    trs_reset(1);
+  else if (function == EXIT)
+    trs_exit(0);
+  else {
+    switch (function) {
+      case GUI:
+        trs_gui();
+        break;
+      case JOYGUI:
+        trs_gui_joy_gui();
+        break;
+      case KEYBRD:
+        trs_gui_get_virtual_key();
+        break;
+      case SAVE:
+        trs_gui_save_state();
+        break;
+      case LOAD:
+        trs_gui_load_state();
+        break;
+      case DISK:
+        trs_gui_disk_management();
+        break;
+      case HARD:
+        trs_gui_hard_management();
+        break;
+      case STRINGY:
+        trs_gui_stringy_management();
+        break;
+      case TAPE:
+        trs_gui_cassette_management();
+        break;
+      case WRITE:
+        trs_gui_write_config();
+        break;
+      case READ:
+        trs_gui_read_config();
+        break;
+      case EMULATOR:
+        trs_gui_model();
+        break;
+      case INTERFACE:
+        trs_gui_display_management();
+        break;
+      case OTHER:
+        trs_gui_misc_management();
+        break;
+      case KEYS:
+        trs_gui_keys_sdltrs();
+        break;
+      case EXEC:
+        trs_gui_exec_cmd();
+        break;
+      case SAVE_BMP:
+        trs_gui_save_bmp();
+        break;
+    }
+    trs_screen_refresh();
+    trs_sdl_flush();
+  }
+  SDL_PauseAudio(0);
 }

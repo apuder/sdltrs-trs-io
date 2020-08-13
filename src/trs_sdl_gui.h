@@ -56,26 +56,9 @@
 extern int jbutton_map[N_JOYBUTTONS];
 extern int jaxis_mapped;
 
+void call_function(int function);
 void trs_gui_display_pause(void);
-void trs_gui_exec_cmd(void);
 int  trs_gui_file_browse(const char* path, char* filename, const char* mask,
                          int browse_dir, const char* type);
-void trs_gui_disk_management(void);
-void trs_gui_hard_management(void);
-void trs_gui_stringy_management(void);
-void trs_gui_cassette_management(void);
-void trs_gui_display_management(void);
-void trs_gui_misc_management(void);
-void trs_gui_save_state(void);
-int  trs_gui_load_state(void);
-void trs_gui_write_config(void);
-int  trs_gui_read_config(void);
-void trs_gui_save_bmp(void);
-void trs_gui_new_machine(void);
-void trs_gui(void);
-
 void trs_gui_refresh(void);
 void trs_gui_write_char(int col, int row, unsigned char char_index, int invert);
-
-void trs_gui_get_virtual_key(void);
-void trs_gui_joy_gui(void);
