@@ -163,6 +163,10 @@ static void trs_gui_display_management(void);
 static void trs_gui_misc_management(void);
 static int  trs_gui_config_management(void);
 static void trs_gui_printer_management(void);
+static const char *trs_gui_get_key_name(int key);
+static int  trs_gui_virtual_keyboard(void);
+static void trs_gui_get_virtual_key(void);
+static void trs_gui_joy_gui(void);
 static int  trs_gui_joystick_get_button(void);
 static void trs_gui_joystick_display_map(int button);
 static void trs_gui_joystick_management(void);
@@ -171,8 +175,6 @@ static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
 static void trs_gui_keys_sdltrs(void);
 static void trs_gui(void);
-static const char *trs_gui_get_key_name(int key);
-static int  trs_gui_virtual_keyboard(void);
 int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text(const char *text, int x, int y, int invert)
@@ -2276,6 +2278,79 @@ void trs_gui_printer_management(void)
   }
 }
 
+const char *trs_gui_get_key_name(int key)
+{
+  int i, found = 0, shifted = 0;
+
+  for (i = 0; i < N_KEYS && !found; i++)
+    if (key_syms[i] == key)
+      found = 1;
+  if (!found) {
+    shifted = 1;
+    for (i = 0; i < N_KEYS && !found; i++)
+      if (key_syms_shifted[i] == key)
+        found = 1;
+  }
+  if (found)
+    return !shifted ? key_names[i - 1] : key_names_shifted[i - 1];
+  else
+    return "???";
+}
+
+int trs_gui_virtual_keyboard(void)
+{
+  static int saved_selection = 0;
+  int key_index = SHIFT, shifted = 0;
+
+  while (key_index == SHIFT || (shifted && key_syms_shifted[key_index] == -1)) {
+    key_index = trs_gui_display_popup_matrix("Virtual Keyboard",
+        !shifted ? key_names : key_names_shifted, 4, 13, saved_selection);
+    if (key_index == -1)
+      return -1;
+    if (key_index == SHIFT)
+      shifted = 1 - shifted;
+    saved_selection = key_index;
+  }
+  return !shifted ? key_syms[key_index] : key_syms_shifted[key_index];
+}
+
+void trs_gui_get_virtual_key(void)
+{
+  int key = trs_gui_virtual_keyboard();
+
+  if (key != -1)
+    trs_xlate_keysym(key);
+}
+
+void trs_gui_joy_gui(void)
+{
+  int selection = trs_gui_display_popup_matrix("Joystick GUI", function_choices, 3, 2, 0);
+
+  if (selection == -1)
+    return;
+
+  switch (function_codes[selection]) {
+    case GUI:
+      trs_gui();
+      break;
+    case KEYBRD:
+      trs_gui_get_virtual_key();
+      break;
+    case SAVE:
+      trs_gui_save_state();
+      break;
+    case LOAD:
+      trs_gui_load_state();
+      break;
+    case RESET:
+      trs_reset(1);
+      break;
+    case EXIT:
+      trs_exit(1);
+      break;
+  }
+}
+
 int trs_gui_joystick_get_button(void)
 {
   SDL_Event event;
@@ -2700,79 +2775,6 @@ void trs_gui(void)
       case -1:
         return;
     }
-  }
-}
-
-const char *trs_gui_get_key_name(int key)
-{
-  int i, found = 0, shifted = 0;
-
-  for (i = 0; i < N_KEYS && !found; i++)
-    if (key_syms[i] == key)
-      found = 1;
-  if (!found) {
-    shifted = 1;
-    for (i = 0; i < N_KEYS && !found; i++)
-      if (key_syms_shifted[i] == key)
-        found = 1;
-  }
-  if (found)
-    return !shifted ? key_names[i - 1] : key_names_shifted[i - 1];
-  else
-    return "???";
-}
-
-int trs_gui_virtual_keyboard(void)
-{
-  static int saved_selection = 0;
-  int key_index = SHIFT, shifted = 0;
-
-  while (key_index == SHIFT || (shifted && key_syms_shifted[key_index] == -1)) {
-    key_index = trs_gui_display_popup_matrix("Virtual Keyboard",
-        !shifted ? key_names : key_names_shifted, 4, 13, saved_selection);
-    if (key_index == -1)
-      return -1;
-    if (key_index == SHIFT)
-      shifted = 1 - shifted;
-    saved_selection = key_index;
-  }
-  return !shifted ? key_syms[key_index] : key_syms_shifted[key_index];
-}
-
-void trs_gui_get_virtual_key(void)
-{
-  int key = trs_gui_virtual_keyboard();
-
-  if (key != -1)
-    trs_xlate_keysym(key);
-}
-
-void trs_gui_joy_gui(void)
-{
-  int selection = trs_gui_display_popup_matrix("Joystick GUI", function_choices, 3, 2, 0);
-
-  if (selection == -1)
-    return;
-
-  switch (function_codes[selection]) {
-    case GUI:
-      trs_gui();
-      break;
-    case KEYBRD:
-      trs_gui_get_virtual_key();
-      break;
-    case SAVE:
-      trs_gui_save_state();
-      break;
-    case LOAD:
-      trs_gui_load_state();
-      break;
-    case RESET:
-      trs_reset(1);
-      break;
-    case EXIT:
-      trs_exit(1);
-      break;
   }
 }
 
