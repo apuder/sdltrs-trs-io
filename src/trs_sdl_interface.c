@@ -96,8 +96,6 @@ extern int  key_queue[KEY_QUEUE_SIZE];
 extern int  key_queue_head;
 extern int  key_queue_entries;
 extern int  trs_gui_exit_sdltrs(void);
-extern void trs_gui_keys_sdltrs(void);
-extern void trs_gui_model(void);
 extern unsigned int cycles_per_timer;
 
 /* Public data */
