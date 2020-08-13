@@ -58,7 +58,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/time.h>
 #include <sys/file.h>
 #include <unistd.h>
 #include <SDL.h>
