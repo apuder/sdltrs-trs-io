@@ -139,11 +139,13 @@ static void trs_gui_delete_filename_list(void);
 static int  trs_gui_readdirectory(const char *path, const char *mask, int browse_dir);
 static int  trs_gui_input_string(const char *title, const char *input, char* output,
                                  unsigned int limit, int file);
+static int  trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
 static int  trs_gui_display_popup(const char *title, const char **entry,
                                   int entry_count, int selection);
 static int  trs_gui_display_popup_matrix(const char *title, const char **entry,
                                          int rows, int cols, int selection);
-static int  trs_gui_display_menu(const char* title, MENU_ENTRY *entry, int selection);
+static int  trs_gui_display_question(const char *text);
+static int  trs_gui_file_overwrite(void);
 static void trs_gui_disk_creation(void);
 #ifdef __linux
 static void trs_gui_disk_steps(void);
@@ -151,20 +153,18 @@ static void trs_gui_disk_steps(void);
 static void trs_gui_disk_options(void);
 static void trs_gui_diskset_load(void);
 static void trs_gui_diskset_save(void);
-static void trs_gui_joystick_management(void);
+static int  trs_gui_config_management(void);
 static void trs_gui_printer_management(void);
+static int  trs_gui_joystick_get_button(void);
+static void trs_gui_joystick_display_map(int button);
+static void trs_gui_joystick_management(void);
 static void trs_gui_default_dirs(void);
 static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
-static int  trs_gui_config_management(void);
-static int  trs_gui_joystick_get_button(void);
-static void trs_gui_joystick_display_map(int button);
 static const char *trs_gui_get_key_name(int key);
 static int  trs_gui_virtual_keyboard(void);
-static int  trs_gui_display_question(const char *text);
-static int  trs_gui_file_overwrite(void);
-void trs_gui_keys_sdltrs(void);
 void trs_gui_model(void);
+void trs_gui_keys_sdltrs(void);
 int  trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text(const char *text, int x, int y, int invert)
@@ -376,14 +376,6 @@ void trs_gui_display_message(const char* title, const char *message)
         return;
     }
   }
-}
-
-void trs_gui_display_pause(void)
-{
-  trs_gui_frame(1, 6, 62, 8);
-  trs_gui_clear_rect(2, 7, 60, 1);
-  trs_gui_center_text("Emulation Paused", 7, 0);
-  trs_gui_refresh();
 }
 
 void trs_gui_create_filename_list(void)
@@ -886,83 +878,6 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   }
 }
 
-int trs_gui_display_popup(const char *title, const char **entry,
-                          int entry_count, int selection)
-{
-  int const saved_selection = selection;
-  int i, key;
-  int x, y;
-  unsigned int max_len = 0;
-
-  for (i = 0; i < entry_count; i++) {
-    if (strlen(entry[i]) > max_len)
-      max_len = strlen(entry[i]);
-  }
-  x = (64 - max_len) / 2;
-  y = (16 - entry_count) / 2;
-
-  trs_gui_frame(x - 1, y - 1, x + max_len, y + entry_count);
-  trs_gui_center_text(title, y - 1, 0);
-
-  for (i = 0; i < entry_count; i++)
-    trs_gui_write_text(entry[i], x, y + i, 0);
-
-  while (1) {
-    trs_gui_write_text(entry[selection], x, selection + y, 1);
-    trs_gui_refresh();
-    key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], x, selection + y, 0);
-    if (entry_count == 2) {
-      switch (key) {
-        case 'n':
-        case 'N':
-          return 0;
-        case 'y':
-        case 'Y':
-          return 1;
-      }
-    }
-    if (key >= '0' && key <= 'z') {
-      key = toupper(key);
-      for (i = 0; i < entry_count; i++) {
-        if (strchr(entry[i], key)) {
-          selection = i;
-          break;
-        }
-      }
-    } else {
-      switch (key) {
-        case SDLK_DOWN:
-        case SDLK_RIGHT:
-          selection++;
-          if (selection > entry_count - 1)
-            selection = 0;
-          break;
-        case SDLK_UP:
-        case SDLK_LEFT:
-          selection--;
-          if (selection < 0)
-            selection = entry_count - 1;
-          break;
-        case SDLK_HOME:
-        case SDLK_PAGEUP:
-          selection = 0;
-          break;
-        case SDLK_END:
-        case SDLK_PAGEDOWN:
-          selection = entry_count - 1;
-          break;
-        case SDLK_RETURN:
-        case SDLK_SPACE:
-        case SDLK_TAB:
-          return selection;
-        case SDLK_ESCAPE:
-          return saved_selection;
-      }
-    }
-  }
-}
-
 int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
 {
   int num = 0, i, key;
@@ -1098,6 +1013,184 @@ int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
       }
     }
   }
+}
+
+int trs_gui_display_popup(const char *title, const char **entry,
+                          int entry_count, int selection)
+{
+  int const saved_selection = selection;
+  int i, key;
+  int x, y;
+  unsigned int max_len = 0;
+
+  for (i = 0; i < entry_count; i++) {
+    if (strlen(entry[i]) > max_len)
+      max_len = strlen(entry[i]);
+  }
+  x = (64 - max_len) / 2;
+  y = (16 - entry_count) / 2;
+
+  trs_gui_frame(x - 1, y - 1, x + max_len, y + entry_count);
+  trs_gui_center_text(title, y - 1, 0);
+
+  for (i = 0; i < entry_count; i++)
+    trs_gui_write_text(entry[i], x, y + i, 0);
+
+  while (1) {
+    trs_gui_write_text(entry[selection], x, selection + y, 1);
+    trs_gui_refresh();
+    key = trs_gui_get_key();
+    trs_gui_write_text(entry[selection], x, selection + y, 0);
+    if (entry_count == 2) {
+      switch (key) {
+        case 'n':
+        case 'N':
+          return 0;
+        case 'y':
+        case 'Y':
+          return 1;
+      }
+    }
+    if (key >= '0' && key <= 'z') {
+      key = toupper(key);
+      for (i = 0; i < entry_count; i++) {
+        if (strchr(entry[i], key)) {
+          selection = i;
+          break;
+        }
+      }
+    } else {
+      switch (key) {
+        case SDLK_DOWN:
+        case SDLK_RIGHT:
+          selection++;
+          if (selection > entry_count - 1)
+            selection = 0;
+          break;
+        case SDLK_UP:
+        case SDLK_LEFT:
+          selection--;
+          if (selection < 0)
+            selection = entry_count - 1;
+          break;
+        case SDLK_HOME:
+        case SDLK_PAGEUP:
+          selection = 0;
+          break;
+        case SDLK_END:
+        case SDLK_PAGEDOWN:
+          selection = entry_count - 1;
+          break;
+        case SDLK_RETURN:
+        case SDLK_SPACE:
+        case SDLK_TAB:
+          return selection;
+        case SDLK_ESCAPE:
+          return saved_selection;
+      }
+    }
+  }
+}
+
+int trs_gui_display_popup_matrix(const char* title, const char **entry,
+                                 int rows, int cols, int selection)
+{
+  int const entry_count = rows * cols;
+  int row, col;
+  int i, j, key;
+  int width, x, y;
+  unsigned int max_len = 0;
+
+  if (selection < 0)
+    selection = 0;
+  else if (selection >= entry_count)
+    selection = entry_count - 1;
+
+  row = selection / cols;
+  col = selection % cols;
+
+  for (i = 0; i < entry_count; i++)
+    if (strlen(entry[i]) + 1 > max_len)
+      max_len = strlen(entry[i]) + 1;
+
+  width = cols * max_len - 1;
+  x = (64 - width) / 2;
+  y = (16 - rows) / 2;
+
+  trs_gui_frame(x - 1, y - 1, x + width, y + rows);
+  trs_gui_clear_rect(x, y, width, rows);
+  trs_gui_write_text(title, x + 1, y - 1, 0);
+  for (i = 0; i < rows; i++)
+    for (j = 0; j < cols; j++)
+      trs_gui_write_text(entry[i * cols + j], x + j * max_len, y + i, 0);
+
+  while (1) {
+    selection = row * cols + col;
+    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 1);
+    trs_gui_refresh();
+    key = trs_gui_get_key();
+    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 0);
+    switch (key) {
+      case SDLK_DOWN:
+        row++;
+        if (row > rows - 1)
+          row = 0;
+        break;
+      case SDLK_UP:
+        row--;
+        if (row < 0)
+          row = rows - 1;
+        break;
+      case SDLK_RIGHT:
+        col++;
+        if (col > cols - 1)
+          col = 0;
+        break;
+      case SDLK_LEFT:
+        col--;
+        if (col < 0)
+          col = cols - 1;
+        break;
+      case SDLK_HOME:
+        col = 0;
+        break;
+      case SDLK_END:
+        col = cols - 1;
+        break;
+      case SDLK_PAGEUP:
+        row = 0;
+        break;
+      case SDLK_PAGEDOWN:
+        row = rows - 1;
+        break;
+      case SDLK_RETURN:
+      case SDLK_SPACE:
+      case SDLK_TAB:
+        return selection;
+      case SDLK_ESCAPE:
+        return -1;
+    }
+  }
+}
+
+int trs_gui_display_question(const char *text)
+{
+  const char *answer_choices[] = {
+    "       No        ",
+    "       Yes       "
+  };
+
+  return trs_gui_display_popup(text, answer_choices, 2, 0);
+}
+
+int trs_gui_file_overwrite(void)
+{
+  struct stat st;
+
+  if (stat(filename, &st) == 0 && S_ISREG(st.st_mode))
+    return trs_gui_display_question("Overwrite file?");
+
+  return 1;
 }
 
 void trs_gui_disk_creation(void)
@@ -1651,6 +1744,124 @@ void trs_gui_cassette_management(void)
   }
 }
 
+void trs_gui_model(void)
+{
+  MENU_ENTRY model_menu[] =
+  {{"Model                                                       ", MENU_NORMAL_TYPE},
+   {"CPU Clock Speed                                             ", MENU_NORMAL_TYPE},
+   {"Exatron Stringy Floppy Emulation for Model I                ", MENU_NORMAL_TYPE},
+   {"Lowercase Modification for Model I                          ", MENU_NORMAL_TYPE},
+   {"Speedup Kit Emulation for Model I                           ", MENU_NORMAL_TYPE},
+   {"", MENU_TITLE_TYPE},
+   {"Grafyx Solution (Micro-Labs) Graphics Emulation             ", MENU_NORMAL_TYPE},
+   {"LE18 (Lowe Electronics) Graphics Emulation                  ", MENU_NORMAL_TYPE},
+   {"", MENU_TITLE_TYPE},
+   {"Dave Huffman (and other) Memory Expansion                   ", MENU_NORMAL_TYPE},
+   {"HyperMem (Anitek Software) 4/4P Memory Expansion            ", MENU_NORMAL_TYPE},
+   {"SuperMem (Alpha Technology) I/III Memory Expansion          ", MENU_NORMAL_TYPE},
+   {"TRS-80 Users Society Selector Memory Expansion              ", MENU_NORMAL_TYPE},
+   {"", 0}};
+  const char *model_choices[4] =  {"  TRS-80 Model I",
+                                   "TRS-80 Model III",
+                                   "  TRS-80 Model 4",
+                                   " TRS-80 Model 4P"};
+  const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
+  float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
+  char input[8];
+  int selection = 0;
+  int model_selection = trs_model == 1 ? 0 : trs_model - 2;
+
+  while (1) {
+    snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
+    snprintf(&model_menu[1].title[50], 11, "%6.2f MHz", clock_mhz[model_selection]);
+    snprintf(&model_menu[2].title[50], 11, "%s", yes_no_choices[stringy]);
+    snprintf(&model_menu[3].title[50], 11, "%s", yes_no_choices[lowercase]);
+    snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
+    snprintf(&model_menu[6].title[50], 11, "%s", yes_no_choices[grafyx_get_microlabs()]);
+    snprintf(&model_menu[7].title[50], 11, "%s", yes_no_choices[lowe_le18]);
+    snprintf(&model_menu[9].title[50], 11, "%s", yes_no_choices[huffman_ram]);
+    snprintf(&model_menu[10].title[50], 11, "%s", yes_no_choices[hypermem]);
+    snprintf(&model_menu[11].title[50], 11, "%s", yes_no_choices[supermem]);
+    snprintf(&model_menu[12].title[50], 11, "%s", yes_no_choices[selector]);
+    trs_gui_clear_screen();
+
+    selection = trs_gui_display_menu("SDLTRS Emulator Settings", model_menu, selection);
+    switch (selection) {
+      case 0:
+        model_selection = trs_gui_display_popup("Model", model_choices, 4, model_selection);
+        break;
+      case 1:
+        snprintf(input, 6, "%.2f", clock_mhz[model_selection]);
+        if (trs_gui_input_string("Enter CPU Clock Speed in MHz",
+            input, input, 6, 0) == 0) {
+          float value = atof(input);
+
+          if (value >= 0.1 && value <= 99.0) {
+            clock_mhz[model_selection] = value;
+            switch (model_selection) {
+              case 0:
+              default:
+                clock_mhz_1 = value;
+                break;
+              case 1:
+                clock_mhz_3 = value;
+                break;
+              case 2:
+              case 3:
+                clock_mhz_4 = value;
+                break;
+            }
+            trs_timer_init();
+          }
+        }
+        break;
+      case 2:
+        stringy = trs_gui_display_popup("Stringy", yes_no_choices, 2, stringy);
+        break;
+      case 3:
+        lowercase = trs_gui_display_popup("Lowercase", yes_no_choices, 2, lowercase);
+        break;
+      case 4:
+        speedup = trs_gui_display_popup("Speedup", speed_choices, 3, speedup);
+        break;
+      case 6:
+        grafyx_set_microlabs(trs_gui_display_popup("Grafyx", yes_no_choices, 2,
+            grafyx_get_microlabs()));
+        break;
+      case 7:
+        lowe_le18 = trs_gui_display_popup("Lowe LE18", yes_no_choices, 2, lowe_le18);
+        break;
+      case 9:
+        huffman_ram = trs_gui_display_popup("Huffman", yes_no_choices, 2, huffman_ram);
+        if (huffman_ram)
+          hypermem = 0;
+        break;
+      case 10:
+        hypermem = trs_gui_display_popup("HyperMem", yes_no_choices, 2, hypermem);
+        if (hypermem)
+          huffman_ram = 0;
+        break;
+      case 11:
+        supermem = trs_gui_display_popup("SuperMem", yes_no_choices, 2, supermem);
+        if (supermem)
+          selector = 0;
+        break;
+      case 12:
+        selector = trs_gui_display_popup("Selector", yes_no_choices, 2, selector);
+        if (selector)
+          supermem = 0;
+        break;
+      case -1:
+        model_selection = (model_selection == 0 ? 1 : model_selection + 2);
+        if (trs_model != model_selection) {
+          trs_model = model_selection;
+          trs_gui_new_machine();
+        }
+        return;
+    }
+  }
+}
+
 void trs_gui_display_management(void)
 {
   MENU_ENTRY display_menu[] =
@@ -1830,6 +2041,225 @@ void trs_gui_display_management(void)
   }
 }
 
+void trs_gui_misc_management(void)
+{
+  MENU_ENTRY misc_menu[] =
+  {{"Emtsafe                                                     ", MENU_NORMAL_TYPE},
+   {"Keystretch Value                                            ", MENU_NORMAL_TYPE},
+   {"Serial Port Name:                                           ", MENU_TITLE_TYPE},
+   {"                                                            ", MENU_NORMAL_TYPE},
+   {"Serial Switches                                             ", MENU_NORMAL_TYPE},
+   {"Shift Bracket Emulation                                     ", MENU_NORMAL_TYPE},
+   {"Sound Output                                                ", MENU_NORMAL_TYPE},
+   {"Turbo Mode                                                  ", MENU_NORMAL_TYPE},
+   {"Turbo Speed                                                 ", MENU_NORMAL_TYPE},
+#if defined(SDL2) || !defined(NOX)
+   {"Turbo Paste                                                 ", MENU_NORMAL_TYPE},
+#endif
+   {"", 0}};
+  char input[12];
+  int selection = 0;
+
+  while (1) {
+    snprintf(&misc_menu[0].title[50], 11, "%s", yes_no_choices[trs_emtsafe]);
+    snprintf(&misc_menu[1].title[50], 11, "%10d", stretch_amount);
+    trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 58);
+    snprintf(&misc_menu[4].title[56], 5, "0x%02X", trs_uart_switches);
+    snprintf(&misc_menu[5].title[50], 11, "%s", yes_no_choices[trs_kb_bracket_state]);
+    snprintf(&misc_menu[6].title[50], 11, "%s", yes_no_choices[trs_sound]);
+    snprintf(&misc_menu[7].title[50], 11, "%s", yes_no_choices[timer_overclock]);
+    snprintf(&misc_menu[8].title[50], 11, "%10d", timer_overclock_rate);
+#if defined(SDL2) || !defined(NOX)
+    snprintf(&misc_menu[9].title[50], 11, "%s", yes_no_choices[turbo_paste]);
+#endif
+    trs_gui_clear_screen();
+
+    selection = trs_gui_display_menu("SDLTRS Miscellaneous Settings", misc_menu, selection);
+    switch (selection) {
+      case 0:
+        trs_emtsafe = trs_gui_display_popup("Emtsafe", yes_no_choices, 2, trs_emtsafe);
+        break;
+      case 1:
+        snprintf(input, 11, "%d", stretch_amount);
+        if (trs_gui_input_string("Enter Keystretch in Cycles", input, input, 10, 0) == 0) {
+          stretch_amount = atoi(input);
+          if (stretch_amount < 0)
+            stretch_amount = STRETCH_AMOUNT;
+        }
+        break;
+      case 3:
+        filename[0] = 0;
+        if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name,
+            filename, FILENAME_MAX, 0) == 0) {
+          snprintf(trs_uart_name, FILENAME_MAX, "%s", filename);
+          trs_uart_init(0);
+        }
+        break;
+      case 4:
+        snprintf(input, 3, "%2X", trs_uart_switches);
+        if (trs_gui_input_string("Enter Serial Switches (Hex, XX)", input, input, 2, 0) == 0) {
+          trs_uart_switches = strtol(input, NULL, 16);
+          trs_uart_init(0);
+        }
+        break;
+      case 5:
+        trs_kb_bracket_state = trs_gui_display_popup("Bracket", yes_no_choices, 2, trs_kb_bracket_state);
+        break;
+      case 6:
+        trs_sound = trs_gui_display_popup("Sound", yes_no_choices, 2, trs_sound);
+        break;
+      case 7:
+        timer_overclock = trs_gui_display_popup("Turbo", yes_no_choices, 2, timer_overclock);
+        break;
+      case 8:
+        snprintf(input, 11, "%d", timer_overclock_rate);
+        if (trs_gui_input_string("Enter Turbo Rate Multiplier", input, input, 10, 0) == 0) {
+          timer_overclock_rate = atoi(input);
+          if (timer_overclock_rate <= 0)
+            timer_overclock_rate = 1;
+        }
+        break;
+#if defined(SDL2) || !defined(NOX)
+      case 9:
+        turbo_paste = trs_gui_display_popup("Paste", yes_no_choices, 2, turbo_paste);
+        break;
+#endif
+      case -1:
+        trs_kb_bracket(trs_kb_bracket_state);
+        trs_screen_caption();
+        return;
+    }
+  }
+}
+
+void trs_gui_save_state(void)
+{
+  filename[0] = 0;
+  if (trs_gui_input_string("Save Emulator State, TAB selects directory",
+      init_state_file[0] != 0 ? init_state_file : trs_state_dir, filename,
+      FILENAME_MAX - 5, 1) == 0) {
+    trs_add_extension(filename, ".t8s");
+    if (trs_gui_file_overwrite()) {
+      if (trs_state_save(filename) == -1)
+        trs_gui_display_message("Error", "Failed to save State");
+      else
+        snprintf(init_state_file, FILENAME_MAX, "%s", filename);
+    }
+  }
+}
+
+int trs_gui_load_state(void)
+{
+  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0, "Saved State (.t8s)") >= 0) {
+    if (trs_state_load(filename) == 0)
+      return 0;
+    trs_gui_display_message("Error", "Failed to load State");
+  }
+  return -1;
+}
+
+void trs_gui_write_config(void)
+{
+  filename[0] = 0;
+  if (trs_gui_input_string("Write Configuration, TAB selects directory",
+      trs_config_file, filename, FILENAME_MAX - 5, 1) == 0) {
+    trs_add_extension(filename, ".t8c");
+    if (trs_gui_file_overwrite()) {
+      if (trs_write_config_file(filename) == -1)
+        trs_gui_display_message("Error", "Failed to write Configuration");
+      else
+        snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
+    }
+  }
+}
+
+int trs_gui_read_config(void)
+{
+  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0,
+      "Configuration (.t8c)") >= 0) {
+    if (trs_load_config_file() == 0) {
+      trs_gui_new_machine();
+      return 0;
+    }
+    trs_gui_display_message("Error", "Failed to read Configuration");
+  }
+  return -1;
+}
+
+static int trs_gui_config_management(void)
+{
+  MENU_ENTRY misc_menu[] =
+  {{"Save Emulator State (ALT-S)", MENU_NORMAL_TYPE},
+   {"Load Emulator State (ALT-L)", MENU_NORMAL_TYPE},
+   {"Write Configuration (ALT-W)", MENU_NORMAL_TYPE},
+   {"Read Configuration  (ALT-R)", MENU_NORMAL_TYPE},
+   {"", 0}};
+  int selection = 0;
+
+  while (1) {
+    trs_gui_clear_screen();
+
+    selection = trs_gui_display_menu("SDLTRS Configuration/State Files", misc_menu, selection);
+    switch (selection) {
+      case 0:
+        trs_gui_save_state();
+        break;
+      case 1:
+        if (trs_gui_load_state() == 0)
+          return 1;
+        break;
+      case 2:
+        trs_gui_write_config();
+        break;
+      case 3:
+        if (trs_gui_read_config() == 0)
+          return 1;
+        break;
+      case -1:
+        return 0;
+    }
+  }
+}
+
+void trs_gui_printer_management(void)
+{
+  MENU_ENTRY printer_menu[] =
+  {{"Close and Reopen Printer Output File", MENU_NORMAL_TYPE},
+   {"Printer Type                                                ", MENU_NORMAL_TYPE},
+   {"Printer Command:", MENU_TITLE_TYPE},
+   {"   ", MENU_NORMAL_TYPE},
+   {"", 0}};
+  const char *printer_choices[2] = {"     None", "     Text"};
+  int selection = 0;
+
+  while (1) {
+    snprintf(&printer_menu[1].title[51], 10, "%s", printer_choices[trs_printer]);
+    trs_gui_limit_string(trs_printer_command, &printer_menu[3].title[2], 58);
+    trs_gui_clear_screen();
+
+    selection = trs_gui_display_menu("SDLTRS Printer Management", printer_menu, selection);
+    switch (selection) {
+      case 0:
+        if (trs_printer_reset() == 0)
+          trs_gui_display_message("Status", "Printer file closed, printer command ran");
+        else
+          trs_gui_display_message("Warning", "No Printer Output in File");
+        break;
+      case 1:
+        trs_printer = trs_gui_display_popup("Printer", printer_choices, 2, trs_printer);
+        break;
+      case 3:
+        filename[0] = 0;
+        if (trs_gui_input_string("Enter Printer Command", trs_printer_command,
+            filename, FILENAME_MAX, 0) == 0)
+          snprintf(trs_printer_command, FILENAME_MAX, "%s", filename);
+        break;
+      case -1:
+        return;
+    }
+  }
+}
+
 int trs_gui_joystick_get_button(void)
 {
   SDL_Event event;
@@ -1899,26 +2329,6 @@ void trs_gui_joystick_display_map(int button)
       trs_gui_write_text(text, 5 + col * 12, 11 + row, button == i);
     }
   }
-}
-
-int trs_gui_display_question(const char *text)
-{
-  const char *answer_choices[] = {
-    "       No        ",
-    "       Yes       "
-  };
-
-  return trs_gui_display_popup(text, answer_choices, 2, 0);
-}
-
-int trs_gui_file_overwrite(void)
-{
-  struct stat st;
-
-  if (stat(filename, &st) == 0 && S_ISREG(st.st_mode))
-    return trs_gui_display_question("Overwrite file?");
-
-  return 1;
 }
 
 void trs_gui_joystick_management(void)
@@ -2026,254 +2436,6 @@ void trs_gui_joystick_management(void)
         if (trs_joystick_num != gui_joystick_num) {
           trs_joystick_num = gui_joystick_num;
           trs_open_joystick();
-        }
-        return;
-    }
-  }
-}
-
-void trs_gui_misc_management(void)
-{
-  MENU_ENTRY misc_menu[] =
-  {{"Emtsafe                                                     ", MENU_NORMAL_TYPE},
-   {"Keystretch Value                                            ", MENU_NORMAL_TYPE},
-   {"Serial Port Name:                                           ", MENU_TITLE_TYPE},
-   {"                                                            ", MENU_NORMAL_TYPE},
-   {"Serial Switches                                             ", MENU_NORMAL_TYPE},
-   {"Shift Bracket Emulation                                     ", MENU_NORMAL_TYPE},
-   {"Sound Output                                                ", MENU_NORMAL_TYPE},
-   {"Turbo Mode                                                  ", MENU_NORMAL_TYPE},
-   {"Turbo Speed                                                 ", MENU_NORMAL_TYPE},
-#if defined(SDL2) || !defined(NOX)
-   {"Turbo Paste                                                 ", MENU_NORMAL_TYPE},
-#endif
-   {"", 0}};
-  char input[12];
-  int selection = 0;
-
-  while (1) {
-    snprintf(&misc_menu[0].title[50], 11, "%s", yes_no_choices[trs_emtsafe]);
-    snprintf(&misc_menu[1].title[50], 11, "%10d", stretch_amount);
-    trs_gui_limit_string(trs_uart_name, &misc_menu[3].title[2], 58);
-    snprintf(&misc_menu[4].title[56], 5, "0x%02X", trs_uart_switches);
-    snprintf(&misc_menu[5].title[50], 11, "%s", yes_no_choices[trs_kb_bracket_state]);
-    snprintf(&misc_menu[6].title[50], 11, "%s", yes_no_choices[trs_sound]);
-    snprintf(&misc_menu[7].title[50], 11, "%s", yes_no_choices[timer_overclock]);
-    snprintf(&misc_menu[8].title[50], 11, "%10d", timer_overclock_rate);
-#if defined(SDL2) || !defined(NOX)
-    snprintf(&misc_menu[9].title[50], 11, "%s", yes_no_choices[turbo_paste]);
-#endif
-    trs_gui_clear_screen();
-
-    selection = trs_gui_display_menu("SDLTRS Miscellaneous Settings", misc_menu, selection);
-    switch (selection) {
-      case 0:
-        trs_emtsafe = trs_gui_display_popup("Emtsafe", yes_no_choices, 2, trs_emtsafe);
-        break;
-      case 1:
-        snprintf(input, 11, "%d", stretch_amount);
-        if (trs_gui_input_string("Enter Keystretch in Cycles", input, input, 10, 0) == 0) {
-          stretch_amount = atoi(input);
-          if (stretch_amount < 0)
-            stretch_amount = STRETCH_AMOUNT;
-        }
-        break;
-      case 3:
-        filename[0] = 0;
-        if (trs_gui_input_string("Enter Serial Port Name", trs_uart_name,
-            filename, FILENAME_MAX, 0) == 0) {
-          snprintf(trs_uart_name, FILENAME_MAX, "%s", filename);
-          trs_uart_init(0);
-        }
-        break;
-      case 4:
-        snprintf(input, 3, "%2X", trs_uart_switches);
-        if (trs_gui_input_string("Enter Serial Switches (Hex, XX)", input, input, 2, 0) == 0) {
-          trs_uart_switches = strtol(input, NULL, 16);
-          trs_uart_init(0);
-        }
-        break;
-      case 5:
-        trs_kb_bracket_state = trs_gui_display_popup("Bracket", yes_no_choices, 2, trs_kb_bracket_state);
-        break;
-      case 6:
-        trs_sound = trs_gui_display_popup("Sound", yes_no_choices, 2, trs_sound);
-        break;
-      case 7:
-        timer_overclock = trs_gui_display_popup("Turbo", yes_no_choices, 2, timer_overclock);
-        break;
-      case 8:
-        snprintf(input, 11, "%d", timer_overclock_rate);
-        if (trs_gui_input_string("Enter Turbo Rate Multiplier", input, input, 10, 0) == 0) {
-          timer_overclock_rate = atoi(input);
-          if (timer_overclock_rate <= 0)
-            timer_overclock_rate = 1;
-        }
-        break;
-#if defined(SDL2) || !defined(NOX)
-      case 9:
-        turbo_paste = trs_gui_display_popup("Paste", yes_no_choices, 2, turbo_paste);
-        break;
-#endif
-      case -1:
-        trs_kb_bracket(trs_kb_bracket_state);
-        trs_screen_caption();
-        return;
-    }
-  }
-}
-
-void trs_gui_printer_management(void)
-{
-  MENU_ENTRY printer_menu[] =
-  {{"Close and Reopen Printer Output File", MENU_NORMAL_TYPE},
-   {"Printer Type                                                ", MENU_NORMAL_TYPE},
-   {"Printer Command:", MENU_TITLE_TYPE},
-   {"   ", MENU_NORMAL_TYPE},
-   {"", 0}};
-  const char *printer_choices[2] = {"     None", "     Text"};
-  int selection = 0;
-
-  while (1) {
-    snprintf(&printer_menu[1].title[51], 10, "%s", printer_choices[trs_printer]);
-    trs_gui_limit_string(trs_printer_command, &printer_menu[3].title[2], 58);
-    trs_gui_clear_screen();
-
-    selection = trs_gui_display_menu("SDLTRS Printer Management", printer_menu, selection);
-    switch (selection) {
-      case 0:
-        if (trs_printer_reset() == 0)
-          trs_gui_display_message("Status", "Printer file closed, printer command ran");
-        else
-          trs_gui_display_message("Warning", "No Printer Output in File");
-        break;
-      case 1:
-        trs_printer = trs_gui_display_popup("Printer", printer_choices, 2, trs_printer);
-        break;
-      case 3:
-        filename[0] = 0;
-        if (trs_gui_input_string("Enter Printer Command", trs_printer_command,
-            filename, FILENAME_MAX, 0) == 0)
-          snprintf(trs_printer_command, FILENAME_MAX, "%s", filename);
-        break;
-      case -1:
-        return;
-    }
-  }
-}
-
-void trs_gui_model(void)
-{
-  MENU_ENTRY model_menu[] =
-  {{"Model                                                       ", MENU_NORMAL_TYPE},
-   {"CPU Clock Speed                                             ", MENU_NORMAL_TYPE},
-   {"Exatron Stringy Floppy Emulation for Model I                ", MENU_NORMAL_TYPE},
-   {"Lowercase Modification for Model I                          ", MENU_NORMAL_TYPE},
-   {"Speedup Kit Emulation for Model I                           ", MENU_NORMAL_TYPE},
-   {"", MENU_TITLE_TYPE},
-   {"Grafyx Solution (Micro-Labs) Graphics Emulation             ", MENU_NORMAL_TYPE},
-   {"LE18 (Lowe Electronics) Graphics Emulation                  ", MENU_NORMAL_TYPE},
-   {"", MENU_TITLE_TYPE},
-   {"Dave Huffman (and other) Memory Expansion                   ", MENU_NORMAL_TYPE},
-   {"HyperMem (Anitek Software) 4/4P Memory Expansion            ", MENU_NORMAL_TYPE},
-   {"SuperMem (Alpha Technology) I/III Memory Expansion          ", MENU_NORMAL_TYPE},
-   {"TRS-80 Users Society Selector Memory Expansion              ", MENU_NORMAL_TYPE},
-   {"", 0}};
-  const char *model_choices[4] =  {"  TRS-80 Model I",
-                                   "TRS-80 Model III",
-                                   "  TRS-80 Model 4",
-                                   " TRS-80 Model 4P"};
-  const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
-  float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
-  char input[8];
-  int selection = 0;
-  int model_selection = trs_model == 1 ? 0 : trs_model - 2;
-
-  while (1) {
-    snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);
-    snprintf(&model_menu[1].title[50], 11, "%6.2f MHz", clock_mhz[model_selection]);
-    snprintf(&model_menu[2].title[50], 11, "%s", yes_no_choices[stringy]);
-    snprintf(&model_menu[3].title[50], 11, "%s", yes_no_choices[lowercase]);
-    snprintf(&model_menu[4].title[49], 12, "%s", speed_choices[speedup]);
-    snprintf(&model_menu[6].title[50], 11, "%s", yes_no_choices[grafyx_get_microlabs()]);
-    snprintf(&model_menu[7].title[50], 11, "%s", yes_no_choices[lowe_le18]);
-    snprintf(&model_menu[9].title[50], 11, "%s", yes_no_choices[huffman_ram]);
-    snprintf(&model_menu[10].title[50], 11, "%s", yes_no_choices[hypermem]);
-    snprintf(&model_menu[11].title[50], 11, "%s", yes_no_choices[supermem]);
-    snprintf(&model_menu[12].title[50], 11, "%s", yes_no_choices[selector]);
-    trs_gui_clear_screen();
-
-    selection = trs_gui_display_menu("SDLTRS Emulator Settings", model_menu, selection);
-    switch (selection) {
-      case 0:
-        model_selection = trs_gui_display_popup("Model", model_choices, 4, model_selection);
-        break;
-      case 1:
-        snprintf(input, 6, "%.2f", clock_mhz[model_selection]);
-        if (trs_gui_input_string("Enter CPU Clock Speed in MHz",
-            input, input, 6, 0) == 0) {
-          float value = atof(input);
-
-          if (value >= 0.1 && value <= 99.0) {
-            clock_mhz[model_selection] = value;
-            switch (model_selection) {
-              case 0:
-              default:
-                clock_mhz_1 = value;
-                break;
-              case 1:
-                clock_mhz_3 = value;
-                break;
-              case 2:
-              case 3:
-                clock_mhz_4 = value;
-                break;
-            }
-            trs_timer_init();
-          }
-        }
-        break;
-      case 2:
-        stringy = trs_gui_display_popup("Stringy", yes_no_choices, 2, stringy);
-        break;
-      case 3:
-        lowercase = trs_gui_display_popup("Lowercase", yes_no_choices, 2, lowercase);
-        break;
-      case 4:
-        speedup = trs_gui_display_popup("Speedup", speed_choices, 3, speedup);
-        break;
-      case 6:
-        grafyx_set_microlabs(trs_gui_display_popup("Grafyx", yes_no_choices, 2,
-            grafyx_get_microlabs()));
-        break;
-      case 7:
-        lowe_le18 = trs_gui_display_popup("Lowe LE18", yes_no_choices, 2, lowe_le18);
-        break;
-      case 9:
-        huffman_ram = trs_gui_display_popup("Huffman", yes_no_choices, 2, huffman_ram);
-        if (huffman_ram)
-          hypermem = 0;
-        break;
-      case 10:
-        hypermem = trs_gui_display_popup("HyperMem", yes_no_choices, 2, hypermem);
-        if (hypermem)
-          huffman_ram = 0;
-        break;
-      case 11:
-        supermem = trs_gui_display_popup("SuperMem", yes_no_choices, 2, supermem);
-        if (supermem)
-          selector = 0;
-        break;
-      case 12:
-        selector = trs_gui_display_popup("Selector", yes_no_choices, 2, selector);
-        if (selector)
-          supermem = 0;
-        break;
-      case -1:
-        model_selection = (model_selection == 0 ? 1 : model_selection + 2);
-        if (trs_model != model_selection) {
-          trs_model = model_selection;
-          trs_gui_new_machine();
         }
         return;
     }
@@ -2389,6 +2551,27 @@ void trs_gui_about_sdltrs(void)
   trs_gui_get_key();
 }
 
+void trs_gui_display_pause(void)
+{
+  trs_gui_frame(1, 6, 62, 8);
+  trs_gui_clear_rect(2, 7, 60, 1);
+  trs_gui_center_text("Emulation Paused", 7, 0);
+  trs_gui_refresh();
+}
+
+void trs_gui_exec_cmd(void)
+{
+  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
+    if (trs_load_cmd(trs_cmd_file) == -1)
+      trs_gui_display_message("Error", "Failed to load CMD file");
+  }
+}
+
+int trs_gui_exit_sdltrs(void)
+{
+  return trs_gui_display_question("Exit SDLTRS?");
+}
+
 void trs_gui_keys_sdltrs(void)
 {
   trs_gui_clear_screen();
@@ -2419,17 +2602,12 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_get_key();
 }
 
-void trs_gui_exec_cmd(void)
+void trs_gui_new_machine(void)
 {
-  if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
-    if (trs_load_cmd(trs_cmd_file) == -1)
-      trs_gui_display_message("Error", "Failed to load CMD file");
-  }
-}
-
-int trs_gui_exit_sdltrs(void)
-{
-  return trs_gui_display_question("Exit SDLTRS?");
+  trs_screen_var_reset();
+  romin = 0;
+  trs_screen_init();
+  trs_reset(1);
 }
 
 void trs_gui_save_bmp(void)
@@ -2445,103 +2623,6 @@ void trs_gui_save_bmp(void)
         trs_gui_display_message("Error", "Failed to save Screenshot");
     }
   }
-}
-
-void trs_gui_write_config(void)
-{
-  filename[0] = 0;
-  if (trs_gui_input_string("Write Configuration, TAB selects directory",
-      trs_config_file, filename, FILENAME_MAX - 5, 1) == 0) {
-    trs_add_extension(filename, ".t8c");
-    if (trs_gui_file_overwrite()) {
-      if (trs_write_config_file(filename) == -1)
-        trs_gui_display_message("Error", "Failed to write Configuration");
-      else
-        snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
-    }
-  }
-}
-
-int trs_gui_read_config(void)
-{
-  if (trs_gui_file_browse(trs_config_file, trs_config_file, ".t8c", 0,
-      "Configuration (.t8c)") >= 0) {
-    if (trs_load_config_file() == 0) {
-      trs_gui_new_machine();
-      return 0;
-    }
-    trs_gui_display_message("Error", "Failed to read Configuration");
-  }
-  return -1;
-}
-
-static int trs_gui_config_management(void)
-{
-  MENU_ENTRY misc_menu[] =
-  {{"Save Emulator State (ALT-S)", MENU_NORMAL_TYPE},
-   {"Load Emulator State (ALT-L)", MENU_NORMAL_TYPE},
-   {"Write Configuration (ALT-W)", MENU_NORMAL_TYPE},
-   {"Read Configuration  (ALT-R)", MENU_NORMAL_TYPE},
-   {"", 0}};
-  int selection = 0;
-
-  while (1) {
-    trs_gui_clear_screen();
-
-    selection = trs_gui_display_menu("SDLTRS Configuration/State Files", misc_menu, selection);
-    switch (selection) {
-      case 0:
-        trs_gui_save_state();
-        break;
-      case 1:
-        if (trs_gui_load_state() == 0)
-          return 1;
-        break;
-      case 2:
-        trs_gui_write_config();
-        break;
-      case 3:
-        if (trs_gui_read_config() == 0)
-          return 1;
-        break;
-      case -1:
-        return 0;
-    }
-  }
-}
-
-void trs_gui_save_state(void)
-{
-  filename[0] = 0;
-  if (trs_gui_input_string("Save Emulator State, TAB selects directory",
-      init_state_file[0] != 0 ? init_state_file : trs_state_dir, filename,
-      FILENAME_MAX - 5, 1) == 0) {
-    trs_add_extension(filename, ".t8s");
-    if (trs_gui_file_overwrite()) {
-      if (trs_state_save(filename) == -1)
-        trs_gui_display_message("Error", "Failed to save State");
-      else
-        snprintf(init_state_file, FILENAME_MAX, "%s", filename);
-    }
-  }
-}
-
-int trs_gui_load_state(void)
-{
-  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0, "Saved State (.t8s)") >= 0) {
-    if (trs_state_load(filename) == 0)
-      return 0;
-    trs_gui_display_message("Error", "Failed to load State");
-  }
-  return -1;
-}
-
-void trs_gui_new_machine(void)
-{
-  trs_screen_var_reset();
-  romin = 0;
-  trs_screen_init();
-  trs_reset(1);
 }
 
 void trs_gui(void)
@@ -2610,87 +2691,6 @@ void trs_gui(void)
         break;
       case -1:
         return;
-    }
-  }
-}
-
-int trs_gui_display_popup_matrix(const char* title, const char **entry,
-                                 int rows, int cols, int selection)
-{
-  int const entry_count = rows * cols;
-  int row, col;
-  int i, j, key;
-  int width, x, y;
-  unsigned int max_len = 0;
-
-  if (selection < 0)
-    selection = 0;
-  else if (selection >= entry_count)
-    selection = entry_count - 1;
-
-  row = selection / cols;
-  col = selection % cols;
-
-  for (i = 0; i < entry_count; i++)
-    if (strlen(entry[i]) + 1 > max_len)
-      max_len = strlen(entry[i]) + 1;
-
-  width = cols * max_len - 1;
-  x = (64 - width) / 2;
-  y = (16 - rows) / 2;
-
-  trs_gui_frame(x - 1, y - 1, x + width, y + rows);
-  trs_gui_clear_rect(x, y, width, rows);
-  trs_gui_write_text(title, x + 1, y - 1, 0);
-  for (i = 0; i < rows; i++)
-    for (j = 0; j < cols; j++)
-      trs_gui_write_text(entry[i * cols + j], x + j * max_len, y + i, 0);
-
-  while (1) {
-    selection = row * cols + col;
-    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 1);
-    trs_gui_refresh();
-    key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 0);
-    switch (key) {
-      case SDLK_DOWN:
-        row++;
-        if (row > rows - 1)
-          row = 0;
-        break;
-      case SDLK_UP:
-        row--;
-        if (row < 0)
-          row = rows - 1;
-        break;
-      case SDLK_RIGHT:
-        col++;
-        if (col > cols - 1)
-          col = 0;
-        break;
-      case SDLK_LEFT:
-        col--;
-        if (col < 0)
-          col = cols - 1;
-        break;
-      case SDLK_HOME:
-        col = 0;
-        break;
-      case SDLK_END:
-        col = cols - 1;
-        break;
-      case SDLK_PAGEUP:
-        row = 0;
-        break;
-      case SDLK_PAGEDOWN:
-        row = rows - 1;
-        break;
-      case SDLK_RETURN:
-      case SDLK_SPACE:
-      case SDLK_TAB:
-        return selection;
-      case SDLK_ESCAPE:
-        return -1;
     }
   }
 }
