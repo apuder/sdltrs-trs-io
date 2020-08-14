@@ -94,7 +94,6 @@ extern int  trs_gui_exit_sdltrs(void);
 extern unsigned int cycles_per_timer;
 
 /* Public data */
-int window_border_width;
 unsigned int foreground;
 unsigned int background;
 unsigned int gui_foreground;
@@ -112,6 +111,7 @@ int resize;
 int resize3;
 int resize4;
 int scanlines;
+int window_border_width;
 #if defined(SDL2) || !defined(NOX)
 int turbo_paste = 0;
 #endif
@@ -649,7 +649,7 @@ static void trs_opt_hypermem(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_joybuttonmap(char *arg, int intarg, int *stringarg)
 {
-  unsigned int i;
+  int i;
 
   for (i = 0; i < N_JOYBUTTONS; i++) {
     char *ptr = strchr(arg, ',');
@@ -830,27 +830,27 @@ static void trs_opt_wafer(char *arg, int intarg, int *stringarg)
 
 static void trs_disk_setsizes(void)
 {
-  unsigned int j;
+  int i;
 
-  for (j = 0; j < 8; j++) {
-    if (disksizes[j] == 5 || disksizes[j] == 8)
-      trs_disk_setsize(j, disksizes[j]);
+  for (i = 0; i < 8; i++) {
+    if (disksizes[i] == 5 || disksizes[i] == 8)
+      trs_disk_setsize(i, disksizes[i]);
     else
-      error("bad value %d for disk %d size", disksizes[j], j);
+      error("bad value %d for disk %d size", disksizes[i], i);
   }
 }
 
 #ifdef __linux
 static void trs_disk_setsteps(void)
 {
-  unsigned int j;
+  int i;
 
   /* Disk Steps are 1 for Single Step or 2 for Double Step for all Eight Default Drives */
-  for (j = 0; j < 8; j++) {
-    if (disksteps[j] == 1 || disksteps[j] == 2)
-      trs_disk_setstep(j, disksteps[j]);
+  for (i = 0; i < 8; i++) {
+    if (disksteps[i] == 1 || disksteps[i] == 2)
+      trs_disk_setstep(i, disksteps[i]);
     else
-      error("bad value %d for disk %d single/double step", disksteps[j], j);
+      error("bad value %d for disk %d single/double step", disksteps[i], i);
   }
 }
 #endif
@@ -1605,7 +1605,7 @@ void trs_exit(int confirm)
 
 void trs_sdl_cleanup(void)
 {
-  unsigned int i, ch;
+  int i, ch;
 
   /* SDL cleanup */
   for (i = 0; i < 6; i++) {
@@ -2404,10 +2404,10 @@ void trs_screen_80x24(int flag)
 
 void screen_init(void)
 {
-  unsigned int i;
+  int i;
 
   /* initially, screen is blank (i.e. full of spaces) */
-  for (i = 0; i < sizeof(trs_screen); i++)
+  for (i = 0; i < 2048; i++)
     trs_screen[i] = ' ';
 
   memset(grafyx, 0, (2 * G_YSIZE * MAX_SCALE) * (G_XSIZE * MAX_SCALE));
@@ -2470,8 +2470,7 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 {
   unsigned int *mydata, *currdata;
   unsigned char *mypixels, *currpixel;
-  unsigned int w;
-  int i, j;
+  int i, j, w;
 
   /*
    * Allocate a bit more room than necessary - There shouldn't be
@@ -2522,7 +2521,7 @@ static SDL_Surface *CreateSurfaceFromDataScale(char *data,
 static void bitmap_init(void)
 {
   /* Initialize from built-in font bitmaps. */
-  unsigned int i;
+  int i;
 
   for (i = 0; i < MAXCHARS; i++) {
     if (trs_char[0][i]) {
@@ -2655,7 +2654,7 @@ void trs_screen_refresh(void)
 void trs_disk_led(int drive, int on_off)
 {
   static int countdown[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  unsigned int i;
+  int i;
   SDL_Rect rect;
 
   rect.w = 16 * scale;
@@ -2697,7 +2696,7 @@ void trs_hard_led(int drive, int on_off)
 {
   static int countdown[4] = { 0, 0, 0, 0 };
   int const drive0_led_x = OrigWidth - border_width - 88 * scale;
-  unsigned int i;
+  int i;
   SDL_Rect rect;
 
   rect.w = 16 * scale;
@@ -3245,7 +3244,7 @@ void lowe_le18_write_control(int value)
 static void
 hrg_init(void)
 {
-  unsigned int i;
+  int i;
 
   /* Precompute arrays of pixel sizes and offsets. */
   for (i = 0; i <= 6; i++) {
@@ -3526,7 +3525,7 @@ int trs_get_mouse_type(void)
 
 void trs_main_save(FILE *file)
 {
-  unsigned int i;
+  int i;
 
   trs_save_int(file, &trs_model, 1);
   trs_save_uchar(file, trs_screen, 2048);
@@ -3559,7 +3558,7 @@ void trs_main_save(FILE *file)
 
 void trs_main_load(FILE *file)
 {
-  unsigned int i;
+  int i;
 
   trs_load_int(file, &trs_model, 1);
   trs_load_uchar(file, trs_screen, 2048);
