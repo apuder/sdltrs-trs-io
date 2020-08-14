@@ -522,8 +522,10 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
         }
         name = (char *)strdup(dir_entry->d_name);
       }
-      if (!name)
+      if (!name) {
+        closedir(directory);
         return -1;
+      }
       trs_gui_add_to_filename_list(name);
     }
     closedir(directory);
