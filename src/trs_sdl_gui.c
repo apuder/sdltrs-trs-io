@@ -499,7 +499,11 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       if (strcmp(dir_entry->d_name, ".") == 0)
         continue;
 
-      snprintf(pathname, FILENAME_MAX, "%s%s", path, dir_entry->d_name);
+      if (snprintf(pathname, FILENAME_MAX, "%s%s",
+          path, dir_entry->d_name) >= FILENAME_MAX) {
+        closedir(directory);
+        return -1;
+      }
       dirname_len = strlen(dir_entry->d_name);
 
       stat(pathname, &st);
