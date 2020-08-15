@@ -1239,9 +1239,6 @@ void trs_screen_init(void)
   int led_height, led_width;
   SDL_Color colors[2];
 
-#if defined(SDL2) || !defined(NOX)
-  copyStatus = COPY_IDLE;
-#endif
   if (trs_model == 1) {
     trs_charset = trs_charset1;
     currentmode = NORMAL;
