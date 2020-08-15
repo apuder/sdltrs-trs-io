@@ -69,11 +69,11 @@
 #include "trs_stringy.h"
 #include "trs_uart.h"
 
-#define MAX_RECTS      2048
-#define MAX_SCALE      4
-#define WHITE          0xe0e0ff
-#define BLACK          0
-#define GREEN          0x344843
+#define MAX_RECTS 2048
+#define MAX_SCALE 4
+#define WHITE     0xe0e0ff
+#define BLACK     0
+#define GREEN     0x344843
 
 /* currentmode values */
 #ifdef _WIN32
