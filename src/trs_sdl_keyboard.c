@@ -54,7 +54,6 @@
 /*
  * Key event queue
  */
-#define KEY_QUEUE_SIZE  (32)
 int key_queue[KEY_QUEUE_SIZE];
 int key_queue_head;
 int key_queue_entries;

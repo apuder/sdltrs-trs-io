@@ -69,7 +69,6 @@
 #include "trs_stringy.h"
 #include "trs_uart.h"
 
-#define KEY_QUEUE_SIZE 32
 #define MAX_RECTS      2048
 #define MAX_SCALE      4
 #define WHITE          0xe0e0ff
