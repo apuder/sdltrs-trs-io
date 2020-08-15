@@ -181,12 +181,12 @@ int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text(const char *text, int x, int y, int invert)
 {
-  int const length = strlen(text);
+  int const len = strlen(text);
   int i;
 
-  if (length > 62 - x) {
+  if (len > 62 - x) {
     int const len_first_part = (59 - x) / 2;
-    int pos_second_part = length - (59 - x - len_first_part);
+    int pos_second_part = len - (59 - x - len_first_part);
 
     for (i = 0; i < len_first_part; i++)
       trs_gui_write_char(x + i, y, text[i], invert);
@@ -195,7 +195,7 @@ void trs_gui_write_text(const char *text, int x, int y, int invert)
     for (; i < 62 - x; i++)
       trs_gui_write_char(x + i, y, text[pos_second_part++], invert);
   } else {
-    for (i = 0; i < length; i++)
+    for (i = 0; i < len; i++)
       trs_gui_write_char(x + i, y, text[i], invert);
   }
 }
@@ -785,13 +785,13 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   int key;
   int insert = 1;
   unsigned int i, pos;
-  unsigned int length;
+  unsigned int len;
   unsigned int first_disp;
 
   if (input != output)
     snprintf(output, limit + 1, "%s", input);
 
-  pos = length = strlen(input);
+  pos = len = strlen(input);
   if (pos > 60)
     first_disp = pos - 59;
   else
@@ -805,7 +805,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
       unsigned int cur_pos = first_disp + i;
 
       trs_gui_write_char(i + 2, 7,
-          (cur_pos >= length) ? ' ' : output[cur_pos],
+          (cur_pos >= len) ? ' ' : output[cur_pos],
           (cur_pos == pos));
     }
     trs_gui_write_text((insert ? " INS " : " OVR "), 56, 8, 1);
@@ -820,7 +820,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         }
         break;
       case SDLK_RIGHT:
-        if (pos < length) {
+        if (pos < len) {
           if (pos == first_disp + 59)
             first_disp++;
           pos++;
@@ -832,7 +832,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         break;
       case SDLK_END:
       case SDLK_PAGEDOWN:
-        pos = length;
+        pos = len;
         if (pos > 60)
           first_disp = pos - 59;
         else
@@ -840,26 +840,26 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         break;
       case SDLK_BACKSPACE:
         if (pos > 0) {
-          for (i = pos; i < length; i++)
+          for (i = pos; i < len; i++)
             output[i - 1] = output[i];
-          length--;
+          len--;
           if (pos == first_disp)
             first_disp--;
           pos--;
         }
         break;
       case SDLK_DELETE:
-        if (pos < length) {
-          for (i = pos; i < length - 1; i++)
+        if (pos < len) {
+          for (i = pos; i < len - 1; i++)
             output[i] = output[i + 1];
-          length--;
+          len--;
         }
         break;
       case SDLK_INSERT:
         insert = !insert;
         break;
       case SDLK_RETURN:
-        output[length] = 0;
+        output[len] = 0;
         return 0;
       case SDLK_ESCAPE:
         return -1;
@@ -871,7 +871,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
 
           if (trs_gui_file_browse(input, directory_name, NULL, 1, "") >= 0) {
             snprintf(output, limit + 1, "%s", directory_name);
-            pos = length = strlen(output);
+            pos = len = strlen(output);
             if (pos > 60)
               first_disp = pos - 59;
             else
@@ -882,26 +882,26 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
         }
         break;
       case SDLK_F9:
-        first_disp = length = pos = 0;
+        first_disp = len = pos = 0;
         output[0] = 0;
         break;
       case SDLK_F10:
-        length = pos;
+        len = pos;
         output[pos] = 0;
         break;
       default:
         if (key >= 0x20 && key <= 0xFF && pos < limit) {
-          if (insert && length < limit) {
-            for (i = length; i > pos; i--)
+          if (insert && len < limit) {
+            for (i = len; i > pos; i--)
               output[i] = output[i - 1];
-            length++;
+            len++;
           }
           output[pos] = (char) key;
           if (pos == first_disp + 59)
             first_disp++;
           pos++;
-          if (pos > length)
-            length++;
+          if (pos > len)
+            len++;
         }
         break;
     }
