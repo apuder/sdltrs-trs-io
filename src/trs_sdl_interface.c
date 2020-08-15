@@ -418,7 +418,6 @@ static const int num_options = sizeof(options) / sizeof(trs_opt);
 
 /* Private routines */
 static void bitmap_init(void);
-static void grafyx_redraw(void);
 static void grafyx_rescale(int y, int x, char byte);
 
 static void stripWhitespace(char *inputStr)
@@ -1237,6 +1236,7 @@ void trs_screen_caption(void)
 void trs_screen_init(void)
 {
   int led_height, led_width;
+  int x, y;
   SDL_Color colors[2];
 
   if (trs_model == 1) {
@@ -1316,7 +1316,10 @@ void trs_screen_init(void)
 #endif
   SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 
-  grafyx_redraw();
+  for (y = 0; y < G_YSIZE; y++)
+    for (x = 0; x < G_XSIZE; x++)
+      grafyx_rescale(y, x, grafyx_unscaled[y][x]);
+
   if (image)
     SDL_FreeSurface(image);
   image = SDL_CreateRGBSurfaceFrom(grafyx, G_XSIZE * scale * 8, G_YSIZE * scale * 2,
@@ -2912,15 +2915,6 @@ static void grafyx_write_byte(int x, int y, char byte)
     TrsSoftBlit(image, &srcRect, screen, &dstRect, grafyx_overlay);
     addToDrawList(&dstRect);
   }
-}
-
-static void grafyx_redraw(void)
-{
-  int x, y;
-
-  for (y = 0; y < G_YSIZE; y++)
-    for (x = 0; x < G_XSIZE; x++)
-      grafyx_rescale(y, x, grafyx_unscaled[y][x]);
 }
 
 static void grafyx_rescale(int y, int x, char byte)
