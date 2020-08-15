@@ -184,8 +184,20 @@ void trs_gui_write_text(const char *text, int x, int y, int invert)
   int const length = strlen(text);
   int i;
 
-  for (i = 0; i < (length <= 62 - x ? length : 62 - x); i++)
-    trs_gui_write_char(x + i, y, text[i], invert);
+  if (length > 62 - x) {
+    int const len_first_part = (59 - x) / 2;
+    int pos_second_part = length - (59 - x - len_first_part);
+
+    for (i = 0; i < len_first_part; i++)
+      trs_gui_write_char(x + i, y, text[i], invert);
+    for (; i < len_first_part + 3; i++)
+      trs_gui_write_char(x + i, y, '.', invert);
+    for (; i < 62 - x; i++)
+      trs_gui_write_char(x + i, y, text[pos_second_part++], invert);
+  } else {
+    for (i = 0; i < length; i++)
+      trs_gui_write_char(x + i, y, text[i], invert);
+  }
 }
 
 void trs_gui_center_text(const char *text, int y, int invert)
