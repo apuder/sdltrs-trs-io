@@ -78,7 +78,7 @@ static const char *yes_no_choices[2] = {
 static const char *function_choices[8] = {
   "      GUI       ", "Virtual Keyboard",
   "   Save State   ", "   Load State   ",
-  "     Reset      ", "      Exit      ",
+  "     Reset      ", "      Quit      ",
   "     Pause      ", "  Joystick GUI  "
 };
 
@@ -2672,7 +2672,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
   trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Alt PgUp/PgDn: Scale Window ", 2, 4, 0);
   trs_gui_write_text("F7/Alt M: Main Menu of SDLTRS   Alt Enter: Toggle Fullscreen", 2, 5, 0);
-  trs_gui_write_text("F8/Shift-F8: Exit/Abort SDLTRS  Alt A/C/V: Select/Copy/Paste", 2, 6, 0);
+  trs_gui_write_text("F8/Shift-F8: Quit/Abort SDLTRS  Alt A/C/V: Select/Copy/Paste", 2, 6, 0);
   trs_gui_write_text("F9/Alt Z:"
 #ifdef ZBX
   " Enter debugger (zbx)  "
@@ -2710,7 +2710,7 @@ void trs_gui_exec_cmd(void)
 
 int trs_gui_exit_sdltrs(void)
 {
-  return trs_gui_display_question("Exit SDLTRS?");
+  return trs_gui_display_question("Quit SDLTRS?");
 }
 
 void trs_gui_save_bmp(void)
