@@ -51,6 +51,9 @@
 #include "trs.h"
 #include "trs_sdl_keyboard.h"
 
+static void queue_key(int state);
+static int dequeue_key();
+
 /*
  * Key event queue
  */
@@ -529,7 +532,7 @@ void trs_kb_bracket(int shifted)
 }
 
 /* Emulate joystick with the keypad */
-int trs_emulate_joystick(int key_down, int bit_action)
+static int trs_emulate_joystick(int key_down, int bit_action)
 {
   if (bit_action < TK_Joystick)
     return 0;
