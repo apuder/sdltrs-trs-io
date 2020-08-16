@@ -1,9 +1,9 @@
 # Template file for 'sdltrs'
 pkgname=sdltrs
-version=1.2.11
+version=1.2.12
 revision=1
 build_style=gnu-configure
-configure_args="--enable-readline"
+configure_args="--enable-readline --enable-zbx"
 depends="desktop-file-utils hicolor-icon-theme"
 hostmakedepends="autoconf automake"
 makedepends="SDL2-devel readline-devel"
@@ -12,7 +12,7 @@ maintainer="Jens Guenther <dbotw@gmx.net>"
 license="BSD-2-Clause"
 homepage="https://gitlab.com/jengun/sdltrs"
 distfiles="${homepage}/-/archive/${version}/${pkgname}-${version}.tar.gz"
-checksum=183fcc7a412f525b6aacb1dea7a371bfbbdc9d34deb1b1c0a08dada6190e17a8
+checksum=205320d1d81f4e7a46bd6787f43e5298af5206cf10ffaa4d39b067c5583e763a
 
 pre_configure() {
 	./autogen.sh
