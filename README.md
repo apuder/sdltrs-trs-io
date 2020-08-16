@@ -25,12 +25,12 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 ## Packages
 
-  * [sdltrs_1.2.11-1_i386.deb]    (32-bit, SDL)
-  * [sdl2trs_1.2.11-1_i386.deb]   (32-bit, SDL2)
-  * [sdltrs_1.2.11-1_amd64.deb]   (64-bit, SDL)
-  * [sdl2trs_1.2.11-1_amd64.deb]  (64-bit, SDL2)
+  * [sdltrs_1.2.12-1_i386.deb]    (32-bit, SDL)
+  * [sdl2trs_1.2.12-1_i386.deb]   (32-bit, SDL2)
+  * [sdltrs_1.2.12-1_amd64.deb]   (64-bit, SDL)
+  * [sdl2trs_1.2.12-1_amd64.deb]  (64-bit, SDL2)
 
-(Build on Debian 9/i386 & Linux Mint 19.3/amd64)
+(Build on Debian 9/i386 & Linux Mint 20/amd64)
 
 Thanks to Tércio Martins a package for Arch Linux is available in the [AUR].
 
@@ -64,7 +64,7 @@ It has also been merged to the upstream of [RetroPie] since version 4.6.6 ...
 [sdltrs.exe]: bin/sdltrs.exe
 [sdl2trs.exe]: bin/sdl2trs.exe
 [sdl2trs64.exe]: bin/sdl2trs64.exe
-[sdltrs_1.2.11-1_i386.deb]: bin/sdltrs_1.2.11-1_i386.deb
-[sdl2trs_1.2.11-1_i386.deb]: bin/sdl2trs_1.2.11-1_i386.deb
-[sdltrs_1.2.11-1_amd64.deb]: bin/sdltrs_1.2.11-1_amd64.deb
-[sdl2trs_1.2.11-1_amd64.deb]: bin/sdl2trs_1.2.11-1_amd64.deb
+[sdltrs_1.2.12-1_i386.deb]: bin/sdltrs_1.2.12-1_i386.deb
+[sdl2trs_1.2.12-1_i386.deb]: bin/sdl2trs_1.2.12-1_i386.deb
+[sdltrs_1.2.12-1_amd64.deb]: bin/sdltrs_1.2.12-1_amd64.deb
+[sdl2trs_1.2.12-1_amd64.deb]: bin/sdl2trs_1.2.12-1_amd64.deb
