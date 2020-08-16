@@ -1,3 +1,10 @@
+## Version 1.2.12 Release 08-16-2020:
+
+  * Fixed issue #3 "Handle CapsLock key in SDL2" (reported by David Barr).
+  * Fixed some crashes (Copy Buffer, "SuperMem" option).
+  * Fixed bugs and other improvements.
+  * Made Z80 debugger an optional feature.
+
 ## Version 1.2.11 Release 06-28-2020:
 
   * Added CPU clock speed selection.
