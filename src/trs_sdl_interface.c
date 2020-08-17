@@ -1174,34 +1174,6 @@ int trs_write_config_file(const char *filename)
   return 0;
 }
 
-void trs_rom_init(void)
-{
-  switch (trs_model) {
-    case 1:
-      if (trs_load_rom(romfile) != 0)
-        trs_load_compiled_rom(trs_rom1_size, trs_rom1);
-      break;
-    case 3:
-    case 4:
-      if (trs_load_rom(romfile3) != 0)
-        trs_load_compiled_rom(trs_rom3_size, trs_rom3);
-      break;
-    case 5:
-      if (trs_load_rom(romfile4p) != 0)
-        trs_load_compiled_rom(trs_rom4p_size, trs_rom4p);
-      break;
-  }
-
-  if (trs_model == 1 && stringy) {
-    int i;
-
-    /* Load ROM for ESF and adjust size */
-    for (i = 0; i < trs_romesf_size; ++i)
-      mem_write_rom(0x3000 + i, trs_romesf[i]);
-    trs_rom_size = 0x3780;
-  }
-}
-
 void trs_screen_var_reset(void)
 {
   text80x24 = 0;

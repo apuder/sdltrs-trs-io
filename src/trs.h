@@ -155,17 +155,6 @@ extern void trs_sound_out(int value);
 extern int trs_joystick_in(void);
 
 extern int trs_rom_size;
-extern int trs_rom1_size;
-extern int trs_rom3_size;
-extern int trs_rom4p_size;
-extern int trs_romesf_size;
-extern unsigned char trs_rom1[];
-extern unsigned char trs_rom3[];
-extern unsigned char trs_rom4p[];
-extern unsigned char trs_romesf[];
-
-extern void trs_load_compiled_rom(int size, unsigned char rom[]);
-extern int trs_load_rom(const char *filename);
 
 extern unsigned char trs_interrupt_latch_read(void);
 extern unsigned char trs_nmi_latch_read(void);
