@@ -56,7 +56,6 @@
 #include "trs_sdl_keyboard.h"
 #include "trs_state_save.h"
 
-extern int fullscreen;
 extern int trs_rom1_size;
 extern int trs_rom3_size;
 extern int trs_rom4p_size;
