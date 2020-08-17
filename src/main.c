@@ -100,7 +100,7 @@ int trs_load_cmd(const char *filename)
   return 0;
 }
 
-int trs_load_rom(const char *filename)
+static int trs_load_rom(const char *filename)
 {
   FILE *program;
   int c;
@@ -152,7 +152,7 @@ int trs_load_rom(const char *filename)
   return 0;
 }
 
-void trs_load_compiled_rom(int size, unsigned char rom[])
+static void trs_load_compiled_rom(int size, unsigned char rom[])
 {
   int i;
 
