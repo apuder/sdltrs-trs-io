@@ -56,10 +56,11 @@
 #include "trs_sdl_keyboard.h"
 #include "trs_state_save.h"
 
-extern unsigned char trs_rom1[];
-extern unsigned char trs_rom3[];
-extern unsigned char trs_rom4p[];
-extern unsigned char trs_romesf[];
+/* Include ROMs */
+#include "trs_rom1.c"
+#include "trs_rom3.c"
+#include "trs_rom4p.c"
+#include "trs_romesf.c"
 
 int trs_model = 1;
 char *program_name;
@@ -148,7 +149,7 @@ static int trs_load_rom(const char *filename)
   return 0;
 }
 
-static void trs_load_compiled_rom(int size, unsigned char rom[])
+static void trs_load_compiled_rom(int size, const unsigned char rom[])
 {
   int i;
 
@@ -162,24 +163,24 @@ void trs_rom_init(void)
   switch (trs_model) {
     case 1:
       if (trs_load_rom(romfile) != 0)
-        trs_load_compiled_rom(146, trs_rom1);
+        trs_load_compiled_rom(sizeof(trs_rom1), trs_rom1);
       break;
     case 3:
     case 4:
       if (trs_load_rom(romfile3) != 0)
-        trs_load_compiled_rom(146, trs_rom3);
+        trs_load_compiled_rom(sizeof(trs_rom3), trs_rom3);
       break;
     case 5:
       if (trs_load_rom(romfile4p) != 0)
-        trs_load_compiled_rom(504, trs_rom4p);
+        trs_load_compiled_rom(sizeof(trs_rom4p), trs_rom4p);
       break;
   }
 
   if (trs_model == 1 && stringy) {
-    int i;
+    int unsigned i;
 
     /* Load ROM for ESF and adjust size */
-    for (i = 0; i < 1920; ++i)
+    for (i = 0; i < sizeof(trs_romesf); ++i)
       mem_write_rom(0x3000 + i, trs_romesf[i]);
     trs_rom_size = 0x3780;
   }

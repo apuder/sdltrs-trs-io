@@ -27,10 +27,6 @@ set(SOURCES
 	src/trs_memory.c
 	src/trs_mkdisk.c
 	src/trs_printer.c
-	src/trs_rom1.c
-	src/trs_rom3.c
-	src/trs_rom4p.c
-	src/trs_romesf.c
 	src/trs_sdl_gui.c
 	src/trs_sdl_interface.c
 	src/trs_sdl_keyboard.c
