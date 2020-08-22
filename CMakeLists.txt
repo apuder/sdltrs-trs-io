@@ -43,7 +43,6 @@ test_big_endian(BIGENDIAN)
 if (${BIGENDIAN})
 	add_definitions(-Dbig_endian)
 endif ()
-unset(BIGENDIAN)
 
 option(FASTMOVE	"Fast inaccurate Z80 block moves"	OFF)
 option(NOX	"Build SDL 1.2 version without X"	OFF)
