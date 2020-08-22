@@ -55,7 +55,7 @@ if (FASTMOVE)
 	add_definitions(-DFAST_MOVE)
 endif ()
 
-if (READLINE)
+if (READLINE AND ZBX)
 	find_package(Curses QUIET)
 	find_path(Readline_ROOT_DIR
 		NAMES include/readline/readline.h
