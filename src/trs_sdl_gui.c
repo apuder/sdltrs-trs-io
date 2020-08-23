@@ -792,6 +792,8 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
     snprintf(output, limit + 1, "%s", input);
 
   pos = len = strlen(input);
+
+redraw:
   if (pos > 60)
     first_disp = pos - 59;
   else
@@ -872,13 +874,8 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
           if (trs_gui_file_browse(input, directory_name, NULL, 1, "") >= 0) {
             snprintf(output, limit + 1, "%s", directory_name);
             pos = len = strlen(output);
-            if (pos > 60)
-              first_disp = pos - 59;
-            else
-              first_disp = 0;
           }
-          trs_gui_frame(1, 6, 62, 8);
-          trs_gui_write_text(title, 3, 6, 0);
+          goto redraw;
         }
         break;
       case SDLK_F9:
