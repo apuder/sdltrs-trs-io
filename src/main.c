@@ -122,7 +122,7 @@ static int trs_load_rom(const char *filename)
       return 0;
   } else if (c == 1 || c == 5) {
     /* Assume MODELA/III file */
-    extern Uchar *rom; /*!! fixme*/
+    extern Uchar rom[];
     Uchar loadmap[Z80_ADDRESS_LIMIT];
     rewind(program);
     if (load_cmd(program, rom, loadmap, 0, NULL, -1, NULL, NULL, 1) == LOAD_CMD_OK) {
