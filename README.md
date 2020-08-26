@@ -41,8 +41,8 @@ Altough considered as *experimental*, it is recommended for newer operating
 systems (SDL2 binaries and packages above are build on the *master* branch,
 which uses software rendering).
 
-The SDL2 version is available in Valerio Lupi's fork of the [RetroPie-Setup].
-It has also been merged to the upstream of [RetroPie] since version 4.6.6 ...
+The SDL2 version is available in [RetroPie] since version 4.6.6 and Valerio
+Lupi's fork of [RetroPie-Setup] ...
 
 ## Screenshots
 
