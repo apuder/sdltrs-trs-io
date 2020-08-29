@@ -65,15 +65,6 @@
 int trs_model = 1;
 char *program_name;
 
-static void check_endian()
-{
-  wordregister x;
-  x.byte.low = 1;
-  x.byte.high = 0;
-  if (x.word != 1)
-    fatal("Program compiled with wrong ENDIAN value: adjust the Makefile and recompile.");
-}
-
 int trs_load_cmd(const char *filename)
 {
   FILE *program;
@@ -190,6 +181,7 @@ int SDLmain(int argc, char *argv[])
 {
   int debug = FALSE;
   struct stat st;
+  wordregister x;
 
   /* program_name must be set first because the error
    * printing routines use it. */
@@ -200,7 +192,10 @@ int SDLmain(int argc, char *argv[])
     program_name++;
   }
 
-  check_endian();
+  x.byte.low = 1;
+  x.byte.high = 0;
+  if (x.word != 1)
+    fatal("Program compiled with wrong ENDIAN value: please recompile on this machine.");
 
 #if defined(SDL2) && defined(_WIN32)
   SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
