@@ -77,14 +77,14 @@ static void check_endian()
 int trs_load_cmd(const char *filename)
 {
   FILE *program;
-  extern Uchar memory;
+  extern Uchar memory[];
   int entry;
 
   if ((program = fopen(filename,"rb")) == NULL) {
     error("failed to load CMD file %s: %s", filename, strerror(errno));
     return -1;
   }
-  if (load_cmd(program, &memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK) {
+  if (load_cmd(program, memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK) {
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
     if (entry >= 0)
       REG_PC = entry;
