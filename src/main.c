@@ -195,7 +195,7 @@ int SDLmain(int argc, char *argv[])
   x.byte.low = 1;
   x.byte.high = 0;
   if (x.word != 1)
-    fatal("Program compiled with wrong ENDIAN value: please recompile on this machine.");
+    fatal("Program compiled with wrong ENDIAN: please recompile for this architecture.");
 
 #if defined(SDL2) && defined(_WIN32)
   SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
