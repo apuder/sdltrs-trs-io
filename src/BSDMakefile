@@ -34,7 +34,8 @@ LIBS	+= -L/usr/X11R7/lib -lX11 -lcurses -lreadline -Wl,-R/usr/X11R7/lib
 INCS	!= sdl-config --cflags
 INCS	+= -I/usr/X11R7/include
 MACROS	 = -DREADLINE -DZBX
-CFLAGS	+= -g -Wall -O2 ${INCS} ${ENDIAN} ${MACROS}
+DEBUG	?= -g -Wall -O2
+CFLAGS	+= -${DEBUG} ${INCS} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}

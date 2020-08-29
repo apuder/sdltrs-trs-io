@@ -89,7 +89,8 @@ wsdl2:	CC	 = ${MINGW}\bin\gcc.exe
 wsdl2:	PROG	 = sdl2trs.exe
 wsdl2:	${PROG}
 
-CFLAGS		+= -g -Wall -Wextra -Wno-unused-parameter -O2 ${INCS} ${ENDIAN} ${MACROS}
+DEBUG		?= -Wall -Wextra -Wno-unused-parameter -O2
+CFLAGS		+= ${DEBUG} ${INCS} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
