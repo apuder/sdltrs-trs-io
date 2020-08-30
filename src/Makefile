@@ -79,7 +79,7 @@ win64:	MINGW64	 = C:\MinGW64
 win64:	CC	 = ${MINGW64}\bin\gcc.exe
 win64:	INCS	 = -I${MINGW64}\include\SDL2
 win64:	LIBS	 = -L${MINGW64}\lib -lmingw32 -lSDL2main -lSDL2
-win64:	MACROS	 = -DSDL2 -WIN32
+win64:	MACROS	 = -DSDL2 -DWIN32
 win64:	PROG	 = sdl2trs64.exe
 win64:	${PROG}
 
