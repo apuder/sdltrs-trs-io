@@ -50,17 +50,20 @@ nox:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbi
 nox:	INCS	 = $(shell sdl-config --cflags)
 nox:	LIBS	 = $(shell sdl-config --libs)
 nox:	MACROS	 = -DNOX
+nox:	READLINE?= -DREADLINE
 nox:	${PROG}
 
 sdl:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 sdl:	INCS	 = $(shell sdl-config --cflags)
 sdl:	LIBS	 = $(shell sdl-config --libs) -lX11
+sdl:	READLINE?= -DREADLINE
 sdl:	${PROG}
 
 sdl2:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 sdl2:	INCS	 = $(shell sdl2-config --cflags)
 sdl2:	LIBS	 = $(shell sdl2-config --libs)
 sdl2:	MACROS	 = -DSDL2
+sdl2:	READLINE?= -DREADLINE
 sdl2:	PROG	 = sdl2trs
 sdl2:	${PROG}
 
@@ -88,11 +91,9 @@ wsdl2:	MACROS	 = -DSDL2 -DWIN32
 wsdl2:	PROG	 = sdl2trs.exe
 wsdl2:	${PROG}
 
-DEBUG		?= -Wall -Wextra -Wno-unused-parameter -O2
-READLINE	?= -DREADLINE
-READLINELIBS	:=$(if ${READLINE},-lreadline,)
+READLINELIBS	 =$(if ${READLINE},-lreadline,)
 ZBX		?= -DZBX
-
+DEBUG		?= -Wall -Wextra -Wno-unused-parameter -O2
 CFLAGS		+= ${DEBUG} ${INCS} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
 
 ${PROG}: ${OBJS}
