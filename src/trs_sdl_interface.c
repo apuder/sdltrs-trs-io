@@ -2714,12 +2714,13 @@ void trs_turbo_led(void)
   addToDrawList(&rect);
 }
 
-void trs_screen_write_char(int position, unsigned char char_index)
+void trs_screen_write_char(unsigned int position, unsigned char char_index)
 {
-  int row, col, expanded;
+  unsigned int row, col;
+  int expanded;
   SDL_Rect srcRect, dstRect;
 
-  if (position >= screen_chars)
+  if (position >= (unsigned int)screen_chars)
     return;
   trs_screen[position] = char_index;
   if ((currentmode & EXPANDED) && (position & 1))
