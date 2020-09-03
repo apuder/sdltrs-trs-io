@@ -147,14 +147,14 @@ trs_cassette_fall_interrupt(int dummy)
 }
 
 void
-trs_cassette_clear_interrupts()
+trs_cassette_clear_interrupts(void)
 {
   interrupt_latch &= ~(M3_CASSRISE_BIT|M3_CASSFALL_BIT);
   z80_state.irq = (interrupt_latch & interrupt_mask) != 0;
 }
 
 int
-trs_cassette_interrupts_enabled()
+trs_cassette_interrupts_enabled(void)
 {
   return interrupt_mask & (M3_CASSRISE_BIT|M3_CASSFALL_BIT);
 }
@@ -285,7 +285,7 @@ trs_reset_button_interrupt(int state)
 }
 
 unsigned char
-trs_interrupt_latch_read()
+trs_interrupt_latch_read(void)
 {
   unsigned char tmp = interrupt_latch;
   if (trs_model == 1) {
@@ -306,7 +306,7 @@ trs_interrupt_mask_write(unsigned char value)
 
 /* M3 only */
 unsigned char
-trs_nmi_latch_read()
+trs_nmi_latch_read(void)
 {
   return ~nmi_latch;
 }
@@ -365,7 +365,7 @@ void trs_timer_sync_with_host(void)
 }
 
 void
-trs_timer_init()
+trs_timer_init(void)
 {
   struct tm *lt;
   time_t tt;
@@ -423,13 +423,13 @@ trs_timer_init()
 }
 
 void
-trs_timer_off()
+trs_timer_off(void)
 {
   timer_on = 0;
 }
 
 void
-trs_timer_on()
+trs_timer_on(void)
 {
   if (!timer_on) {
     timer_on = 1;
@@ -493,7 +493,7 @@ trs_schedule_event(trs_event_func f, int arg, int countdown)
  * schedules a new event, however, leave that one pending.)
  */
 void
-trs_do_event()
+trs_do_event(void)
 {
   trs_event_func f = event_func;
   if (f) {
@@ -507,7 +507,7 @@ trs_do_event()
  * Cancel scheduled event, if any.
  */
 void
-trs_cancel_event()
+trs_cancel_event(void)
 {
   event_func = NULL;
   z80_state.sched = 0;
@@ -517,7 +517,7 @@ trs_cancel_event()
  * Check event scheduled
  */
 trs_event_func
-trs_event_scheduled()
+trs_event_scheduled(void)
 {
   return event_func;
 }

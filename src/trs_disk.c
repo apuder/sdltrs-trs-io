@@ -312,19 +312,19 @@ DiskState disk[NDRIVES];
 unsigned char jv1_interleave[10] = {0, 5, 1, 6, 2, 7, 3, 8, 4, 9};
 
 /* Forward */
-void real_verify();
+void real_verify(void);
 void real_restore(int curdrive);
-void real_seek();
-void real_read();
-void real_write();
-void real_readadr();
-void real_readtrk();
-void real_writetrk();
+void real_seek(void);
+void real_read(void);
+void real_write(void);
+void real_readadr(void);
+void real_readtrk(void);
+void real_writetrk(void);
 int real_check_empty(DiskState *d);
 
 /* Entry point for the zbx debugger */
 void
-trs_disk_debug()
+trs_disk_debug(void)
 {
   int i;
   printf("Floppy disk controller state:\n");
@@ -935,7 +935,7 @@ cmd_type(unsigned char cmd)
    required.  Called even if this NMI is masked, so we also use it here
    to set NOTRDY and LOSTDATA. */
 int
-trs_disk_motoroff()
+trs_disk_motoroff(void)
 {
   int stopped;
   int cmdtype;
@@ -1117,7 +1117,7 @@ search(int sector, int side)
    density.  Don't set TRSDISK_NOTFOUND; leave the caller to do
    that. */
 static int
-search_adr()
+search_adr(void)
 {
   DiskState *d = &disk[state.curdrive];
   if (d->file == NULL) {
@@ -1141,7 +1141,7 @@ search_adr()
 
 
 void
-verify()
+verify(void)
 {
   /* Verify that head is on the expected track */
   DiskState *d = &disk[state.curdrive];
@@ -1163,7 +1163,7 @@ verify()
 /* Return a value in [0,1) indicating how far we've rotated
  * from the leading edge of the index hole */
 float
-angle()
+angle(void)
 {
   DiskState *d = &disk[state.curdrive];
   float a;
@@ -1187,7 +1187,7 @@ angle()
 }
 
 static void
-type1_status()
+type1_status(void)
 {
   DiskState *d = &disk[state.curdrive];
 
@@ -3146,7 +3146,7 @@ real_check_empty(DiskState *d)
 }
 
 void
-real_verify()
+real_verify(void)
 {
   /* Verify that head is on the expected track */
   /*!! ignore for now*/
@@ -3175,7 +3175,7 @@ real_restore(int curdrive)
 }
 
 void
-real_seek()
+real_seek(void)
 {
 #if __linux
   DiskState *d = &disk[state.curdrive];
@@ -3211,7 +3211,7 @@ real_seek()
 }
 
 void
-real_read()
+real_read(void)
 {
 #if __linux
   DiskState *d = &disk[state.curdrive];
@@ -3298,7 +3298,7 @@ real_read()
 }
 
 void
-real_write()
+real_write(void)
 {
 #if __linux
   DiskState *d = &disk[state.curdrive];
@@ -3384,7 +3384,7 @@ real_write()
 }
 
 void
-real_readadr()
+real_readadr(void)
 {
 #if __linux
   DiskState *d = &disk[state.curdrive];
@@ -3440,13 +3440,13 @@ real_readadr()
 }
 
 void
-real_readtrk()
+real_readtrk(void)
 {
   trs_disk_unimpl(state.currcommand, "read track on real floppy");
 }
 
 void
-real_writetrk()
+real_writetrk(void)
 {
 #if __linux
   DiskState *d = &disk[state.curdrive];

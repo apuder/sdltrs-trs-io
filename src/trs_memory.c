@@ -316,7 +316,7 @@ void mem_romin(int state)
     memory_map = (memory_map & ~4) + (romin << 2);
 }
 
-void mem_init()
+void mem_init(void)
 {
     /* Initialize RAM, ROM & Video memory */
     memset(&memory, 0, sizeof(memory));

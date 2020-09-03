@@ -85,7 +85,7 @@ typedef struct {
 OpenDisk od[MAX_OPENDISK];
 int xtrshard_fd[4] = {-1,-1,-1,-1};
 
-void do_emt_system()
+void do_emt_system(void)
 {
   int res;
   if (trs_emtsafe) {
@@ -105,7 +105,7 @@ void do_emt_system()
   REG_BC = res;
 }
 
-void do_emt_mouse()
+void do_emt_mouse(void)
 {
   int x, y;
   unsigned int buttons, sens;
@@ -159,7 +159,7 @@ void do_emt_mouse()
   }
 }
 
-void do_emt_getddir()
+void do_emt_getddir(void)
 {
   if (REG_HL + REG_BC > 0x10000 ||
       REG_HL + strlen(trs_disk_dir) + 1 > REG_HL + REG_BC) {
@@ -174,7 +174,7 @@ void do_emt_getddir()
   REG_BC = strlen(trs_disk_dir);
 }
 
-void do_emt_setddir()
+void do_emt_setddir(void)
 {
   if (trs_emtsafe) {
     error("emt_setddir: potentially dangerous emulator trap blocked");
@@ -198,7 +198,7 @@ void do_emt_setddir()
   REG_F |= ZERO_MASK;
 }
 
-void do_emt_open()
+void do_emt_open(void)
 {
   int fd, oflag, eoflag;
   eoflag = REG_BC;
@@ -236,7 +236,7 @@ void do_emt_open()
   REG_DE = fd;
 }
 
-void do_emt_close()
+void do_emt_close(void)
 {
   if (close(REG_DE) >= 0) {
     REG_A = 0;
@@ -247,7 +247,7 @@ void do_emt_close()
   }
 }
 
-void do_emt_read()
+void do_emt_read(void)
 {
   int size;
   int i;
@@ -276,7 +276,7 @@ void do_emt_read()
 }
 
 
-void do_emt_write()
+void do_emt_write(void)
 {
   int size;
   int i;
@@ -310,7 +310,7 @@ void do_emt_write()
   REG_BC = size;
 }
 
-void do_emt_lseek()
+void do_emt_lseek(void)
 {
   int i;
   off_t offset;
@@ -337,7 +337,7 @@ void do_emt_lseek()
   }
 }
 
-void do_emt_strerror()
+void do_emt_strerror(void)
 {
   char *msg;
   int size;
@@ -371,7 +371,7 @@ void do_emt_strerror()
   }
 }
 
-void do_emt_time()
+void do_emt_time(void)
 {
   time_t now = time(0);
   if (REG_A == 1) {
@@ -414,7 +414,7 @@ void do_emt_time()
   REG_DE = now & 0xffff;
 }
 
-void do_emt_opendir()
+void do_emt_opendir(void)
 {
   int i;
   char *dirname;
@@ -440,7 +440,7 @@ void do_emt_opendir()
   }
 }
 
-void do_emt_closedir()
+void do_emt_closedir(void)
 {
   int i = REG_DE;
   int ok;
@@ -460,7 +460,7 @@ void do_emt_closedir()
   }
 }
 
-void do_emt_readdir()
+void do_emt_readdir(void)
 {
   int size, i = REG_DE;
   struct dirent *result;
@@ -497,7 +497,7 @@ void do_emt_readdir()
   REG_BC = size;
 }
 
-void do_emt_chdir()
+void do_emt_chdir(void)
 {
   int ok = chdir((char *)mem_pointer(REG_HL, 0));
   if (trs_emtsafe) {
@@ -515,7 +515,7 @@ void do_emt_chdir()
   }
 }
 
-void do_emt_getcwd()
+void do_emt_getcwd(void)
 {
   char *result;
   if (REG_HL + REG_BC > 0x10000) {
@@ -537,7 +537,7 @@ void do_emt_getcwd()
 }
 
 /* fixme - document codes that were removed. */
-void do_emt_misc()
+void do_emt_misc(void)
 {
   switch (REG_A) {
   case 0:
@@ -620,7 +620,7 @@ void do_emt_misc()
   }
 }
 
-void do_emt_ftruncate()
+void do_emt_ftruncate(void)
 {
   int i, result;
   off_t offset;
@@ -653,7 +653,7 @@ void do_emt_ftruncate()
   }
 }
 
-void do_emt_opendisk()
+void do_emt_opendisk(void)
 {
   char *name = (char *)mem_pointer(REG_HL, 0);
   char *qname;
@@ -754,7 +754,7 @@ int do_emt_closefd(int odindex)
   return(close(od[odindex].fd));
 }
 
-void do_emt_closedisk()
+void do_emt_closedisk(void)
 {
   int i;
   if (REG_DE == 0xffff) {
@@ -791,7 +791,7 @@ void do_emt_closedisk()
   }
 }
 
-void do_emt_resetdisk()
+void do_emt_resetdisk(void)
 {
   int i;
 

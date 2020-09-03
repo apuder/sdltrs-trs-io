@@ -417,7 +417,7 @@ static void do_sub_byte(int value)
     do_sub_flags(a, value, result);
 }
 
-static void do_negate()
+static void do_negate(void)
 {
     int a;
 
@@ -513,7 +513,7 @@ static void do_cp(int value)
     REG_F = f;
 }
 
-static void do_cpd()
+static void do_cpd(void)
 {
     int oldcarry = REG_F & CARRY_MASK;
     int a, value, result;
@@ -533,7 +533,7 @@ static void do_cpd()
     T_COUNT(16);
 }
 
-static void do_cpi()
+static void do_cpi(void)
 {
     int oldcarry = REG_F & CARRY_MASK;
     int a, value, result;
@@ -554,7 +554,7 @@ static void do_cpi()
 }
 
 #ifdef FAST_MOVE
-static void do_cpdr()
+static void do_cpdr(void)
 {
     int oldcarry = REG_F & CARRY_MASK;
     int a = REG_A, value, result;
@@ -579,7 +579,7 @@ static void do_cpdr()
     T_COUNT(-5);
 }
 
-static void do_cpir()
+static void do_cpir(void)
 {
     int oldcarry = REG_F & CARRY_MASK;
     int a = REG_A, value, result;
@@ -604,7 +604,7 @@ static void do_cpir()
     T_COUNT(-5);
 }
 #else
-static void do_cpdr()
+static void do_cpdr(void)
 {
     do_cpd();
     if(OVERFLOW_FLAG && !ZERO_FLAG) {
@@ -613,7 +613,7 @@ static void do_cpdr()
     }
 }
 
-static void do_cpir()
+static void do_cpir(void)
 {
     do_cpi();
     if(OVERFLOW_FLAG && !ZERO_FLAG) {
@@ -788,7 +788,7 @@ static int rrc_byte(int value)
  * Perform the RLA, RLCA, RRA, RRCA instructions.  These set the flags
  * differently than the other rotate instrucitons.
  */
-static void do_rla()
+static void do_rla(void)
 {
     Uchar set;
 
@@ -810,7 +810,7 @@ static void do_rla()
       | set | (REG_A & (UNDOC3_MASK | UNDOC5_MASK ));
 }
 
-static void do_rra()
+static void do_rra(void)
 {
     Uchar set;
 
@@ -831,7 +831,7 @@ static void do_rra()
       | set | (REG_A & (UNDOC3_MASK | UNDOC5_MASK ));
 }
 
-static void do_rlca()
+static void do_rlca(void)
 {
     Uchar set;
 
@@ -850,7 +850,7 @@ static void do_rlca()
       | set | (REG_A & (UNDOC3_MASK | UNDOC5_MASK ));
 }
 
-static void do_rrca()
+static void do_rrca(void)
 {
     Uchar set;
 
@@ -968,7 +968,7 @@ static int srl_byte(int value)
     return result;
 }
 
-static void do_ldd()
+static void do_ldd(void)
 {
     int moved, undoc;
     mem_write(REG_DE, moved = mem_read(REG_HL));
@@ -986,7 +986,7 @@ static void do_ldd()
     T_COUNT(16);
 }
 
-static void do_ldi()
+static void do_ldi(void)
 {
     int moved, undoc;
     mem_write(REG_DE, moved = mem_read(REG_HL));
@@ -1005,7 +1005,7 @@ static void do_ldi()
 }
 
 #ifdef FAST_MOVE
-static void do_ldir()
+static void do_ldir(void)
 {
     int moved, undoc;
 
@@ -1023,7 +1023,7 @@ static void do_ldir()
     T_COUNT(-5);
 }
 
-static void do_lddr()
+static void do_lddr(void)
 {
     int moved, undoc;
 
@@ -1041,7 +1041,7 @@ static void do_lddr()
     T_COUNT(-5);
 }
 #else
-static void do_ldir()
+static void do_ldir(void)
 {
     do_ldi();
     if(OVERFLOW_FLAG) {
@@ -1050,7 +1050,7 @@ static void do_ldir()
     }
 }
 
-static void do_lddr()
+static void do_lddr(void)
 {
     do_ldd();
     if(OVERFLOW_FLAG) {
@@ -1060,7 +1060,7 @@ static void do_lddr()
 }
 #endif
 
-static void do_ld_a_i()
+static void do_ld_a_i(void)
 {
     Uchar set;
 
@@ -1079,7 +1079,7 @@ static void do_ld_a_i()
     REG_F = (REG_F & CARRY_MASK) | (REG_A & (UNDOC3_MASK | UNDOC5_MASK)) | set;
 }
 
-static void do_ld_a_r()
+static void do_ld_a_r(void)
 {
     Uchar set;
 
@@ -1100,7 +1100,7 @@ static void do_ld_a_r()
 
 /* Completely new implementation adapted from yaze.
    The old one was very wrong. */
-static void do_daa()
+static void do_daa(void)
 {
   int a = REG_A, f = REG_F;
   int alow = a & 0xf;
@@ -1132,7 +1132,7 @@ static void do_daa()
     | hcarry | (parity(a) ? PARITY_MASK : 0) | carry;
 }
 
-static void do_rld()
+static void do_rld(void)
 {
     /*
      * Rotate-left-decimal.
@@ -1161,7 +1161,7 @@ static void do_rld()
     mem_write(REG_HL,new_value);
 }
 
-static void do_rrd()
+static void do_rrd(void)
 {
     /*
      * Rotate-right-decimal.
@@ -1195,7 +1195,7 @@ static void do_rrd()
  * Input/output instruction support:
  */
 
-static void do_ind()
+static void do_ind(void)
 {
     mem_write(REG_HL, z80_in(REG_C));
     REG_HL--;
@@ -1211,7 +1211,7 @@ static void do_ind()
 }
 
 #ifdef FAST_MOVE
-static void do_indr()
+static void do_indr(void)
 {
     do
     {
@@ -1226,7 +1226,7 @@ static void do_indr()
     SET_SUBTRACT();
 }
 #else
-static void do_indr()
+static void do_indr(void)
 {
     do_ind();
     if (!ZERO_FLAG) {
@@ -1236,7 +1236,7 @@ static void do_indr()
 }
 #endif
 
-static void do_ini()
+static void do_ini(void)
 {
     mem_write(REG_HL, z80_in(REG_C));
     REG_HL++;
@@ -1252,7 +1252,7 @@ static void do_ini()
 }
 
 #ifdef FAST_MOVE
-static void do_inir()
+static void do_inir(void)
 {
     do
     {
@@ -1267,7 +1267,7 @@ static void do_inir()
     SET_SUBTRACT();
 }
 #else
-static void do_inir()
+static void do_inir(void)
 {
     do_ini();
     if(!ZERO_FLAG) {
@@ -1307,7 +1307,7 @@ static int in_with_flags(int port)
     return value;
 }
 
-static void do_outd()
+static void do_outd(void)
 {
     z80_out(REG_C, mem_read(REG_HL));
     REG_HL--;
@@ -1323,7 +1323,7 @@ static void do_outd()
 }
 
 #ifdef FAST_MOVE
-static void do_outdr()
+static void do_outdr(void)
 {
     do
     {
@@ -1338,7 +1338,7 @@ static void do_outdr()
     SET_SUBTRACT();
 }
 #else
-static void do_outdr()
+static void do_outdr(void)
 {
     do_outd();
     if(!ZERO_FLAG) {
@@ -1348,7 +1348,7 @@ static void do_outdr()
 }
 #endif
 
-static void do_outi()
+static void do_outi(void)
 {
     z80_out(REG_C, mem_read(REG_HL));
     REG_HL++;
@@ -1364,7 +1364,7 @@ static void do_outi()
 }
 
 #ifdef FAST_MOVE
-static void do_outir()
+static void do_outir(void)
 {
     do
     {
@@ -1379,7 +1379,7 @@ static void do_outir()
     SET_SUBTRACT();
 }
 #else
-static void do_outir()
+static void do_outir(void)
 {
     do_outi();
     if (!ZERO_FLAG) {
@@ -1394,32 +1394,32 @@ static void do_outir()
  * Interrupt handling routines:
  */
 
-static void do_di()
+static void do_di(void)
 {
     z80_state.iff1 = z80_state.iff2 = 0;
 }
 
-static void do_ei()
+static void do_ei(void)
 {
     z80_state.iff1 = z80_state.iff2 = 1;
 }
 
-static void do_im0()
+static void do_im0(void)
 {
     z80_state.interrupt_mode = 0;
 }
 
-static void do_im1()
+static void do_im1(void)
 {
     z80_state.interrupt_mode = 1;
 }
 
-static void do_im2()
+static void do_im2(void)
 {
     z80_state.interrupt_mode = 2;
 }
 
-static void do_int()
+static void do_int(void)
 {
     /* handle a maskable interrupt */
     REG_SP -= 2;
@@ -1441,7 +1441,7 @@ static void do_int()
     }
 }
 
-static void do_nmi()
+static void do_nmi(void)
 {
     /* handle a non-maskable interrupt */
     REG_SP -= 2;
@@ -1454,7 +1454,7 @@ static void do_nmi()
 /*
  * Extended instructions which have 0xCB as the first byte:
  */
-static void do_CB_instruction()
+static void do_CB_instruction(void)
 {
     Uchar instruction;
 
@@ -2743,7 +2743,7 @@ static void do_indexed_instruction(Ushort *ixp)
 /*
  * Extended instructions which have 0xED as the first byte:
  */
-static int do_ED_instruction()
+static int do_ED_instruction(void)
 {
     Uchar instruction;
     int debug = 0;
@@ -4444,7 +4444,7 @@ int z80_run(int continuous)
 }
 
 
-void z80_reset()
+void z80_reset(void)
 {
     REG_PC = 0;
     REG_A = 0xFF;

@@ -1606,7 +1606,7 @@ static void trs_flip_fullscreen(void)
 }
 
 #if defined(SDL2) || !defined(NOX)
-static char *trs_get_copy_data()
+static char *trs_get_copy_data(void)
 {
   static char copy_data[2048];
   char *curr_data = copy_data;

@@ -274,27 +274,27 @@
 #define EO_TRUNC  01000
 #define EO_APPEND 02000
 
-extern void do_emt_system();
-extern void do_emt_getddir();
-extern void do_emt_setddir();
-extern void do_emt_mouse();
-extern void do_emt_open();
-extern void do_emt_close();
-extern void do_emt_read();
-extern void do_emt_write();
-extern void do_emt_lseek();
-extern void do_emt_strerror();
-extern void do_emt_time();
-extern void do_emt_opendir();
-extern void do_emt_closedir();
-extern void do_emt_readdir();
-extern void do_emt_chdir();
-extern void do_emt_getcwd();
-extern void do_emt_misc();
-extern void do_emt_ftruncate();
-extern void do_emt_opendisk();
-extern void do_emt_closedisk();
-extern void do_emt_resetdisk();
+extern void do_emt_system(void);
+extern void do_emt_getddir(void);
+extern void do_emt_setddir(void);
+extern void do_emt_mouse(void);
+extern void do_emt_open(void);
+extern void do_emt_close(void);
+extern void do_emt_read(void);
+extern void do_emt_write(void);
+extern void do_emt_lseek(void);
+extern void do_emt_strerror(void);
+extern void do_emt_time(void);
+extern void do_emt_opendir(void);
+extern void do_emt_closedir(void);
+extern void do_emt_readdir(void);
+extern void do_emt_chdir(void);
+extern void do_emt_getcwd(void);
+extern void do_emt_misc(void);
+extern void do_emt_ftruncate(void);
+extern void do_emt_opendisk(void);
+extern void do_emt_closedisk(void);
+extern void do_emt_resetdisk(void);
 
 extern void trs_impexp_xtrshard_attach(int drive, const char *filename);
 extern void trs_impexp_xtrshard_remove(int drive);

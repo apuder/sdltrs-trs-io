@@ -59,5 +59,5 @@ void trs_sound_out(int value);
 void orch90_flush(int dummy);
 void trs_orch90_out(int channels, int value);
 void trs_cassette_update(int dummy);
-int trs_cassette_in();
-void trs_cassette_reset();
+int trs_cassette_in(void);
+void trs_cassette_reset(void);

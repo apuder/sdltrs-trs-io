@@ -192,7 +192,7 @@ static char *trap_name(int flag)
     }
 }
 
-static void show_zbxinfo()
+static void show_zbxinfo(void)
 {
     printf("zbx: Z80 debugger by David Gingold, Alex Wolman, and Timothy"
            " Mann\n");
@@ -207,7 +207,7 @@ static void show_zbxinfo()
 #endif
 }
 
-static void clear_all_traps()
+static void clear_all_traps(void)
 {
     int i;
     for(i = 0; i < MAX_TRAPS; ++i)
@@ -222,7 +222,7 @@ static void clear_all_traps()
     num_watchpoints = 0;
 }
 
-static void print_traps()
+static void print_traps(void)
 {
     int i;
 
@@ -305,7 +305,7 @@ static void clear_trap_address(int address, int flag)
     }
 }
 
-void debug_print_registers()
+void debug_print_registers(void)
 {
     printf("\n       S Z - H - PV N C   IFF1 IFF2 IM\n");
     printf("Flags: %d %d %d %d %d  %d %d %d     %d    %d   %d\n\n",
@@ -333,13 +333,13 @@ void debug_print_registers()
 }
 
 
-void trs_debug()
+void trs_debug(void)
 {
     stop_signaled = 1;
     if (trs_continuous > 0) trs_continuous = 0;
 }
 
-void debug_init()
+void debug_init(void)
 {
     int i;
 
@@ -393,7 +393,7 @@ static void print_memory(Ushort address, int num_bytes)
     }
 }
 
-static void debug_run()
+static void debug_run(void)
 {
     Uchar t;
     Uchar byte;
@@ -481,7 +481,7 @@ static void debug_run()
     printf("Stopped at %.4x\n", REG_PC);
 }
 
-void debug_shell()
+void debug_shell(void)
 {
     char input[MAXLINE];
     char command[MAXLINE];
@@ -968,7 +968,7 @@ test_sub(int a, int b)
     }
 }
 
-test_all()
+test_all(void)
 {
     int a, b;
 

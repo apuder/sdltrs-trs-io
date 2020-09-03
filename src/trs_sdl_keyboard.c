@@ -52,7 +52,7 @@
 #include "trs_sdl_keyboard.h"
 
 static void queue_key(int state);
-static int dequeue_key();
+static int dequeue_key(void);
 
 /*
  * Key event queue
@@ -498,12 +498,12 @@ static tstate_t key_stretch_timeout;
 int stretch_amount = STRETCH_AMOUNT;
 int trs_kb_bracket_state = 0;
 
-void trs_kb_reset()
+void trs_kb_reset(void)
 {
   key_stretch_timeout = z80_state.t_count;
 }
 
-void trs_kb_heartbeat()
+void trs_kb_heartbeat(void)
 {
   /* Don't hold keys in queue too long */
   key_heartbeat++;
@@ -677,7 +677,7 @@ void trs_joy_axis(unsigned char axis, short value)
   }
 }
 
-int trs_joystick_in()
+int trs_joystick_in(void)
 {
 #if JOYDEBUG
   debug("joy %02x ", joystate);
@@ -823,7 +823,7 @@ int trs_kb_mem_read(int address)
   return kb_mem_value(address);
 }
 
-void clear_key_queue()
+void clear_key_queue(void)
 {
   key_queue_head = 0;
   key_queue_entries = 0;
@@ -847,7 +847,7 @@ void queue_key(int state)
   }
 }
 
-int dequeue_key()
+int dequeue_key(void)
 {
   int rval = -1;
 

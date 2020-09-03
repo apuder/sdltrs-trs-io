@@ -93,7 +93,7 @@ typedef struct {
 static State state;
 
 /* Forward */
-static int hard_data_in();
+static int hard_data_in(void);
 static void hard_data_out(int value);
 static void hard_restore(int cmd);
 static void hard_read(int cmd);
@@ -507,7 +507,7 @@ static int find_sector(int newstatus)
   return 1;
 }
 
-static int hard_data_in()
+static int hard_data_in(void)
 {
   Drive *d = &state.d[state.drive];
   if (trs_show_led)
