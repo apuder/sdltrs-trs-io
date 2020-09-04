@@ -178,7 +178,6 @@ static void trs_gui_keys_sdltrs(void);
 static void trs_gui_exec_cmd(void);
 static void trs_gui_save_bmp(void);
 static void trs_gui(void);
-int trs_gui_exit_sdltrs(void);
 
 void trs_gui_write_text(const char *text, int x, int y, int invert)
 {

@@ -89,7 +89,6 @@ extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 extern int  key_queue[KEY_QUEUE_SIZE];
 extern int  key_queue_head;
 extern int  key_queue_entries;
-extern int  trs_gui_exit_sdltrs(void);
 extern unsigned int cycles_per_timer;
 
 /* Public data */

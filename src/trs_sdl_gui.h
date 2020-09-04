@@ -58,6 +58,7 @@ extern int jaxis_mapped;
 
 void call_function(int function);
 void trs_gui_display_pause(void);
+int  trs_gui_exit_sdltrs(void);
 int  trs_gui_file_browse(const char* path, char* filename, const char* mask,
                          int browse_dir, const char* type);
 void trs_gui_refresh(void);
