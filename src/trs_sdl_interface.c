@@ -2105,10 +2105,14 @@ void trs_get_event(int wait)
           keysym.sym = SDLK_LSHIFT;
 
         if (trs_model == 1) {
-               if (keysym.sym == SDLK_F1) keysym.sym = 0x115;
-          else if (keysym.sym == SDLK_F2) keysym.sym = 0x120;
-          else if (keysym.sym == SDLK_F3) keysym.sym = 0x121;
-          else if (keysym.sym == SDLK_F4) keysym.sym = 0x122;
+          switch (keysym.sym) {
+            case SDLK_F1: keysym.sym = 0x115; break;
+            case SDLK_F2: keysym.sym = 0x120; break;
+            case SDLK_F3: keysym.sym = 0x121; break;
+            case SDLK_F4: keysym.sym = 0x122; break;
+            default:
+              break;
+          }
         }
 
 #ifdef SDL2
