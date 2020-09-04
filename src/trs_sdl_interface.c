@@ -84,7 +84,6 @@
 #define INVERSE   2
 #define ALTERNATE 4
 
-extern char *program_name;
 extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 extern int  key_queue[KEY_QUEUE_SIZE];
 extern int  key_queue_head;
@@ -1257,7 +1256,7 @@ void trs_screen_init(void)
 
 #ifdef SDL2
   if (window == NULL) {
-    window = SDL_CreateWindow(program_name,
+    window = SDL_CreateWindow(NULL,
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
                               OrigWidth, OrigHeight,
