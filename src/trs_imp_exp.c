@@ -66,7 +66,7 @@ int trs_emtsafe = 1;
 /* New emulator traps */
 typedef struct {
   DIR *dir;
-  char pathname[FILENAME_MAX];
+  char pathname[FILENAME_MAXLEN];
 } OpenDir;
 
 #define MAX_OPENDIR 32
@@ -78,7 +78,7 @@ typedef struct {
   int oflag;
   int xtrshard;
   int xtrshard_unit;
-  char filename[FILENAME_MAX];
+  char filename[FILENAME_MAXLEN];
 } OpenDisk;
 
 #define MAX_OPENDISK 32
@@ -188,10 +188,10 @@ void do_emt_setddir(void)
     const char* home = getenv("HOME");
 
     if (home) {
-      char dirname[FILENAME_MAX];
+      char dirname[FILENAME_MAXLEN];
 
-      snprintf(dirname, FILENAME_MAX, "%s%c%s", home, DIR_SLASH, trs_disk_dir + 1);
-      snprintf(trs_disk_dir, FILENAME_MAX, "%s", dirname);
+      snprintf(dirname, FILENAME_MAXLEN, "%s%c%s", home, DIR_SLASH, trs_disk_dir + 1);
+      snprintf(trs_disk_dir, FILENAME_MAXLEN, "%s", dirname);
     }
   }
   REG_A = 0;
@@ -433,7 +433,7 @@ void do_emt_opendir(void)
     REG_A = errno;
     REG_F &= ~ZERO_MASK;
   } else {
-    strncpy(dir[i].pathname, dirname, FILENAME_MAX);
+    strncpy(dir[i].pathname, dirname, FILENAME_MAXLEN);
     REG_DE = i;
     REG_A = 0;
     REG_F |= ZERO_MASK;
@@ -715,7 +715,7 @@ void do_emt_opendisk(void)
         (strlen(name) == 8))) {
     int hard_unit = name[strlen(name) -1] - '0';
     if (hard_unit >= 0 && hard_unit <= 3) {
-      snprintf(od[i].filename, FILENAME_MAX, "%s", trs_hard_getfilename(hard_unit));
+      snprintf(od[i].filename, FILENAME_MAXLEN, "%s", trs_hard_getfilename(hard_unit));
       od[i].fd = open(od[i].filename, oflag, REG_DE);
       od[i].oflag = oflag;
       if (od[i].fd >= 0)
@@ -727,7 +727,7 @@ void do_emt_opendisk(void)
     }
   } else {
     od[i].fd = open(qname, oflag, REG_DE);
-    snprintf(od[i].filename, FILENAME_MAX, "%s", qname);
+    snprintf(od[i].filename, FILENAME_MAXLEN, "%s", qname);
     od[i].xtrshard = 0;
   }
   free(qname);
@@ -882,7 +882,7 @@ trs_impexp_xtrshard_attach(int drive, const char *filename)
   for (i = 0; i < MAX_OPENDISK; i++) {
     if (od[i].inuse && od[i].xtrshard && (od[i].xtrshard_unit == drive)) {
       close(od[i].fd);
-      snprintf(od[i].filename, FILENAME_MAX, "%s", filename);
+      snprintf(od[i].filename, FILENAME_MAXLEN, "%s", filename);
       od[i].fd = open(filename, od[i].oflag);
       xtrshard_fd[od[i].xtrshard_unit] = od[i].fd;
     }

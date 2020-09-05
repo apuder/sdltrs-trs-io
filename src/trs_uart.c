@@ -61,9 +61,9 @@
 /*#define UARTDEBUG2 1*/
 
 #if __linux
-char trs_uart_name[FILENAME_MAX] = "/dev/ttyS0";
+char trs_uart_name[FILENAME_MAXLEN] = "/dev/ttyS0";
 #else
-char trs_uart_name[FILENAME_MAX] = "";
+char trs_uart_name[FILENAME_MAXLEN] = "";
 #endif
 
 int trs_uart_switches =

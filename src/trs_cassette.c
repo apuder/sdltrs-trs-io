@@ -92,7 +92,7 @@ static const char *format_name[] = {
 
 #define FLUSH -500  /* special fake signal value used when turning off motor */
 
-static char cassette_filename[FILENAME_MAX] = {0};
+static char cassette_filename[FILENAME_MAXLEN] = {0};
 static int cassette_position = 0;
 static unsigned int cassette_format = DEFAULT_FORMAT;
 static int cassette_state = CLOSE;
@@ -556,7 +556,7 @@ trs_cassette_insert(const char *filename)
    int len = strlen(filename);
    const char *extension;
 
-   snprintf(cassette_filename, FILENAME_MAX, "%s", filename);
+   snprintf(cassette_filename, FILENAME_MAXLEN, "%s", filename);
    cassette_position = 0;
 
    if (len >= 3)
