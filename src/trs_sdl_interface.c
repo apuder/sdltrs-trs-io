@@ -2810,9 +2810,15 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
   rect.h = h * cur_char_height;
 
   SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format,
+#if defined(big_endian) && !defined(__linux)
+      (gui_background & 0xFF),
+      (gui_background >> 8) & 0xFF,
+      (gui_background >> 16) & 0xFF));
+#else
       (gui_background >> 16) & 0xFF,
       (gui_background >> 8) & 0xFF,
       (gui_background & 0xFF)));
+#endif
 }
 
 void trs_gui_refresh(void)
