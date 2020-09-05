@@ -84,7 +84,7 @@
 #define INVERSE   2
 #define ALTERNATE 4
 
-extern char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
+extern unsigned char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT];
 extern int  key_queue[KEY_QUEUE_SIZE];
 extern int  key_queue_head;
 extern int  key_queue_entries;
@@ -2428,7 +2428,7 @@ boxes_init(int fg_color, int bg_color, int width, int height, int expanded)
   }
 }
 
-static SDL_Surface *CreateSurfaceFromDataScale(char *data,
+static SDL_Surface *CreateSurfaceFromDataScale(unsigned char *data,
     unsigned int fg_color,
     unsigned int bg_color,
     unsigned int scale_x,

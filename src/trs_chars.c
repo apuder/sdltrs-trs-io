@@ -11,7 +11,7 @@
 
 #include "trs_iodefs.h"
 
-const char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT] = {
+const unsigned char trs_char_data[][MAXCHARS][TRS_CHAR_HEIGHT] = {
 
 {
   /* CG 0 - for Model I */
