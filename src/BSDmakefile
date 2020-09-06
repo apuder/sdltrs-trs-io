@@ -39,3 +39,7 @@ CFLAGS	+= -Wall -Wextra -Wno-unused-parameter ${DEBUG} ${INCS} ${ENDIAN} ${MACRO
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
+
+.PHONY: clean
+clean:
+	rm -f ${OBJS} ${PROG}
