@@ -56,7 +56,6 @@ if (FASTMOVE)
 endif ()
 
 if (READLINE AND ZBX)
-	find_package(Curses QUIET)
 	find_path(Readline_ROOT_DIR
 		NAMES include/readline/readline.h
 	)
@@ -69,9 +68,10 @@ if (READLINE AND ZBX)
 		HINTS ${Readline_ROOT_DIR}/lib
 	)
 	if (Readline_LIBRARY)
+		find_package(Curses QUIET)
 		add_definitions(-DREADLINE)
-		include_directories(${Readline_INCLUDE_DIR})
-		target_link_libraries(sdltrs ${Readline_LIBRARY})
+		include_directories(${Readline_INCLUDE_DIR} ${CURSES_INCLUDE_DIR})
+		target_link_libraries(sdltrs ${Readline_LIBRARY} ${CURSES_LIBRARIES})
 	else ()
 		message("-- Readline NOT FOUND")
 	endif ()
