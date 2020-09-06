@@ -34,7 +34,7 @@ all:
 	@echo "make (bsd|clean|clean-win|depend|nox|sdl|sdl2|win32|win64|wsdl2)"
 
 bsd:
-	make -f BSDMakefile
+	make -f BSDmakefile
 
 clean:
 	rm -f ${OBJS} ${PROG} sdl2trs
