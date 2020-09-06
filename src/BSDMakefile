@@ -35,7 +35,7 @@ INCS	!= sdl-config --cflags
 INCS	+= -I/usr/X11R7/include
 MACROS	 = -DREADLINE -DZBX
 DEBUG	?= -g
-CFLAGS	+= -Wall -Wextra ${DEBUG} ${INCS} ${ENDIAN} ${MACROS}
+CFLAGS	+= -Wall -Wextra -Wno-unused-parameter ${DEBUG} ${INCS} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
