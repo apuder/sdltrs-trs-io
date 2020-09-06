@@ -52,7 +52,7 @@ extern int trs_uart_status_in(void);
 extern void trs_uart_control_out(int value);
 extern int trs_uart_data_in(void);
 extern void trs_uart_data_out(int value);
-extern char trs_uart_name[FILENAME_MAXLEN];
+extern char trs_uart_name[FILENAME_MAX];
 extern int trs_uart_switches;
 
 #define TRS_UART_MODEM    0xE8 /* in */

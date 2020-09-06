@@ -52,7 +52,6 @@
 #include "z80.h"
 
 
-#define FILENAME_MAXLEN 256
 #define STRETCH_AMOUNT 4000
 #define DEFAULT_SAMPLE_RATE 44100  /* samples/sec to use for .wav files */
 
@@ -62,18 +61,18 @@
 #define DIR_SLASH '/'
 #endif
 
-extern char romfile[FILENAME_MAXLEN];
-extern char romfile3[FILENAME_MAXLEN];
-extern char romfile4p[FILENAME_MAXLEN];
-extern char trs_hard_dir[FILENAME_MAXLEN];
-extern char trs_cass_dir[FILENAME_MAXLEN];
-extern char trs_disk_set_dir[FILENAME_MAXLEN];
-extern char trs_state_dir[FILENAME_MAXLEN];
-extern char trs_printer_dir[FILENAME_MAXLEN];
-extern char trs_printer_command[FILENAME_MAXLEN];
-extern char trs_cmd_file[FILENAME_MAXLEN];
-extern char trs_config_file[FILENAME_MAXLEN];
-extern char init_state_file[FILENAME_MAXLEN];
+extern char romfile[FILENAME_MAX];
+extern char romfile3[FILENAME_MAX];
+extern char romfile4p[FILENAME_MAX];
+extern char trs_hard_dir[FILENAME_MAX];
+extern char trs_cass_dir[FILENAME_MAX];
+extern char trs_disk_set_dir[FILENAME_MAX];
+extern char trs_state_dir[FILENAME_MAX];
+extern char trs_printer_dir[FILENAME_MAX];
+extern char trs_printer_command[FILENAME_MAX];
+extern char trs_cmd_file[FILENAME_MAX];
+extern char trs_config_file[FILENAME_MAX];
+extern char init_state_file[FILENAME_MAX];
 
 extern int trs_model; /* 1, 3, 4, 5(=4p) */
 extern unsigned int foreground;

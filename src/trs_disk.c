@@ -298,7 +298,7 @@ typedef struct {
   int inches;                     /* 5 or 8, as seen by TRS-80 */
   int real_step;                  /* 1=normal, 2=double-step if REAL */
   FILE* file;
-  char filename[FILENAME_MAXLEN];
+  char filename[FILENAME_MAX];
   union {
     JV3State jv3;                 /* valid if emutype = JV3 */
     RealState real;               /* valid if emutype = REAL */
@@ -823,7 +823,7 @@ trs_disk_insert(int drive, const char *diskname)
       d->phytrack = 0;
       real_restore(drive);
     }
-    snprintf(d->filename, FILENAME_MAXLEN, "%s", diskname);
+    snprintf(d->filename, FILENAME_MAX, "%s", diskname);
   } else
 #endif
   {
@@ -836,7 +836,7 @@ trs_disk_insert(int drive, const char *diskname)
       d->writeprot = 0;
     }
     trs_disk_emutype(d);
-    snprintf(d->filename, FILENAME_MAXLEN, "%s", diskname);
+    snprintf(d->filename, FILENAME_MAX, "%s", diskname);
   }
   if (d->emutype == JV3) {
     int id_index, n;
@@ -3548,11 +3548,11 @@ real_writetrk(void)
 int trs_diskset_save(const char *filename)
 {
     const char *diskfilename;
-    char dirname[FILENAME_MAXLEN];
+    char dirname[FILENAME_MAX];
     FILE *f;
     int i;
 
-    if (getcwd(dirname, FILENAME_MAXLEN) == NULL)
+    if (getcwd(dirname, FILENAME_MAX) == NULL)
       return -1;
 
     f = fopen(filename, "w");
@@ -3587,7 +3587,7 @@ int trs_diskset_save(const char *filename)
 
 int trs_diskset_load(const char *filename)
 {
-  char diskname[FILENAME_MAXLEN + 1];
+  char diskname[FILENAME_MAX + 1];
   FILE *f;
   int i;
 
@@ -3595,7 +3595,7 @@ int trs_diskset_load(const char *filename)
 
   if (f) {
     for (i = 0; i < 8; i++) {
-      if (fgets(diskname, FILENAME_MAXLEN, f) == NULL)
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
@@ -3605,7 +3605,7 @@ int trs_diskset_load(const char *filename)
       }
     }
     for (i = 0; i < 4; i++) {
-      if (fgets(diskname, FILENAME_MAXLEN, f) == NULL)
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;
@@ -3615,7 +3615,7 @@ int trs_diskset_load(const char *filename)
       }
     }
     for (i = 0; i < 8; i++) {
-      if (fgets(diskname, FILENAME_MAXLEN, f) == NULL)
+      if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
       if (strlen(diskname) != 0)
         diskname[strlen(diskname)-1] = 0;

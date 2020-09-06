@@ -60,7 +60,7 @@ int stringy;
 typedef long stringy_pos_t;
 
 typedef struct {
-  char name[FILENAME_MAXLEN];
+  char name[FILENAME_MAX];
   FILE *file;
   stringy_pos_t length;
   stringy_pos_t eotWidth;
@@ -334,7 +334,7 @@ stringy_get_writeprotect(int drive)
 int
 stringy_insert(int drive, const char *name)
 {
-  snprintf(stringy_info[drive].name, FILENAME_MAXLEN, "%s", name);
+  snprintf(stringy_info[drive].name, FILENAME_MAX, "%s", name);
   return stringy_change(drive);
 }
 

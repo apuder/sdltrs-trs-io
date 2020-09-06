@@ -47,7 +47,6 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
-#include "trs.h"
 #include "trs_cassette.h"
 #include "trs_disk.h"
 #include "trs_hard.h"
@@ -73,7 +72,7 @@ static void win_set_readonly(char *filename, int readonly)
 
 void trs_protect_cass(int writeprot)
 {
-  char prot_filename[FILENAME_MAXLEN];
+  char prot_filename[FILENAME_MAX];
 #ifndef _WIN32
   struct stat st;
   int newmode;
@@ -83,7 +82,7 @@ void trs_protect_cass(int writeprot)
   if (cassname[0] == 0)
     return;
 
-  snprintf(prot_filename, FILENAME_MAXLEN, "%s", cassname);
+  snprintf(prot_filename, FILENAME_MAX, "%s", cassname);
 
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)
@@ -105,7 +104,7 @@ void trs_protect_cass(int writeprot)
 
 void trs_protect_disk(int drive, int writeprot)
 {
-  char prot_filename[FILENAME_MAXLEN];
+  char prot_filename[FILENAME_MAX];
 #ifndef _WIN32
   struct stat st;
   int newmode;
@@ -117,7 +116,7 @@ void trs_protect_disk(int drive, int writeprot)
   if (diskname[0] == 0)
     return;
 
-  snprintf(prot_filename, FILENAME_MAXLEN, "%s", diskname);
+  snprintf(prot_filename, FILENAME_MAX, "%s", diskname);
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)
     return;
@@ -158,7 +157,7 @@ void trs_protect_disk(int drive, int writeprot)
 
 void trs_protect_hard(int drive, int writeprot)
 {
-  char prot_filename[FILENAME_MAXLEN];
+  char prot_filename[FILENAME_MAX];
 #ifndef _WIN32
   struct stat st;
 #endif
@@ -169,7 +168,7 @@ void trs_protect_hard(int drive, int writeprot)
   if (diskname[0] == 0)
     return;
 
-  snprintf(prot_filename, FILENAME_MAXLEN, "%s", diskname);
+  snprintf(prot_filename, FILENAME_MAX, "%s", diskname);
 
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)
@@ -208,7 +207,7 @@ void trs_protect_hard(int drive, int writeprot)
 
 void trs_protect_stringy(int drive, int writeprot)
 {
-  char prot_filename[FILENAME_MAXLEN];
+  char prot_filename[FILENAME_MAX];
 #ifndef _WIN32
   struct stat st;
 #endif
@@ -219,7 +218,7 @@ void trs_protect_stringy(int drive, int writeprot)
   if (diskname[0] == 0)
     return;
 
-  snprintf(prot_filename, FILENAME_MAXLEN, "%s", diskname);
+  snprintf(prot_filename, FILENAME_MAX, "%s", diskname);
 
 #ifndef _WIN32
   if (stat(prot_filename, &st) < 0)

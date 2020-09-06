@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "trs.h"
 #include "trs_state_save.h"
 
 static const char stateFileBanner[] = "sldtrs State Save File";
@@ -333,10 +332,10 @@ void trs_load_float(FILE *file, float *buffer, int count)
 
 void trs_save_filename(FILE *file, char *filename)
 {
-  char dirname[FILENAME_MAXLEN];
+  char dirname[FILENAME_MAX];
   unsigned short length;
 
-  if (getcwd(dirname, FILENAME_MAXLEN) != NULL) {
+  if (getcwd(dirname, FILENAME_MAX) != NULL) {
     if (strncmp(filename, dirname, strlen(dirname)) == 0)
       filename = &filename[strlen(dirname)+1];
   }

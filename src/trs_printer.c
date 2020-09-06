@@ -50,19 +50,19 @@
 #define TEXT_PRINTER 1
 
 static FILE *printer = NULL;
-static char printer_filename[FILENAME_MAXLEN];
+static char printer_filename[FILENAME_MAX];
 static int printer_open = FALSE;
 int trs_printer = NO_PRINTER;
 
 int trs_printer_reset(void)
 {
-  char command[FILENAME_MAXLEN * 2]; /* for print_command and for spool_file */
+  char command[256 + FILENAME_MAX]; /* 256 for print_command + FILENAME_MAX for spool_file */
 
   if (printer_open) {
     fclose(printer);
     printer_open = FALSE;
     if (trs_printer_command[0]) {
-      snprintf(command, FILENAME_MAXLEN * 2, trs_printer_command, printer_filename);
+      snprintf(command, 255 + FILENAME_MAX, trs_printer_command, printer_filename);
       if (system(command) != 0)
         return -1;
     }
@@ -77,8 +77,8 @@ void trs_printer_open(void)
   struct stat st;
 
   for (file_num = 0; file_num < 10000; file_num++) {
-    if (snprintf(printer_filename, FILENAME_MAXLEN, "%s%ctrsprn%04d.txt",
-        trs_printer_dir, DIR_SLASH, file_num) < FILENAME_MAXLEN) {
+    if (snprintf(printer_filename, FILENAME_MAX, "%s%ctrsprn%04d.txt",
+        trs_printer_dir, DIR_SLASH, file_num) < FILENAME_MAX) {
       if (stat(printer_filename, &st) < 0) {
         printer_open = TRUE;
         printer = fopen(printer_filename,"w");

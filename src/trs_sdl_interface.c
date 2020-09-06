@@ -112,19 +112,19 @@ int window_border_width;
 #if defined(SDL2) || !defined(NOX)
 int turbo_paste = 0;
 #endif
-char romfile[FILENAME_MAXLEN];
-char romfile3[FILENAME_MAXLEN];
-char romfile4p[FILENAME_MAXLEN];
-char trs_disk_dir[FILENAME_MAXLEN];
-char trs_hard_dir[FILENAME_MAXLEN];
-char trs_cass_dir[FILENAME_MAXLEN];
-char trs_disk_set_dir[FILENAME_MAXLEN];
-char trs_state_dir[FILENAME_MAXLEN];
-char trs_printer_dir[FILENAME_MAXLEN];
-char trs_cmd_file[FILENAME_MAXLEN];
-char trs_config_file[FILENAME_MAXLEN];
-char init_state_file[FILENAME_MAXLEN];
-char trs_printer_command[FILENAME_MAXLEN];
+char romfile[FILENAME_MAX];
+char romfile3[FILENAME_MAX];
+char romfile4p[FILENAME_MAX];
+char trs_disk_dir[FILENAME_MAX];
+char trs_hard_dir[FILENAME_MAX];
+char trs_cass_dir[FILENAME_MAX];
+char trs_disk_set_dir[FILENAME_MAX];
+char trs_state_dir[FILENAME_MAX];
+char trs_printer_dir[FILENAME_MAX];
+char trs_cmd_file[FILENAME_MAX];
+char trs_config_file[FILENAME_MAX];
+char init_state_file[FILENAME_MAX];
+char trs_printer_command[FILENAME_MAX];
 
 /* Private data */
 static unsigned char trs_screen[2048];
@@ -701,14 +701,14 @@ static void trs_opt_rom(char *arg, int intarg, int *stringarg)
 {
   switch (trs_model) {
     case 1:
-      snprintf(romfile, FILENAME_MAXLEN, "%s", arg);
+      snprintf(romfile, FILENAME_MAX, "%s", arg);
       break;
     case 3:
     case 4:
-      snprintf(romfile3, FILENAME_MAXLEN, "%s", arg);
+      snprintf(romfile3, FILENAME_MAX, "%s", arg);
       break;
     case 5:
-      snprintf(romfile4p, FILENAME_MAXLEN, "%s", arg);
+      snprintf(romfile4p, FILENAME_MAX, "%s", arg);
       break;
    }
 }
@@ -787,7 +787,7 @@ static void trs_opt_speedup(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_string(char *arg, int intarg, int *stringarg)
 {
-  snprintf((char *)stringarg, FILENAME_MAXLEN, "%s", arg);
+  snprintf((char *)stringarg, FILENAME_MAX, "%s", arg);
 }
 
 static void trs_opt_supermem(char *arg, int intarg, int *stringarg)
@@ -853,7 +853,7 @@ static void trs_disk_setsteps(void)
 
 int trs_load_config_file(void)
 {
-  char line[FILENAME_MAXLEN];
+  char line[FILENAME_MAX];
   char *arg;
   FILE *config_file;
   int i;
@@ -937,11 +937,11 @@ int trs_load_config_file(void)
 
   if (trs_config_file[0] == 0) {
 #ifdef _WIN32
-    snprintf(trs_config_file, FILENAME_MAXLEN, "./sdltrs.t8c");
+    snprintf(trs_config_file, FILENAME_MAX, "./sdltrs.t8c");
 #else
     const char *home = getenv("HOME");
 
-    snprintf(trs_config_file, FILENAME_MAXLEN, "%s/.sdltrs.t8c", home);
+    snprintf(trs_config_file, FILENAME_MAX, "%s/.sdltrs.t8c", home);
 #endif
   }
 
@@ -999,11 +999,11 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     }
     else if ((len = strlen(argv[i]) - 4) > 0) {
       if (strcasecmp(&argv[i][len], ".t8c") == 0)
-        snprintf(trs_config_file, FILENAME_MAXLEN, "%s", argv[i]);
+        snprintf(trs_config_file, FILENAME_MAX, "%s", argv[i]);
       else if (strcasecmp(&argv[i][len], ".t8s") == 0)
-        snprintf(init_state_file, FILENAME_MAXLEN, "%s", argv[i]);
+        snprintf(init_state_file, FILENAME_MAX, "%s", argv[i]);
       else if (strcasecmp(&argv[i][len], ".cmd") == 0)
-        snprintf(trs_cmd_file, FILENAME_MAXLEN, "%s", argv[i]);
+        snprintf(trs_cmd_file, FILENAME_MAX, "%s", argv[i]);
     }
   }
 
@@ -2064,7 +2064,7 @@ void trs_get_event(int wait)
               if (SDL_GetModState() & KMOD_SHIFT) {
                 trs_disk_remove(keysym.sym - SDLK_0);
               } else {
-                char filename[FILENAME_MAXLEN];
+                char filename[FILENAME_MAX];
 
                 if (trs_gui_file_browse(trs_disk_dir, filename, NULL, 0,
                       "Floppy Disk Image") != -1)
