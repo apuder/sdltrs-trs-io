@@ -115,12 +115,15 @@ endif ()
 install(TARGETS sdltrs		DESTINATION ${CMAKE_INSTALL_BINDIR}/)
 install(FILES src/sdltrs.1	DESTINATION ${CMAKE_INSTALL_MANDIR}/man1/)
 install(FILES LICENSE		DESTINATION ${CMAKE_INSTALL_DOCDIR}/)
+
 if (HTMLDOC)
 install(DIRECTORY html		DESTINATION ${CMAKE_INSTALL_DOCDIR}/)
 endif ()
+
 if (DISKIMG)
 install(DIRECTORY diskimages/	DESTINATION ${CMAKE_INSTALL_DATADIR}/sdltrs/)
 endif ()
+
 if (ICONS)
 install(FILES sdltrs.desktop	DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/)
 install(FILES icons/sdltrs.png	DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps/)
