@@ -30,6 +30,10 @@
 #define JOY_BOUNCE      (20000)
 #define KEY_QUEUE_SIZE  (32)
 
+extern int key_queue[KEY_QUEUE_SIZE];
+extern int key_queue_head;
+extern int key_queue_entries;
+
 void trs_joy_button_down(void);
 void trs_joy_button_up(void);
 void trs_joy_hat(unsigned char value);

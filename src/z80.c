@@ -79,7 +79,6 @@
 /*SUPPRESS 112*/
 /*SUPPRESS 115*/
 
-extern unsigned int cycles_per_timer;
 extern void trs_timer_sync_with_host(void);
 
 /*
