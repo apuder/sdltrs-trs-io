@@ -17,6 +17,10 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
   * Change Z80 CPU default MHz of each TRS-80 Model
   * More accurate emulation of Z80 block instructions
 
+## License
+
+  BSD-2-Clause
+
 ## Binaries
 
   * [sdltrs.exe]     (32-bit, needs [SDL.DLL] of [SDL-1.2.14] for Win9X)
