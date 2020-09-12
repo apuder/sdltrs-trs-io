@@ -520,7 +520,7 @@ int trs_gui_readdirectory(const char *path, const char *mask, int browse_dir)
       dirname_len = strlen(dir_entry->d_name);
 
       stat(pathname, &st);
-      if ((st.st_mode & S_IFMT) == S_IFDIR) {
+      if (S_ISDIR(st.st_mode)) {
         if ( (name = (char *)malloc(dirname_len + 3)) )
           snprintf(name, dirname_len + 3, "<%s>", dir_entry->d_name);
       }
@@ -590,7 +590,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
   }
 
   stat(current_dir, &st);
-  if (strcmp(current_dir, ".") == 0 || (st.st_mode & S_IFMT) != S_IFDIR) {
+  if (strcmp(current_dir, ".") == 0 || S_ISDIR(st.st_mode)) {
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
       error("getcwd: %s", current_dir);
   }
