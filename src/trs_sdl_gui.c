@@ -1042,19 +1042,15 @@ int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
 int trs_gui_display_popup(const char *title, const char **entry,
                           int entry_count, int selection)
 {
+  int const entry_len = strlen(entry[0]);
   int const saved_selection = selection;
   int i, key;
   int x, y;
-  unsigned int max_len = 0;
 
-  for (i = 0; i < entry_count; i++) {
-    if (strlen(entry[i]) > max_len)
-      max_len = strlen(entry[i]);
-  }
-  x = (64 - max_len) / 2;
+  x = (64 - entry_len) / 2;
   y = (16 - entry_count) / 2;
 
-  trs_gui_frame(x - 1, y - 1, x + max_len, y + entry_count);
+  trs_gui_frame(x - 1, y - 1, x + entry_len, y + entry_count);
   trs_gui_center_text(title, y - 1, 0);
 
   for (i = 0; i < entry_count; i++)
@@ -1119,11 +1115,11 @@ int trs_gui_display_popup(const char *title, const char **entry,
 int trs_gui_display_popup_matrix(const char* title, const char **entry,
                                  int rows, int cols, int selection)
 {
+  int const entry_len = strlen(entry[0]) + 1;
   int const entry_count = rows * cols;
   int row, col;
   int i, j, key;
   int width, x, y;
-  unsigned int max_len = 0;
 
   if (selection < 0)
     selection = 0;
@@ -1133,11 +1129,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   row = selection / cols;
   col = selection % cols;
 
-  for (i = 0; i < entry_count; i++)
-    if (strlen(entry[i]) + 1 > max_len)
-      max_len = strlen(entry[i]) + 1;
-
-  width = cols * max_len - 1;
+  width = cols * entry_len - 1;
   x = (64 - width) / 2;
   y = (16 - rows) / 2;
 
@@ -1146,14 +1138,14 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   trs_gui_write_text(title, x + 1, y - 1, 0);
   for (i = 0; i < rows; i++)
     for (j = 0; j < cols; j++)
-      trs_gui_write_text(entry[i * cols + j], x + j * max_len, y + i, 0);
+      trs_gui_write_text(entry[i * cols + j], x + j * entry_len, y + i, 0);
 
   while (1) {
     selection = row * cols + col;
-    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 1);
+    trs_gui_write_text(entry[selection], x + col * entry_len, y + row, 1);
     trs_gui_refresh();
     key = trs_gui_get_key();
-    trs_gui_write_text(entry[selection], x + col * max_len, y + row, 0);
+    trs_gui_write_text(entry[selection], x + col * entry_len, y + row, 0);
     switch (key) {
       case SDLK_DOWN:
         row++;
