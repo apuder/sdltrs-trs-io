@@ -219,17 +219,17 @@ int SDLmain(int argc, char *argv[])
   trs_open_joystick();
 
   if (stat(trs_disk_dir, &st) < 0)
-    trs_disk_dir[0] = 0;
+    strcpy(trs_disk_dir, ".");
   if (stat(trs_hard_dir, &st) < 0)
-    trs_hard_dir[0] = 0;
+    strcpy(trs_hard_dir, ".");
   if (stat(trs_cass_dir, &st) < 0)
-    trs_cass_dir[0] = 0;
+    strcpy(trs_cass_dir, ".");
   if (stat(trs_state_dir, &st) < 0)
-    trs_state_dir[0] = 0;
+    strcpy(trs_state_dir, ".");
   if (stat(trs_disk_set_dir, &st) < 0)
-    trs_disk_set_dir[0] = 0;
+    strcpy(trs_disk_set_dir, ".");
   if (stat(trs_printer_dir, &st) < 0)
-    trs_printer_dir[0] = 0;
+    strcpy(trs_printer_dir, ".");
 
   screen_init();
   trs_screen_init();

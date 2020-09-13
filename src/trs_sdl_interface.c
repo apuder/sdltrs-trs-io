@@ -902,28 +902,28 @@ int trs_load_config_file(void)
   strcpy(romfile, "level2.rom");
   strcpy(romfile3, "model3.rom");
   strcpy(romfile4p, "model4p.rom");
+  strcpy(trs_cass_dir, ".");
+  strcpy(trs_disk_dir, ".");
+  strcpy(trs_disk_set_dir, ".");
+  strcpy(trs_hard_dir, ".");
 #ifdef _WIN32
   strcpy(trs_printer_command, "notepad %s");
 #else
   strcpy(trs_printer_command, "lpr %s");
 #endif
+  strcpy(trs_printer_dir, ".");
   stretch_amount = STRETCH_AMOUNT;
-  trs_cass_dir[0] = 0;
   trs_charset = 3;
   trs_charset1 = 3;
   trs_charset3 = 4;
   trs_charset4 = 8;
-  trs_disk_dir[0] = 0;
   trs_disk_doubler = TRSDISK_BOTH;
-  trs_disk_set_dir[0] = 0;
   trs_disk_truedam = 0;
   trs_emtsafe = 1;
-  trs_hard_dir[0] = 0;
   trs_joystick_num = 0;
   trs_kb_bracket(FALSE);
   trs_keypad_joystick = TRUE;
   trs_model = 1;
-  trs_printer_dir[0] = 0;
   trs_show_led = TRUE;
   trs_state_dir[0] = 0;
   trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
