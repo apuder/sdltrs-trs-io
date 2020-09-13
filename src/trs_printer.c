@@ -42,8 +42,11 @@
 
 /* $Id: trs_printer.c,v 1.3 2008/06/26 04:39:56 mann Exp $ */
 
+#include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+#include "error.h"
 #include "trs.h"
 
 #define NO_PRINTER   0
@@ -82,6 +85,11 @@ void trs_printer_open(void)
       if (stat(printer_filename, &st) < 0) {
         printer_open = TRUE;
         printer = fopen(printer_filename,"w");
+        if (printer == NULL) {
+          error("failed to open printer output file %s: %s", printer_filename,
+              strerror(errno));
+          printer_open = FALSE;
+        }
         return;
       }
     }
