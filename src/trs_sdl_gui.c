@@ -1861,7 +1861,7 @@ void trs_gui_model(void)
             grafyx_get_microlabs()));
         break;
       case 7:
-        lowe_le18 = trs_gui_display_popup("Lowe LE18", yes_no_choices, 2, lowe_le18);
+        lowe_le18 = trs_gui_display_popup("LE18", yes_no_choices, 2, lowe_le18);
         break;
       case 9:
         huffman_ram = trs_gui_display_popup("Huffman", yes_no_choices, 2, huffman_ram);
