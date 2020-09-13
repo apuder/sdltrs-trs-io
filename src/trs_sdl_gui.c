@@ -1190,12 +1190,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
 
 int trs_gui_display_question(const char *text)
 {
-  const char *answer_choices[] = {
-    "       No        ",
-    "       Yes       "
-  };
-
-  return trs_gui_display_popup(text, answer_choices, 2, 0);
+  return trs_gui_display_popup(text, yes_no_choices, 2, 0);
 }
 
 int trs_gui_file_overwrite(void)
@@ -1203,7 +1198,7 @@ int trs_gui_file_overwrite(void)
   struct stat st;
 
   if (stat(filename, &st) == 0 && S_ISREG(st.st_mode))
-    return trs_gui_display_question("Overwrite file?");
+    return trs_gui_display_question("Overwrite?");
 
   return 1;
 }
@@ -2695,7 +2690,7 @@ void trs_gui_exec_cmd(void)
 
 int trs_gui_exit_sdltrs(void)
 {
-  return trs_gui_display_question("Quit SDLTRS?");
+  return trs_gui_display_question("Quit?");
 }
 
 void trs_gui_save_bmp(void)
