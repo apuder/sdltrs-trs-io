@@ -93,8 +93,8 @@ wsdl2:	${PROG}
 
 READLINELIBS	 =$(if ${READLINE},-lreadline,)
 ZBX		?= -DZBX
-DEBUG		?= -Wall -Wextra -Wno-unused-parameter -O2
-CFLAGS		+= ${DEBUG} ${INCS} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
+DEBUG		?= -g -O2
+CFLAGS		+= -Wall ${DEBUG} ${INCS} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS} ${READLINELIBS}
