@@ -2507,7 +2507,7 @@ void trs_gui_joystick_management(void)
           jbutton_map[button] = -1;
         break;
       case 6:
-        if (trs_gui_display_question("Are You Sure?") == 1) {
+        if (trs_gui_display_question("Sure?") == 1) {
           for (i = 0; i < N_JOYBUTTONS; i++)
             jbutton_map[i] = -1;
          }
