@@ -912,6 +912,7 @@ int trs_load_config_file(void)
   strcpy(trs_printer_command, "lpr %s");
 #endif
   strcpy(trs_printer_dir, ".");
+  strcpy(trs_state_dir, ".");
   stretch_amount = STRETCH_AMOUNT;
   trs_charset = 3;
   trs_charset1 = 3;
@@ -925,7 +926,6 @@ int trs_load_config_file(void)
   trs_keypad_joystick = TRUE;
   trs_model = 1;
   trs_show_led = TRUE;
-  trs_state_dir[0] = 0;
   trs_uart_switches = 0x7 | TRS_UART_NOPAR | TRS_UART_WORD8;
   window_border_width = 2;
 
