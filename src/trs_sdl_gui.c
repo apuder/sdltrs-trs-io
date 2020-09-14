@@ -1907,7 +1907,7 @@ void trs_gui_display_management(void)
   const char *font34_choices[3] =   {"     Katakana",
                                      "International",
                                      "         Bold"};
-  const char *scale_choices[4] =    {"  None", "   2 x", "   3 x", "   4 x"};
+  const char *scale_choices[4] =    {" None", "  2 x", "  3 x", "  4 x"};
   char input[8];
   int redraw = 0;
   int selection = 0;
@@ -1926,7 +1926,7 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[7].title[52], 9, "%8d", window_border_width);
     snprintf(&display_menu[8].title[50], 11, "%s", yes_no_choices[resize3]);
     snprintf(&display_menu[9].title[50], 11, "%s", yes_no_choices[resize4]);
-    snprintf(&display_menu[10].title[54], 7, "%s", scale_choices[scale - 1]);
+    snprintf(&display_menu[10].title[55], 6, "%s", scale_choices[scale - 1]);
     snprintf(&display_menu[11].title[50], 11, "%s", yes_no_choices[trs_show_led]);
     snprintf(&display_menu[12].title[50], 11, "%s", yes_no_choices[scanlines]);
     trs_gui_clear_screen();
