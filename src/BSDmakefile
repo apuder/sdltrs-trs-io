@@ -29,16 +29,17 @@ SRCS	+= PasteManager.c
 OBJS	 = ${SRCS:.c=.o}
 
 ENDIAN	!= echo; echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian"
-LIBS	!= sdl-config --libs
-LIBS	+= -L/usr/X11R7/lib -lX11 -lcurses -lreadline -Wl,-R/usr/X11R7/lib
 INCS	!= sdl-config --cflags
-INCS	+= -I/usr/X11R7/include
+LIBS	!= sdl-config --libs
+LIBS	+= -lcurses -lreadline
 MACROS	 = -DREADLINE -DZBX
+X11INC	?= -I/usr/X11R7/include
+X11LIB	?= -L/usr/X11R7/lib -lX11 -Wl,-R/usr/X11R7/lib
 DEBUG	?= -g
-CFLAGS	+= -Wall -Wextra -Wno-unused-parameter ${DEBUG} ${INCS} ${ENDIAN} ${MACROS}
+CFLAGS	+= -Wall ${DEBUG} ${INCS} ${X11INC} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
-	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS}
+	${CC} -o ${PROG} ${OBJS} ${LIBS} ${X11LIB} ${LDFLAGS}
 
 .PHONY: clean
 clean:

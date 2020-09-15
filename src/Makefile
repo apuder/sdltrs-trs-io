@@ -55,8 +55,10 @@ nox:	${PROG}
 
 sdl:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 sdl:	INCS	 = $(shell sdl-config --cflags)
-sdl:	LIBS	 = $(shell sdl-config --libs) -lX11
+sdl:	LIBS	 = $(shell sdl-config --libs)
 sdl:	READLINE?= -DREADLINE
+sdl:	X11INC	?= -I/usr/include/X11
+sdl:	X11LIB	?= -L/usr/lib/X11 -lX11
 sdl:	${PROG}
 
 sdl2:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
@@ -94,7 +96,7 @@ wsdl2:	${PROG}
 READLINELIBS	 =$(if ${READLINE},-lreadline,)
 ZBX		?= -DZBX
 DEBUG		?= -g -O2
-CFLAGS		+= -Wall ${DEBUG} ${INCS} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
+CFLAGS		+= -Wall ${DEBUG} ${INCS} ${X11INC} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
 
 ${PROG}: ${OBJS}
-	${CC} -o ${PROG} ${OBJS} ${LIBS} ${LDFLAGS} ${READLINELIBS}
+	${CC} -o ${PROG} ${OBJS} ${LIBS} ${X11LIB} ${LDFLAGS} ${READLINELIBS}
