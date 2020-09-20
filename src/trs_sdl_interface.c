@@ -238,9 +238,7 @@ typedef struct trs_opt_struct {
 
 static void trs_opt_borderwidth(char *arg, int intarg, int *stringarg);
 static void trs_opt_cass(char *arg, int intarg, int *stringarg);
-static void trs_opt_charset1(char *arg, int intarg, int *stringarg);
-static void trs_opt_charset3(char *arg, int intarg, int *stringarg);
-static void trs_opt_charset4(char *arg, int intarg, int *stringarg);
+static void trs_opt_charset(char *arg, int intarg, int *stringarg);
 static void trs_opt_clock(char *arg, int intarg, int *stringarg);
 static void trs_opt_color(char *arg, int intarg, int *color);
 static void trs_opt_disk(char *arg, int intarg, int *stringarg);
@@ -281,9 +279,9 @@ static const trs_opt options[] = {
   { "borderwidth",     trs_opt_borderwidth,   1, 0, NULL                 },
   { "cassdir",         trs_opt_string,        1, 0, trs_cass_dir         },
   { "cassette",        trs_opt_cass,          1, 0, NULL                 },
-  { "charset1",        trs_opt_charset1,      1, 0, NULL                 },
-  { "charset3",        trs_opt_charset3,      1, 0, NULL                 },
-  { "charset4",        trs_opt_charset4,      1, 0, NULL                 },
+  { "charset1",        trs_opt_charset,       1, 1, NULL                 },
+  { "charset3",        trs_opt_charset,       1, 3, NULL                 },
+  { "charset4",        trs_opt_charset,       1, 4, NULL                 },
   { "clock1",          trs_opt_clock,         1, 1, NULL                 },
   { "clock3",          trs_opt_clock,         1, 3, NULL                 },
   { "clock4",          trs_opt_clock,         1, 4, NULL                 },
@@ -468,81 +466,73 @@ static void trs_opt_cass(char *arg, int intarg, int *stringarg)
   trs_cassette_insert(arg);
 }
 
-static void trs_opt_charset1(char *arg, int intarg, int *stringarg)
+static void trs_opt_charset(char *arg, int intarg, int *stringarg)
 {
-  if (isdigit((int)*arg)) {
-    trs_charset1 = atoi(arg);
-    if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 < 10 || trs_charset1 > 12)))
-      trs_charset1 = 3;
-  } else
-    switch (tolower((int)*arg)) {
-      case 'e': /*early*/
-        trs_charset1 = 0;
-        break;
-      case 's': /*stock*/
-        trs_charset1 = 1;
-        break;
-      case 'l': /*lcmod*/
-        trs_charset1 = 2;
-        break;
-      case 'w': /*wider*/
+  if (intarg == 1) {
+    if (isdigit((int)*arg)) {
+      trs_charset1 = atoi(arg);
+      if (trs_charset1 < 0 || (trs_charset1 > 3 && (trs_charset1 < 10 ||
+          trs_charset1 > 12)))
         trs_charset1 = 3;
-        break;
-      case 'g': /*genie or german*/
-        trs_charset1 = 10;
-        break;
-      case 'h': /*ht-1080z*/
-        trs_charset1 = 11;
-        break;
-      case 'v': /*video genie*/
-        trs_charset1 = 12;
-        break;
-      default:
-        error("unknown charset1 name: %s", arg);
-  }
-}
+    } else
+      switch (tolower((int)*arg)) {
+        case 'e': /*early*/
+          trs_charset1 = 0;
+          break;
+        case 's': /*stock*/
+          trs_charset1 = 1;
+          break;
+        case 'l': /*lcmod*/
+          trs_charset1 = 2;
+          break;
+        case 'w': /*wider*/
+          trs_charset1 = 3;
+          break;
+        case 'g': /*genie or german*/
+          trs_charset1 = 10;
+          break;
+        case 'h': /*ht-1080z*/
+          trs_charset1 = 11;
+          break;
+        case 'v': /*video genie*/
+          trs_charset1 = 12;
+          break;
+        default:
+          error("unknown charset1 name: %s", arg);
+    }
+  } else {
+    if (isdigit((int)*arg)) {
+      if (intarg == 3) {
+        trs_charset3 = atoi(arg);
+        if (trs_charset3 < 4 || trs_charset3 > 6)
+          trs_charset3 = 4;
+      } else {
+        trs_charset4 = atoi(arg);
+        if (trs_charset4 < 7 || trs_charset4 > 9)
+          trs_charset4 = 8;
+      }
+    } else {
+      int charset;
 
-static void trs_opt_charset3(char *arg, int intarg, int *stringarg)
-{
-  if (isdigit((int)*arg)) {
-    trs_charset3 = atoi(arg);
-    if (trs_charset3 < 4 || trs_charset3 > 6)
-      trs_charset3 = 4;
-  } else
-    switch (tolower((int)*arg)) {
-      case 'k': /*katakana*/
-        trs_charset3 = 4;
-        break;
-      case 'i': /*international*/
-        trs_charset3 = 5;
-        break;
-      case 'b': /*bold*/
-        trs_charset3 = 6;
-        break;
-      default:
-        error("unknown charset3 name: %s", arg);
-  }
-}
-
-static void trs_opt_charset4(char *arg, int intarg, int *stringarg)
-{
-  if (isdigit((int)*arg)) {
-    trs_charset4 = atoi(arg);
-    if (trs_charset4 < 7 || trs_charset4 > 9)
-      trs_charset4 = 8;
-  } else
-    switch (tolower((int)*arg)) {
-      case 'k': /*katakana*/
-        trs_charset4 = 7;
-        break;
-      case 'i': /*international*/
-        trs_charset4 = 8;
-        break;
-      case 'b': /*bold*/
-        trs_charset4 = 9;
-        break;
-      default:
-        error("unknown charset4 name: %s", arg);
+      switch (tolower((int)*arg)) {
+        case 'k': /*katakana*/
+          charset = 4;
+          break;
+        case 'i': /*international*/
+          charset = 5;
+          break;
+        case 'b': /*bold*/
+          charset = 6;
+          break;
+        default:
+          error("unknown charset%d name: %s", intarg, arg);
+          return;
+      }
+      if (intarg == 3)
+        trs_charset3 = charset;
+      else
+        trs_charset4 = charset + 3;
+    }
   }
 }
 
