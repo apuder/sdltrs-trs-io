@@ -920,13 +920,12 @@ int trs_load_config_file(void)
   window_border_width = 2;
 
   if (trs_config_file[0] == 0) {
-#ifdef _WIN32
-    snprintf(trs_config_file, FILENAME_MAX, "./sdltrs.t8c");
-#else
     const char *home = getenv("HOME");
 
-    snprintf(trs_config_file, FILENAME_MAX, "%s/.sdltrs.t8c", home);
-#endif
+    if (home)
+      snprintf(trs_config_file, FILENAME_MAX, "%s/.sdltrs.t8c", home);
+    else
+      snprintf(trs_config_file, FILENAME_MAX, "./sdltrs.t8c");
   }
 
   if ((config_file = fopen(trs_config_file, "r")) == NULL) {
