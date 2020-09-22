@@ -1939,7 +1939,6 @@ void trs_get_event(int wait)
               break;
             case SDLK_l:
               call_function(LOAD);
-              trs_screen_init();
               break;
             case SDLK_m:
               call_function(GUI);
