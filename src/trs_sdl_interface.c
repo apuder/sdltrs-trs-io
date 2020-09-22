@@ -1519,15 +1519,14 @@ void trs_sdl_flush(void)
 void trs_exit(int confirm)
 {
   static int recursion = 0;
-  SDL_Surface *buffer = NULL;
 
   if (recursion && confirm)
     return;
   recursion = 1;
 
   if (confirm) {
-    buffer = SDL_ConvertSurface(screen, screen->format, SDL_SWSURFACE);
-    if (!trs_gui_exit_sdltrs()) {
+    SDL_Surface *buffer = SDL_ConvertSurface(screen, screen->format, SDL_SWSURFACE);
+    if (!trs_gui_exit_sdltrs() && buffer) {
       SDL_BlitSurface(buffer, NULL, screen, NULL);
       SDL_FreeSurface(buffer);
       trs_gui_refresh();
