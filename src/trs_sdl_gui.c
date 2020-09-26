@@ -2168,7 +2168,8 @@ void trs_gui_save_state(void)
 
 int trs_gui_load_state(void)
 {
-  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0, "Saved State (.t8s)") >= 0) {
+  if (trs_gui_file_browse(trs_state_dir, filename, ".t8s", 0,
+      "State (.t8s)") >= 0) {
     if (trs_state_load(filename) == 0) {
       trs_screen_init();
       return 0;
