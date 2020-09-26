@@ -40,6 +40,7 @@
  * or write protect/unprotect an existing one.
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,6 +48,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
+#include "error.h"
 #include "trs_cassette.h"
 #include "trs_disk.h"
 #include "trs_hard.h"
@@ -264,8 +266,10 @@ int trs_create_blank_jv1(const char *fname)
 
   /* Unformatted JV1 disk - just an empty file! */
   f = fopen(fname, "wb");
-  if (f == NULL)
+  if (f == NULL) {
+    error("failed to create JV1 disk %s: %s", fname, strerror(errno));
     return -1;
+  }
   fclose(f);
   return 0;
 }
@@ -277,8 +281,10 @@ int trs_create_blank_jv3(const char *fname)
 
   /* Unformatted JV3 disk. */
   f = fopen(fname, "wb");
-  if (f == NULL)
+  if (f == NULL) {
+    error("failed to create JV3 disk %s: %s", fname, strerror(errno));
     return -1;
+  }
   for (i = 0; i < (256 * 34); i++)
     putc(0xff, f);
   fclose(f);
@@ -293,8 +299,10 @@ int trs_create_blank_dmk(const char *fname, int sides, int density,
   /* Unformatted DMK disk */
 
   f = fopen(fname, "wb");
-  if (f == NULL)
+  if (f == NULL) {
+    error("failed to create DMK disk %s: %s", fname, strerror(errno));
     return -1;
+  }
   putc(0, f);           /* 0: not write protected */
   putc(0, f);           /* 1: initially zero tracks */
   if (eight) {
@@ -378,8 +386,10 @@ int trs_create_blank_hard(const char *fname, int cyl, int sec,
   rhh.cksum = ((Uchar) cksum) ^ 0x4c;
 
   f = fopen(fname, "wb");
-  if (f == NULL)
+  if (f == NULL) {
+    error("failed to create hard disk %s: %s", fname, strerror(errno));
     return 1;
+  }
   fwrite(&rhh, sizeof(rhh), 1, f);
   fclose(f);
   return 0;
