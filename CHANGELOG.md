@@ -1,3 +1,11 @@
+## Version 1.2.13 Release 09-27-2020:
+
+  * Fixed issue #6 "Core dump when trying to print" (reported by "zoof").
+  * Fixed loading of MODELA/III file.
+  * Fixed TextGUI colors on big endian machines.
+  * Fixed location of default directories.
+  * Fixed some bugs and other improvements.
+
 ## Version 1.2.12 Release 08-16-2020:
 
   * Fixed issue #3 "Handle CapsLock key in SDL2" (reported by David Barr).

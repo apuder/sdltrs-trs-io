@@ -2634,7 +2634,7 @@ void trs_gui_about_sdltrs(void)
   trs_gui_frame(0, 0, 63, 15);
   trs_gui_write_text("About SDLTRS", 2, 0, 0);
   trs_gui_center_text("SDLTRS", 3, 0);
-  trs_gui_center_text("Version 1.2.12", 4, 0);
+  trs_gui_center_text("Version 1.2.13", 4, 0);
   trs_gui_center_text("Copyright (C) 2006-2011 Mark Grebe", 5, 0);
   trs_gui_center_text("<http://sdltrs.sourceforge.net>", 6, 0);
   trs_gui_center_text("Patches (2018-2020) by Alan Cox and Jens Guenther", 8, 0);
