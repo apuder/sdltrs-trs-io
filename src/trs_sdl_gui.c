@@ -592,7 +592,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
   stat(current_dir, &st);
   if (current_dir[0] == 0 || strcmp(current_dir, ".") == 0 || S_ISDIR(st.st_mode) == 0) {
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
-      error("getcwd: %s", current_dir);
+      current_dir[0] = 0;
   }
   if (current_dir[strlen(current_dir) - 1] != DIR_SLASH)
     snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir),
@@ -713,7 +713,7 @@ read_directory:
                 current_dir[0] != DIR_SLASH) {
 #endif
                 if (getcwd(current_dir, FILENAME_MAX) == NULL)
-                  error("getcwd: %s", current_dir);
+                  current_dir[0] = 0;
                 snprintf(current_dir + strlen(current_dir),
                     FILENAME_MAX - strlen(current_dir), "%c", DIR_SLASH);
               }
