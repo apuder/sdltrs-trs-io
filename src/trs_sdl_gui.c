@@ -2558,7 +2558,6 @@ void trs_gui_default_dirs(void)
   int selection = 1;
 
   while (1) {
-    /* print current defaults */
     trs_gui_limit_string(trs_disk_dir, &default_menu[1].title[2], 58);
     trs_gui_limit_string(trs_hard_dir, &default_menu[3].title[2], 58);
     trs_gui_limit_string(trs_cass_dir, &default_menu[5].title[2], 58);
