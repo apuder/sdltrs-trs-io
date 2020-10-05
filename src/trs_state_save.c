@@ -27,9 +27,11 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
+#include <errno.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include "error.h"
 #include "trs_state_save.h"
 
 static const char stateFileBanner[] = "sldtrs State Save File";
@@ -58,6 +60,7 @@ int trs_state_save(const char *filename)
     fclose(file);
     return 0;
   }
+  error("failed to save State %s: %s", filename, strerror(errno));
   return -1;
 }
 
@@ -72,11 +75,13 @@ int trs_state_load(const char *filename)
     trs_load_uchar(file, (unsigned char *)banner, strlen(stateFileBanner));
     banner[strlen(stateFileBanner)] = 0;
     if (strcmp(banner, stateFileBanner)) {
+      error("failed to get State Banner from %s", filename);
       fclose(file);
       return -1;
     }
     trs_load_uint32(file, &version, 1);
     if (version != stateVersionNumber) {
+      error("unsupported version %d of State file", version);
       fclose(file);
       return -1;
     }
@@ -95,6 +100,7 @@ int trs_state_load(const char *filename)
     fclose(file);
     return 0;
   }
+  error("failed to load State %s: %s", filename, strerror(errno));
   return -1;
 }
 
@@ -353,4 +359,3 @@ void trs_load_filename(FILE *file, char *filename)
   trs_load_uchar(file, (unsigned char *)filename, length);
   filename[length] = 0;
 }
-

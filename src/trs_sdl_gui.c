@@ -27,6 +27,7 @@
    Last modified on Wed May 07 09:12:00 MST 2006 by markgrebe
 */
 
+#include <errno.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1746,9 +1747,10 @@ void trs_gui_cassette_management(void)
                 ret = create_wav_header(cassette_file);
               fclose(cassette_file);
             }
-            if (ret)
+            if (ret) {
               trs_gui_display_message("Error", "Error creating Cassette Image");
-            else {
+              error("failed to create Cassette Image %s: %s", filename, strerror(errno));
+            } else {
               if (drive_insert)
                 trs_cassette_insert(filename);
             }
@@ -2706,8 +2708,10 @@ void trs_gui_save_bmp(void)
     trs_screen_refresh();
     trs_sdl_flush();
     if (trs_gui_file_overwrite()) {
-      if (trs_sdl_savebmp(filename) != 0)
+      if (trs_sdl_savebmp(filename) != 0) {
+        error("failed to save Screenshot %s: %s", filename, strerror(errno));
         trs_gui_display_message("Error", "Failed to save Screenshot");
+      }
     }
   }
 }

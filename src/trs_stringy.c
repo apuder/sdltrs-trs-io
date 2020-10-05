@@ -131,7 +131,8 @@ stringy_create_with(const char *name,
 
   f = fopen(name, "w");
   if (f == NULL) {
-      return errno;
+    error("failed to create Wafer Image %s: %s", name, strerror(errno));
+    return errno;
   }
 
   switch (format) {
