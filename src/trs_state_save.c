@@ -73,8 +73,7 @@ int trs_state_load(const char *filename)
   file = fopen(filename, "rb");
   if (file) {
     trs_load_uchar(file, (unsigned char *)banner, strlen(stateFileBanner));
-    banner[strlen(stateFileBanner)] = 0;
-    if (strcmp(banner, stateFileBanner)) {
+    if (strncmp(banner, stateFileBanner, strlen(stateFileBanner))) {
       error("failed to get State Banner from %s", filename);
       fclose(file);
       return -1;
