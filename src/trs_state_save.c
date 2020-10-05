@@ -35,6 +35,7 @@
 #include "trs_state_save.h"
 
 static const char stateFileBanner[] = "sldtrs State Save File";
+static int const stateFileBannerLen = sizeof(stateFileBanner) - 1;
 static unsigned stateVersionNumber = 1;
 
 int trs_state_save(const char *filename)
@@ -43,7 +44,7 @@ int trs_state_save(const char *filename)
 
   file = fopen(filename, "wb");
   if (file) {
-    trs_save_uchar(file, (unsigned char *)stateFileBanner, strlen(stateFileBanner));
+    trs_save_uchar(file, (unsigned char *)stateFileBanner, stateFileBannerLen);
     trs_save_uint32(file, &stateVersionNumber, 1);
     trs_main_save(file);
     trs_cassette_save(file);
@@ -72,8 +73,8 @@ int trs_state_load(const char *filename)
 
   file = fopen(filename, "rb");
   if (file) {
-    trs_load_uchar(file, (unsigned char *)banner, strlen(stateFileBanner));
-    if (strncmp(banner, stateFileBanner, strlen(stateFileBanner))) {
+    trs_load_uchar(file, (unsigned char *)banner, stateFileBannerLen);
+    if (strncmp(banner, stateFileBanner, stateFileBannerLen)) {
       error("failed to get State Banner from %s", filename);
       fclose(file);
       return -1;
