@@ -567,8 +567,7 @@ static void trs_opt_disk(char *arg, int intarg, int *stringarg)
 
 static void trs_opt_diskset(char *arg, int intarg, int *stringarg)
 {
-  if (trs_diskset_load(arg) == -1)
-    error("failed to load Diskset %s: %s", arg, strerror(errno));
+  trs_diskset_load(arg);
 }
 
 static void trs_opt_doubler(char *arg, int intarg, int *stringarg)
