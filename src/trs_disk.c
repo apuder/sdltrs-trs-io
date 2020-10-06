@@ -3856,6 +3856,8 @@ void trs_disk_load(FILE *file)
       if (disk[i].file == NULL) {
         disk[i].file = fopen(disk[i].filename, "rb");
         if (disk[i].file == NULL) {
+          error("failed to load disk%d: %s: %s", i, disk[i].filename,
+              strerror(errno));
           disk[i].emutype = NONE;
           disk[i].writeprot = 0;
           disk[i].filename[0] = 0;

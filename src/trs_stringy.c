@@ -724,6 +724,13 @@ void trs_stringy_load(FILE *file)
       stringy_info[i].file = fopen(stringy_info[i].name, "rb+");
       if (stringy_info[i].file == NULL) {
         stringy_info[i].file = fopen(stringy_info[i].name, "rb");
+        if (stringy_info[i].file == NULL) {
+          error("failed to load wafer%d: %s: %s", i, stringy_info[i].name,
+              strerror(errno));
+          stringy_info[i].name[0] = 0;
+          stringy_info[i].in_port = 0;
+          continue;
+        }
         stringy_info[i].in_port |= 1 << 0;
       } else {
         stringy_info[i].in_port &= ~(1 << 0);;

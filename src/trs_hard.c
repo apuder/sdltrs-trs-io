@@ -641,6 +641,13 @@ void trs_hard_load(FILE *file)
       state.d[i].file = fopen(state.d[i].filename, "rb+");
       if (state.d[i].file == NULL) {
         state.d[i].file = fopen(state.d[i].filename, "rb");
+        if (state.d[i].file == NULL) {
+          error("failed to load hard%d: %s: %s", i, state.d[i].filename,
+              strerror(errno));
+          state.d[i].filename[0] = 0;
+          state.d[i].writeprot = 0;
+          continue;
+        }
         state.d[i].writeprot = 1;
       } else {
         state.d[i].writeprot = 0;
@@ -648,4 +655,3 @@ void trs_hard_load(FILE *file)
     }
   }
 }
-
