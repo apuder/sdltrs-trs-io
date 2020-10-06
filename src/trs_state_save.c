@@ -30,7 +30,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include "error.h"
 #include "trs_state_save.h"
 
@@ -338,14 +337,7 @@ void trs_load_float(FILE *file, float *buffer, int count)
 
 void trs_save_filename(FILE *file, char *filename)
 {
-  char dirname[FILENAME_MAX];
-  unsigned short length;
-
-  if (getcwd(dirname, FILENAME_MAX) != NULL) {
-    if (strncmp(filename, dirname, strlen(dirname)) == 0)
-      filename = &filename[strlen(dirname)+1];
-  }
-  length = strlen(filename);
+  unsigned short length = strlen(filename);
 
   trs_save_uint16(file, &length, 1);
   trs_save_uchar(file, (unsigned char *)filename, length);

@@ -3547,40 +3547,26 @@ real_writetrk(void)
 
 int trs_diskset_save(const char *filename)
 {
-    const char *diskfilename;
-    char dirname[FILENAME_MAX];
     FILE *f;
     int i;
-
-    if (getcwd(dirname, FILENAME_MAX) == NULL)
-      return -1;
 
     f = fopen(filename, "w");
     if (f) {
       for (i = 0; i < 8; i++) {
-        diskfilename = trs_disk_getfilename(i);
-        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname) + 1];
-        fputs(diskfilename, f);
-        fprintf(f, "\n");
-        }
+        fputs(trs_disk_getfilename(i), f);
+        fputc('\n', f);
+      }
       for (i = 0; i < 4; i++) {
-        diskfilename = trs_hard_getfilename(i);
-        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname) + 1];
-        fputs(diskfilename, f);
-        fprintf(f, "\n");
-        }
+        fputs(trs_hard_getfilename(i), f);
+        fputc('\n', f);
+      }
       for (i = 0; i < 8; i++) {
-        diskfilename = stringy_get_name(i);
-        if (strncmp(diskfilename, dirname, strlen(dirname)) == 0)
-          diskfilename = &diskfilename[strlen(dirname) + 1];
-        fputs(diskfilename, f);
-        fprintf(f, "\n");
-        }
+        fputs(stringy_get_name(i), f);
+        fputc('\n', f);
+      }
       fclose(f);
       return 0;
-      }
+    }
     else
       return -1;
 }
