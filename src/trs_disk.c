@@ -3584,26 +3584,29 @@ int trs_diskset_load(const char *filename)
     for (i = 0; i < 8; i++) {
       if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
-      if (strlen(diskname) != 0)
+      if (strlen(diskname) != 0) {
         diskname[strlen(diskname) - 1] = 0;
-      if (strlen(diskname) != 0)
-        trs_disk_insert(i, diskname);
+        if (diskname[0])
+          trs_disk_insert(i, diskname);
+      }
     }
     for (i = 0; i < 4; i++) {
       if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
-      if (strlen(diskname) != 0)
+      if (strlen(diskname) != 0) {
         diskname[strlen(diskname) - 1] = 0;
-      if (strlen(diskname) != 0)
-        trs_hard_attach(i, diskname);
+        if (diskname[0])
+          trs_hard_attach(i, diskname);
+      }
     }
     for (i = 0; i < 8; i++) {
       if (fgets(diskname, FILENAME_MAX, f) == NULL)
         continue;
-      if (strlen(diskname) != 0)
+      if (strlen(diskname) != 0) {
         diskname[strlen(diskname) - 1] = 0;
-      if (strlen(diskname) != 0)
-        stringy_insert(i, diskname);
+        if (diskname[0])
+          stringy_insert(i, diskname);
+      }
     }
     fclose(f);
     return 0;
