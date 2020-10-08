@@ -3574,7 +3574,7 @@ int trs_diskset_save(const char *filename)
 
 int trs_diskset_load(const char *filename)
 {
-  char diskname[FILENAME_MAX + 1];
+  char diskname[FILENAME_MAX];
   FILE *f;
   int i;
 
