@@ -571,7 +571,6 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
                         int browse_dir, const char* type)
 {
   char current_dir[FILENAME_MAX];
-  char limited_dir[64];
   char title[64];
   struct stat st;
   const char *new_dir;
@@ -604,10 +603,10 @@ read_directory:
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
     return -1;
 
-  trs_gui_limit_string(current_dir, limited_dir, 58);
+  trs_gui_limit_string(current_dir, title, 58);
   trs_gui_clear_screen();
   trs_gui_frame(0, 0, 63, 15);
-  trs_gui_center_text(limited_dir, 1, 0);
+  trs_gui_center_text(title, 1, 0);
 
   if (browse_dir) {
     snprintf(title, 63, "Choose %sDirectory", type);
