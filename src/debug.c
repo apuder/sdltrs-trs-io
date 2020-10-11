@@ -571,7 +571,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "list") || !strcmp(command, "l"))
 	    {
-		int x, y;
+		unsigned int x, y;
 		Ushort start, old_start;
 		int bytes = 0;
 		int lines = 0;
@@ -609,7 +609,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "in"))
 	    {
-		int port;
+		unsigned int port;
 
 		if(sscanf(input, "in %x", &port) == 1)
 			printf("in %x = %x\n", port, z80_in(port));
@@ -699,7 +699,7 @@ void debug_shell(void)
 		    !strcmp(command, "a"))
 	    {
 		char regname[MAXLINE];
-		int addr, value;
+		unsigned int addr, value;
 
 		if(sscanf(input, "%*s $%[a-zA-Z] = %x", regname, &value) == 2)
 		{
@@ -773,7 +773,7 @@ void debug_shell(void)
 	    else if(!strcmp(command, "stop") || !strcmp(command, "break") ||
 		    !strcmp(command, "b"))
 	    {
-		int address;
+		unsigned int address;
 
 		if(sscanf(input, "stop at %x", &address) != 1 &&
 		   sscanf(input, "%*s %x", &address) != 1)
@@ -785,7 +785,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "trace") || !strcmp(command, "t"))
 	    {
-		int address;
+		unsigned int address;
 
 		if(sscanf(input, "%*s %x", &address) != 1)
 		{
@@ -800,7 +800,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "traceon") || !strcmp(command, "tron"))
 	    {
-		int address;
+		unsigned int address;
 
 		if(sscanf(input, "traceon at %x", &address) == 1 ||
 		   sscanf(input, "tron %x", &address) == 1)
@@ -815,7 +815,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "traceoff") || !strcmp(command, "troff"))
 	    {
-		int address;
+		unsigned int address;
 
 		if(sscanf(input, "traceoff at %x", &address) == 1 ||
 		   sscanf(input, "troff %x", &address) == 1)
@@ -830,7 +830,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "watch") || !strcmp(command, "w"))
 	    {
-		int address;
+		unsigned int address;
 
 		if(sscanf(input, "%*s %x", &address) == 1)
 		{
@@ -855,16 +855,16 @@ void debug_shell(void)
 	    else if(!strcmp(command, "diskdebug"))
 	    {
 		trs_disk_debug_flags = 0;
-		sscanf(input, "diskdebug %x", &trs_disk_debug_flags);
+		sscanf(input, "diskdebug %x", (unsigned int *)&trs_disk_debug_flags);
 	    }
 	    else if(!strcmp(command, "iodebug"))
 	    {
 		trs_io_debug_flags = 0;
-		sscanf(input, "iodebug %x", &trs_io_debug_flags);
+		sscanf(input, "iodebug %x", (unsigned int *)&trs_io_debug_flags);
 	    }
 	    else
 	    {
-		int start_address, end_address, num_bytes;
+		unsigned int start_address, end_address, num_bytes;
 
 		if(sscanf(input, "%x , %x / ", &start_address, &end_address) == 2)
 		{

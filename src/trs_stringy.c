@@ -478,11 +478,11 @@ stringy_flux_read(stringy_info_t *s, int *flux, stringy_pos_t *delta)
 
   switch(s->format) {
   case STRINGY_FMT_DEBUG:
-    bres = fscanf(s->file, "%u %lu\n", flux, delta);
+    bres = fscanf(s->file, "%d %ld\n", flux, delta);
     if (bres == EOF) {
       if (ferror(s->file)) return FALSE;
       stringy_read_debug_header(s);
-      bres = fscanf(s->file, "%u %lu\n", flux, delta);
+      bres = fscanf(s->file, "%d %ld\n", flux, delta);
       if (bres == EOF && ferror(s->file)) return FALSE;
     }
     return TRUE;
