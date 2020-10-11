@@ -785,10 +785,10 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   unsigned int len;
   unsigned int first_disp;
 
-  if (input != output)
+  if (input != output && strcmp(input, ".") != 0)
     snprintf(output, limit + 1, "%s", input);
 
-  pos = len = strlen(input);
+  pos = len = strlen(output);
 
 redraw:
   if (pos > 60)
