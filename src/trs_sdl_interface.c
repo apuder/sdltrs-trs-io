@@ -277,6 +277,7 @@ static const trs_opt options[] = {
   { "background",      trs_opt_color,         1, 0, &background          },
   { "bg",              trs_opt_color,         1, 0, &background          },
   { "borderwidth",     trs_opt_borderwidth,   1, 0, NULL                 },
+  { "bw",              trs_opt_borderwidth,   1, 0, NULL                 },
   { "cass",            trs_opt_cass,          1, 0, NULL                 },
   { "cassdir",         trs_opt_string,        1, 0, trs_cass_dir         },
   { "cassette",        trs_opt_cass,          1, 0, NULL                 },
