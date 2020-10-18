@@ -670,13 +670,16 @@ int assert_state(int state)
       return -1;
     }
     cassette_file = fopen(cassette_filename, "rb");
-    if (cassette_format == WAV_FORMAT &&
-        cassette_file != NULL && parse_wav_header(cassette_file) < 0) {
-      cassette_file = NULL;
-    }
     if (cassette_file == NULL) {
       error("couldn't read %s: %s", cassette_filename, strerror(errno));
       cassette_state = FAILED;
+      return -1;
+    }
+    if (cassette_format == WAV_FORMAT && parse_wav_header(cassette_file) < 0) {
+      error("removed unusable wav file %s", cassette_filename);
+      cassette_filename[0] = 0;
+      cassette_state = FAILED;
+      fclose(cassette_file);
       return -1;
     }
     fseek(cassette_file, cassette_position, 0);
