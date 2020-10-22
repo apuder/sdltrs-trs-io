@@ -60,6 +60,7 @@ void debug(const char *fmt, ...)
   va_start(args, fmt);
   vfprintf(stderr, fmt, args);
   va_end(args);
+  fflush(stderr);
 }
 
 void error(const char *fmt, ...)
@@ -71,6 +72,7 @@ void error(const char *fmt, ...)
   vfprintf(stderr, fmt, args);
   va_end(args);
   fputc('\n', stderr);
+  fflush(stderr);
 }
 
 void fatal(const char *fmt, ...)
@@ -82,6 +84,7 @@ void fatal(const char *fmt, ...)
   vfprintf(stderr, fmt, args);
   va_end(args);
   fputc('\n', stderr);
+  fflush(stderr);
   exit(1);
 }
 
@@ -94,4 +97,5 @@ void warn(const char *fmt, ...)
   vfprintf(stderr, fmt, args);
   va_end(args);
   fputc('\n', stderr);
+  fflush(stderr);
 }
