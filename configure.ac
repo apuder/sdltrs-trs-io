@@ -4,8 +4,16 @@ AC_CONFIG_SRCDIR([src/trs.h])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_MAKE_SET
 AC_C_BIGENDIAN([AC_DEFINE([big_endian])])
 AC_CANONICAL_HOST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_HEADERS([fcntl.h limits.h sys/file.h sys/ioctl.h sys/time.h termios.h])
+AC_CHECK_FUNCS([ftruncate getcwd gettimeofday memmove memset putenv strcasecmp strchr strdup strerror strncasecmp strrchr strtol])
 
 case $host_os in
   *mingw*)
@@ -13,7 +21,8 @@ case $host_os in
     ;;
   *)
     AS_IF([test "x$with_x" != "xno"],
-    [AC_PATH_XTRA
+    [AC_PATH_X
+     AC_PATH_XTRA
      CFLAGS="$CFLAGS $X_CFLAGS"
      LDFLAGS="$LDFLAGS $X_LIBS"
      AC_CHECK_LIB([X11], [XOpenDisplay], [], AC_DEFINE([NOX]))],
