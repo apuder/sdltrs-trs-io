@@ -748,6 +748,8 @@ void debug_shell(void)
 			REG_IY = value;
 		    } else if(!strcasecmp(regname, "i")) {
 			REG_I = value;
+		    } else if(!strcasecmp(regname, "r")) {
+			REG_R = value;
 		    } else {
 			printf("Unrecognized register name %s.\n", regname);
 		    }
