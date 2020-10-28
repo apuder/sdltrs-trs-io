@@ -145,6 +145,9 @@ Miscellaneous:\n\
     a(ssign) $<reg> = <value>\n\
     a(ssign) I<port> = <value>\n\
     a(ssign) <addr> = <value>\n\
+    set $<reg> = <value>\n\
+    set I<port> = <value>\n\
+    set <addr> = <value>\n\
         Change the value of a register, register pair, I/O or memory byte.\n\
     timeroff\n\
     timeron\n\
