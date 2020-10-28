@@ -1,37 +1,62 @@
+**SDL(2)TRS** needs the development files of `SDL2` (or `SDL 1.2`) and
+optional `GNU readline` for the integrated Z80 debugger zbx.
+
+On *Debian* and *Ubuntu* based systems these can be installed with:
+```sh
+sudo apt install libsdl2-dev libreadline-dev
+```
+or
+```sh
+sudo apt install libsdl1.2-dev libreadline-dev
+```
+for the old SDL 1.2 version.
+
+For *Win32/64* please install [MinGW], [MinGW-w64] or [MSYS2] and the
+[SDL] development library with the `mingw.tar.gz` file extension.
+
+---
+
 To build with autotools:
 ------------------------
+
+Installation of `aclocal`, `autoconf` and `automake` is required:
+```sh
+sudo apt install autoconf automake autotools-dev
+```
+on *Debian* and *Ubuntu* systems.
 
 From the main directory, execute:
 ```sh
 ./autogen.sh
 ```
-which will generate the `configure` script. Installation of `aclocal`,
-`autoconf` and `automake` is needed for this.
+which will generate the `configure` script.
 
 To configure the build system, execute:
 ```sh
 ./configure
 ```
-To enable faster but not accurate Z80 block moves, execute:
+
+This should autodetect the configuration but some options may be passed:
 ```sh
 ./configure --enable-fastmove
 ```
-To build the old SDL 1.2 version (see below) of **SDLTRS**, execute:
+to enable faster but not accurate Z80 block moves,
 ```sh
 ./configure --enable-sdl1
 ```
-To build with SDL 1.2 only (no *X11* and no *PasteManager*), execute:
+to build the old SDL 1.2 version,
 ```sh
 ./configure --enable-sdl1 --without-x
 ```
-To build with the integrated Z80 debugger zbx, execute:
+to build with SDL 1.2 only (no *X11* and no *PasteManager*),
 ```
 ./configure --enable-zbx
 ```
-To enable `readline` support for the zbx debugger, execute:
+to build with the integrated Z80 debugger zbx,
 ```sh
 ./configure --enable-zbx --enable-readline
 ```
+to enable `readline` support for the zbx debugger.
 
 Start build of the program in the main directory by executing:
 ```sh
@@ -40,57 +65,57 @@ make
 
 ---
 
-To build with SDL2:
--------------------
+To build with CMake:
+--------------------
 
-**SDL2TRS** needs the development files of `SDL2` and `GNU readline`
-for the debugger. On *Debian* or *Ubuntu* these can be installed with:
+From the main directory, execute:
 ```sh
-sudo apt install libsdl2-dev libreadline-dev
+mkdir build
+cd build
+cmake ..
+cmake --build .
 ```
+
+---
+
+To build with Makefiles:
+------------------------
+
 From the `src` directory, execute:
 ```sh
 make sdl2
 ```
+to build the SDL2 version,
 
----
-
-To build with SDL 1.2:
-----------------------
-
-**SDLTRS** needs the development files of `libSDL 1.2`, `X11` and `GNU
-readline` for the debugger. On *Debian* or *Ubuntu* these can be
-installed with:
-```sh
-sudo apt install libsdl1.2-dev libreadline-dev
-```
-From the `src` directory, execute:
 ```sh
 make sdl
 ```
+to build the old SDL 1.2 version,
 
----
-
-To build with SDL 1.2 only (no X11):
-------------------------------------
-
-From the `src` directory, execute:
 ```sh
 make nox
 ```
-**SDLTRS** will be build without the *PasteManager* (*Copy & Paste* to
-and from the Emulator screen), but works on operating systems with no
-*X11*-server like *Haiku* or *BeOS*.
+to build with old SDL 1.2 only (no X11: **SDLTRS** will be build
+without the *PasteManager* but works on systems with no *X11*-server
+like *Haiku* or *BeOS*),
 
----
-
-To build on FreeBSD/NetBSD/OpenBSD with SDL 1.2:
-------------------------------------------------
-
-From the `src` directory, execute:
 ```sh
 make bsd
 ```
+(or just `make` on *FreeBSD*/*OpenBSD*) to build on BSD with SDL 1.2.
+
+For *Win32/64* please copy the header files of the SDL library to
+`\MinGW\include\SDL2` or `\MinGW\include\SDL`, and libraries to the
+`\MinGW\lib\` directory or edit the macros `LIBS` and `INCS` in
+`Makefile` to point to the location of the SDL installation:
+```sh
+mingw32-make wsdl2
+```
+to build the SDL2 version (`sdl2trs.exe`), or
+```sh
+mingw32-make win32
+```
+for the old SDL 1.2 version (`sdltrs.exe`).
 
 ---
 
@@ -108,33 +133,10 @@ In the main directory of the source, execute the following commands:
 ./configure --enable-readline
 make
 ```
-
 This will build the executable binary file called `sdltrs`.
-
----
-
-To build on Win32 with SDL 2.0/SDL 1.2:
----------------------------------------
-
-**SDLTRS** is designed to be build with [MinGW]. The [SDL] development
-library is also required.
-
-The runtime library file `SDL2.DLL` or `SDL.DLL` should be copied to the
-directory of the **SDLTRS** binary file, the header files of the library
-to `\MinGW\include\SDL2` or `\MinGW\include\SDL`, and libraries to the
-`\MinGW\lib\` directory or edit the macros `LIBS` and `INCS` in `Makefile`
-to point to the location of the SDL installation.
-
-From the `src` directory, execute:
-```sh
-mingw32-make wsdl2
-```
-to build the SDL2 version, or
-```sh
-mingw32-make win32
-```
-for the old SDL 1.2 version.
 
 [Homebrew]: https://brew.sh
 [MinGW]: http://www.mingw.org
+[MinGW-w64]: http://mingw-w64.org
+[MSYS2]: https://www.msys2.org
 [SDL]: https://www.libsdl.org
