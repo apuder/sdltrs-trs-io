@@ -1,4 +1,4 @@
-**SDL(2)TRS** needs the development files of `SDL2` (or `SDL 1.2`) and
+**SDL(2)TRS** needs the development files of `SDL2`/`SDL 1.2` and
 optional `GNU readline` for the integrated Z80 debugger zbx.
 
 On *Debian* and *Ubuntu* based systems these can be installed with:
@@ -9,10 +9,11 @@ or
 ```sh
 sudo apt install libsdl1.2-dev libreadline-dev
 ```
-for the old SDL 1.2 version.
+for the SDL 1.2 version.
 
-For *Win32/64* please install [MinGW], [MinGW-w64] or [MSYS2] and the
-[SDL] development library with the `mingw.tar.gz` file extension.
+For *Win32/64* please install [MinGW] or [MinGW-w64] and the [SDL]
+development library with the `mingw.tar.gz` file extension.
+It is recommended to use [MSYS2] to make things easier.
 
 ---
 
@@ -44,7 +45,7 @@ to enable faster but not accurate Z80 block moves,
 ```sh
 ./configure --enable-sdl1
 ```
-to build the old SDL 1.2 version,
+to build the SDL 1.2 version,
 ```sh
 ./configure --enable-sdl1 --without-x
 ```
@@ -90,14 +91,14 @@ to build the SDL2 version,
 ```sh
 make sdl
 ```
-to build the old SDL 1.2 version,
+to build the SDL 1.2 version,
 
 ```sh
 make nox
 ```
-to build with old SDL 1.2 only (no X11: **SDLTRS** will be build
-without the *PasteManager* but works on systems with no *X11*-server
-like *Haiku* or *BeOS*),
+to build with SDL 1.2 only (no X11: **SDLTRS** will be build without
+the *PasteManager* but works on systems with no *X11*-server like
+*Haiku* or *BeOS*),
 
 ```sh
 make bsd
@@ -105,9 +106,9 @@ make bsd
 (or just `make` on *FreeBSD*/*OpenBSD*) to build on BSD with SDL 1.2.
 
 For *Win32/64* please copy the header files of the SDL library to
-`\MinGW\include\SDL2` or `\MinGW\include\SDL`, and libraries to the
-`\MinGW\lib\` directory or edit the macros `LIBS` and `INCS` in
-`Makefile` to point to the location of the SDL installation:
+`\MinGW\include\SDL2` (or `\MinGW\include\SDL` for SDL 1.2), and
+libraries to the `\MinGW\lib\` directory or edit the macros `LIBS` and
+`INCS` in `Makefile` to point to the location of the SDL installation:
 ```sh
 mingw32-make wsdl2
 ```
@@ -115,7 +116,7 @@ to build the SDL2 version (`sdl2trs.exe`), or
 ```sh
 mingw32-make win32
 ```
-for the old SDL 1.2 version (`sdltrs.exe`).
+for the SDL 1.2 version (`sdltrs.exe`).
 
 ---
 
