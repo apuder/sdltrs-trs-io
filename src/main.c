@@ -140,13 +140,13 @@ static int trs_load_rom(const char *filename)
   return 0;
 }
 
-static void trs_load_compiled_rom(int size, const unsigned char rom[])
+static void trs_load_compiled_rom(int address, int size, const unsigned char rom[])
 {
   int i;
 
-  trs_rom_size = size;
+  trs_rom_size = address + size;
   for (i = 0; i < size; ++i)
-    mem_write_rom(i, rom[i]);
+    mem_write_rom(address + i, rom[i]);
 }
 
 void trs_rom_init(void)
@@ -154,26 +154,19 @@ void trs_rom_init(void)
   switch (trs_model) {
     case 1:
       if (trs_load_rom(romfile) != 0)
-        trs_load_compiled_rom(sizeof(trs_rom1), trs_rom1);
+        trs_load_compiled_rom(0, sizeof(trs_rom1), trs_rom1);
+      if (stringy)
+        trs_load_compiled_rom(0x3000, sizeof(trs_romesf), trs_romesf);
       break;
     case 3:
     case 4:
       if (trs_load_rom(romfile3) != 0)
-        trs_load_compiled_rom(sizeof(trs_rom3), trs_rom3);
+        trs_load_compiled_rom(0, sizeof(trs_rom3), trs_rom3);
       break;
     case 5:
       if (trs_load_rom(romfile4p) != 0)
-        trs_load_compiled_rom(sizeof(trs_rom4p), trs_rom4p);
+        trs_load_compiled_rom(0, sizeof(trs_rom4p), trs_rom4p);
       break;
-  }
-
-  if (trs_model == 1 && stringy) {
-    int unsigned i;
-
-    /* Load ROM for ESF and adjust size */
-    for (i = 0; i < sizeof(trs_romesf); ++i)
-      mem_write_rom(0x3000 + i, trs_romesf[i]);
-    trs_rom_size = 0x3780;
   }
 }
 
