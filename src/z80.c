@@ -50,8 +50,7 @@
  * easily adapted to emulate any Z80 machine.  All of the documented
  * Z80 flags and instructions are implemented.  The only documented
  * features we cheat a little on are interrupt handling (modes 0 and 2
- * are not supported) and the refresh register (reading it returns a
- * random number; writing it is ignored).
+ * are not supported).
  *
  * All of the undocumented instructions, flags, and features listed in
  * http://www.msxnet.org/tech/Z80/z80undoc.txt are implemented too,
@@ -1084,7 +1083,7 @@ static void do_ld_a_r(void)
 
     set = 0;
 
-    REG_A = (REG_R & 0xFF) | REG_R7;
+    REG_A = (REG_R & 0x7F) | REG_R7;
 
     if(REG_A & 0x80)
       set |= SIGN_MASK;
