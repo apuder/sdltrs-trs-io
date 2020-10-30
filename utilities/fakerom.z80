@@ -1,6 +1,5 @@
 ;
 ; Fake ROM for xtrs, initial hack
-; $Id: fakerom.z80,v 1.2 2008/06/26 04:39:56 mann Exp $
 ;
 
 video	equ	3c00h+7*64
