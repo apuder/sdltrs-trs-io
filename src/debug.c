@@ -85,14 +85,17 @@ Running:\n\
     c(ont)\n\
         Continue execution.\n\
     s(tep)\n\
-        Execute one instruction, disallowing all interrupts.\n\
     s(tep)i(nt)\n\
-        Execute one instruction, allowing an interrupt afterwards.\n\
+        Execute one instruction, or if the instruction is repeating (such as\n\
+        LDIR), execute only one iteration.  With \"step\", an interrupt is\n\
+        not allowed to occur after the instruction; with \"stepint\", an\n\
+        interrupt is allowed.\n\
     n(ext)\n\
     n(ext)i(nt)\n\
         Execute one instruction.  If the instruction is a CALL, continue\n\
-        until the return.  Interrupts are always allowed inside the call,\n\
-        but only the nextint form allows an interrupt afterwards.\n\
+        until the return.  If the instruction is repeating (such as LDIR),\n\
+        continue until it finishes.  Interrupts are always allowed during\n\
+        execution, but only \"nextint\" allows an interrupt afterwards.\n\
     re(set)\n\
         Hard reset the Z80 and devices.\n\
     s(oft)r(eset)\n\
@@ -330,6 +333,7 @@ void debug_print_registers(void)
 	   REG_D, REG_E, REG_PC, REG_DE_PRIME);
     printf("H L: %.2x %.2x    SP: %.4x    HL': %.4x\n",
 	   REG_H, REG_L, REG_SP, REG_HL_PRIME);
+    printf("I R: %.2x %.2x\n", REG_I, REG_R7 | (REG_R & 0x7f));
 
     printf("\nT-state counter: %" TSTATE_T_LEN "", z80_state.t_count);
     printf("\nZ80 Clock Speed: %.2f MHz\n", z80_state.clockMHz);
@@ -622,7 +626,7 @@ void debug_shell(void)
 	    else if(!strcmp(command, "next") || !strcmp(command, "nextint") ||
 		    !strcmp(command, "n") || !strcmp(command, "ni"))
 	    {
-		int is_call = 0, is_rst = 0;
+		int is_call = 0, is_rst = 0, is_rep = 0;
 		switch(mem_read(REG_PC)) {
 		  case 0xCD:	/* call address */
 		    is_call = 1;
@@ -661,6 +665,21 @@ void debug_shell(void)
 		  case 0xFF:
 		    is_rst = 1;
 		    break;
+		  case 0xED:
+		    switch(mem_read(REG_PC + 1)) {
+		      case 0xB0: /* ldir */
+		      case 0xB8: /* lddr */
+		      case 0xB1: /* cpir */
+		      case 0xB9: /* cpdr */
+		      case 0xB2: /* inir */
+		      case 0xBA: /* indr */
+		      case 0xB3: /* otir */
+		      case 0xBB: /* otdr */
+		        is_rep = 1;
+		        break;
+		      default:
+		        break;
+		    }
 		  default:
 		    break;
 		}
@@ -669,6 +688,9 @@ void debug_shell(void)
 		    debug_run();
 		} else if (is_rst) {
 		    set_trap((REG_PC + 1) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
+		    debug_run();
+		} else if (is_rep) {
+		    set_trap((REG_PC + 2) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
 		    debug_run();
 		} else {
 		    z80_run((!strcmp(command, "nextint") || !strcmp(command, "ni")) ? 0 : -1);
@@ -750,6 +772,7 @@ void debug_shell(void)
 			REG_I = value;
 		    } else if(!strcasecmp(regname, "r")) {
 			REG_R = value;
+			REG_R7 = value & 0x80;
 		    } else {
 			printf("Unrecognized register name %s.\n", regname);
 		    }
