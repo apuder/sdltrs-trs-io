@@ -312,6 +312,7 @@ static const trs_opt options[] = {
   { "keystretch",      trs_opt_keystretch,    1, 0, NULL                 },
   { "le18",            trs_opt_value,         0, 1, &lowe_le18           },
   { "lower",           trs_opt_value,         0, 1, &lowercase           },
+  { "lowercase",       trs_opt_value,         0, 1, &lowercase           },
   { "microlabs",       trs_opt_microlabs,     0, 1, NULL                 },
   { "m1",              trs_opt_value,         0, 1, &trs_model           },
   { "m3",              trs_opt_value,         0, 3, &trs_model           },
@@ -333,6 +334,7 @@ static const trs_opt options[] = {
   { "nokeypadjoy",     trs_opt_value,         0, 0, &trs_keypad_joystick },
   { "nole18",          trs_opt_value,         0, 0, &lowe_le18           },
   { "nolower",         trs_opt_value,         0, 0, &lowercase           },
+  { "nolowercase",     trs_opt_value,         0, 0, &lowercase           },
   { "nomicrolabs",     trs_opt_microlabs,     0, 0, NULL                 },
   { "nomousepointer",  trs_opt_value,         0, 0, &mousepointer        },
   { "noresize3",       trs_opt_value,         0, 0, &resize3             },
@@ -1076,7 +1078,7 @@ int trs_write_config_file(const char *filename)
   fprintf(config_file, "%skeypadjoy\n", trs_keypad_joystick ? "" : "no");
   fprintf(config_file, "keystretch=%d\n", stretch_amount);
   fprintf(config_file, "%sle18\n", lowe_le18 ? "" : "no");
-  fprintf(config_file, "%slower\n", lowercase ? "" : "no");
+  fprintf(config_file, "%slowercase\n", lowercase ? "" : "no");
   fprintf(config_file, "%smicrolabs\n", grafyx_microlabs ? "" : "no");
   fprintf(config_file, "model=%d%s\n",
           trs_model == 5 ? 4 : trs_model, trs_model == 5 ? "P" : "");
