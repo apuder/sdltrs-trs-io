@@ -1224,6 +1224,9 @@ void trs_screen_init(void)
 
 #ifdef SDL2
   if (window == NULL) {
+#ifdef XDEBUG
+    debug("SDL_VIDEODRIVER=%s\n", SDL_GetCurrentVideoDriver());
+#endif
     window = SDL_CreateWindow(NULL,
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
