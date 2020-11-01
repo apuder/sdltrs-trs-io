@@ -602,6 +602,12 @@ void do_emt_misc(void)
   case 21:
     trs_disk_truedam = REG_HL;
     break;
+  case 24:
+    REG_HL = lowercase;
+    break;
+  case 25:
+    lowercase = REG_HL;
+    break;
   default:
     error("unsupported function code to emt_misc");
     break;
