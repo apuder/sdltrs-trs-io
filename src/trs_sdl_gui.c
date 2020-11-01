@@ -1774,7 +1774,7 @@ void trs_gui_model(void)
    {"Grafyx Solution (Micro-Labs) Graphics Emulation             ", MENU_NORMAL_TYPE},
    {"LE18 (Lowe Electronics) Graphics Emulation                  ", MENU_NORMAL_TYPE},
    {"", MENU_TITLE_TYPE},
-   {"Dave Huffman (and other) Memory Expansion                   ", MENU_NORMAL_TYPE},
+   {"Dave Huffman (and other) 4/4P Memory Expansion              ", MENU_NORMAL_TYPE},
    {"HyperMem (Anitek Software) 4/4P Memory Expansion            ", MENU_NORMAL_TYPE},
    {"SuperMem (Alpha Technology) I/III Memory Expansion          ", MENU_NORMAL_TYPE},
    {"TRS-80 Users Society Selector Memory Expansion              ", MENU_NORMAL_TYPE},
