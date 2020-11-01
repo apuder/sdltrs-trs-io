@@ -1748,8 +1748,8 @@ void trs_get_event(int wait)
       case SDL_KEYDOWN:
         keysym = event.key.keysym;
 #if XDEBUG
-        debug("KeyDown: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
-            keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
+        debug("KeyDown: mod 0x%x, scancode 0x%x keycode 0x%x\n",
+            keysym.mod, keysym.scancode, keysym.sym);
 #endif
 #if defined(SDL2) || !defined(NOX)
         if (keysym.sym != SDLK_LALT) {
@@ -2085,8 +2085,8 @@ void trs_get_event(int wait)
       case SDL_KEYUP:
         keysym = event.key.keysym;
 #if XDEBUG
-        debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x, unicode 0x%x\n",
-            keysym.mod, keysym.scancode, keysym.sym, keysym.unicode);
+        debug("KeyUp: mod 0x%x, scancode 0x%x keycode 0x%x\n",
+            keysym.mod, keysym.scancode, keysym.sym);
 #endif
         if (SDL_GetModState() & KMOD_LALT)
           break;
