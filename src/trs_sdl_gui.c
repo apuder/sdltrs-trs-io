@@ -609,7 +609,7 @@ read_directory:
 
   if (browse_dir) {
     snprintf(title, 63, "Choose %sDirectory", type);
-    trs_gui_center_text("TAB selects directory", 15, 1);
+    trs_gui_center_text(" TAB selects directory ", 15, 1);
   }
   else
     snprintf(title, 63, "Select %s File To Load", type);
@@ -2211,10 +2211,10 @@ int trs_gui_read_config(void)
 static int trs_gui_config_management(void)
 {
   MENU_ENTRY misc_menu[] =
-  {{"Save Emulator State (ALT-S)", MENU_NORMAL_TYPE},
-   {"Load Emulator State (ALT-L)", MENU_NORMAL_TYPE},
-   {"Write Configuration (ALT-W)", MENU_NORMAL_TYPE},
-   {"Read Configuration  (ALT-R)", MENU_NORMAL_TYPE},
+  {{"Save Emulator State (Alt-S)", MENU_NORMAL_TYPE},
+   {"Load Emulator State (Alt-L)", MENU_NORMAL_TYPE},
+   {"Write Configuration (Alt-W)", MENU_NORMAL_TYPE},
+   {"Read Configuration  (Alt-R)", MENU_NORMAL_TYPE},
    {"", 0}};
   int selection = 0;
 
@@ -2640,7 +2640,7 @@ void trs_gui_about_sdltrs(void)
   trs_gui_center_text("<http://gitlab.com/jengun/sdltrs>", 9, 0);
   trs_gui_center_text("Based on xtrs 4.9d by Tim Mann", 11, 0);
   trs_gui_center_text("xtrs 1.0 Copyright (C) 1992 Clarendon Hill Software", 12, 0);
-  trs_gui_center_text("Press Any Key To Return", 15, 1);
+  trs_gui_center_text(" Press Any Key To Return ", 15, 1);
   trs_gui_refresh();
   trs_gui_get_key();
 }
@@ -2653,24 +2653,24 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("F1-F3: Functions Keys F1/F2/F3  PgUp/PgDn: Left/Right Shift ", 2, 1, 0);
   trs_gui_write_text("F4: F4/CapsLock on TRS-80 4/4P  Insert: TRS-80 Underscore   ", 2, 2, 0);
   trs_gui_write_text("F5/ScrollLock: TRS-80 @ Key     Shift UP Arrow: TRS-80 ESC  ", 2, 3, 0);
-  trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Alt PgUp/PgDn: Scale Window ", 2, 4, 0);
-  trs_gui_write_text("F7/Alt M: Main Menu of SDLTRS   Alt Enter: Toggle Fullscreen", 2, 5, 0);
-  trs_gui_write_text("F8/Shift-F8: Quit/Abort SDLTRS  Alt A/C/V: Select/Copy/Paste", 2, 6, 0);
-  trs_gui_write_text("F9/Alt Z:"
+  trs_gui_write_text("F6: TRS-80 '0' Key (Shifted 0)  Alt-PgUp/PgDn: Scale Window ", 2, 4, 0);
+  trs_gui_write_text("F7/Alt-M: Main Menu of SDLTRS   Alt-Enter: Toggle Fullscreen", 2, 5, 0);
+  trs_gui_write_text("F8/Shift-F8: Quit/Abort SDLTRS  Alt-A/C/V: Select/Copy/Paste", 2, 6, 0);
+  trs_gui_write_text("F9/Alt-Z:"
 #ifdef ZBX
   " Enter debugger (zbx)  "
 #else
   " Toggle Fullscreen     "
 #endif
-  "Alt D/F: Floppy Disk Menu   ", 2, 7, 0);
-  trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt H: Hard Disk Menu       ", 2, 8, 0);
-  trs_gui_write_text("F11/Alt K: Show this key help   Alt T: Cassette/Tape Menu   ", 2, 9, 0);
-  trs_gui_write_text("F12/Alt N: Switch Turbo On/Off  Alt L/S: Load / Save State  ", 2, 10, 0);
-  trs_gui_write_text("ESC: TRS-80 Break Key           Alt R/W: Read / Write Config", 2, 11, 0);
-  trs_gui_write_text("Home/Clear: TRS-80 Clear Key    Alt P/Pause: Pause Emulator ", 2, 12, 0);
-  trs_gui_write_text("End: TRS-80 Shifted Down Arrow  Alt 0-7: Insert Disk Drive  ", 2, 13, 0);
-  trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Shift Alt 0-7: Remove Disk  ", 2, 14, 0);
-  trs_gui_center_text("Press Any Key To Return", 15, 1);
+  "Alt-D/F: Floppy Disk Menu   ", 2, 7, 0);
+  trs_gui_write_text("F10/Shift-F10: Warm/Cold Reset  Alt-H: Hard Disk Menu       ", 2, 8, 0);
+  trs_gui_write_text("F11/Alt-K: Show this key help   Alt-T: Cassette/Tape Menu   ", 2, 9, 0);
+  trs_gui_write_text("F12/Alt-N: Switch Turbo On/Off  Alt-L/S: Load / Save State  ", 2, 10, 0);
+  trs_gui_write_text("ESC: TRS-80 Break Key           Alt-R/W: Read / Write Config", 2, 11, 0);
+  trs_gui_write_text("Home/Clear: TRS-80 Clear Key    Alt-P/Pause: Pause Emulator ", 2, 12, 0);
+  trs_gui_write_text("End: TRS-80 Shifted Down Arrow  Alt-0...7: Insert Disk Drive", 2, 13, 0);
+  trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Shift-Alt-0...7: Remove Disk", 2, 14, 0);
+  trs_gui_center_text(" Press Any Key To Return ", 15, 1);
   trs_gui_refresh();
   trs_gui_get_key();
 }
@@ -2716,13 +2716,13 @@ void trs_gui_save_bmp(void)
 void trs_gui(void)
 {
   MENU_ENTRY main_menu[] =
-  {{"Floppy Disk Management   (ALT-D)", MENU_NORMAL_TYPE},
-   {"Hard Disk Management     (ALT-H)", MENU_NORMAL_TYPE},
-   {"Cassette Management      (ALT-T)", MENU_NORMAL_TYPE},
-   {"Stringy Wafer Management (ALT-G)", MENU_NORMAL_TYPE},
-   {"Emulator Settings        (ALT-E)", MENU_NORMAL_TYPE},
-   {"Display Settings         (ALT-I)", MENU_NORMAL_TYPE},
-   {"Miscellaneous Settings   (ALT-O)", MENU_NORMAL_TYPE},
+  {{"Floppy Disk Management   (Alt-D)", MENU_NORMAL_TYPE},
+   {"Hard Disk Management     (Alt-H)", MENU_NORMAL_TYPE},
+   {"Cassette Management      (Alt-T)", MENU_NORMAL_TYPE},
+   {"Stringy Wafer Management (Alt-G)", MENU_NORMAL_TYPE},
+   {"Emulator Settings        (Alt-E)", MENU_NORMAL_TYPE},
+   {"Display Settings         (Alt-I)", MENU_NORMAL_TYPE},
+   {"Miscellaneous Settings   (Alt-O)", MENU_NORMAL_TYPE},
    {"Configuration/State Files", MENU_NORMAL_TYPE},
    {"Printer Management", MENU_NORMAL_TYPE},
    {"Joystick Settings", MENU_NORMAL_TYPE},
