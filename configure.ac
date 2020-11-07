@@ -33,6 +33,11 @@ AC_ARG_ENABLE([fastmove],
   [AC_DEFINE([FAST_MOVE])
    AC_MSG_NOTICE([faster but not accurate Z80 block moves enabled])])
 
+AC_ARG_ENABLE([oldscan],
+  [AS_HELP_STRING([--enable-oldscan], [display Scanlines using old method])],
+  [AC_DEFINE([OLD_SCANLINES])
+   AC_MSG_NOTICE([display Scanlines using old method enabled])])
+
 AC_ARG_ENABLE([readline],
   [AS_HELP_STRING([--enable-readline], [readline support for zbx debugger])],
   [AC_SEARCH_LIBS(tgetent, curses ncurses ncursesw, [], [])

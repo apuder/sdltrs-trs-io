@@ -43,6 +43,10 @@ This should autodetect the configuration but some options may be passed:
 ```
 to enable faster but not accurate Z80 block moves,
 ```sh
+./configure --enable-oldscan
+```
+to enable old method to display Scanlines,
+```sh
 ./configure --enable-sdl1
 ```
 to build the SDL 1.2 version,

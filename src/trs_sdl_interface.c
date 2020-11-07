@@ -1493,6 +1493,16 @@ void trs_sdl_flush(void)
     return;
 
   if (scanlines) {
+#ifdef OLD_SCANLINES
+    SDL_Rect rect;
+
+    rect.x = 0;
+    rect.w = OrigWidth;
+    rect.h = scale;
+
+    for (rect.y = 0; rect.y < screen_height; rect.y += (scale * 2))
+      SDL_FillRect(screen, &rect, background);
+#else
     int const width = screen->format->BytesPerPixel * scale * OrigWidth;
     Uint8 *pixels   = screen->pixels;
     Uint8 *pixel;
@@ -1506,6 +1516,7 @@ void trs_sdl_flush(void)
         *pixel++ &= scanshade;
     }
     SDL_UnlockSurface(screen);
+#endif
   }
 
   if (drawnRectCount == MAX_RECTS)
