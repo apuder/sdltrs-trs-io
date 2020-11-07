@@ -1777,7 +1777,7 @@ void trs_gui_model(void)
    {"Dave Huffman (and other) 4/4P Memory Expansion              ", MENU_NORMAL_TYPE},
    {"HyperMem (Anitek Software) 4/4P Memory Expansion            ", MENU_NORMAL_TYPE},
    {"SuperMem (Alpha Technology) I/III Memory Expansion          ", MENU_NORMAL_TYPE},
-   {"TRS-80 Users Society Selector Memory Expansion              ", MENU_NORMAL_TYPE},
+   {"TRS-80 Users Society Selector I Memory Expansion            ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *model_choices[4] =  {"  TRS-80 Model I",
                                    "TRS-80 Model III",
