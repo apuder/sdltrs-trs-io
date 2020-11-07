@@ -118,6 +118,7 @@ int jbutton_map[N_JOYBUTTONS] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 int jaxis_mapped = 0;
 
 extern int  scanlines;
+extern int  scanshade;
 #if defined(SDL2) || !defined(NOX)
 extern int  turbo_paste;
 #endif
@@ -1895,7 +1896,7 @@ void trs_gui_display_management(void)
    {"Resize Window on Mode Change for Model 4                    ", MENU_NORMAL_TYPE},
    {"Scale Factor for Window                                     ", MENU_NORMAL_TYPE},
    {"LED Display for Disks and Turbo Mode                        ", MENU_NORMAL_TYPE},
-   {"Display Scanlines to simulate old CRT                       ", MENU_NORMAL_TYPE},
+   {"Display Scanlines with brightness                           ", MENU_NORMAL_TYPE},
    {"", 0}};
   const char *font1_choices[7] =    {"      Early",
                                      "      Stock",
@@ -1928,7 +1929,7 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[9].title[50], 11, "%s", yes_no_choices[resize4]);
     snprintf(&display_menu[10].title[55], 6, "%s", scale_choices[scale - 1]);
     snprintf(&display_menu[11].title[50], 11, "%s", yes_no_choices[trs_show_led]);
-    snprintf(&display_menu[12].title[50], 11, "%s", yes_no_choices[scanlines]);
+    snprintf(&display_menu[12].title[34], 27, "%-3d%23s", scanshade, yes_no_choices[scanlines]);
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Display Settings", display_menu, selection);
@@ -2042,11 +2043,17 @@ void trs_gui_display_management(void)
         }
         break;
       case 12:
-        value = trs_gui_display_popup("Scanlines", yes_no_choices, 2, scanlines);
-        if (value != scanlines) {
-          scanlines = value;
-          redraw = 1;
+        scanlines = trs_gui_display_popup("Scanlines", yes_no_choices, 2, scanlines);
+        if (scanlines) {
+          snprintf(input, 4, "%d", scanshade);
+          if (trs_gui_input_string("Enter brightness (0 = dark - 255 = light)",
+              input, input, 3, 0) == 0) {
+            scanshade = atoi(input);
+            if (scanshade < 0 || scanshade > 255)
+              scanshade = 127;
+          }
         }
+        redraw = 1;
         break;
       case -1:
         return;
