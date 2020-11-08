@@ -1,0 +1,35 @@
+option('FASTMOVE',
+	type		: 'boolean',
+	value		: false,
+	description	: 'Fast inaccurate Z80 block moves'
+)
+
+option('OLDSCAN',
+	type		: 'boolean',
+	value		: false,
+	description	: 'Display Scanlines using old method'
+)
+
+option('NOX',
+	type		: 'boolean',
+	value		: false,
+	description	: 'Build SDL 1.2 version without X'
+)
+
+option('READLINE',
+	type		: 'boolean',
+	value		: true,
+	description	: 'Readline support for zbx debugger'
+)
+
+option('SDL1',
+	type		: 'boolean',
+	value		: false,
+	description	: 'Use SDL version 1.2 instead of SDL2'
+)
+
+option('ZBX',
+	type		: 'boolean',
+	value		: true,
+	description	: 'Build with integrated Z80 debugger'
+)
