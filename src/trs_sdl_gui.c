@@ -1896,7 +1896,11 @@ void trs_gui_display_management(void)
    {"Resize Window on Mode Change for Model 4                    ", MENU_NORMAL_TYPE},
    {"Scale Factor for Window                                     ", MENU_NORMAL_TYPE},
    {"LED Display for Disks and Turbo Mode                        ", MENU_NORMAL_TYPE},
+#ifdef OLD_SCANLINES
+   {"Display Scanlines with Background Color                     ", MENU_NORMAL_TYPE},
+#else
    {"Display Scanlines with brightness                           ", MENU_NORMAL_TYPE},
+#endif
    {"", 0}};
   const char *font1_choices[7] =    {"      Early",
                                      "      Stock",
@@ -1929,7 +1933,11 @@ void trs_gui_display_management(void)
     snprintf(&display_menu[9].title[50], 11, "%s", yes_no_choices[resize4]);
     snprintf(&display_menu[10].title[55], 6, "%s", scale_choices[scale - 1]);
     snprintf(&display_menu[11].title[50], 11, "%s", yes_no_choices[trs_show_led]);
+#ifdef OLD_SCANLINES
+    snprintf(&display_menu[12].title[50], 11, "%s", yes_no_choices[scanlines]);
+#else
     snprintf(&display_menu[12].title[34], 27, "%-3d%23s", scanshade, yes_no_choices[scanlines]);
+#endif
     trs_gui_clear_screen();
 
     selection = trs_gui_display_menu("SDLTRS Display Settings", display_menu, selection);
@@ -2043,17 +2051,19 @@ void trs_gui_display_management(void)
         }
         break;
       case 12:
-        scanlines = trs_gui_display_popup("Scanlines", yes_no_choices, 2, scanlines);
-        if (scanlines) {
+        value = trs_gui_display_popup("Scanlines", yes_no_choices, 2, scanlines);
+#ifdef OLD_SCANLINES
+        if (value != scanlines)
+#else
+        if (value) {
           snprintf(input, 4, "%d", scanshade);
           if (trs_gui_input_string("Enter brightness (0 = dark - 255 = light)",
-              input, input, 3, 0) == 0) {
-            scanshade = atoi(input);
-            if (scanshade < 0 || scanshade > 255)
-              scanshade = 127;
-          }
+              input, input, 3, 0) == 0)
+            scanshade = atoi(input) & 255;
         }
-        redraw = 1;
+#endif
+          redraw = 1;
+        scanlines = value;
         break;
       case -1:
         return;
