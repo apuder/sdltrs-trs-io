@@ -160,9 +160,9 @@ static void trs_gui_disk_management(void);
 static void trs_gui_hard_management(void);
 static void trs_gui_stringy_management(void);
 static void trs_gui_cassette_management(void);
-static void trs_gui_model(void);
-static void trs_gui_display_management(void);
-static void trs_gui_misc_management(void);
+static void trs_gui_emulator_settings(void);
+static void trs_gui_display_settings(void);
+static void trs_gui_misc_settings(void);
 static int  trs_gui_config_management(void);
 static void trs_gui_printer_management(void);
 static const char *trs_gui_get_key_name(int key);
@@ -171,7 +171,7 @@ static void trs_gui_get_virtual_key(void);
 static void trs_gui_joy_gui(void);
 static int  trs_gui_joystick_get_button(void);
 static void trs_gui_joystick_display_map(int button);
-static void trs_gui_joystick_management(void);
+static void trs_gui_joystick_settings(void);
 static void trs_gui_default_dirs(void);
 static void trs_gui_rom_files(void);
 static void trs_gui_about_sdltrs(void);
@@ -1763,7 +1763,7 @@ void trs_gui_cassette_management(void)
   }
 }
 
-void trs_gui_model(void)
+void trs_gui_emulator_settings(void)
 {
   MENU_ENTRY model_menu[] =
   {{"Model                                                       ", MENU_NORMAL_TYPE},
@@ -1881,7 +1881,7 @@ void trs_gui_model(void)
   }
 }
 
-void trs_gui_display_management(void)
+void trs_gui_display_settings(void)
 {
   MENU_ENTRY display_menu[] =
   {{"Emulator Background Color                                   ", MENU_NORMAL_TYPE},
@@ -2076,7 +2076,7 @@ void trs_gui_display_management(void)
   }
 }
 
-void trs_gui_misc_management(void)
+void trs_gui_misc_settings(void)
 {
   MENU_ENTRY misc_menu[] =
   {{"Emtsafe                                                     ", MENU_NORMAL_TYPE},
@@ -2443,7 +2443,7 @@ void trs_gui_joystick_display_map(int button)
   }
 }
 
-void trs_gui_joystick_management(void)
+void trs_gui_joystick_settings(void)
 {
   MENU_ENTRY display_menu[] =
   {{"Use Keypad for Joystick                                     ", MENU_NORMAL_TYPE},
@@ -2767,13 +2767,13 @@ void trs_gui(void)
         trs_gui_stringy_management();
         break;
       case 4:
-        trs_gui_model();
+        trs_gui_emulator_settings();
         break;
       case 5:
-        trs_gui_display_management();
+        trs_gui_display_settings();
         break;
       case 6:
-        trs_gui_misc_management();
+        trs_gui_misc_settings();
         break;
       case 7:
         if (trs_gui_config_management())
@@ -2783,7 +2783,7 @@ void trs_gui(void)
         trs_gui_printer_management();
         break;
       case 9:
-        trs_gui_joystick_management();
+        trs_gui_joystick_settings();
         break;
       case 10:
         trs_gui_default_dirs();
@@ -2849,13 +2849,13 @@ void call_function(int function)
         trs_gui_read_config();
         break;
       case EMULATOR:
-        trs_gui_model();
+        trs_gui_emulator_settings();
         break;
       case INTERFACE:
-        trs_gui_display_management();
+        trs_gui_display_settings();
         break;
       case OTHER:
-        trs_gui_misc_management();
+        trs_gui_misc_settings();
         break;
       case KEYS:
         trs_gui_keys_sdltrs();
