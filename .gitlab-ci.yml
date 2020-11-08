@@ -28,6 +28,13 @@ build-clang:
  - CC="clang" cmake ..
  - cmake --build .
 
+build-meson:
+ script:
+ - apt-get install -y -qq meson libreadline-dev libsdl2-dev
+ - meson build
+ - cd build
+ - ninja
+
 build-sdl1:
  script:
  - apt-get install -y -qq cmake libreadline-dev libsdl1.2-dev
