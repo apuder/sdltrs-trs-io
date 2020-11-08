@@ -49,7 +49,7 @@ depend:
 nox:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 nox:	INCS	 = $(shell sdl-config --cflags)
 nox:	LIBS	 = $(shell sdl-config --libs)
-nox:	MACROS	 = -DNOX
+nox:	MACROS	+= -DNOX
 nox:	READLINE?= -DREADLINE
 nox:	${PROG}
 
@@ -64,7 +64,7 @@ sdl:	${PROG}
 sdl2:	ENDIAN	 = $(shell echo "ab" | od -x | grep "6261" > /dev/null || echo "-Dbig_endian")
 sdl2:	INCS	 = $(shell sdl2-config --cflags)
 sdl2:	LIBS	 = $(shell sdl2-config --libs)
-sdl2:	MACROS	 = -DSDL2
+sdl2:	MACROS	+= -DSDL2
 sdl2:	READLINE?= -DREADLINE
 sdl2:	PROG	 = sdl2trs
 sdl2:	${PROG}
@@ -73,7 +73,7 @@ win32:	MINGW	 = C:\MinGW
 win32:	CC	 = ${MINGW}\bin\gcc.exe
 win32:	INCS	 = -I${MINGW}\include\SDL
 win32:	LIBS	 = -L${MINGW}\lib -lmingw32 -lSDLmain -lSDL
-win32:	MACROS	 = -DWIN32
+win32:	MACROS	+= -DWIN32
 win32:	PROG	 = sdltrs.exe
 win32:	${PROG}
 
@@ -81,7 +81,7 @@ win64:	MINGW64	 = C:\MinGW64
 win64:	CC	 = ${MINGW64}\bin\gcc.exe
 win64:	INCS	 = -I${MINGW64}\include\SDL2
 win64:	LIBS	 = -L${MINGW64}\lib -lmingw32 -lSDL2main -lSDL2
-win64:	MACROS	 = -DSDL2 -DWIN32
+win64:	MACROS	+= -DSDL2 -DWIN32
 win64:	PROG	 = sdl2trs64.exe
 win64:	${PROG}
 
@@ -89,7 +89,7 @@ wsdl2:	MINGW	 = C:\MinGW
 wsdl2:	CC	 = ${MINGW}\bin\gcc.exe
 wsdl2:	INCS	 = -I${MINGW}\include\SDL2
 wsdl2:	LIBS	 = -L${MINGW}\lib -lmingw32 -lSDL2main -lSDL2
-wsdl2:	MACROS	 = -DSDL2 -DWIN32
+wsdl2:	MACROS	+= -DSDL2 -DWIN32
 wsdl2:	PROG	 = sdl2trs.exe
 wsdl2:	${PROG}
 
