@@ -1,9 +1,9 @@
 before_script:
- - apt-get update -qq
+ - apt-get update -qq 1> /dev/null
 
 build:
  script:
- - apt-get install -y -qq cmake libreadline-dev libsdl2-dev
+ - apt-get install -y -qq cmake libreadline-dev libsdl2-dev 1> /dev/null
  - mkdir build
  - cd build
  - cmake ..
@@ -12,8 +12,8 @@ build:
 build-32:
  script:
  - dpkg --add-architecture i386
- - apt-get update -qq
- - apt-get install -y cmake gcc-multilib libgcc1:i386 libreadline-dev:i386 libsdl2-dev:i386
+ - apt-get update -qq 1> /dev/null
+ - apt-get install -y cmake gcc-multilib libgcc1:i386 libreadline-dev:i386 libsdl2-dev:i386 1> /dev/null
  - mkdir build
  - cd build
  - CFLAGS="-m32" cmake ..
@@ -22,7 +22,7 @@ build-32:
 
 build-clang:
  script:
- - apt-get install -y -qq clang cmake libreadline-dev libsdl2-dev
+ - apt-get install -y -qq clang cmake libreadline-dev libsdl2-dev 1> /dev/null
  - mkdir build
  - cd build
  - CC="clang" cmake ..
@@ -30,14 +30,14 @@ build-clang:
 
 build-meson:
  script:
- - apt-get install -y -qq meson libreadline-dev libsdl2-dev
+ - apt-get install -y -qq meson libreadline-dev libsdl2-dev 1> /dev/null
  - meson build
  - cd build
  - ninja
 
 build-sdl1:
  script:
- - apt-get install -y -qq cmake libreadline-dev libsdl1.2-dev
+ - apt-get install -y -qq cmake libreadline-dev libsdl1.2-dev 1> /dev/null
  - mkdir build
  - cd build
  - cmake -DSDL1=1 ..
