@@ -27,8 +27,14 @@ srcs = ['src/blit.c',
 	'src/PasteManager.c']
 
 compiler = meson.get_compiler('c')
+endian	 = host_machine.endian()
 readline = declare_dependency()
 x11	 = declare_dependency()
+
+message('host machine endian: ' + endian)
+if endian == 'big'
+	add_project_arguments('-Dbig_endian', language : 'c')
+endif
 
 if get_option('FASTMOVE')
 	add_project_arguments('-DFAST_MOVE', language : 'c')
@@ -73,4 +79,4 @@ if get_option('ZBX')
 	endif
 endif
 
-executable('sdltrs', srcs, dependencies : [ readline, sdl, x11])
+executable('sdltrs', srcs, dependencies : [ readline, sdl, x11 ])
