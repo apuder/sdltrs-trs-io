@@ -43,7 +43,7 @@ Thanks to Tércio Martins a package for Arch Linux is available in the [AUR].
 ## SDL2
 
 The [SDL2] branch contains the SDL2 version with hardware rendering support.
-Altough considered as *experimental*, it is recommended for newer operating
+Although considered as *experimental*, it is recommended for newer operating
 systems (SDL2 binaries and packages above are build on the *master* branch,
 which uses software rendering).
 

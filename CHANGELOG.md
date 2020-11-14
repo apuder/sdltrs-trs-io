@@ -102,7 +102,7 @@
     emulator runs 5 times the speed of a normal TRS-80, however, the rate is
     adjustable through the Text GUI or command line/configuration file
     options.
-  * Changed Disk Drive Numbering to Start With 0, not 1 - The intial release
+  * Changed Disk Drive Numbering to Start With 0, not 1 - The initial release
     of the emulator numbered floppy drives from 1-8 and hard drives from 1-4.
     However, TRS-80 drives started number at 0, so this was very confusing for
     users. This has been changed in this release, however, note that
