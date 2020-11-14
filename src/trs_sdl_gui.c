@@ -2171,14 +2171,14 @@ void trs_gui_save_state(void)
 {
   filename[0] = 0;
   if (trs_gui_input_string("Save Emulator State, TAB selects directory",
-      init_state_file[0] != 0 ? init_state_file : trs_state_dir, filename,
+      trs_state_file[0] != 0 ? trs_state_file : trs_state_dir, filename,
       FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8s");
     if (trs_gui_file_overwrite()) {
       if (trs_state_save(filename) == -1)
         trs_gui_display_message("Error", "Failed to save State");
       else
-        snprintf(init_state_file, FILENAME_MAX, "%s", filename);
+        snprintf(trs_state_file, FILENAME_MAX, "%s", filename);
     }
   }
 }

@@ -72,7 +72,7 @@ extern char trs_printer_dir[FILENAME_MAX];
 extern char trs_printer_command[FILENAME_MAX];
 extern char trs_cmd_file[FILENAME_MAX];
 extern char trs_config_file[FILENAME_MAX];
-extern char init_state_file[FILENAME_MAX];
+extern char trs_state_file[FILENAME_MAX];
 
 extern int trs_model; /* 1, 3, 4, 5(=4p) */
 extern unsigned int foreground;

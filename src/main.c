@@ -222,8 +222,8 @@ int SDLmain(int argc, char *argv[])
   trs_screen_init();
   trs_reset(1);
 
-  if (init_state_file[0]) {
-    trs_state_load(init_state_file);
+  if (trs_state_file[0]) {
+    trs_state_load(trs_state_file);
     trs_screen_init();
     trs_screen_refresh();
   }

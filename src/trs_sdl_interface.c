@@ -102,7 +102,7 @@ char trs_state_dir[FILENAME_MAX];
 char trs_printer_dir[FILENAME_MAX];
 char trs_cmd_file[FILENAME_MAX];
 char trs_config_file[FILENAME_MAX];
-char init_state_file[FILENAME_MAX];
+char trs_state_file[FILENAME_MAX];
 char trs_printer_command[FILENAME_MAX];
 
 /* Private data */
@@ -963,7 +963,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
 
   /* Check for config or state files on the command line */
   trs_config_file[0] = 0;
-  init_state_file[0] = 0;
+  trs_state_file[0] = 0;
   trs_cmd_file[0] = 0;
 
   for (i = 1; i < argc; i++) {
@@ -980,7 +980,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
       if (strcasecmp(&argv[i][len], ".t8c") == 0)
         snprintf(trs_config_file, FILENAME_MAX, "%s", argv[i]);
       else if (strcasecmp(&argv[i][len], ".t8s") == 0)
-        snprintf(init_state_file, FILENAME_MAX, "%s", argv[i]);
+        snprintf(trs_state_file, FILENAME_MAX, "%s", argv[i]);
       else if (strcasecmp(&argv[i][len], ".cmd") == 0)
         snprintf(trs_cmd_file, FILENAME_MAX, "%s", argv[i]);
     }
