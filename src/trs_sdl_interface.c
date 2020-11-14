@@ -2868,7 +2868,7 @@ static void grafyx_rescale(int y, int x, char byte)
         exp[1] = (((byte & 0x08) >> 2)      +  (byte & 0x10)
                +  ((byte & 0x20) << 2)) * 7 + ((byte & 0x04) >> 2);
         exp[0] = (((byte & 0x40) >> 4)      + ((byte & 0x80) >> 2)) * 7
-               +  ((byte & 0x20) >> 5) * 3;
+               +  ((byte & 0x20) >> 5)  * 3;
         break;
       case 4:
         exp[3] =  ((byte & 0x01)       + ((byte & 0x02) << 3)) * 15;
