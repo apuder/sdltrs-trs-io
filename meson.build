@@ -1,4 +1,9 @@
-project('sdltrs', 'c')
+project('sdltrs', 'c',
+	version: '1.2.13',
+	license: 'BSD',
+	default_options: [ 'buildtype=debugoptimized', 'c_std=gnu89' ],
+	meson_version: '>= 0.36.0'
+)
 
 sources = files([
 	'src/blit.c',
