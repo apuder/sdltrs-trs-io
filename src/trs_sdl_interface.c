@@ -1794,7 +1794,10 @@ void trs_get_event(int wait)
         switch (keysym.sym) {
           /* Trap some function keys here */
           case SDLK_F7:
-            call_function(GUI);
+            if (SDL_GetModState() & KMOD_SHIFT)
+              call_function(EMULATOR);
+            else
+              call_function(GUI);
             continue;
           case SDLK_F8:
             trs_exit(!(SDL_GetModState() & KMOD_SHIFT));
