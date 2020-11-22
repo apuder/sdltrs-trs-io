@@ -100,9 +100,6 @@ int hypermem = 0;
 int selector = 0;
 int selector_reg = 0;
 
-/*SUPPRESS 53*/
-/*SUPPRESS 112*/
-
 void mem_video_page(int which)
 {
     video_offset = -VIDEO_START + (which ? VIDEO_PAGE_1 : VIDEO_PAGE_0);

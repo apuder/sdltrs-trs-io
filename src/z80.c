@@ -64,14 +64,6 @@
 #include "trs_state_save.h"
 #include "z80.h"
 
-/*
- * Keep Saber quiet.
- */
-/*SUPPRESS 53*/
-/*SUPPRESS 51*/
-/*SUPPRESS 112*/
-/*SUPPRESS 115*/
-
 extern void trs_timer_sync_with_host(void);
 
 /*

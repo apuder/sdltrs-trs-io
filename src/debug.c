@@ -51,8 +51,6 @@
 #include "error.h"
 #include "trs.h"
 
-/*SUPPRESS 112*/
-
 #define MAXLINE		(256)
 #define ADDRESS_SPACE	(0x10000)
 #define MAX_TRAPS	(100)
