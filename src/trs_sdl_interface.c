@@ -295,6 +295,7 @@ static const trs_opt options[] = {
   { "fg",              trs_opt_color,         1, 0, &foreground          },
   { "foreground",      trs_opt_color,         1, 0, &foreground          },
   { "fullscreen",      trs_opt_value,         0, 1, &fullscreen          },
+  { "fs",              trs_opt_value,         0, 1, &fullscreen          },
   { "guibackground",   trs_opt_color,         1, 0, &gui_background      },
   { "guibg",           trs_opt_color,         1, 0, &gui_background      },
   { "guifg",           trs_opt_color,         1, 0, &gui_foreground      },
