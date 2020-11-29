@@ -1,3 +1,10 @@
+## Version 1.2.14 Release 11-29-2020:
+
+  * Added brightness control for Scanlines.
+  * Added shortcuts for: `-borderwidth`, `-cassette` and `-fullscreen`.
+  * Fixed `LD A,R` instruction (pointed out by Timothy P. Mann).
+  * Merged some changes for the zbx debugger from `xtrs`.
+
 ## Version 1.2.13 Release 09-27-2020:
 
   * Fixed issue #6 "Core dump when trying to print" (reported by "zoof").
