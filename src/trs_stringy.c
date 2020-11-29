@@ -97,14 +97,14 @@ typedef struct {
 #endif
 } stringy_info_t;
 
-stringy_info_t stringy_info[STRINGY_MAX_UNITS];
+static stringy_info_t stringy_info[STRINGY_MAX_UNITS];
 
 /*
  * .esf file format used by TRS32.
  */
-const char stringy_esf_magic[4] = "ESF\x1a";
-const Uchar stringy_esf_header_length = 12;
-const Uchar stringy_esf_write_protected = 1;
+static const char stringy_esf_magic[4] = "ESF\x1a";
+static const Uchar stringy_esf_header_length = 12;
+static const Uchar stringy_esf_write_protected = 1;
 /*
 struct {
   char magic[4] = stringy_esf_magic;
@@ -116,7 +116,7 @@ struct {
 }
  */
 
-const char stringy_debug_header[] = "xtrs stringy debug %ld %ld %d\n";
+static const char stringy_debug_header[] = "xtrs stringy debug %ld %ld %d\n";
 
 #define STRINGY_STOPPED 0
 #define STRINGY_READING 1

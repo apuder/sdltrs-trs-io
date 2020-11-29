@@ -135,13 +135,13 @@ static int cassette_pulsestate;
 #define SPEED_500     0
 #define SPEED_1500    1
 #define SPEED_250     2
-int cassette_speed = SPEED_500;
+static int cassette_speed = SPEED_500;
 
 /* Pulse shapes for conversion from .cas on input */
 #define CAS_MAXSTATES 8
-struct {
-  int delta_us;
-  int next;
+static struct {
+  const int delta_us;
+  const int next;
 } pulse_shape[3][2][CAS_MAXSTATES] = {
   {{
     /* Low-speed zero: clock 1 data 0 */
@@ -468,7 +468,7 @@ static void trs_sdl_sound_update(void *userdata, Uint8 * stream, int len)
       num_to_read = sound_ring_count;
 
     if (sound_ring_read_ptr + num_to_read > sound_ring_end) {
-      int len_to_end = sound_ring_end - sound_ring_read_ptr;
+      int const len_to_end = sound_ring_end - sound_ring_read_ptr;
 
       SDL_memcpy(stream, sound_ring_read_ptr, len_to_end);
       SDL_memcpy(stream + len_to_end, sound_ring, num_to_read - len_to_end);
@@ -547,7 +547,7 @@ set_audio_format(int state)
 void
 trs_cassette_insert(const char *filename)
 {
-   int len = strlen(filename);
+   int const len = strlen(filename);
    const char *extension;
 
    snprintf(cassette_filename, FILENAME_MAX, "%s", filename);

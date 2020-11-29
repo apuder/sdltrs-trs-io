@@ -98,7 +98,7 @@ typedef struct {
   tstate_t motor_timeout;       /* 0 if stopped, else time when it stops */
 } FDCState;
 
-FDCState state, other_state;
+static FDCState state, other_state;
 
 /* Format states - what is expected next? */
 #define FMT_GAP0    0
@@ -295,10 +295,10 @@ typedef struct {
   } u;
 } DiskState;
 
-DiskState disk[NDRIVES];
+static DiskState disk[NDRIVES];
 
 /* Emulate interleave in JV1 mode */
-unsigned char jv1_interleave[10] = {0, 5, 1, 6, 2, 7, 3, 8, 4, 9};
+static const unsigned char jv1_interleave[10] = {0, 5, 1, 6, 2, 7, 3, 8, 4, 9};
 
 /* Forward */
 void real_verify(void);

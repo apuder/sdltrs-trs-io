@@ -80,25 +80,25 @@ Uchar memory[0x200001]; /* +1 so strings from mem_pointer are NUL-terminated */
 Uchar rom[MAX_ROM_SIZE + 1];
 Uchar video[MAX_VIDEO_SIZE + 1];
 int trs_rom_size;
-int trs_video_size;
+static int trs_video_size;
 
-int memory_map = 0;
-int bank_offset[2];
+static int memory_map = 0;
+static int bank_offset[2];
 #define VIDEO_PAGE_0 0
 #define VIDEO_PAGE_1 1024
-int video_offset = (-VIDEO_START + VIDEO_PAGE_0);
+static int video_offset = (-VIDEO_START + VIDEO_PAGE_0);
 int lowercase = 1;
 int romin = 0; /* Model 4p */
 unsigned int bank_base = 0x10000;
-unsigned char mem_command = 0;
+static unsigned char mem_command = 0;
 int huffman_ram = 0;
 int supermem = 0;
-Uchar *supermem_ram = NULL;
-int supermem_base;
-unsigned int supermem_hi;
+static Uchar *supermem_ram = NULL;
+static int supermem_base;
+static unsigned int supermem_hi;
 int hypermem = 0;
 int selector = 0;
-int selector_reg = 0;
+static int selector_reg = 0;
 
 void mem_video_page(int which)
 {

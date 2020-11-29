@@ -58,7 +58,7 @@ typedef struct {
 } OpenDir;
 
 #define MAX_OPENDIR 32
-OpenDir dir[MAX_OPENDIR];
+static OpenDir dir[MAX_OPENDIR];
 
 typedef struct {
   int fd;
@@ -70,8 +70,8 @@ typedef struct {
 } OpenDisk;
 
 #define MAX_OPENDISK 32
-OpenDisk od[MAX_OPENDISK];
-int xtrshard_fd[4] = {-1,-1,-1,-1};
+static OpenDisk od[MAX_OPENDISK];
+static int xtrshard_fd[4] = {-1,-1,-1,-1};
 
 void do_emt_system(void)
 {
