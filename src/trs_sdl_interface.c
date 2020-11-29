@@ -333,6 +333,7 @@ static const trs_opt options[] = {
 #endif
   { "noemtsafe",       trs_opt_value,         0, 0, &trs_emtsafe         },
   { "nofullscreen",    trs_opt_value,         0, 0, &fullscreen          },
+  { "nofs",            trs_opt_value,         0, 0, &fullscreen          },
   { "nohuffman",       trs_opt_huffman,       0, 0, NULL                 },
   { "nohypermem",      trs_opt_hypermem,      0, 0, NULL                 },
   { "nojoyaxismapped", trs_opt_value,         0, 0, &jaxis_mapped        },
