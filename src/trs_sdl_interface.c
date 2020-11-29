@@ -106,6 +106,8 @@ char trs_state_file[FILENAME_MAX];
 char trs_printer_command[FILENAME_MAX];
 
 /* Private data */
+#include "trs_chars.c"
+
 static unsigned char trs_screen[2048];
 static int cpu_panel = 0;
 static int debugger = 0;

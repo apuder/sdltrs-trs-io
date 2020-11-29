@@ -8,7 +8,6 @@ SRCS	+= load_cmd.c
 SRCS	+= load_hex.c
 SRCS	+= main.c
 SRCS	+= trs_cassette.c
-SRCS	+= trs_chars.c
 SRCS	+= trs_disk.c
 SRCS	+= trs_hard.c
 SRCS	+= trs_imp_exp.c
