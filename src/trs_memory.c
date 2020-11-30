@@ -78,26 +78,27 @@
    of the port mods rather than anything normal (512K might be more 'normal' */
 Uchar memory[0x200001]; /* +1 so strings from mem_pointer are NUL-terminated */
 Uchar rom[MAX_ROM_SIZE + 1];
-Uchar video[MAX_VIDEO_SIZE + 1];
 int trs_rom_size;
-static int trs_video_size;
+int lowercase = 1;
+int romin = 0; /* Model 4p */
+int huffman_ram = 0;
+int hypermem = 0;
+int supermem = 0;
+int selector = 0;
 
+/* private data */
+static Uchar video[MAX_VIDEO_SIZE + 1];
+static int trs_video_size;
 static int memory_map = 0;
 static int bank_offset[2];
 #define VIDEO_PAGE_0 0
 #define VIDEO_PAGE_1 1024
 static int video_offset = (-VIDEO_START + VIDEO_PAGE_0);
-int lowercase = 1;
-int romin = 0; /* Model 4p */
-unsigned int bank_base = 0x10000;
+static unsigned int bank_base = 0x10000;
 static unsigned char mem_command = 0;
-int huffman_ram = 0;
-int supermem = 0;
 static Uchar *supermem_ram = NULL;
 static int supermem_base;
 static unsigned int supermem_hi;
-int hypermem = 0;
-int selector = 0;
 static int selector_reg = 0;
 
 void mem_video_page(int which)
