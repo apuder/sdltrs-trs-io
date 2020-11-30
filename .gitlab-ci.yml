@@ -17,6 +17,4 @@ build-32-sdl1:
 build-clang:
  script:
  - apt-get install -y -qq clang meson libreadline-dev libsdl2-dev 1> /dev/null
- - CC="clang" meson build
- - cd build
- - ninja
+ - CC="clang" meson build && cd build && ninja
