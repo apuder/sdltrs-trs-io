@@ -19,7 +19,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
 ## License
 
-  BSD-2-Clause
+  [BSD 2-Clause](LICENSE)
 
 ## Binaries
 
