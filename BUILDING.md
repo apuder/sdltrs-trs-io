@@ -75,10 +75,7 @@ To build with CMake:
 
 From the main directory, execute:
 ```sh
-mkdir build
-cd build
-cmake ..
-cmake --build .
+mkdir -p build && cd build && cmake .. && cmake --build .
 ```
 
 ---

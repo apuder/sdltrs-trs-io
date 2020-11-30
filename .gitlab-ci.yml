@@ -4,20 +4,14 @@ before_script:
 build:
  script:
  - apt-get install -y -qq cmake libreadline-dev libsdl2-dev 1> /dev/null
- - mkdir build
- - cd build
- - cmake ..
- - cmake --build .
+ - mkdir -p build && cd build && cmake .. && cmake --build .
 
 build-32-sdl1:
  script:
  - dpkg --add-architecture i386
  - apt-get update -qq 1> /dev/null
  - apt-get install -y cmake gcc-multilib libgcc1:i386 libreadline-dev:i386 libsdl1.2-dev:i386 1> /dev/null
- - mkdir build
- - cd build
- - CFLAGS="-m32" cmake -DSDL1=1 ..
- - cmake --build .
+ - mkdir -p build && cd build && CFLAGS="-m32" cmake -DSDL1=1 .. && cmake --build .
  - file sdltrs
 
 build-clang:
