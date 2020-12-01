@@ -34,8 +34,8 @@ LIBS	+= -lcurses -lreadline
 MACROS	+= -DREADLINE -DZBX
 X11INC	?= -I/usr/X11R7/include
 X11LIB	?= -L/usr/X11R7/lib -lX11 -Wl,-R/usr/X11R7/lib
-DEBUG	?= -g -Wall
-CFLAGS	+= ${DEBUG} ${INCS} ${X11INC} ${ENDIAN} ${MACROS}
+CFLAGS	?= -g -Wall
+CFLAGS	:= ${CFLAGS} ${INCS} ${X11INC} ${ENDIAN} ${MACROS}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${X11LIB} ${LDFLAGS}
