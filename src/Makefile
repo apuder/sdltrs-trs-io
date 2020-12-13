@@ -95,7 +95,7 @@ wsdl2:	${PROG}
 READLINELIBS	 =$(if ${READLINE},-lreadline,)
 ZBX		?= -DZBX
 CFLAGS		?= -g -O2 -Wall
-CFLAGS		:= ${CFLAGS} ${INCS} ${X11INC} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
+CFLAGS		+= ${INCS} ${X11INC} ${ENDIAN} ${MACROS} ${READLINE} ${ZBX}
 
 ${PROG}: ${OBJS}
 	${CC} -o ${PROG} ${OBJS} ${LIBS} ${X11LIB} ${LDFLAGS} ${READLINELIBS}
