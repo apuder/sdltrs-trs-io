@@ -156,43 +156,43 @@ struct z80_state_struct
  * Register accessors:
  */
 
-#define Z80_A	(z80_state.af.byte.high)
-#define Z80_F	(z80_state.af.byte.low)
-#define Z80_B	(z80_state.bc.byte.high)
-#define Z80_C	(z80_state.bc.byte.low)
-#define Z80_D	(z80_state.de.byte.high)
-#define Z80_E	(z80_state.de.byte.low)
-#define Z80_H	(z80_state.hl.byte.high)
-#define Z80_L	(z80_state.hl.byte.low)
-#define Z80_IX_HIGH	(z80_state.ix.byte.high)
-#define Z80_IX_LOW	(z80_state.ix.byte.low)
-#define Z80_IY_HIGH	(z80_state.iy.byte.high)
-#define Z80_IY_LOW	(z80_state.iy.byte.low)
+#define Z80_A			(z80_state.af.byte.high)
+#define Z80_F			(z80_state.af.byte.low)
+#define Z80_B			(z80_state.bc.byte.high)
+#define Z80_C			(z80_state.bc.byte.low)
+#define Z80_D			(z80_state.de.byte.high)
+#define Z80_E			(z80_state.de.byte.low)
+#define Z80_H			(z80_state.hl.byte.high)
+#define Z80_L			(z80_state.hl.byte.low)
+#define Z80_IX_HIGH		(z80_state.ix.byte.high)
+#define Z80_IX_LOW		(z80_state.ix.byte.low)
+#define Z80_IY_HIGH		(z80_state.iy.byte.high)
+#define Z80_IY_LOW		(z80_state.iy.byte.low)
 
-#define Z80_SP	(z80_state.sp.word)
-#define Z80_PC	(z80_state.pc.word)
+#define Z80_SP			(z80_state.sp.word)
+#define Z80_PC			(z80_state.pc.word)
 
-#define Z80_AF	(z80_state.af.word)
-#define Z80_BC	(z80_state.bc.word)
-#define Z80_DE	(z80_state.de.word)
-#define Z80_HL	(z80_state.hl.word)
+#define Z80_AF			(z80_state.af.word)
+#define Z80_BC			(z80_state.bc.word)
+#define Z80_DE			(z80_state.de.word)
+#define Z80_HL			(z80_state.hl.word)
 
-#define Z80_AF_PRIME	(z80_state.af_prime.word)
-#define Z80_BC_PRIME	(z80_state.bc_prime.word)
-#define Z80_DE_PRIME	(z80_state.de_prime.word)
-#define Z80_HL_PRIME	(z80_state.hl_prime.word)
+#define Z80_AF_PRIME		(z80_state.af_prime.word)
+#define Z80_BC_PRIME		(z80_state.bc_prime.word)
+#define Z80_DE_PRIME		(z80_state.de_prime.word)
+#define Z80_HL_PRIME		(z80_state.hl_prime.word)
 
-#define Z80_IX	(z80_state.ix.word)
-#define Z80_IY	(z80_state.iy.word)
+#define Z80_IX			(z80_state.ix.word)
+#define Z80_IY			(z80_state.iy.word)
 
-#define Z80_I	(z80_state.i)
-#define Z80_R	(z80_state.r)
-#define Z80_R7	(z80_state.r7)
+#define Z80_I			(z80_state.i)
+#define Z80_R			(z80_state.r)
+#define Z80_R7			(z80_state.r7)
 
-#define HIGH(p) (((struct twobyte *)(p))->high)
-#define LOW(p) (((struct twobyte *)(p))->low)
+#define HIGH(p)			(((struct twobyte *)(p))->high)
+#define LOW(p)			(((struct twobyte *)(p))->low)
 
-#define T_COUNT(n) (z80_state.t_count += (n))
+#define T_COUNT(n)		(z80_state.t_count += (n))
 
 /*
  * Flag accessors:
@@ -256,7 +256,7 @@ extern void mem_write(int address, int value);
 extern void mem_write_rom(int address, int value);
 extern int mem_read_word(int address);
 extern void mem_write_word(int address, int value);
-Uchar *mem_pointer(int address, int writing);
+extern Uchar *mem_pointer(int address, int writing);
 extern int load_hex(FILE *file); /* returns highest address loaded + 1 */
 extern void z80_out(int port, int value);
 extern int z80_in(int port);
