@@ -41,7 +41,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <SDL.h>
 #include "error.h"
 #include "load_cmd.h"
@@ -167,7 +166,6 @@ void trs_rom_init(void)
 int SDLmain(int argc, char *argv[])
 {
   int debug = FALSE;
-  struct stat st;
   wordregister x;
 
   /* program_name must be set first because the error
@@ -204,20 +202,6 @@ int SDLmain(int argc, char *argv[])
   trs_parse_command_line(argc, argv, &debug);
   trs_set_keypad_joystick();
   trs_open_joystick();
-
-  if (stat(trs_disk_dir, &st) < 0)
-    strcpy(trs_disk_dir, ".");
-  if (stat(trs_hard_dir, &st) < 0)
-    strcpy(trs_hard_dir, ".");
-  if (stat(trs_cass_dir, &st) < 0)
-    strcpy(trs_cass_dir, ".");
-  if (stat(trs_state_dir, &st) < 0)
-    strcpy(trs_state_dir, ".");
-  if (stat(trs_disk_set_dir, &st) < 0)
-    strcpy(trs_disk_set_dir, ".");
-  if (stat(trs_printer_dir, &st) < 0)
-    strcpy(trs_printer_dir, ".");
-
   screen_init();
   trs_screen_init();
   trs_reset(1);

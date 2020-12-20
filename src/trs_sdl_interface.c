@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <SDL.h>
 #include "blit.h"
@@ -230,6 +231,7 @@ static void trs_opt_clock(char *arg, int intarg, int *stringarg);
 static void trs_opt_color(char *arg, int intarg, int *color);
 static void trs_opt_disk(char *arg, int intarg, int *stringarg);
 static void trs_opt_diskset(char *arg, int intarg, int *stringarg);
+static void trs_opt_dirname(char *arg, int intarg, int *stringarg);
 static void trs_opt_doubler(char *arg, int intarg, int *stringarg);
 #ifdef __linux
 static void trs_opt_doublestep(char *arg, int intarg, int *stringarg);
@@ -267,7 +269,7 @@ static const trs_opt options[] = {
   { "borderwidth",     trs_opt_borderwidth,   1, 0, NULL                 },
   { "bw",              trs_opt_borderwidth,   1, 0, NULL                 },
   { "cass",            trs_opt_cass,          1, 0, NULL                 },
-  { "cassdir",         trs_opt_string,        1, 0, trs_cass_dir         },
+  { "cassdir",         trs_opt_dirname,       1, 0, trs_cass_dir         },
   { "cassette",        trs_opt_cass,          1, 0, NULL                 },
   { "charset1",        trs_opt_charset,       1, 1, NULL                 },
   { "charset3",        trs_opt_charset,       1, 3, NULL                 },
@@ -286,9 +288,9 @@ static const trs_opt options[] = {
   { "disk5",           trs_opt_disk,          1, 5, NULL                 },
   { "disk6",           trs_opt_disk,          1, 6, NULL                 },
   { "disk7",           trs_opt_disk,          1, 7, NULL                 },
-  { "diskdir",         trs_opt_string,        1, 0, trs_disk_dir         },
+  { "diskdir",         trs_opt_dirname,       1, 0, trs_disk_dir         },
   { "diskset",         trs_opt_diskset,       1, 0, NULL                 },
-  { "disksetdir",      trs_opt_string,        1, 0, trs_disk_set_dir     },
+  { "disksetdir",      trs_opt_dirname,       1, 0, trs_disk_set_dir     },
   { "doubler",         trs_opt_doubler,       1, 0, NULL                 },
 #ifdef __linux
   { "doublestep",      trs_opt_doublestep,    0, 2, NULL                 },
@@ -306,7 +308,7 @@ static const trs_opt options[] = {
   { "hard1",           trs_opt_hard,          1, 1, NULL                 },
   { "hard2",           trs_opt_hard,          1, 2, NULL                 },
   { "hard3",           trs_opt_hard,          1, 3, NULL                 },
-  { "harddir",         trs_opt_string,        1, 0, trs_hard_dir         },
+  { "harddir",         trs_opt_dirname,       1, 0, trs_hard_dir         },
   { "hideled",         trs_opt_value,         0, 0, &trs_show_led        },
   { "huffman",         trs_opt_huffman,       0, 1, NULL                 },
   { "hypermem",        trs_opt_hypermem,      0, 1, NULL                 },
@@ -358,7 +360,7 @@ static const trs_opt options[] = {
 #endif
   { "printer",         trs_opt_printer,       1, 0, NULL                 },
   { "printercmd",      trs_opt_string,        1, 0, trs_printer_command  },
-  { "printerdir",      trs_opt_string,        1, 0, trs_printer_dir      },
+  { "printerdir",      trs_opt_dirname,       1, 0, trs_printer_dir      },
   { "resize3",         trs_opt_value,         0, 1, &resize3             },
   { "resize4",         trs_opt_value,         0, 1, &resize4             },
   { "rom",             trs_opt_rom,           1, 0, NULL                 },
@@ -376,7 +378,7 @@ static const trs_opt options[] = {
   { "sizemap",         trs_opt_sizemap,       1, 0, NULL                 },
   { "sound",           trs_opt_value,         0, 1, &trs_sound           },
   { "speedup",         trs_opt_speedup,       1, 0, NULL                 },
-  { "statedir",        trs_opt_string,        1, 0, trs_state_dir        },
+  { "statedir",        trs_opt_dirname,       1, 0, trs_state_dir        },
 #ifdef __linux
   { "stepmap",         trs_opt_stepmap,       1, 0, NULL                 },
 #endif
@@ -563,6 +565,18 @@ static void trs_opt_disk(char *arg, int intarg, int *stringarg)
 static void trs_opt_diskset(char *arg, int intarg, int *stringarg)
 {
   trs_diskset_load(arg);
+}
+
+static void trs_opt_dirname(char *arg, int intarg, int *stringarg)
+{
+  struct stat st;
+
+  if (arg[strlen(arg) - 1] == DIR_SLASH)
+    snprintf((char *)stringarg, FILENAME_MAX, "%s", arg);
+  else
+    snprintf((char *)stringarg, FILENAME_MAX - 1, "%s%c", arg, DIR_SLASH);
+  if (stat((char *)stringarg, &st) < 0)
+    strcpy((char *)stringarg, ".");
 }
 
 static void trs_opt_doubler(char *arg, int intarg, int *stringarg)
