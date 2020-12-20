@@ -1221,7 +1221,7 @@ trs_disk_select_write(unsigned char data)
   static int old_data = -1;
 
   if ((trs_disk_debug_flags & DISKDEBUG_FDCREG) && data != old_data) {
-    debug("select_write(0x%02x) pc 0x%04x\n", data, REG_PC);
+    debug("select_write(0x%02x) pc 0x%04x\n", data, Z80_PC);
     old_data = data;
   }
 
@@ -1303,7 +1303,7 @@ unsigned char
 trs_disk_track_read(void)
 {
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("track_read() => 0x%02x pc 0x%04x\n", state.track, REG_PC);
+    debug("track_read() => 0x%02x pc 0x%04x\n", state.track, Z80_PC);
   }
   return state.track;
 }
@@ -1312,7 +1312,7 @@ void
 trs_disk_track_write(unsigned char data)
 {
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("track_write(0x%02x) pc 0x%04x\n", data, REG_PC);
+    debug("track_write(0x%02x) pc 0x%04x\n", data, Z80_PC);
   }
   state.track = data;
 }
@@ -1321,7 +1321,7 @@ unsigned char
 trs_disk_sector_read(void)
 {
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("sector_read() => 0x%02x pc 0x%04x\n", state.sector, REG_PC);
+    debug("sector_read() => 0x%02x pc 0x%04x\n", state.sector, Z80_PC);
   }
   return state.sector;
 }
@@ -1354,7 +1354,7 @@ void
 trs_disk_sector_write(unsigned char data)
 {
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("sector_write(0x%02x) pc 0x%04x\n", data, REG_PC);
+    debug("sector_write(0x%02x) pc 0x%04x\n", data, Z80_PC);
   }
   if (trs_model == 1 && (trs_disk_doubler & TRSDISK_TANDY)) {
     switch (data) {
@@ -1549,7 +1549,7 @@ trs_disk_data_read(void)
     break;
   }
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("data_read() => 0x%02x pc 0x%04x\n", state.data, REG_PC);
+    debug("data_read() => 0x%02x pc 0x%04x\n", state.data, Z80_PC);
   }
   return state.data;
 }
@@ -1564,7 +1564,7 @@ trs_disk_data_write(unsigned char data)
     trs_disk_led(state.curdrive, 1);
 
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("data_write(0x%02x) pc 0x%04x\n", data, REG_PC);
+    debug("data_write(0x%02x) pc 0x%04x\n", data, Z80_PC);
   }
   switch (state.currcommand & TRSDISK_CMDMASK) {
   case TRSDISK_WRITE:
@@ -2149,7 +2149,7 @@ trs_disk_status_read(void)
   }
   if ((trs_disk_debug_flags & DISKDEBUG_FDCREG) &&
       state.status != last_status) {
-    debug("status_read() => 0x%02x pc 0x%04x\n", state.status, REG_PC);
+    debug("status_read() => 0x%02x pc 0x%04x\n", state.status, Z80_PC);
     last_status = state.status;
   }
 
@@ -2186,7 +2186,7 @@ trs_disk_command_write(unsigned char cmd)
     trs_disk_led(state.curdrive, 1);
 
   if (trs_disk_debug_flags & DISKDEBUG_FDCREG) {
-    debug("command_write(0x%02x) pc 0x%04x\n", cmd, REG_PC);
+    debug("command_write(0x%02x) pc 0x%04x\n", cmd, Z80_PC);
   }
 
   /* Handle DMK partial track reformat */

@@ -310,23 +310,23 @@ void debug_print_registers(void)
     printf("Flags: %d %d %d %d %d  %d %d %d     %d    %d   %d\n\n",
 	   (SIGN_FLAG != 0),
 	   (ZERO_FLAG != 0),
-	   (REG_F & UNDOC5_MASK) != 0,
+	   (Z80_F & UNDOC5_MASK) != 0,
 	   (HALF_CARRY_FLAG != 0),
-	   (REG_F & UNDOC3_MASK) != 0,
+	   (Z80_F & UNDOC3_MASK) != 0,
 	   (OVERFLOW_FLAG != 0),
 	   (SUBTRACT_FLAG != 0),
 	   (CARRY_FLAG != 0),
 	   z80_state.iff1, z80_state.iff2, z80_state.interrupt_mode);
 
     printf("A F: %.2x %.2x    IX: %.4x    AF': %.4x\n",
-	   REG_A, REG_F, REG_IX, REG_AF_PRIME);
+	   Z80_A, Z80_F, Z80_IX, Z80_AF_PRIME);
     printf("B C: %.2x %.2x    IY: %.4x    BC': %.4x\n",
-	   REG_B, REG_C, REG_IY, REG_BC_PRIME);
+	   Z80_B, Z80_C, Z80_IY, Z80_BC_PRIME);
     printf("D E: %.2x %.2x    PC: %.4x    DE': %.4x\n",
-	   REG_D, REG_E, REG_PC, REG_DE_PRIME);
+	   Z80_D, Z80_E, Z80_PC, Z80_DE_PRIME);
     printf("H L: %.2x %.2x    SP: %.4x    HL': %.4x\n",
-	   REG_H, REG_L, REG_SP, REG_HL_PRIME);
-    printf("I R: %.2x %.2x\n", REG_I, REG_R7 | (REG_R & 0x7f));
+	   Z80_H, Z80_L, Z80_SP, Z80_HL_PRIME);
+    printf("I R: %.2x %.2x\n", Z80_I, Z80_R7 | (Z80_R & 0x7f));
 
     printf("\nT-state counter: %" TSTATE_T_LEN "", z80_state.t_count);
     printf("\nZ80 Clock Speed: %.2f MHz\n", z80_state.clockMHz);
@@ -403,7 +403,7 @@ static void debug_run(void)
 
     stop_signaled = 0;
 
-    t = traps[REG_PC];
+    t = traps[Z80_PC];
     while(!stop_signaled)
     {
 	if(t)
@@ -411,7 +411,7 @@ static void debug_run(void)
 	    if(t & TRACE_FLAG)
 	    {
 		printf("Trace: ");
-		disassemble(REG_PC);
+		disassemble(Z80_PC);
 	    }
 	    if(t & DISASSEMBLE_ON_FLAG)
 	    {
@@ -423,7 +423,7 @@ static void debug_run(void)
 	    }
 	}
 
-	if(print_instructions) disassemble(REG_PC);
+	if(print_instructions) disassemble(Z80_PC);
 
 	continuous = (!print_instructions && num_traps == 0);
 	if (z80_run(continuous)) {
@@ -431,7 +431,7 @@ static void debug_run(void)
 	  stop_signaled = 1;
 	}
 
-	t = traps[REG_PC];
+	t = traps[Z80_PC];
 	if(t & BREAKPOINT_FLAG)
 	{
 	    stop_signaled = 1;
@@ -439,7 +439,7 @@ static void debug_run(void)
 	if(t & BREAK_ONCE_FLAG)
 	{
 	    stop_signaled = 1;
-	    clear_trap_address(REG_PC, BREAK_ONCE_FLAG);
+	    clear_trap_address(Z80_PC, BREAK_ONCE_FLAG);
 	}
 
 	/*
@@ -478,7 +478,7 @@ static void debug_run(void)
 	}
 
     }
-    printf("Stopped at %.4x\n", REG_PC);
+    printf("Stopped at %.4x\n", Z80_PC);
 }
 
 void debug_shell(void)
@@ -499,7 +499,7 @@ void debug_shell(void)
     while(!done)
     {
 	printf("\n");
-	disassemble(REG_PC);
+	disassemble(Z80_PC);
 
 #ifdef READLINE
 	/*
@@ -542,7 +542,7 @@ void debug_shell(void)
 	    }
 	    else if(!strcmp(command, "clear") || !strcmp(command, "cl"))
 	    {
-		clear_trap_address(REG_PC, 0);
+		clear_trap_address(Z80_PC, 0);
 	    }
 	    else if(!strcmp(command, "cont") || !strcmp(command, "c"))
 	    {
@@ -588,7 +588,7 @@ void debug_shell(void)
 		}
 		else
 		{
-		    start = REG_PC;
+		    start = Z80_PC;
 		    lines = 10;
 		}
 
@@ -620,7 +620,7 @@ void debug_shell(void)
 		    !strcmp(command, "n") || !strcmp(command, "ni"))
 	    {
 		int is_call = 0, is_rst = 0, is_rep = 0;
-		switch(mem_read(REG_PC)) {
+		switch(mem_read(Z80_PC)) {
 		  case 0xCD:	/* call address */
 		    is_call = 1;
 		    break;
@@ -659,7 +659,7 @@ void debug_shell(void)
 		    is_rst = 1;
 		    break;
 		  case 0xED:
-		    switch(mem_read(REG_PC + 1)) {
+		    switch(mem_read(Z80_PC + 1)) {
 		      case 0xB0: /* ldir */
 		      case 0xB8: /* lddr */
 		      case 0xB1: /* cpir */
@@ -677,13 +677,13 @@ void debug_shell(void)
 		    break;
 		}
 		if (is_call) {
-		    set_trap((REG_PC + 3) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
+		    set_trap((Z80_PC + 3) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
 		    debug_run();
 		} else if (is_rst) {
-		    set_trap((REG_PC + 1) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
+		    set_trap((Z80_PC + 1) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
 		    debug_run();
 		} else if (is_rep) {
-		    set_trap((REG_PC + 2) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
+		    set_trap((Z80_PC + 2) % ADDRESS_SPACE, BREAK_ONCE_FLAG);
 		    debug_run();
 		} else {
 		    z80_run((!strcmp(command, "nextint") || !strcmp(command, "ni")) ? 0 : -1);
@@ -722,50 +722,50 @@ void debug_shell(void)
 		if(sscanf(input, "%*s $%[a-zA-Z] = %x", regname, &value) == 2)
 		{
 		    if(!strcasecmp(regname, "a")) {
-			REG_A = value;
+			Z80_A = value;
 		    } else if(!strcasecmp(regname, "f")) {
-			REG_F = value;
+			Z80_F = value;
 		    } else if(!strcasecmp(regname, "b")) {
-			REG_B = value;
+			Z80_B = value;
 		    } else if(!strcasecmp(regname, "c")) {
-			REG_C = value;
+			Z80_C = value;
 		    } else if(!strcasecmp(regname, "d")) {
-			REG_D = value;
+			Z80_D = value;
 		    } else if(!strcasecmp(regname, "e")) {
-			REG_E = value;
+			Z80_E = value;
 		    } else if(!strcasecmp(regname, "h")) {
-			REG_H = value;
+			Z80_H = value;
 		    } else if(!strcasecmp(regname, "l")) {
-			REG_L = value;
+			Z80_L = value;
 		    } else if(!strcasecmp(regname, "sp")) {
-			REG_SP = value;
+			Z80_SP = value;
 		    } else if(!strcasecmp(regname, "pc")) {
-			REG_PC = value;
+			Z80_PC = value;
 		    } else if(!strcasecmp(regname, "af")) {
-			REG_AF = value;
+			Z80_AF = value;
 		    } else if(!strcasecmp(regname, "bc")) {
-			REG_BC = value;
+			Z80_BC = value;
 		    } else if(!strcasecmp(regname, "de")) {
-			REG_DE = value;
+			Z80_DE = value;
 		    } else if(!strcasecmp(regname, "hl")) {
-			REG_HL = value;
+			Z80_HL = value;
 		    } else if(!strcasecmp(regname, "af'")) {
-			REG_AF_PRIME = value;
+			Z80_AF_PRIME = value;
 		    } else if(!strcasecmp(regname, "bc'")) {
-			REG_BC_PRIME = value;
+			Z80_BC_PRIME = value;
 		    } else if(!strcasecmp(regname, "de'")) {
-			REG_DE_PRIME = value;
+			Z80_DE_PRIME = value;
 		    } else if(!strcasecmp(regname, "hl'")) {
-			REG_HL_PRIME = value;
+			Z80_HL_PRIME = value;
 		    } else if(!strcasecmp(regname, "ix")) {
-			REG_IX = value;
+			Z80_IX = value;
 		    } else if(!strcasecmp(regname, "iy")) {
-			REG_IY = value;
+			Z80_IY = value;
 		    } else if(!strcasecmp(regname, "i")) {
-			REG_I = value;
+			Z80_I = value;
 		    } else if(!strcasecmp(regname, "r")) {
-			REG_R = value;
-			REG_R7 = value & 0x80;
+			Z80_R = value;
+			Z80_R7 = value & 0x80;
 		    } else {
 			printf("Unrecognized register name %s.\n", regname);
 		    }
@@ -799,7 +799,7 @@ void debug_shell(void)
 		if(sscanf(input, "stop at %x", &address) != 1 &&
 		   sscanf(input, "%*s %x", &address) != 1)
 		{
-		    address = REG_PC;
+		    address = Z80_PC;
 		}
 		address %= ADDRESS_SPACE;
 		set_trap(address, BREAKPOINT_FLAG);
@@ -810,7 +810,7 @@ void debug_shell(void)
 
 		if(sscanf(input, "%*s %x", &address) != 1)
 		{
-		    address = REG_PC;
+		    address = Z80_PC;
 		}
 		address %= ADDRESS_SPACE;
 		set_trap(address, TRACE_FLAG);

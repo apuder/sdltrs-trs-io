@@ -71,7 +71,7 @@ int trs_load_cmd(const char *filename)
   if (load_cmd(program, memory, NULL, 0, NULL, -1, NULL, &entry, 1) == LOAD_CMD_OK) {
     debug("entry point of %s: 0x%x (%d) ...\n", filename, entry, entry);
     if (entry >= 0)
-      REG_PC = entry;
+      Z80_PC = entry;
   } else {
     error("unknown CMD format");
     fclose(program);

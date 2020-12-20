@@ -78,19 +78,19 @@ void do_emt_system(void)
   int res;
   if (trs_emtsafe) {
     error("emt_system: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
-  res = system((char *)mem_pointer(REG_HL, 0));
+  res = system((char *)mem_pointer(Z80_HL, 0));
   if (res == -1) {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   } else {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   }
-  REG_BC = res;
+  Z80_BC = res;
 }
 
 void do_emt_mouse(void)
@@ -100,45 +100,45 @@ void do_emt_mouse(void)
 
   trs_emu_mouse = TRUE;
 
-  switch (REG_B) {
+  switch (Z80_B) {
   case 1:
     trs_get_mouse_pos(&x, &y, &buttons);
-    REG_HL = x;
-    REG_DE = y;
-    REG_A = buttons;
-    if (REG_A) {
-      REG_F &= ~ZERO_MASK;
+    Z80_HL = x;
+    Z80_DE = y;
+    Z80_A = buttons;
+    if (Z80_A) {
+      Z80_F &= ~ZERO_MASK;
     } else {
-      REG_F |= ZERO_MASK;
+      Z80_F |= ZERO_MASK;
     }
     break;
   case 2:
-    trs_set_mouse_pos(REG_HL, REG_DE);
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    trs_set_mouse_pos(Z80_HL, Z80_DE);
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
     break;
   case 3:
     trs_get_mouse_max(&x, &y, &sens);
-    REG_HL = x;
-    REG_DE = y;
-    REG_A = sens;
-    if (REG_A) {
-      REG_F &= ~ZERO_MASK;
+    Z80_HL = x;
+    Z80_DE = y;
+    Z80_A = sens;
+    if (Z80_A) {
+      Z80_F &= ~ZERO_MASK;
     } else {
-      REG_F |= ZERO_MASK;
+      Z80_F |= ZERO_MASK;
     }
     break;
   case 4:
-    trs_set_mouse_max(REG_HL, REG_DE, REG_C);
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    trs_set_mouse_max(Z80_HL, Z80_DE, Z80_C);
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
     break;
   case 5:
-    REG_A = trs_get_mouse_type();
-    if (REG_A) {
-      REG_F &= ~ZERO_MASK;
+    Z80_A = trs_get_mouse_type();
+    if (Z80_A) {
+      Z80_F &= ~ZERO_MASK;
     } else {
-      REG_F |= ZERO_MASK;
+      Z80_F |= ZERO_MASK;
     }
     break;
   default:
@@ -149,28 +149,28 @@ void do_emt_mouse(void)
 
 void do_emt_getddir(void)
 {
-  if (REG_HL + REG_BC > 0x10000 ||
-      REG_HL + strlen(trs_disk_dir) + 1 > REG_HL + REG_BC) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+  if (Z80_HL + Z80_BC > 0x10000 ||
+      Z80_HL + strlen(trs_disk_dir) + 1 > Z80_HL + Z80_BC) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
-  strcpy((char *)mem_pointer(REG_HL, 1), trs_disk_dir);
-  REG_A = 0;
-  REG_F |= ZERO_MASK;
-  REG_BC = strlen(trs_disk_dir);
+  strcpy((char *)mem_pointer(Z80_HL, 1), trs_disk_dir);
+  Z80_A = 0;
+  Z80_F |= ZERO_MASK;
+  Z80_BC = strlen(trs_disk_dir);
 }
 
 void do_emt_setddir(void)
 {
   if (trs_emtsafe) {
     error("emt_setddir: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
-  strcpy(trs_disk_dir, (char *)mem_pointer(REG_HL, 0));
+  strcpy(trs_disk_dir, (char *)mem_pointer(Z80_HL, 0));
   if (trs_disk_dir[0] == '~' &&
       (trs_disk_dir[1] == DIR_SLASH || trs_disk_dir[1] == '\0')) {
     const char* home = getenv("HOME");
@@ -182,14 +182,14 @@ void do_emt_setddir(void)
       snprintf(trs_disk_dir, FILENAME_MAX, "%s", dirname);
     }
   }
-  REG_A = 0;
-  REG_F |= ZERO_MASK;
+  Z80_A = 0;
+  Z80_F |= ZERO_MASK;
 }
 
 void do_emt_open(void)
 {
   int fd, oflag, eoflag;
-  eoflag = REG_BC;
+  eoflag = Z80_BC;
   switch (eoflag & EO_ACCMODE) {
   case EO_RDONLY:
   default:
@@ -209,29 +209,29 @@ void do_emt_open(void)
 
   if (trs_emtsafe && oflag != O_RDONLY) {
     error("emt_open: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
-  fd = open((char *)mem_pointer(REG_HL, 0), oflag, REG_DE);
+  fd = open((char *)mem_pointer(Z80_HL, 0), oflag, Z80_DE);
   if (fd >= 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
-  REG_DE = fd;
+  Z80_DE = fd;
 }
 
 void do_emt_close(void)
 {
-  if (close(REG_DE) >= 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+  if (close(Z80_DE) >= 0) {
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
 }
 
@@ -240,27 +240,27 @@ void do_emt_read(void)
   int size;
   int i;
 
-  if (REG_HL + REG_BC > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+  if (Z80_HL + Z80_BC > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
   if (trs_show_led) {
     for (i = 0; i < 3; i++) {
-      if (REG_DE == xtrshard_fd[i])
+      if (Z80_DE == xtrshard_fd[i])
         trs_hard_led(i, 1);
     }
   }
-  size = read(REG_DE, mem_pointer(REG_HL, 1), REG_BC);
+  size = read(Z80_DE, mem_pointer(Z80_HL, 1), Z80_BC);
   if (size >= 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
-  REG_BC = size;
+  Z80_BC = size;
 }
 
 
@@ -271,56 +271,56 @@ void do_emt_write(void)
 
   if (trs_emtsafe) {
     error("emt_write: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
- if (REG_HL + REG_BC > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+ if (Z80_HL + Z80_BC > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
   if (trs_show_led) {
     for (i = 0; i < 3; i++) {
-      if (REG_DE == xtrshard_fd[i])
+      if (Z80_DE == xtrshard_fd[i])
         trs_hard_led(i, 1);
     }
   }
-  size = write(REG_DE, mem_pointer(REG_HL, 0), REG_BC);
+  size = write(Z80_DE, mem_pointer(Z80_HL, 0), Z80_BC);
   if (size >= 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
-  REG_BC = size;
+  Z80_BC = size;
 }
 
 void do_emt_lseek(void)
 {
   int i;
   off_t offset;
-  if (REG_HL + 8 > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
+  if (Z80_HL + 8 > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
   offset = 0;
   for (i = 0; i < 8; i++) {
-    offset = offset + (mem_read(REG_HL + i) << i*8);
+    offset = offset + (mem_read(Z80_HL + i) << i*8);
   }
-  offset = lseek(REG_DE, offset, REG_BC);
+  offset = lseek(Z80_DE, offset, Z80_BC);
   if (offset != (off_t) -1) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
-  for (i = REG_HL; i < 8; i++) {
-    mem_write(REG_HL + i, offset & 0xff);
+  for (i = Z80_HL; i < 8; i++) {
+    mem_write(Z80_HL + i, offset & 0xff);
     offset >>= 8;
   }
 }
@@ -329,40 +329,40 @@ void do_emt_strerror(void)
 {
   char *msg;
   int size;
-  if (REG_HL + REG_BC > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+  if (Z80_HL + Z80_BC > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
   errno = 0;
-  msg = strerror(REG_A);
+  msg = strerror(Z80_A);
   size = strlen(msg);
   if (errno != 0) {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
-  } else if (REG_BC < size + 2) {
-    REG_A = ERANGE;
-    REG_F &= ~ZERO_MASK;
-    size = REG_BC - 1;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
+  } else if (Z80_BC < size + 2) {
+    Z80_A = ERANGE;
+    Z80_F &= ~ZERO_MASK;
+    size = Z80_BC - 1;
   } else {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   }
-  memcpy(mem_pointer(REG_HL, 1), msg, size);
-  mem_write(REG_HL + size++, '\r');
-  mem_write(REG_HL + size, '\0');
+  memcpy(mem_pointer(Z80_HL, 1), msg, size);
+  mem_write(Z80_HL + size++, '\r');
+  mem_write(Z80_HL + size, '\0');
   if (errno == 0) {
-    REG_BC = size;
+    Z80_BC = size;
   } else {
-    REG_BC = 0xFFFF;
+    Z80_BC = 0xFFFF;
   }
 }
 
 void do_emt_time(void)
 {
   time_t now = time(0);
-  if (REG_A == 1) {
+  if (Z80_A == 1) {
 #if __alpha
     struct tm *loctm = localtime(&now);
     now += loctm->tm_gmtoff;
@@ -395,11 +395,11 @@ void do_emt_time(void)
       error("trouble computing local time in emt_time");
     }
 #endif
-  } else if (REG_A != 0) {
+  } else if (Z80_A != 0) {
     error("unsupported function code to emt_time");
   }
-  REG_BC = (now >> 16) & 0xffff;
-  REG_DE = now & 0xffff;
+  Z80_BC = (now >> 16) & 0xffff;
+  Z80_DE = now & 0xffff;
 }
 
 void do_emt_opendir(void)
@@ -410,127 +410,127 @@ void do_emt_opendir(void)
     if (dir[i].dir == NULL) break;
    }
   if (i == MAX_OPENDIR) {
-    REG_DE = 0xffff;
-    REG_A = EMFILE;
+    Z80_DE = 0xffff;
+    Z80_A = EMFILE;
     return;
   }
-  dirname = (char *)mem_pointer(REG_HL, 0);
+  dirname = (char *)mem_pointer(Z80_HL, 0);
   dir[i].dir = opendir(dirname);
   if (dir[i].dir == NULL) {
-    REG_DE = 0xffff;
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_DE = 0xffff;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   } else {
     strncpy(dir[i].pathname, dirname, FILENAME_MAX);
-    REG_DE = i;
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_DE = i;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   }
 }
 
 void do_emt_closedir(void)
 {
-  int i = REG_DE;
+  int i = Z80_DE;
   int ok;
   if (i < 0 || i >= MAX_OPENDIR || dir[i].dir == NULL) {
-    REG_A = EBADF;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EBADF;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
   ok = closedir(dir[i].dir);
   dir[i].dir = NULL;
   if (ok >= 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
 }
 
 void do_emt_readdir(void)
 {
-  int size, i = REG_DE;
+  int size, i = Z80_DE;
   struct dirent *result;
 
   if (i < 0 || i >= MAX_OPENDIR || dir[i].dir == NULL) {
-    REG_A = EBADF;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+    Z80_A = EBADF;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
-  if (REG_HL + REG_BC > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+  if (Z80_HL + Z80_BC > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
   result = readdir(dir[i].dir);
   if (result == NULL) {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
   size = strlen(result->d_name);
-  if (size + 1 > REG_BC) {
-    REG_A = ERANGE;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+  if (size + 1 > Z80_BC) {
+    Z80_A = ERANGE;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
-  strcpy((char *)mem_pointer(REG_HL, 1), result->d_name);
-  REG_A = 0;
-  REG_F |= ZERO_MASK;
-  REG_BC = size;
+  strcpy((char *)mem_pointer(Z80_HL, 1), result->d_name);
+  Z80_A = 0;
+  Z80_F |= ZERO_MASK;
+  Z80_BC = size;
 }
 
 void do_emt_chdir(void)
 {
-  int ok = chdir((char *)mem_pointer(REG_HL, 0));
+  int ok = chdir((char *)mem_pointer(Z80_HL, 0));
   if (trs_emtsafe) {
     error("emt_chdir: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
   if (ok < 0) {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   } else {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   }
 }
 
 void do_emt_getcwd(void)
 {
   char *result;
-  if (REG_HL + REG_BC > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+  if (Z80_HL + Z80_BC > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
-  result = getcwd((char *)mem_pointer(REG_HL, 1), REG_BC);
+  result = getcwd((char *)mem_pointer(Z80_HL, 1), Z80_BC);
   if (result == NULL) {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
-    REG_BC = 0xFFFF;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
+    Z80_BC = 0xFFFF;
     return;
   }
-  REG_A = 0;
-  REG_F |= ZERO_MASK;
-  REG_BC = strlen(result);
+  Z80_A = 0;
+  Z80_F |= ZERO_MASK;
+  Z80_BC = strlen(result);
 }
 
 /* fixme - document codes that were removed. */
 void do_emt_misc(void)
 {
-  switch (REG_A) {
+  switch (Z80_A) {
   case 0:
 /* Removed for sdltrs - mdg */
-    REG_HL = 0;
+    Z80_HL = 0;
     break;
   case 1:
     trs_exit(0);
@@ -544,69 +544,69 @@ void do_emt_misc(void)
     trs_reset(0);
     break;
   case 4:
-    REG_HL = 0;
+    Z80_HL = 0;
     break;
   case 5:
-    REG_HL = trs_model;
+    Z80_HL = trs_model;
     break;
   case 6:
-    REG_HL = trs_disk_getsize(REG_BC);
+    Z80_HL = trs_disk_getsize(Z80_BC);
     break;
   case 7:
-    trs_disk_setsize(REG_BC, REG_HL);
+    trs_disk_setsize(Z80_BC, Z80_HL);
     break;
 #ifdef __linux
   case 8:
-    REG_HL = trs_disk_getstep(REG_BC);
+    Z80_HL = trs_disk_getstep(Z80_BC);
     break;
   case 9:
-    trs_disk_setstep(REG_BC, REG_HL);
+    trs_disk_setstep(Z80_BC, Z80_HL);
     break;
 #endif
   case 10:
-    REG_HL = grafyx_get_microlabs();
+    Z80_HL = grafyx_get_microlabs();
     break;
   case 11:
-    grafyx_set_microlabs(REG_HL);
+    grafyx_set_microlabs(Z80_HL);
     break;
   case 12:
 /* Removed for sdltrs - mdg */
-    REG_HL = 0;
-    REG_BC = 0;
+    Z80_HL = 0;
+    Z80_BC = 0;
     break;
   case 13:
 /* Removed for sdltrs - mdg */
     break;
   case 14:
-    REG_HL = stretch_amount;
+    Z80_HL = stretch_amount;
     break;
   case 15:
-    stretch_amount = REG_HL;
+    stretch_amount = Z80_HL;
     break;
   case 16:
-    REG_HL = trs_disk_doubler;
+    Z80_HL = trs_disk_doubler;
     break;
   case 17:
-    trs_disk_doubler = REG_HL;
+    trs_disk_doubler = Z80_HL;
     break;
   case 18:
-    REG_HL = 0;
+    Z80_HL = 0;
 /* Removed for sdltrs - mdg */
     break;
   case 19:
 /* Removed for sdltrs - mdg */
     break;
   case 20:
-    REG_HL = trs_disk_truedam;
+    Z80_HL = trs_disk_truedam;
     break;
   case 21:
-    trs_disk_truedam = REG_HL;
+    trs_disk_truedam = Z80_HL;
     break;
   case 24:
-    REG_HL = lowercase;
+    Z80_HL = lowercase;
     break;
   case 25:
-    lowercase = REG_HL;
+    lowercase = Z80_HL;
     break;
   default:
     error("unsupported function code to emt_misc");
@@ -620,41 +620,41 @@ void do_emt_ftruncate(void)
   off_t offset;
   if (trs_emtsafe) {
     error("emt_ftruncate: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
-  if (REG_HL + 8 > 0x10000) {
-    REG_A = EFAULT;
-    REG_F &= ~ZERO_MASK;
+  if (Z80_HL + 8 > 0x10000) {
+    Z80_A = EFAULT;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
   offset = 0;
   for (i = 0; i < 8; i++) {
-    offset = offset + (mem_read(REG_HL + i) << i*8);
+    offset = offset + (mem_read(Z80_HL + i) << i*8);
   }
 #ifdef _WIN32
-  result = chsize(REG_DE, offset);
+  result = chsize(Z80_DE, offset);
 #else
-  result = ftruncate(REG_DE, offset);
+  result = ftruncate(Z80_DE, offset);
 #endif
   if (result == 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
 }
 
 void do_emt_opendisk(void)
 {
-  char *name = (char *)mem_pointer(REG_HL, 0);
+  char *name = (char *)mem_pointer(Z80_HL, 0);
   char *qname;
   int i;
   int oflag, eoflag;
 
-  eoflag = REG_BC;
+  eoflag = Z80_BC;
   switch (eoflag & EO_ACCMODE) {
   case EO_RDONLY:
   default:
@@ -674,8 +674,8 @@ void do_emt_opendisk(void)
 
   if (trs_emtsafe && oflag != O_RDONLY) {
     error("emt_opendisk: potentially dangerous emulator trap blocked");
-    REG_A = EACCES;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EACCES;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
 
@@ -693,9 +693,9 @@ void do_emt_opendisk(void)
     if (!od[i].inuse) break;
   }
   if (i == MAX_OPENDISK) {
-    REG_DE = 0xffff;
-    REG_A = EMFILE;
-    REG_F &= ~ZERO_MASK;
+    Z80_DE = 0xffff;
+    Z80_A = EMFILE;
+    Z80_F &= ~ZERO_MASK;
     free(qname);
     return;
   }
@@ -710,7 +710,7 @@ void do_emt_opendisk(void)
     int hard_unit = name[strlen(name) -1] - '0';
     if (hard_unit >= 0 && hard_unit <= 3) {
       snprintf(od[i].filename, FILENAME_MAX, "%s", trs_hard_getfilename(hard_unit));
-      od[i].fd = open(od[i].filename, oflag, REG_DE);
+      od[i].fd = open(od[i].filename, oflag, Z80_DE);
       od[i].oflag = oflag;
       if (od[i].fd >= 0)
         od[i].xtrshard = 1;
@@ -720,20 +720,20 @@ void do_emt_opendisk(void)
       od[i].fd = -1;
     }
   } else {
-    od[i].fd = open(qname, oflag, REG_DE);
+    od[i].fd = open(qname, oflag, Z80_DE);
     snprintf(od[i].filename, FILENAME_MAX, "%s", qname);
     od[i].xtrshard = 0;
   }
   free(qname);
   if (od[i].fd >= 0) {
     od[i].inuse = 1;
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
-  REG_DE = od[i].fd;
+  Z80_DE = od[i].fd;
 }
 
 int do_emt_closefd(int odindex)
@@ -751,7 +751,7 @@ int do_emt_closefd(int odindex)
 void do_emt_closedisk(void)
 {
   int i;
-  if (REG_DE == 0xffff) {
+  if (Z80_DE == 0xffff) {
     for (i = 0; i < MAX_OPENDISK; i++) {
       if (od[i].inuse) {
     do_emt_closefd(i);
@@ -760,28 +760,28 @@ void do_emt_closedisk(void)
     od[i].filename[0] = 0;
       }
     }
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
     return;
   }
 
   for (i = 0; i < MAX_OPENDISK; i++) {
-    if (od[i].inuse && od[i].fd == REG_DE) break;
+    if (od[i].inuse && od[i].fd == Z80_DE) break;
   }
   if (i == MAX_OPENDISK) {
-    REG_A = EBADF;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = EBADF;
+    Z80_F &= ~ZERO_MASK;
     return;
   }
   od[i].inuse = 0;
   od[i].xtrshard = 0;
   od[i].filename[0] = 0;
   if (do_emt_closefd(i) >= 0) {
-    REG_A = 0;
-    REG_F |= ZERO_MASK;
+    Z80_A = 0;
+    Z80_F |= ZERO_MASK;
   } else {
-    REG_A = errno;
-    REG_F &= ~ZERO_MASK;
+    Z80_A = errno;
+    Z80_F &= ~ZERO_MASK;
   }
 }
 
