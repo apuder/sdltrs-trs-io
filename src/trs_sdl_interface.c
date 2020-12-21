@@ -943,8 +943,7 @@ int trs_load_config_file(void)
   }
 
   if ((config_file = fopen(trs_config_file, "r")) == NULL) {
-    if (trs_write_config_file(trs_config_file) == -1)
-      error("failed to write %s: %s", trs_config_file, strerror(errno));
+    trs_write_config_file(trs_config_file);
     return -1;
   }
 
@@ -1038,8 +1037,10 @@ int trs_write_config_file(const char *filename)
   FILE *config_file;
   int i;
 
-  if ((config_file = fopen(filename, "w")) == NULL)
+  if ((config_file = fopen(filename, "w")) == NULL) {
+    error("failed to write %s: %s", trs_config_file, strerror(errno));
     return -1;
+  }
 
   fprintf(config_file, "background=0x%x\n", background);
   fprintf(config_file, "borderwidth=%d\n", window_border_width);
