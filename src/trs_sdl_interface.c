@@ -940,11 +940,17 @@ int trs_load_config_file(void)
       snprintf(trs_config_file, FILENAME_MAX, "%s/.sdltrs.t8c", home);
     else
       snprintf(trs_config_file, FILENAME_MAX, "./sdltrs.t8c");
-  }
 
-  if ((config_file = fopen(trs_config_file, "r")) == NULL) {
-    trs_write_config_file(trs_config_file);
-    return -1;
+    if ((config_file = fopen(trs_config_file, "r")) == NULL) {
+      debug("create default configuration file: %s\n", trs_config_file);
+      trs_write_config_file(trs_config_file);
+      return -1;
+    }
+  } else {
+    if ((config_file = fopen(trs_config_file, "r")) == NULL) {
+      error("failed to load %s: %s", trs_config_file, strerror(errno));
+      return -1;
+    }
   }
 
   while (fgets(line, sizeof(line), config_file)) {
@@ -1003,8 +1009,7 @@ void trs_parse_command_line(int argc, char **argv, int *debug)
     }
   }
 
-  if (trs_load_config_file() == -1)
-    error("failed to load %s: %s", trs_config_file, strerror(errno));
+  trs_load_config_file();
 
   for (i = 1; i < argc; i++) {
     int argAvail = ((i + 1) < argc); /* is argument available? */
