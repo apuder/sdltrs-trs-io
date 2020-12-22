@@ -2720,7 +2720,6 @@ void trs_gui_save_bmp(void)
       trs_printer_dir, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".bmp");
     trs_screen_refresh();
-    trs_sdl_flush();
     if (trs_gui_file_overwrite()) {
       if (trs_sdl_savebmp(filename) != 0) {
         error("failed to save Screenshot %s: %s", filename, strerror(errno));
@@ -2868,7 +2867,6 @@ void call_function(int function)
         break;
     }
     trs_screen_refresh();
-    trs_sdl_flush();
   }
   SDL_PauseAudio(0);
 }
