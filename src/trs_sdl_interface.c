@@ -409,16 +409,15 @@ static void grafyx_rescale(int y, int x, char byte);
 
 static void stripWhitespace(char *inputStr)
 {
-  char *start, *end;
+  char *pos = inputStr;
 
-  start = inputStr;
-  while (*start && (*start == ' '|| *start == '\t' || *start == '\r' || *start == '\n'))
-    start++;
-  memmove(inputStr, start, strlen(start) + 1);
-  end = inputStr + strlen(inputStr) - 1;
-  while (*end && (*end == ' ' || *end == '\t' || *end == '\r' || *end == '\n'))
-    end--;
-  *(end + 1) = '\0';
+  while (*pos && (*pos == ' ' || *pos == '\t' || *pos == '\r' || *pos == '\n'))
+    pos++;
+  memmove(inputStr, pos, strlen(pos) + 1);
+  pos = inputStr + strlen(inputStr) - 1;
+  while (*pos && (*pos == ' ' || *pos == '\t' || *pos == '\r' || *pos == '\n'))
+    pos--;
+  *(pos + 1) = '\0';
 }
 
 static const char *charset_name(int charset)
