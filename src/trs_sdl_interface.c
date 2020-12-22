@@ -365,6 +365,7 @@ static const trs_opt options[] = {
   { "resize4",         trs_opt_value,         0, 1, &resize4             },
   { "rom",             trs_opt_rom,           1, 0, NULL                 },
   { "romfile",         trs_opt_string,        1, 0, romfile              },
+  { "romfile1",        trs_opt_string,        1, 0, romfile              },
   { "romfile3",        trs_opt_string,        1, 0, romfile3             },
   { "romfile4p",       trs_opt_string,        1, 0, romfile4p            },
   { "samplerate",      trs_opt_samplerate,    1, 0, NULL                 },
