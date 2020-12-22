@@ -412,11 +412,11 @@ static void stripWhitespace(char *inputStr)
 {
   char *pos = inputStr;
 
-  while (*pos && (*pos == ' ' || *pos == '\t' || *pos == '\r' || *pos == '\n'))
+  while (*pos && isspace(*pos))
     pos++;
   memmove(inputStr, pos, strlen(pos) + 1);
   pos = inputStr + strlen(inputStr) - 1;
-  while (*pos && (*pos == ' ' || *pos == '\t' || *pos == '\r' || *pos == '\n'))
+  while (*pos && isspace(*pos))
     pos--;
   *(pos + 1) = '\0';
 }
