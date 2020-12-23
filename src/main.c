@@ -209,7 +209,6 @@ int SDLmain(int argc, char *argv[])
   if (trs_state_file[0]) {
     trs_state_load(trs_state_file);
     trs_screen_init();
-    trs_screen_refresh();
   }
   if (trs_cmd_file[0])
     trs_load_cmd(trs_cmd_file);
