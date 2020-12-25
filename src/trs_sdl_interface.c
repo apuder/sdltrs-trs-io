@@ -1952,10 +1952,11 @@ void trs_get_event(int wait)
               break;
             case SDLK_PERIOD:
               mousepointer = !mousepointer;
-              SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
 #ifdef SDL2
+              SDL_SetRelativeMouseMode(mousepointer ? SDL_FALSE : SDL_TRUE);
               SDL_SetWindowGrab(window, mousepointer ? SDL_FALSE : SDL_TRUE);
 #else
+              SDL_ShowCursor(mousepointer ? SDL_ENABLE : SDL_DISABLE);
               SDL_WM_GrabInput(mousepointer ? SDL_GRAB_OFF : SDL_GRAB_ON);
 #endif
               break;
