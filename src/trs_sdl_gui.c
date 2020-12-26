@@ -2410,6 +2410,8 @@ int trs_gui_joystick_get_button(void)
           return -1;
         }
         return event.jbutton.button;
+      case SDL_MOUSEBUTTONDOWN:
+        return event.button.button;
     }
   }
 }

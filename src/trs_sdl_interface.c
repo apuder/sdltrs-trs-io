@@ -2218,6 +2218,13 @@ void trs_get_event(int wait)
         break;
 
       case SDL_JOYBUTTONUP:
+      case SDL_MOUSEBUTTONUP:
+        if (event.type == SDL_MOUSEBUTTONUP) {
+          if (mousepointer)
+            break;
+          else
+            event.jbutton.button = event.button.button;
+        }
         if (event.jbutton.button < N_JOYBUTTONS) {
           int key = jbutton_map[event.jbutton.button];
 
@@ -2231,6 +2238,13 @@ void trs_get_event(int wait)
         break;
 
       case SDL_JOYBUTTONDOWN:
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+          if (mousepointer)
+            break;
+          else
+            event.jbutton.button = event.button.button;
+        }
         if (event.jbutton.button < N_JOYBUTTONS) {
           int key = jbutton_map[event.jbutton.button];
 
@@ -2246,24 +2260,39 @@ void trs_get_event(int wait)
           trs_joy_button_down();
         break;
 
-      case SDL_MOUSEBUTTONDOWN:
-        if (!mousepointer)
-          trs_joy_button_down();
-        break;
-
-      case SDL_MOUSEBUTTONUP:
-        if (!mousepointer)
-          trs_joy_button_up();
-        break;
-
       case SDL_MOUSEMOTION:
         if (!mousepointer) {
           SDL_MouseMotionEvent motion = event.motion;
 
-          if (motion.xrel != 0)
-            trs_joy_axis(0, motion.xrel, 1);
-          if (motion.yrel != 0)
-            trs_joy_axis(1, motion.yrel, 2);
+          if (motion.xrel != 0) {
+            if (jaxis_mapped) {
+              if (abs(motion.xrel) > 2) {
+                int key = motion.xrel < 0 ? 0x114 : 0x113;
+                int i;
+
+                for (i = 0; i < abs(motion.xrel); i++)
+                  trs_xlate_keysym(key);
+              }
+            } else
+              trs_joy_axis(0, motion.xrel, 1);
+          } else
+            if (jaxis_mapped)
+              trs_xlate_keysym(0x10000);
+
+          if (motion.yrel != 0) {
+            if (jaxis_mapped) {
+              if (abs(motion.yrel) > 2) {
+                int key = motion.yrel < 0 ? 0x111 : 0x112;
+                int i;
+
+                for (i = 0; i < abs(motion.yrel); i++)
+                  trs_xlate_keysym(key);
+              }
+            } else
+              trs_joy_axis(1, motion.yrel, 2);
+          } else
+            if (jaxis_mapped)
+              trs_xlate_keysym(0x10000);
         }
         break;
 
