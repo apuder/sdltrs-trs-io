@@ -30,26 +30,27 @@
 #ifdef _WIN32
 #undef  INTERFACE
 #endif
-#define GUI          1
-#define KEYBRD       2
-#define SAVE         3
-#define LOAD         4
-#define RESET        5
-#define EXIT         6
-#define PAUSE        7
-#define JOYGUI       8
-#define DISK         9
-#define HARD         10
-#define STRINGY      11
-#define TAPE         12
-#define READ         13
-#define WRITE        14
-#define EMULATOR     15
-#define INTERFACE    16
-#define OTHER        17
-#define KEYS         18
-#define EXEC         19
-#define SAVE_BMP     20
+
+#define GUI          (-10)
+#define KEYBRD       (-11)
+#define SAVE         (-12)
+#define LOAD         (-13)
+#define RESET        (-14)
+#define EXIT         (-15)
+#define PAUSE        (-16)
+#define JOYGUI       (-17)
+#define DISK         (-18)
+#define HARD         (-19)
+#define STRINGY      (-20)
+#define TAPE         (-21)
+#define READ         (-22)
+#define WRITE        (-23)
+#define EMULATOR     (-24)
+#define INTERFACE    (-25)
+#define OTHER        (-26)
+#define KEYS         (-27)
+#define EXEC         (-28)
+#define SAVE_BMP     (-29)
 
 #define N_JOYBUTTONS 20
 
