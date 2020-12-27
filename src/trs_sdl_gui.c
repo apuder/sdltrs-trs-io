@@ -1134,7 +1134,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
 
   trs_gui_frame(x - 1, y - 1, x + width, y + rows);
   trs_gui_clear_rect(x, y, width, rows);
-  trs_gui_write_text(title, x + 1, y - 1, 0);
+  trs_gui_center_text(title, y - 1, 0);
   for (i = 0; i < rows; i++)
     for (j = 0; j < cols; j++)
       trs_gui_write_text(entry[i * cols + j], x + j * entry_len, y + i, 0);
