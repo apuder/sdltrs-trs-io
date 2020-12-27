@@ -2376,8 +2376,8 @@ int trs_gui_joystick_get_button(void)
 {
   SDL_Event event;
 
-  trs_gui_frame(20, 1, 43, 3);
-  trs_gui_write_text("Press Joystick Button", 21, 2, 0);
+  trs_gui_frame(25, 7, 38, 9);
+  trs_gui_write_text("Press Button", 26, 8, 0);
   trs_gui_refresh();
 
   while (1) {
@@ -2450,7 +2450,7 @@ void trs_gui_joystick_settings(void)
   MENU_ENTRY display_menu[] =
   {{"Use Keypad for Joystick                                     ", MENU_NORMAL_TYPE},
    {"USB Joystick/Gamepad                                        ", MENU_NORMAL_TYPE},
-   {"Map Analog Stick to Arrow Keys                              ", MENU_NORMAL_TYPE},
+   {"Map Joystick/Mouse to Arrow Keys                            ", MENU_NORMAL_TYPE},
    {"Map Button to Key", MENU_NORMAL_TYPE},
    {"Map Button to Function", MENU_NORMAL_TYPE},
    {"Unmap Button", MENU_NORMAL_TYPE},
@@ -2505,22 +2505,17 @@ void trs_gui_joystick_settings(void)
         gui_joystick_num = joy_index - 1;
         break;
       case 2:
-        jaxis_mapped = trs_gui_display_popup("Stick", yes_no_choices, 2, jaxis_mapped);
+        jaxis_mapped = trs_gui_display_popup("Arrow", yes_no_choices, 2, jaxis_mapped);
         break;
       case 3:
-        trs_gui_frame(20, 1, 43, 3);
-        trs_gui_write_text("     Select Key      ", 21, 2, 0);
-        trs_gui_refresh();
         if ((key = trs_gui_virtual_keyboard()) != -1) {
           if ((button = trs_gui_joystick_get_button()) != -1)
             jbutton_map[button] = key;
         }
         break;
       case 4:
-        trs_gui_frame(20, 1, 43, 3);
-        trs_gui_write_text("   Select Function   ", 21, 2, 0);
-        trs_gui_refresh();
-        if ((key = trs_gui_display_popup_matrix("", function_choices, 4, 2, 0)) != -1) {
+        if ((key = trs_gui_display_popup_matrix("Select Function", function_choices,
+            4, 2, 0)) != -1) {
           if ((button = trs_gui_joystick_get_button()) != -1)
             jbutton_map[button] = function_codes[key];
         }
