@@ -1570,7 +1570,7 @@ void trs_exit(int confirm)
     if (!trs_gui_exit_sdltrs() && buffer) {
       SDL_BlitSurface(buffer, NULL, screen, NULL);
       SDL_FreeSurface(buffer);
-      trs_gui_refresh();
+      trs_screen_update();
       recursion = 0;
       return;
     }
@@ -2816,6 +2816,15 @@ void trs_screen_write_char(unsigned int position, unsigned char char_index)
     hrg_update_char(position);
 }
 
+void trs_screen_update(void)
+{
+#ifdef SDL2
+  SDL_UpdateWindowSurface(window);
+#else
+  SDL_UpdateRect(screen, 0, 0, 0, 0);
+#endif
+}
+
 void trs_gui_clear_rect(int x, int y, int w, int h)
 {
   SDL_Rect rect;
@@ -2840,15 +2849,6 @@ void trs_gui_clear_rect(int x, int y, int w, int h)
       (gui_background >> 16) & 0xFF,
       (gui_background >> 8) & 0xFF,
       (gui_background & 0xFF)));
-#endif
-}
-
-void trs_gui_refresh(void)
-{
-#ifdef SDL2
-  SDL_UpdateWindowSurface(window);
-#else
-  SDL_UpdateRect(screen, 0, 0, 0, 0);
 #endif
 }
 

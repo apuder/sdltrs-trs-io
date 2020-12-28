@@ -272,7 +272,7 @@ int trs_gui_get_key(void)
         break;
 #ifdef SDL2
       case SDL_WINDOWEVENT:
-        trs_gui_refresh();
+        trs_screen_update();
         break;
 #endif
       case SDL_MOUSEBUTTONDOWN:
@@ -392,7 +392,7 @@ void trs_gui_display_message(const char* title, const char *message)
   trs_gui_write_text(title, 3, 6, 0);
   trs_gui_write_text(message, 5, 7, 0);
   trs_gui_write_text(" Press ENTER to continue ", 36, 8, 1);
-  trs_gui_refresh();
+  trs_screen_update();
 
   while (1) {
     switch (trs_gui_get_key()) {
@@ -628,7 +628,7 @@ read_directory:
       redraw = 0;
     }
     trs_gui_write_text(filenamelist[current_first + selection], 2, selection + 2, 1);
-    trs_gui_refresh();
+    trs_screen_update();
     key = trs_gui_get_key();
     trs_gui_write_text(filenamelist[current_first + selection], 2, selection + 2, 0);
     if (key >= '0' && key <= 'z') {
@@ -808,7 +808,7 @@ redraw:
           (cur_pos == pos));
     }
     trs_gui_write_text((insert ? " INS " : " OVR "), 56, 8, 1);
-    trs_gui_refresh();
+    trs_screen_update();
     key = trs_gui_get_key();
     switch (key) {
       case SDLK_LEFT:
@@ -917,7 +917,7 @@ int trs_gui_display_menu(const char *title, MENU_ENTRY *entry, int selection)
 
   while (1) {
     trs_gui_write_text(entry[selection].title, 2, selection + 2, 1);
-    trs_gui_refresh();
+    trs_screen_update();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection].title, 2, selection + 2, 0);
     if (key >= '0' && key <= '9') {
@@ -1058,7 +1058,7 @@ int trs_gui_display_popup(const char *title, const char **entry,
 
   while (1) {
     trs_gui_write_text(entry[selection], x, selection + y, 1);
-    trs_gui_refresh();
+    trs_screen_update();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection], x, selection + y, 0);
     if (entry_count == 2) {
@@ -1142,7 +1142,7 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
   while (1) {
     selection = row * cols + col;
     trs_gui_write_text(entry[selection], x + col * entry_len, y + row, 1);
-    trs_gui_refresh();
+    trs_screen_update();
     key = trs_gui_get_key();
     trs_gui_write_text(entry[selection], x + col * entry_len, y + row, 0);
     switch (key) {
@@ -2378,7 +2378,7 @@ int trs_gui_joystick_get_button(void)
 
   trs_gui_frame(25, 7, 38, 9);
   trs_gui_write_text("Press Button", 26, 8, 0);
-  trs_gui_refresh();
+  trs_screen_update();
 
   while (1) {
     SDL_WaitEvent(&event);
@@ -2533,7 +2533,7 @@ void trs_gui_joystick_settings(void)
       case 7:
         if ((button = trs_gui_joystick_get_button()) != -1) {
           trs_gui_joystick_display_map(button);
-          trs_gui_refresh();
+          trs_screen_update();
           SDL_Delay(1000);
         }
         break;
@@ -2655,7 +2655,7 @@ void trs_gui_about_sdltrs(void)
   trs_gui_center_text("Based on xtrs 4.9d by Tim Mann", 11, 0);
   trs_gui_center_text("xtrs 1.0 Copyright (C) 1992 Clarendon Hill Software", 12, 0);
   trs_gui_center_text(" Press Any Key To Return ", 15, 1);
-  trs_gui_refresh();
+  trs_screen_update();
   trs_gui_get_key();
 }
 
@@ -2685,7 +2685,7 @@ void trs_gui_keys_sdltrs(void)
   trs_gui_write_text("End: TRS-80 Shifted Down Arrow  Alt-0...7: Insert Disk Drive", 2, 13, 0);
   trs_gui_write_text("Control: TRS-80 4/4P Ctrl Key   Shift-Alt-0...7: Remove Disk", 2, 14, 0);
   trs_gui_center_text(" Press Any Key To Return ", 15, 1);
-  trs_gui_refresh();
+  trs_screen_update();
   trs_gui_get_key();
 }
 
@@ -2694,7 +2694,7 @@ void trs_gui_display_pause(void)
   trs_gui_frame(1, 6, 62, 8);
   trs_gui_clear_rect(2, 7, 60, 1);
   trs_gui_center_text("Emulation Paused", 7, 0);
-  trs_gui_refresh();
+  trs_screen_update();
 }
 
 void trs_gui_exec_cmd(void)
