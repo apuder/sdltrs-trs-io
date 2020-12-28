@@ -1779,12 +1779,7 @@ void trs_get_event(int wait)
             trs_sdl_cleanup();
             fatal("failed to get window surface: %s", SDL_GetError());
           }
-          trs_screen_refresh();
-          if (copyStatus == COPY_DEFINED) {
-            copyStatus = COPY_CLEAR;
-            ProcessCopySelection(0);
-            copyStatus = COPY_DEFINED;
-          }
+          SDL_UpdateWindowSurface(window);
 #else
       case SDL_ACTIVEEVENT:
         if (event.active.state & SDL_APPACTIVE) {
