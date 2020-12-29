@@ -76,10 +76,10 @@ static const char *yes_no_choices[2] = {
 };
 
 static const char *function_choices[8] = {
-  "      GUI       ", "Virtual Keyboard",
-  "   Save State   ", "   Load State   ",
-  "     Reset      ", "      Quit      ",
-  "     Pause      ", "  Joystick GUI  "
+  "  GUI Menu  ", "  Keyboard  ",
+  " Save State ", " Load State ",
+  "   Reset    ", "    Quit    ",
+  "   Pause    ", "Joystick GUI"
 };
 
 static int const function_codes[8] = {
