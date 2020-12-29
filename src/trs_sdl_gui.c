@@ -2405,13 +2405,15 @@ int trs_gui_joystick_get_button(void)
           return -1;
         break;
       case SDL_JOYBUTTONDOWN:
-        if (event.jbutton.button >= N_JOYBUTTONS) {
-          trs_gui_display_message("Error", "Unsupported Joystick Button");
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.type == SDL_MOUSEBUTTONDOWN)
+          event.jbutton.button = event.button.button;
+        if (event.jbutton.button < N_JOYBUTTONS)
+          return event.jbutton.button;
+        else {
+          trs_gui_display_message("Error", "Unsupported Button");
           return -1;
         }
-        return event.jbutton.button;
-      case SDL_MOUSEBUTTONDOWN:
-        return event.button.button;
     }
   }
 }
