@@ -59,7 +59,7 @@ void error(const char *fmt, ...)
 {
   va_list args;
 
-  fprintf(stderr, "%s error: ", program_name);
+  fprintf(stderr, "%s ERROR: ", program_name);
   va_start(args, fmt);
   vfprintf(stderr, fmt, args);
   va_end(args);
@@ -71,7 +71,7 @@ void fatal(const char *fmt, ...)
 {
   va_list args;
 
-  fprintf(stderr, "%s fatal error: ", program_name);
+  fprintf(stderr, "%s FATAL ERROR: ", program_name);
   va_start(args, fmt);
   vfprintf(stderr, fmt, args);
   va_end(args);

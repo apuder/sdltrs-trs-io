@@ -1279,7 +1279,7 @@ void trs_gui_disk_creation(void)
             else
               ret = trs_create_blank_dmk(filename, num_sides, density, eight, ignore_density);
             if (ret)
-              trs_gui_display_message("Error", strerror(errno));
+              trs_gui_display_message("ERROR", strerror(errno));
             else if (drive_insert)
               trs_disk_insert(drive_insert - 1, filename);
             return;
@@ -1386,7 +1386,7 @@ void trs_gui_diskset_load(void)
 {
   if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, "Disk Set") >= 0) {
     if (trs_diskset_load(filename) == -1)
-      trs_gui_display_message("Error", strerror(errno));
+      trs_gui_display_message("ERROR", strerror(errno));
   }
 }
 
@@ -1398,7 +1398,7 @@ void trs_gui_diskset_save(void)
     trs_add_extension(filename, ".set");
     if (trs_gui_file_overwrite()) {
       if (trs_diskset_save(filename) == -1)
-        trs_gui_display_message("Error", strerror(errno));
+        trs_gui_display_message("ERROR", strerror(errno));
     }
   }
 }
@@ -1517,7 +1517,7 @@ void trs_gui_hard_management(void)
               trs_gui_display_message("Warning",
                   "Cylinder Count > 203 is incompatible with XTRSHARD/DCT");
           } else
-            trs_gui_display_message("Error",
+            trs_gui_display_message("ERROR",
                 "Cylinder Count must be between 3 and 256");
         }
         break;
@@ -1535,7 +1535,7 @@ void trs_gui_hard_management(void)
                     "Sector is incompatible with Matthew Reed's emulators");
             }
           } else
-            trs_gui_display_message("Error",
+            trs_gui_display_message("ERROR",
                 "Sector Count must be between 4 and 256");
         }
         break;
@@ -1546,7 +1546,7 @@ void trs_gui_hard_management(void)
           if (value >= 1 && value <= 8)
             granularity = value;
           else
-            trs_gui_display_message("Error", "Granularity must be between 1 and 8");
+            trs_gui_display_message("ERROR", "Granularity must be between 1 and 8");
         }
         break;
       case 10:
@@ -1556,7 +1556,7 @@ void trs_gui_hard_management(void)
           if (value >= 1 && value < cylinder_count)
             dir_sector = value;
           else
-            trs_gui_display_message("Error",
+            trs_gui_display_message("ERROR",
                 "Directory Sector must be between 1 and Cylinder Count - 1");
         }
         break;
@@ -1565,15 +1565,15 @@ void trs_gui_hard_management(void)
         break;
       case 12:
         if (sector_count < granularity) {
-          trs_gui_display_message("Error", "Sector Count must be >= Granularity");
+          trs_gui_display_message("ERROR", "Sector Count must be >= Granularity");
           break;
         }
         if ((sector_count % granularity) != 0) {
-          trs_gui_display_message("Error", "Sector Count must be multiple of Granularity");
+          trs_gui_display_message("ERROR", "Sector Count must be multiple of Granularity");
           break;
         }
         if ((sector_count / granularity) > 32) {
-          trs_gui_display_message("Error", "Sector Count / Granularity must be <= 32");
+          trs_gui_display_message("ERROR", "Sector Count / Granularity must be <= 32");
           break;
         }
         filename[0] = 0;
@@ -1582,7 +1582,7 @@ void trs_gui_hard_management(void)
           if (trs_gui_file_overwrite()) {
             if (trs_create_blank_hard(filename, cylinder_count, sector_count,
                 granularity, dir_sector))
-              trs_gui_display_message("Error", strerror(errno));
+              trs_gui_display_message("ERROR", strerror(errno));
             else if (drive_insert)
               trs_hard_attach(drive_insert - 1, filename);
             return;
@@ -1648,7 +1648,7 @@ void trs_gui_stringy_management(void)
             trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
           if (trs_gui_file_overwrite()) {
             if (stringy_create(filename))
-              trs_gui_display_message("Error", strerror(errno));
+              trs_gui_display_message("ERROR", strerror(errno));
             else
               if (wafer_insert)
                 stringy_insert(wafer_insert - 1, filename);
@@ -1747,7 +1747,7 @@ void trs_gui_cassette_management(void)
               fclose(cassette_file);
             }
             if (ret) {
-              trs_gui_display_message("Error", strerror(errno));
+              trs_gui_display_message("ERROR", strerror(errno));
               error("failed to create Cassette Image %s: %s", filename, strerror(errno));
             } else {
               if (drive_insert)
@@ -2176,7 +2176,7 @@ void trs_gui_save_state(void)
     trs_add_extension(filename, ".t8s");
     if (trs_gui_file_overwrite()) {
       if (trs_state_save(filename) == -1)
-        trs_gui_display_message("Error", strerror(errno));
+        trs_gui_display_message("ERROR", strerror(errno));
       else
         snprintf(trs_state_file, FILENAME_MAX, "%s", filename);
     }
@@ -2191,7 +2191,7 @@ int trs_gui_load_state(void)
       trs_screen_init();
       return 0;
     } else
-      trs_gui_display_message("Error", strerror(errno));
+      trs_gui_display_message("ERROR", strerror(errno));
   }
   return -1;
 }
@@ -2205,7 +2205,7 @@ void trs_gui_write_config(void)
     trs_add_extension(filename, ".t8c");
     if (trs_gui_file_overwrite()) {
       if (trs_write_config_file(filename) == -1)
-        trs_gui_display_message("Error",  strerror(errno));
+        trs_gui_display_message("ERROR",  strerror(errno));
       else
         snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
     }
@@ -2220,7 +2220,7 @@ int trs_gui_read_config(void)
       trs_gui_new_machine();
       return 0;
     }
-    trs_gui_display_message("Error", strerror(errno));
+    trs_gui_display_message("ERROR", strerror(errno));
   }
   return -1;
 }
@@ -2411,7 +2411,7 @@ int trs_gui_joystick_get_button(void)
         if (event.jbutton.button < N_JOYBUTTONS)
           return event.jbutton.button;
         else {
-          trs_gui_display_message("Error", "Unsupported Button");
+          trs_gui_display_message("ERROR", "Unsupported Button");
           return -1;
         }
     }
@@ -2703,7 +2703,7 @@ void trs_gui_exec_cmd(void)
 {
   if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
     if (trs_load_cmd(trs_cmd_file) == -1)
-      trs_gui_display_message("Error", "Failed to load CMD file");
+      trs_gui_display_message("ERROR", "Failed to load CMD file");
   }
 }
 
@@ -2721,7 +2721,7 @@ void trs_gui_save_bmp(void)
     trs_screen_refresh();
     if (trs_gui_file_overwrite()) {
       if (trs_sdl_savebmp(filename) != 0) {
-        trs_gui_display_message("Error", strerror(errno));
+        trs_gui_display_message("ERROR", strerror(errno));
         error("failed to save Screenshot %s: %s", filename, strerror(errno));
       }
     }
