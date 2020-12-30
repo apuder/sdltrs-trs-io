@@ -1279,7 +1279,7 @@ void trs_gui_disk_creation(void)
             else
               ret = trs_create_blank_dmk(filename, num_sides, density, eight, ignore_density);
             if (ret)
-              trs_gui_display_message("Error", "Error creating Disk Image");
+              trs_gui_display_message("Error", strerror(errno));
             else if (drive_insert)
               trs_disk_insert(drive_insert - 1, filename);
             return;
@@ -1386,7 +1386,7 @@ void trs_gui_diskset_load(void)
 {
   if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, "Disk Set") >= 0) {
     if (trs_diskset_load(filename) == -1)
-      trs_gui_display_message("Error", "Failed to load Disk Set");
+      trs_gui_display_message("Error", strerror(errno));
   }
 }
 
@@ -1398,7 +1398,7 @@ void trs_gui_diskset_save(void)
     trs_add_extension(filename, ".set");
     if (trs_gui_file_overwrite()) {
       if (trs_diskset_save(filename) == -1)
-        trs_gui_display_message("Error", "Failed to save Disk Set");
+        trs_gui_display_message("Error", strerror(errno));
     }
   }
 }
@@ -1582,7 +1582,7 @@ void trs_gui_hard_management(void)
           if (trs_gui_file_overwrite()) {
             if (trs_create_blank_hard(filename, cylinder_count, sector_count,
                 granularity, dir_sector))
-              trs_gui_display_message("Error", "Error creating Hard Disk Image");
+              trs_gui_display_message("Error", strerror(errno));
             else if (drive_insert)
               trs_hard_attach(drive_insert - 1, filename);
             return;
@@ -1648,7 +1648,7 @@ void trs_gui_stringy_management(void)
             trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
           if (trs_gui_file_overwrite()) {
             if (stringy_create(filename))
-              trs_gui_display_message("Error", "Error creating Stringy Wafer Image");
+              trs_gui_display_message("Error", strerror(errno));
             else
               if (wafer_insert)
                 stringy_insert(wafer_insert - 1, filename);
@@ -1747,7 +1747,7 @@ void trs_gui_cassette_management(void)
               fclose(cassette_file);
             }
             if (ret) {
-              trs_gui_display_message("Error", "Error creating Cassette Image");
+              trs_gui_display_message("Error", strerror(errno));
               error("failed to create Cassette Image %s: %s", filename, strerror(errno));
             } else {
               if (drive_insert)
@@ -2176,7 +2176,7 @@ void trs_gui_save_state(void)
     trs_add_extension(filename, ".t8s");
     if (trs_gui_file_overwrite()) {
       if (trs_state_save(filename) == -1)
-        trs_gui_display_message("Error", "Failed to save State");
+        trs_gui_display_message("Error", strerror(errno));
       else
         snprintf(trs_state_file, FILENAME_MAX, "%s", filename);
     }
@@ -2191,7 +2191,7 @@ int trs_gui_load_state(void)
       trs_screen_init();
       return 0;
     } else
-      trs_gui_display_message("Error", "Failed to load State");
+      trs_gui_display_message("Error", strerror(errno));
   }
   return -1;
 }
@@ -2205,7 +2205,7 @@ void trs_gui_write_config(void)
     trs_add_extension(filename, ".t8c");
     if (trs_gui_file_overwrite()) {
       if (trs_write_config_file(filename) == -1)
-        trs_gui_display_message("Error", "Failed to write Configuration");
+        trs_gui_display_message("Error",  strerror(errno));
       else
         snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
     }
@@ -2220,7 +2220,7 @@ int trs_gui_read_config(void)
       trs_gui_new_machine();
       return 0;
     }
-    trs_gui_display_message("Error", "Failed to read Configuration");
+    trs_gui_display_message("Error", strerror(errno));
   }
   return -1;
 }
@@ -2721,8 +2721,8 @@ void trs_gui_save_bmp(void)
     trs_screen_refresh();
     if (trs_gui_file_overwrite()) {
       if (trs_sdl_savebmp(filename) != 0) {
+        trs_gui_display_message("Error", strerror(errno));
         error("failed to save Screenshot %s: %s", filename, strerror(errno));
-        trs_gui_display_message("Error", "Failed to save Screenshot");
       }
     }
   }
