@@ -1043,7 +1043,7 @@ int trs_write_config_file(const char *filename)
   int i;
 
   if ((config_file = fopen(filename, "w")) == NULL) {
-    error("failed to write %s: %s", trs_config_file, strerror(errno));
+    error("failed to write %s: %s", filename, strerror(errno));
     return -1;
   }
 
