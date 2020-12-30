@@ -973,7 +973,7 @@ int trs_load_config_file(void)
       }
     }
     if (i == num_options)
-      error("unrecognized option %s", line);
+      error("unrecognized option: %s", line);
   }
 
   fclose(config_file);
