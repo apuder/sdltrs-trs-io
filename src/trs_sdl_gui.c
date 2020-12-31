@@ -131,6 +131,7 @@ static void trs_gui_clear_screen(void);
 static void trs_gui_limit_string(const char *orig, char *limited, unsigned int limit);
 static void trs_add_extension(char *name, const char *ext);
 static int  trs_gui_get_key(void);
+static void trs_gui_display_error(const char *name);
 static void trs_gui_display_message(const char *title, const char *message);
 static void trs_gui_create_filename_list(void);
 static void trs_gui_add_to_filename_list(char *name);
@@ -383,6 +384,14 @@ int trs_gui_get_key(void)
         break;
     }
   }
+}
+
+void trs_gui_display_error(const char *name)
+{
+  char text[60];
+
+  snprintf(text, 60, "%s: %s", strerror(errno), name);
+  trs_gui_display_message("ERROR", text);
 }
 
 void trs_gui_display_message(const char* title, const char *message)
@@ -1279,7 +1288,7 @@ void trs_gui_disk_creation(void)
             else
               ret = trs_create_blank_dmk(filename, num_sides, density, eight, ignore_density);
             if (ret)
-              trs_gui_display_message("ERROR", strerror(errno));
+              trs_gui_display_error(filename);
             else if (drive_insert)
               trs_disk_insert(drive_insert - 1, filename);
             return;
@@ -1386,7 +1395,7 @@ void trs_gui_diskset_load(void)
 {
   if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, "Disk Set") >= 0) {
     if (trs_diskset_load(filename) == -1)
-      trs_gui_display_message("ERROR", strerror(errno));
+      trs_gui_display_error(filename);
   }
 }
 
@@ -1398,7 +1407,7 @@ void trs_gui_diskset_save(void)
     trs_add_extension(filename, ".set");
     if (trs_gui_file_overwrite()) {
       if (trs_diskset_save(filename) == -1)
-        trs_gui_display_message("ERROR", strerror(errno));
+        trs_gui_display_error(filename);
     }
   }
 }
@@ -1582,7 +1591,7 @@ void trs_gui_hard_management(void)
           if (trs_gui_file_overwrite()) {
             if (trs_create_blank_hard(filename, cylinder_count, sector_count,
                 granularity, dir_sector))
-              trs_gui_display_message("ERROR", strerror(errno));
+              trs_gui_display_error(filename);
             else if (drive_insert)
               trs_hard_attach(drive_insert - 1, filename);
             return;
@@ -1648,7 +1657,7 @@ void trs_gui_stringy_management(void)
             trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
           if (trs_gui_file_overwrite()) {
             if (stringy_create(filename))
-              trs_gui_display_message("ERROR", strerror(errno));
+              trs_gui_display_error(filename);
             else
               if (wafer_insert)
                 stringy_insert(wafer_insert - 1, filename);
@@ -1747,7 +1756,7 @@ void trs_gui_cassette_management(void)
               fclose(cassette_file);
             }
             if (ret) {
-              trs_gui_display_message("ERROR", strerror(errno));
+              trs_gui_display_error(filename);
               error("failed to create Cassette Image %s: %s", filename, strerror(errno));
             } else {
               if (drive_insert)
@@ -2178,7 +2187,7 @@ void trs_gui_save_state(void)
       if (trs_state_save(filename) == 0)
         snprintf(trs_state_file, FILENAME_MAX, "%s", filename);
       else
-        trs_gui_display_message("ERROR", strerror(errno));
+        trs_gui_display_error(filename);
     }
   }
 }
@@ -2191,7 +2200,7 @@ int trs_gui_load_state(void)
       trs_screen_init();
       return 0;
     } else
-      trs_gui_display_message("ERROR", strerror(errno));
+      trs_gui_display_error(filename);
   }
   return -1;
 }
@@ -2207,7 +2216,7 @@ void trs_gui_write_config(void)
       if (trs_write_config_file(filename) == 0)
         snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
       else
-        trs_gui_display_message("ERROR",  strerror(errno));
+        trs_gui_display_error(filename);
     }
   }
 }
@@ -2220,7 +2229,7 @@ int trs_gui_read_config(void)
       trs_gui_new_machine();
       return 0;
     }
-    trs_gui_display_message("ERROR", strerror(errno));
+    trs_gui_display_error(trs_config_file);
   }
   return -1;
 }
@@ -2721,7 +2730,7 @@ void trs_gui_save_bmp(void)
     trs_screen_refresh();
     if (trs_gui_file_overwrite()) {
       if (trs_sdl_savebmp(filename) != 0) {
-        trs_gui_display_message("ERROR", strerror(errno));
+        trs_gui_display_error(filename);
         error("failed to save Screenshot %s: %s", filename, strerror(errno));
       }
     }
