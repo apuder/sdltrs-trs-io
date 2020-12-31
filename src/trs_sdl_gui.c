@@ -431,6 +431,7 @@ void trs_gui_add_to_filename_list(char *name)
 
     if ((filenamelist_new = realloc(filenamelist, 2 *
         filenamelistsize * sizeof(char*))) == NULL) {
+      free(filenamelist);
       trs_sdl_cleanup();
       fatal("failed to reallocate filenamelist");
     }
