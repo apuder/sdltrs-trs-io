@@ -1745,24 +1745,18 @@ void trs_gui_cassette_management(void)
               break;
           }
           if (trs_gui_file_overwrite()) {
-            FILE *cassette_file;
-            int ret = 0;
+            FILE *cassette_file = fopen(filename, "wb");
 
-            if ((cassette_file = fopen(filename, "wb")) == NULL)
-              ret = -1;
-            else {
-              if (image_type == 2)
-                ret = create_wav_header(cassette_file);
+            if (cassette_file) {
+              if (image_type == 2) {
+                 if (create_wav_header(cassette_file) < 0)
+                   trs_gui_display_message("ERROR", "Failed to create WAVE header");
+              }
               fclose(cassette_file);
-            }
-            if (ret) {
-              trs_gui_display_error(filename);
-              error("failed to create Cassette Image %s: %s", filename, strerror(errno));
-            } else {
               if (drive_insert)
                 trs_cassette_insert(filename);
-            }
-            return;
+            } else
+              trs_gui_display_error(filename);
           }
         }
         break;
