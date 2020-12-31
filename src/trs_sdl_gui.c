@@ -2729,10 +2729,8 @@ void trs_gui_save_bmp(void)
     trs_add_extension(filename, ".bmp");
     trs_screen_refresh();
     if (trs_gui_file_overwrite()) {
-      if (trs_sdl_savebmp(filename) != 0) {
+      if (trs_sdl_savebmp(filename) != 0)
         trs_gui_display_error(filename);
-        error("failed to save Screenshot %s: %s", filename, strerror(errno));
-      }
     }
   }
 }
