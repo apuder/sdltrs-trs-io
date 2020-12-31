@@ -390,7 +390,7 @@ void trs_gui_display_message(const char* title, const char *message)
   trs_gui_frame(1, 6, 62, 8);
   trs_gui_clear_rect(2, 7, 60, 1);
   trs_gui_write_text(title, 3, 6, 0);
-  trs_gui_write_text(message, 5, 7, 0);
+  trs_gui_write_text(message, 3, 7, 0);
   trs_gui_write_text(" Press ENTER to continue ", 36, 8, 1);
   trs_screen_update();
 
