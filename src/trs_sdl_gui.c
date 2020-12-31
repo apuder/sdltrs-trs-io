@@ -2175,10 +2175,10 @@ void trs_gui_save_state(void)
       FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8s");
     if (trs_gui_file_overwrite()) {
-      if (trs_state_save(filename) == -1)
-        trs_gui_display_message("ERROR", strerror(errno));
-      else
+      if (trs_state_save(filename) == 0)
         snprintf(trs_state_file, FILENAME_MAX, "%s", filename);
+      else
+        trs_gui_display_message("ERROR", strerror(errno));
     }
   }
 }
@@ -2204,10 +2204,10 @@ void trs_gui_write_config(void)
       FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".t8c");
     if (trs_gui_file_overwrite()) {
-      if (trs_write_config_file(filename) == -1)
-        trs_gui_display_message("ERROR",  strerror(errno));
-      else
+      if (trs_write_config_file(filename) == 0)
         snprintf(trs_config_file, FILENAME_MAX, "%s", filename);
+      else
+        trs_gui_display_message("ERROR",  strerror(errno));
     }
   }
 }
