@@ -77,7 +77,7 @@ void fatal(const char *fmt, ...)
   va_end(args);
   fputc('\n', stderr);
   fflush(stderr);
-  exit(1);
+  exit(EXIT_FAILURE);
 }
 
 void warn(const char *fmt, ...)
