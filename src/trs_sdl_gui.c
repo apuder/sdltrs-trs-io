@@ -390,8 +390,8 @@ void trs_gui_display_error(const char *name)
 {
   char text[60];
 
-  snprintf(text, 60, "%s: %s", strerror(errno), name);
-  trs_gui_display_message("ERROR", text);
+  if (snprintf(text, 60, "%s: %s", strerror(errno), name))
+    trs_gui_display_message("ERROR", text);
 }
 
 void trs_gui_display_message(const char* title, const char *message)
