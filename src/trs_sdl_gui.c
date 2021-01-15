@@ -1150,6 +1150,14 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
       trs_gui_write_text(entry[i * cols + j], x + j * entry_len, y + i, 0);
 
   while (1) {
+    if (col < 0)
+      col = cols - 1;
+    if (col > cols - 1)
+      col = 0;
+    if (row < 0)
+      row = rows - 1;
+    if (row > rows - 1)
+       row = 0;
     selection = row * cols + col;
     trs_gui_write_text(entry[selection], x + col * entry_len, y + row, 1);
     trs_screen_update();
@@ -1159,22 +1167,22 @@ int trs_gui_display_popup_matrix(const char* title, const char **entry,
       case SDLK_DOWN:
         row++;
         if (row > rows - 1)
-          row = 0;
+          col++;
         break;
       case SDLK_UP:
         row--;
         if (row < 0)
-          row = rows - 1;
+          col--;
         break;
       case SDLK_RIGHT:
         col++;
         if (col > cols - 1)
-          col = 0;
+          row++;
         break;
       case SDLK_LEFT:
         col--;
         if (col < 0)
-          col = cols - 1;
+          row--;
         break;
       case SDLK_HOME:
         col = 0;
