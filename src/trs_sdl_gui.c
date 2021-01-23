@@ -1258,7 +1258,6 @@ void trs_gui_disk_creation(void)
   static int ignore_density = 0;
   static int drive_insert = 0;
   int selection = 6;
-  int ret;
 
   while (1) {
     snprintf(&disk_creation_menu[0].title[54], 7, "%s", image_type_choices[image_type]);
@@ -1294,6 +1293,8 @@ void trs_gui_disk_creation(void)
         if (trs_gui_input_string("Enter Filename for Disk Image, TAB selects directory",
             trs_disk_dir, filename, FILENAME_MAX, 1) == 0) {
           if (trs_gui_file_overwrite()) {
+            int ret = 0;
+
             if (image_type == 0)
               ret = trs_create_blank_jv1(filename);
             else if (image_type == 1)
