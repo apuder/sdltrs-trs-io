@@ -610,7 +610,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
 
 read_directory:
   trs_gui_delete_filename_list();
-  if (trs_gui_readdirectory(current_dir, mask, browse_dir) == -1)
+  if (trs_gui_readdirectory(current_dir, mask, browse_dir) != 0)
     return -1;
 
   trs_gui_limit_string(current_dir, title, 58);
@@ -1403,7 +1403,7 @@ void trs_gui_disk_options(void)
 void trs_gui_diskset_load(void)
 {
   if (trs_gui_file_browse(trs_disk_set_dir, filename, ".set", 0, "Disk Set") >= 0) {
-    if (trs_diskset_load(filename) == -1)
+    if (trs_diskset_load(filename) != 0)
       trs_gui_display_error(filename);
   }
 }
@@ -1415,7 +1415,7 @@ void trs_gui_diskset_save(void)
       trs_disk_set_dir, filename, FILENAME_MAX - 5, 1) == 0) {
     trs_add_extension(filename, ".set");
     if (trs_gui_file_overwrite()) {
-      if (trs_diskset_save(filename) == -1)
+      if (trs_diskset_save(filename) != 0)
         trs_gui_display_error(filename);
     }
   }
@@ -1599,7 +1599,7 @@ void trs_gui_hard_management(void)
             trs_hard_dir, filename, 191, 1) == 0) {
           if (trs_gui_file_overwrite()) {
             if (trs_create_blank_hard(filename, cylinder_count, sector_count,
-                granularity, dir_sector))
+                granularity, dir_sector) != 0)
               trs_gui_display_error(filename);
             else if (drive_insert)
               trs_hard_attach(drive_insert - 1, filename);
@@ -1665,7 +1665,7 @@ void trs_gui_stringy_management(void)
         if (trs_gui_input_string("Enter Filename for Wafer Image, TAB selects directory",
             trs_cass_dir, filename, FILENAME_MAX, 1) == 0) {
           if (trs_gui_file_overwrite()) {
-            if (stringy_create(filename))
+            if (stringy_create(filename) != 0)
               trs_gui_display_error(filename);
             else
               if (wafer_insert)
@@ -2714,7 +2714,7 @@ void trs_gui_display_pause(void)
 void trs_gui_exec_cmd(void)
 {
   if (trs_gui_file_browse(trs_cmd_file, trs_cmd_file, ".cmd", 0, "CMD (.cmd)") >= 0) {
-    if (trs_load_cmd(trs_cmd_file) == -1)
+    if (trs_load_cmd(trs_cmd_file) != 0)
       trs_gui_display_message("ERROR", "Failed to load CMD file");
   }
 }
