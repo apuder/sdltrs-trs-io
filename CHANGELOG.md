@@ -1,3 +1,10 @@
+## Version 1.2.15 Release 01-24-2021:
+
+  * Added joystick emulation with mouse.
+  * Fixed directory selection in GUI.
+  * Fixed joystick function mapping.
+  * Fixed some bugs and other improvements.
+
 ## Version 1.2.14 Release 11-29-2020:
 
   * Added brightness control for Scanlines.
