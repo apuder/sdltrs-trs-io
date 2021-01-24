@@ -2669,9 +2669,10 @@ void trs_gui_about_sdltrs(void)
   trs_gui_center_text("Version 1.2.14", 4, 0);
   trs_gui_center_text("Copyright (C) 2006-2011 Mark Grebe", 5, 0);
   trs_gui_center_text("<http://sdltrs.sourceforge.net>", 6, 0);
-  trs_gui_center_text("Patches (2018-2020) by Alan Cox and Jens Guenther", 8, 0);
-  trs_gui_center_text("<http://gitlab.com/jengun/sdltrs>", 9, 0);
-  trs_gui_center_text("Based on xtrs 4.9d by Tim Mann", 11, 0);
+  trs_gui_center_text("Patches (2018-2020) by Alan Cox and Jens Guenther", 7, 0);
+  trs_gui_center_text("<http://gitlab.com/jengun/sdltrs>", 8, 0);
+  trs_gui_center_text("Based on xtrs 4.9d by Tim Mann", 10, 0);
+  trs_gui_center_text("<http://www.tim-mann.org/xtrs>", 11, 0);
   trs_gui_center_text("xtrs 1.0 Copyright (C) 1992 Clarendon Hill Software", 12, 0);
   trs_gui_center_text(" Press Any Key To Return ", 15, 1);
   trs_screen_update();
