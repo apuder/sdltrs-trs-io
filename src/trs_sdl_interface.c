@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006-2011, Mark Grebe
- * Copyright (C) 2018-2020, Jens Guenther
+ * Copyright (C) 2018-2021, Jens Guenther
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
