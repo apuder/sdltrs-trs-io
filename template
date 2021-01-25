@@ -1,6 +1,6 @@
 # Template file for 'sdltrs'
 pkgname=sdltrs
-version=1.2.14
+version=1.2.15
 revision=1
 build_style=gnu-configure
 configure_args="--enable-readline --enable-zbx"
@@ -12,7 +12,7 @@ maintainer="Jens Guenther <dbotw@gmx.net>"
 license="BSD-2-Clause"
 homepage="https://gitlab.com/jengun/sdltrs"
 distfiles="${homepage}/-/archive/${version}/${pkgname}-${version}.tar.gz"
-checksum=40562aab7514ca2c39ed66572e403c41ab194fcb46c8d76449bcdb2ac2a77e20
+checksum=dda4371c1d9f951dda6d4e80620065f19721a55f0b2164a76efe8912348f2ff3
 
 pre_configure() {
 	./autogen.sh
