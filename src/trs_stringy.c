@@ -593,7 +593,6 @@ stringy_out(int unit, int value)
 {
   stringy_info_t *s = &stringy_info[unit];
   int old_state, new_state;
-  int res;
 
   if (s->in_port & STRINGY_NO_WAFER) return;
 
@@ -642,6 +641,8 @@ stringy_out(int unit, int value)
       new_state == STRINGY_WRITING) {
     if (s->format == STRINGY_FMT_DEBUG) {
       /* Debug format can't handle overwriting */
+      int res;
+
       fflush(s->file);
       res = ftruncate(fileno(s->file), ftell(s->file));
       assert(res == 0);
