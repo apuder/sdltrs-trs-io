@@ -1828,14 +1828,15 @@ void trs_get_event(int wait)
             if (SDL_GetModState() & KMOD_SHIFT) {
               cpu_panel = !cpu_panel;
               trs_screen_caption();
-            }
-            else
+            } else {
 #ifdef ZBX
-              if (!fullscreen)
-                trs_debug();
+            if (fullscreen)
+              trs_flip_fullscreen();
+            trs_debug();
 #else
              trs_flip_fullscreen();
 #endif
+            }
             continue;
           case SDLK_F10:
             trs_reset(!(SDL_GetModState() & KMOD_SHIFT));
@@ -2029,8 +2030,9 @@ void trs_get_event(int wait)
               break;
             case SDLK_z:
 #ifdef ZBX
-              if (!fullscreen)
-                trs_debug();
+              if (fullscreen)
+                trs_flip_fullscreen();
+              trs_debug();
 #else
               trs_flip_fullscreen();
 #endif
