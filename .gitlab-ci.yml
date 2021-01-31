@@ -1,3 +1,8 @@
+only:
+ changes:
+ - src/*
+ - .gitlab-ci.yml
+
 before_script:
  - apt-get update -qq 1> /dev/null
 
