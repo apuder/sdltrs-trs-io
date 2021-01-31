@@ -201,9 +201,9 @@
  *         Before, BC = unit number, 0-7
  *                 HL = new step, 1 or 2
  *    10 = query graphics type
- *         Before, HL = 0 Radio Shack, 1 Micro Labs
+ *         Before, HL = 0 Radio Shack, 1 Micro-Labs
  *    11 = set graphics type
- *         Before, HL = 0 Radio Shack, 1 Micro Labs
+ *         Before, HL = 0 Radio Shack, 1 Micro-Labs
  *    12 = query delay
  *         After,  HL = delay
  *                 BC = autodelay flag (0 or 1)

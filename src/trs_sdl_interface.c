@@ -174,7 +174,7 @@ static int timer_saved;
 static unsigned int cycles_saved;
 #endif
 
-/* Support for Micro Labs Grafyx Solution and Radio Shack hi-res card */
+/* Support for Micro-Labs Grafyx Solution and Radio Shack hi-res card */
 
 /* True size of graphics memory -- some is offscreen */
 #define G_XSIZE 128
@@ -190,7 +190,7 @@ static unsigned char grafyx_xoffset = 0, grafyx_yoffset = 0;
 
 /* Port 0x83 (grafyx_mode) bits */
 #define G_ENABLE    1
-#define G_UL_NOTEXT 2   /* Micro Labs only */
+#define G_UL_NOTEXT 2   /* Micro-Labs only */
 #define G_RS_WAIT   2   /* Radio Shack only */
 #define G_XDEC      4
 #define G_YDEC      8
