@@ -1,17 +1,20 @@
-only:
- changes:
- - src/*
- - .gitlab-ci.yml
+.job_template: &job_definition
+ only:
+  changes:
+   - src/*
+   - .gitlab-ci.yml
 
 before_script:
  - apt-get update -qq 1> /dev/null
 
 build:
+ <<: *job_definition
  script:
  - apt-get install -y -qq cmake libreadline-dev libsdl2-dev 1> /dev/null
  - mkdir -p build && cd build && cmake .. && cmake --build .
 
 build-32-sdl1:
+ <<: *job_definition
  script:
  - dpkg --add-architecture i386
  - apt-get update -qq 1> /dev/null
@@ -20,6 +23,7 @@ build-32-sdl1:
  - file sdltrs
 
 build-clang:
+ <<: *job_definition
  script:
  - apt-get install -y -qq clang meson libreadline-dev libsdl2-dev 1> /dev/null
  - CC="clang" meson build && cd build && ninja
