@@ -1,6 +1,8 @@
 .job_template: &job_definition
  only:
   changes:
+   - CMakeLists.txt
+   - meson.build
    - src/*
    - .gitlab-ci.yml
 
