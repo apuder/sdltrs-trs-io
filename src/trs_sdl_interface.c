@@ -1839,7 +1839,7 @@ void trs_get_event(int wait)
             }
             continue;
           case SDLK_F10:
-            trs_reset(!(SDL_GetModState() & KMOD_SHIFT));
+            trs_reset(SDL_GetModState() & KMOD_SHIFT);
             continue;
           case SDLK_F11:
             if (SDL_GetModState() & KMOD_SHIFT)
