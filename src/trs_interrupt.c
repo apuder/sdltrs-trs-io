@@ -112,7 +112,7 @@ float clock_mhz_4 = 4.05504;
 
 static int timer_on = 1;
 #ifdef IDEBUG
-long lost_timer_interrupts = 0;
+static long lost_timer_interrupts = 0;
 #endif
 
 /* Note: the independent interrupt latch and mask model is not correct
