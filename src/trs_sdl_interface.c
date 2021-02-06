@@ -1830,11 +1830,11 @@ void trs_get_event(int wait)
               trs_screen_caption();
             } else {
 #ifdef ZBX
-            if (fullscreen)
-              trs_flip_fullscreen();
-            trs_debug();
+              if (fullscreen)
+                trs_flip_fullscreen();
+              trs_debug();
 #else
-             trs_flip_fullscreen();
+              trs_flip_fullscreen();
 #endif
             }
             continue;
