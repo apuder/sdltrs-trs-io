@@ -110,6 +110,7 @@ float clock_mhz_4 = 4.05504;
 #define NEWDOS3_MIN                 0x42cd
 #define NEWDOS3_SEC                 0x42cc
 
+static Uint32 deltatime;
 static int timer_on = 1;
 #ifdef IDEBUG
 static long lost_timer_interrupts = 0;
@@ -331,13 +332,7 @@ trs_timer_event(void)
 void trs_timer_sync_with_host(void)
 {
   Uint32 curtime;
-  Uint32 deltatime;
   static Uint32 lasttime = 0;
-
-  if (timer_overclock)
-    deltatime = 1000 / (timer_overclock_rate * timer_hz);
-  else
-    deltatime = 1000 / timer_hz;
 
   curtime = SDL_GetTicks();
 
@@ -374,7 +369,7 @@ trs_timer_init(void)
       z80_state.clockMHz = clock_mhz_4;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
-  trs_screen_caption();
+  trs_turbo_mode();
 
   trs_timer_event();
 
@@ -450,6 +445,19 @@ trs_timer_speed(int fast)
     z80_state.clockMHz = (fast & 1) ? 5.07 /* 3.4 */ : clock_mhz_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
+  trs_turbo_mode();
+}
+
+void
+trs_turbo_mode(void)
+{
+  if (timer_overclock)
+    deltatime = 1000 / (timer_overclock_rate * timer_hz);
+  else
+    deltatime = 1000 / timer_hz;
+
+  if (trs_show_led)
+    trs_turbo_led();
   trs_screen_caption();
 }
 

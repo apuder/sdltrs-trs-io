@@ -236,7 +236,6 @@ void trs_reset(int poweron)
     do_emt_resetdisk();
     /* Reset devices (Model I SYSRES, Model III/4 RESET) */
     trs_cassette_reset();
-    trs_timer_speed(0);
     trs_disk_init(poweron); /* also inits trs_hard and trs_stringy */
     /* I'm told that the hard disk controller is enabled on powerup */
     /* XXX should trs_hard_init do this, then? */
@@ -289,6 +288,7 @@ void trs_reset(int poweron)
 	  trs_turbo_led();
 	}
     } else {
+	trs_timer_speed(0);
 	/* Signal a nonmaskable interrupt. */
 	trs_reset_button_interrupt(1);
 	trs_schedule_event(trs_reset_button_interrupt, 0, 2000);

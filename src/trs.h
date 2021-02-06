@@ -167,6 +167,7 @@ extern void trs_timer_init(void);
 extern void trs_timer_off(void);
 extern void trs_timer_on(void);
 extern void trs_timer_speed(int flag);
+extern void trs_turbo_mode(void);
 extern void trs_cassette_rise_interrupt(int dummy);
 extern void trs_cassette_fall_interrupt(int dummy);
 extern void trs_cassette_clear_interrupts(void);
