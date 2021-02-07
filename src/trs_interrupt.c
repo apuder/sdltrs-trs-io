@@ -60,7 +60,7 @@ static unsigned char nmi_mask = M3_RESET_BIT;
 #define TIMER_HZ_1 40
 #define TIMER_HZ_3 30
 #define TIMER_HZ_4 60
-int timer_hz;
+int timer_hz = TIMER_HZ_1;
 int timer_overclock = 0;
 int timer_overclock_rate = 5;
 int speedup = 1;
