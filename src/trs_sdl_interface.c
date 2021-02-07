@@ -1749,8 +1749,10 @@ void trs_get_event(int wait)
       case PASTE_KEYUP:
         if (paste_lastkey) {
           paste_state = PASTE_IDLE;
-          if (turbo_paste)
+          if (turbo_paste) {
             timer_overclock = timer_saved;
+            trs_turbo_mode();
+          }
           cycles_per_timer = cycles_saved;
         }
         else
@@ -1889,6 +1891,7 @@ void trs_get_event(int wait)
               if (turbo_paste) {
                 timer_saved = timer_overclock;
                 timer_overclock = 1;
+                trs_turbo_mode();
               }
               cycles_saved = cycles_per_timer;
               cycles_per_timer *= 4;
