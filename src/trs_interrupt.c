@@ -369,7 +369,7 @@ trs_timer_init(void)
       z80_state.clockMHz = clock_mhz_4;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
-  trs_turbo_mode();
+  trs_turbo_mode(-1);
 
   trs_timer_event();
 
@@ -445,12 +445,15 @@ trs_timer_speed(int fast)
     z80_state.clockMHz = (fast & 1) ? 5.07 /* 3.4 */ : clock_mhz_3;
   }
   cycles_per_timer = z80_state.clockMHz * 1000000 / timer_hz;
-  trs_turbo_mode();
+  trs_turbo_mode(-1);
 }
 
 void
-trs_turbo_mode(void)
+trs_turbo_mode(int mode)
 {
+  if (mode != -1)
+    timer_overclock = mode;
+
   if (timer_overclock)
     deltatime = 1000 / (timer_overclock_rate * timer_hz);
   else

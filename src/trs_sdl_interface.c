@@ -1749,10 +1749,8 @@ void trs_get_event(int wait)
       case PASTE_KEYUP:
         if (paste_lastkey) {
           paste_state = PASTE_IDLE;
-          if (turbo_paste) {
-            timer_overclock = timer_saved;
-            trs_turbo_mode();
-          }
+          if (turbo_paste)
+            trs_turbo_mode(timer_saved);
           cycles_per_timer = cycles_saved;
         }
         else
@@ -1853,8 +1851,7 @@ void trs_get_event(int wait)
             if (SDL_GetModState() & KMOD_SHIFT)
               trs_timer_init();
             else {
-              timer_overclock = !timer_overclock;
-              trs_turbo_mode();
+              trs_turbo_mode(!timer_overclock);
             }
             continue;
           case SDLK_PAUSE:
@@ -1890,8 +1887,7 @@ void trs_get_event(int wait)
             case SDLK_INSERT:
               if (turbo_paste) {
                 timer_saved = timer_overclock;
-                timer_overclock = 1;
-                trs_turbo_mode();
+                trs_turbo_mode(1);
               }
               cycles_saved = cycles_per_timer;
               cycles_per_timer *= 4;
@@ -1992,8 +1988,7 @@ void trs_get_event(int wait)
               call_function(GUI);
               break;
             case SDLK_n:
-              timer_overclock = !timer_overclock;
-              trs_turbo_mode();
+              trs_turbo_mode(!timer_overclock);
               break;
             case SDLK_o:
               call_function(OTHER);

@@ -2180,7 +2180,7 @@ void trs_gui_misc_settings(void)
 #endif
       case -1:
         trs_kb_bracket(trs_kb_bracket_state);
-        trs_turbo_mode();
+        trs_turbo_mode(timer_overclock);
         return;
     }
   }
