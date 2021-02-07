@@ -746,7 +746,7 @@ read_directory:
             new_dir = filenamelist[current_first + selection];
             current_dir[0] = new_dir[1];
             current_dir[1] = new_dir[2];
-            current_dir[2] = '\\';
+            current_dir[2] = DIR_SLASH;
             current_dir[3] = 0;
             goto read_directory;
           }
@@ -773,7 +773,7 @@ done:
         if (new_dir[0] == '[') {
           name[0] = new_dir[1];
           name[1] = new_dir[2];
-          name[2] = '\\';
+          name[2] = DIR_SLASH;
           name[3] = 0;
         } else
 #endif
