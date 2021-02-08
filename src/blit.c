@@ -297,12 +297,12 @@ void TrsBlitMap(SDL_Palette *src, SDL_PixelFormat *dst)
 void TrsSoftBlit(SDL_Surface *src, SDL_Rect *srcrect,
                  SDL_Surface *dst, SDL_Rect *dstrect, int xor)
 {
-  int dst_locked;
   Uint8 *srcpix, *dstpix;
   int srcskip, dstskip;
+  int dst_locked = SDL_MUSTLOCK(dst);
 
   /* Lock the destination if it's in hardware */
-  if ((dst_locked = SDL_MUSTLOCK(dst))) {
+  if (dst_locked) {
     if (SDL_LockSurface(dst) < 0)
       return;
   }
