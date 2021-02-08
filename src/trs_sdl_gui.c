@@ -801,7 +801,7 @@ int trs_gui_input_string(const char *title, const char* input, char* output,
   unsigned int len;
   unsigned int first_disp;
 
-  if (input != output && strcmp(input, ".") != 0)
+  if (input != output)
     snprintf(output, limit + 1, "%s", input);
 
   pos = len = strlen(output);
