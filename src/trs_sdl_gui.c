@@ -606,7 +606,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
   }
 
   stat(current_dir, &st);
-  if (current_dir[0] == 0 || strcmp(current_dir, ".") == 0 || S_ISDIR(st.st_mode) == 0) {
+  if (current_dir[0] == 0 || current_dir[1] == DIR_SLASH || S_ISDIR(st.st_mode) == 0) {
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
       current_dir[0] = 0;
   }
