@@ -68,7 +68,7 @@ static int print_instructions;
 static int stop_signaled;
 static unsigned int num_watchpoints = 0;
 
-static char help_message[] =
+static const char help_message[] =
 
 "(zbx) commands:\n\
 \n\
