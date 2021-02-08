@@ -304,7 +304,7 @@ static void clear_trap_address(int address, int flag)
     }
 }
 
-void debug_print_registers(void)
+static void debug_print_registers(void)
 {
     printf("\n       S Z - H - PV N C   IFF1 IFF2 IM\n");
     printf("Flags: %d %d %d %d %d  %d %d %d     %d    %d   %d\n\n",
