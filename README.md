@@ -1,4 +1,4 @@
-Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
+Fork of Mark Grebe's [SDLTRS] with bug fixes and patches:
 
   * Included all patches by [EtchedPixels]: banked memory support, Lowe LE18
   * Fixed various SegFaults: ROM Selection Menu, Scaling in Fullscreen
@@ -16,6 +16,7 @@ Modified version of Mark Grebe's [SDLTRS] with bug fixes and patches:
   * Support for Sprinter II/III speed-up kits
   * Change Z80 CPU default MHz of each TRS-80 Model
   * More accurate emulation of Z80 block instructions
+  * Joystick emulation with Mouse
 
 ## License
 
@@ -43,9 +44,9 @@ Thanks to Tércio Martins a package for Arch Linux is available in the [AUR].
 ## SDL2
 
 The [SDL2] branch contains the SDL2 version with hardware rendering support.
-Although considered as *experimental*, it is recommended for newer operating
-systems (SDL2 binaries and packages above are build on the *master* branch,
-which uses software rendering).
+Although considered as *experimental*, it is recommended for newer systems
+(SDL2 binaries and packages above are build on the *master* branch, which
+uses software rendering).
 
 The SDL2 version is available in [RetroPie] since version 4.6.6 and Valerio
 Lupi's fork of [RetroPie-Setup] ...
