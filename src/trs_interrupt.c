@@ -110,7 +110,7 @@ float clock_mhz_4 = 4.05504;
 #define NEWDOS3_MIN                 0x42cd
 #define NEWDOS3_SEC                 0x42cc
 
-static Uint32 deltatime;
+static Uint32 deltatime = 25;
 static int timer_on = 1;
 #ifdef IDEBUG
 static long lost_timer_interrupts = 0;
