@@ -313,6 +313,7 @@ int trs_gui_get_key(void)
             case SDLK_F4:
 #endif
             case SDLK_q:
+            case SDLK_END:
               trs_exit(1);
               break;
             case SDLK_BACKSPACE:
