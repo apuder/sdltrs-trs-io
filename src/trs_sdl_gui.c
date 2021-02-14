@@ -606,6 +606,7 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
     }
   }
 
+read_directory:
   stat(current_dir, &st);
   if (current_dir[0] == 0 || current_dir[1] == DIR_SLASH || S_ISDIR(st.st_mode) == 0) {
     if (getcwd(current_dir, FILENAME_MAX) == NULL)
@@ -615,7 +616,6 @@ int trs_gui_file_browse(const char *path, char *name, const char *mask,
     snprintf(current_dir + strlen(current_dir), FILENAME_MAX - strlen(current_dir),
         "%c", DIR_SLASH);
 
-read_directory:
   trs_gui_delete_filename_list();
   if (trs_gui_readdirectory(current_dir, mask, browse_dir) != 0)
     return -1;
@@ -729,10 +729,7 @@ read_directory:
 #else
                 current_dir[0] != DIR_SLASH) {
 #endif
-                if (getcwd(current_dir, FILENAME_MAX) == NULL)
                   current_dir[0] = 0;
-                snprintf(current_dir + strlen(current_dir),
-                    FILENAME_MAX - strlen(current_dir), "%c", DIR_SLASH);
               }
             } else {
               snprintf(current_dir + strlen(current_dir),
