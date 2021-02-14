@@ -387,6 +387,20 @@ int trs_gui_get_key(void)
             return key;
         }
         break;
+      case SDL_JOYHATMOTION:
+        switch (event.jhat.value) {
+          case SDL_HAT_UP:
+            return SDLK_UP;
+          case SDL_HAT_DOWN:
+            return SDLK_DOWN;
+          case SDL_HAT_LEFT:
+            return SDLK_LEFT;
+          case SDL_HAT_RIGHT:
+            return SDLK_RIGHT;
+          default:
+            break;
+        }
+        break;
     }
   }
 }
