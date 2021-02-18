@@ -1816,10 +1816,15 @@ void trs_gui_emulator_settings(void)
                                    "  TRS-80 Model 4",
                                    " TRS-80 Model 4P"};
   const char *speed_choices[3] =  {"       None", "   Archbold", "Sprinter II"};
-  float clock_mhz[4] = { clock_mhz_1, clock_mhz_3, clock_mhz_4, clock_mhz_4 };
+  float clock_mhz[4];
   char input[8];
   int selection = 0;
   int model_selection = trs_model == 1 ? 0 : trs_model - 2;
+
+  clock_mhz[0] = clock_mhz_1;
+  clock_mhz[1] = clock_mhz_3;
+  clock_mhz[2] = clock_mhz_4;
+  clock_mhz[3] = clock_mhz_4;
 
   while (1) {
     snprintf(&model_menu[0].title[44], 17, "%s", model_choices[model_selection]);

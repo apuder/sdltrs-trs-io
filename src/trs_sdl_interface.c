@@ -2927,7 +2927,7 @@ static void grafyx_rescale(int y, int x, char byte)
     grafyx[p] = byte;
     grafyx[p + G_XSIZE] = byte;
   } else {
-    char exp[scale];
+    char exp[MAX_SCALE];
     int i, j;
     int p = y * (scale * 2) * (G_XSIZE * scale) + x * scale;
     int const s = (G_XSIZE * scale) - scale;
