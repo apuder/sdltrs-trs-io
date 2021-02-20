@@ -3347,14 +3347,16 @@ hrg_write_data(int data)
       }
     }
     if (n0 != 0) {
-      for (i = 0; i < n0; i++)
+      for (i = 0; i < n0; i++) {
         SDL_FillRect(screen, &rect0[i], background);
-      addToDrawList(&rect0[0]);
+        addToDrawList(&rect0[i]);
+      }
     }
     if (n1 != 0) {
-      for (i = 0; i < n1; i++)
+      for (i = 0; i < n1; i++) {
         SDL_FillRect(screen, &rect1[i], foreground);
-      addToDrawList(&rect1[0]);
+        addToDrawList(&rect1[i]);
+      }
     }
   }
   else {
