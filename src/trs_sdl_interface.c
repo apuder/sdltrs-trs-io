@@ -3584,10 +3584,9 @@ void trs_main_load(FILE *file)
 
 int trs_sdl_savebmp(const char *filename)
 {
-  if (SDL_SaveBMP(screen, filename) == 0)
-    return 0;
-  else {
+  if (SDL_SaveBMP(screen, filename) != 0) {
     error("failed to save Screenshot %s: %s", filename, strerror(errno));
     return -1;
   }
+  return 0;
 }
