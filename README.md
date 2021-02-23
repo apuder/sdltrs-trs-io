@@ -1,9 +1,10 @@
-Fork of Mark Grebe's [SDLTRS] with bug fixes and patches:
+Updated version of Mark Grebe's [SDLTRS]:
 
   * Included all patches by [EtchedPixels]: banked memory support, Lowe LE18
   * Fixed various SegFaults: ROM Selection Menu, Scaling in Fullscreen
   * Reworked the TextGUI: new shortcuts and key bindings, help screen
   * Ctrl-A, Ctrl-C & Ctrl-V can now be used in the Emulator (CP/M & WordStar)
+  * Display scanlines to simulate an old CRT monitor resolution
   * Access to real floppy disks works now on Linux
   * Tried to fix reported bugs to the original version
   * Port to SDL2 (see [BUILDING.md] and [SDL2])
