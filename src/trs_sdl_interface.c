@@ -3081,10 +3081,7 @@ void grafyx_m3_write_mode(int value)
 int grafyx_m3_write_byte(int position, int byte)
 {
   if (grafyx_microlabs && (grafyx_mode & G3_COORD)) {
-    int const x = (position % 64);
-    int const y = (position / 64) * 12 + grafyx_y;
-
-    grafyx_write_byte(x, y, byte);
+    grafyx_write_byte(position % 64, (position / 64) * 12 + grafyx_y, byte);
     return 1;
   } else
     return 0;
@@ -3093,10 +3090,7 @@ int grafyx_m3_write_byte(int position, int byte)
 unsigned char grafyx_m3_read_byte(int position)
 {
   if (grafyx_microlabs && (grafyx_mode & G3_COORD)) {
-    int const x = (position % 64);
-    int const y = (position / 64) * 12 + grafyx_y;
-
-    return grafyx_unscaled[y][x];
+    return grafyx_unscaled[(position / 64) * 12 + grafyx_y][position % 64];
   } else
     return trs_screen[position];
 }
