@@ -1215,16 +1215,18 @@ void trs_screen_init(void)
   int x, y;
   SDL_Color colors[2];
 
-  if (trs_model == 1) {
-    trs_charset = trs_charset1;
-    currentmode = NORMAL;
+  switch (trs_model) {
+    case 1:
+      trs_charset = trs_charset1;
+      currentmode = NORMAL;
+      break;
+    case 3:
+      trs_charset = trs_charset3;
+      currentmode = NORMAL;
+      break;
+    default:
+      trs_charset = trs_charset4;
   }
-  else if (trs_model == 3) {
-    trs_charset = trs_charset3;
-    currentmode = NORMAL;
-  }
-  else
-    trs_charset = trs_charset4;
 
   resize = (trs_model >= 4) ? resize4 : resize3;
 
