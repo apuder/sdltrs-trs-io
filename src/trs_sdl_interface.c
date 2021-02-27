@@ -3429,9 +3429,8 @@ hrg_update_char(int position)
 void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
 {
   int win_x, win_y;
-  Uint8 mask;
+  Uint8 const mask = SDL_GetMouseState(&win_x, &win_y);
 
-  mask = SDL_GetMouseState(&win_x, &win_y);
 #if MOUSEDEBUG
   debug("get_mouse %d %d 0x%x ->", win_x, win_y, mask);
 #endif
@@ -3465,26 +3464,25 @@ void trs_get_mouse_pos(int *x, int *y, unsigned int *buttons)
 
 void trs_set_mouse_pos(int x, int y)
 {
-  int dest_x, dest_y;
-
   if (x == mouse_last_x && y == mouse_last_y) {
     /* Kludge: Ignore warp if it says to move the mouse to where we
        last said it was. In general someone could really want to do that,
        but with MDRAW, gratuitous warps to the last location occur frequently.
     */
     return;
-  }
-  dest_x = left_margin + x * (OrigWidth - 2 * left_margin) / mouse_x_size;
-  dest_y = top_margin  + y * (OrigHeight - 2 * top_margin) / mouse_y_size;
+  } else {
+    int const dest_x = left_margin + x * (OrigWidth - 2 * left_margin) / mouse_x_size;
+    int const dest_y = top_margin  + y * (OrigHeight - 2 * top_margin) / mouse_y_size;
 
 #if MOUSEDEBUG
-  debug("set_mouse %d %d -> %d %d\n", x, y, dest_x, dest_y);
+    debug("set_mouse %d %d -> %d %d\n", x, y, dest_x, dest_y);
 #endif
 #ifdef SDL2
-  SDL_WarpMouseInWindow(window, dest_x, dest_y);
+    SDL_WarpMouseInWindow(window, dest_x, dest_y);
 #else
-  SDL_WarpMouse(dest_x, dest_y);
+    SDL_WarpMouse(dest_x, dest_y);
 #endif
+  }
 }
 
 void trs_get_mouse_max(int *x, int *y, unsigned int *sens)
