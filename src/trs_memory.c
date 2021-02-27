@@ -343,6 +343,8 @@ void mem_write_rom(int address, int value)
 
     if (address <= MAX_ROM_SIZE)
       rom[address] = value;
+    else
+      error("invalid ROM address: 0%x", address);
 }
 
 /* Called by load_hex */
