@@ -2222,7 +2222,7 @@ void trs_get_event(int wait)
             event.jbutton.button = event.button.button;
         }
         if (event.jbutton.button < N_JOYBUTTONS) {
-          int key = jbutton_map[event.jbutton.button];
+          int const key = jbutton_map[event.jbutton.button];
 
           if (key >= 0)
             trs_xlate_keysym(0x10000 | key);
@@ -2242,7 +2242,7 @@ void trs_get_event(int wait)
             event.jbutton.button = event.button.button;
         }
         if (event.jbutton.button < N_JOYBUTTONS) {
-          int key = jbutton_map[event.jbutton.button];
+          int const key = jbutton_map[event.jbutton.button];
 
           if (key >= 0)
             trs_xlate_keysym(key);
@@ -2263,7 +2263,7 @@ void trs_get_event(int wait)
           if (motion.xrel != 0) {
             if (jaxis_mapped) {
               if (abs(motion.xrel) > 2) {
-                int key = motion.xrel < 0 ? 0x114 : 0x113;
+                int const key = motion.xrel < 0 ? 0x114 : 0x113;
                 int i;
 
                 for (i = 0; i < abs(motion.xrel); i++)
@@ -2278,7 +2278,7 @@ void trs_get_event(int wait)
           if (motion.yrel != 0) {
             if (jaxis_mapped) {
               if (abs(motion.yrel) > 2) {
-                int key = motion.yrel < 0 ? 0x111 : 0x112;
+                int const key = motion.yrel < 0 ? 0x111 : 0x112;
                 int i;
 
                 for (i = 0; i < abs(motion.yrel); i++)
