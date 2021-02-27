@@ -3417,8 +3417,12 @@ hrg_update_char(int position)
     }
     prev_byte = byte;
   }
-  for (i = 0; i <n; i++)
-    SDL_FillRect(screen, &rect[i], foreground);
+  if (n != 0) {
+    for (i = 0; i < n; i++) {
+      SDL_FillRect(screen, &rect[i], foreground);
+      addToDrawList(&rect[i]);
+    }
+  }
 }
 
 
