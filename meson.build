@@ -1,5 +1,5 @@
 project('sdltrs', 'c',
-	version: '1.2.15',
+	version: '1.2.16',
 	license: 'BSD',
 	default_options: [ 'buildtype=debugoptimized', 'c_std=gnu89' ],
 	meson_version: '>= 0.36.0'

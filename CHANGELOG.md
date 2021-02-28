@@ -1,3 +1,10 @@
+## Version 1.2.16 Release 02-28-2021:
+
+  * Added joystick hat support in GUI.
+  * Fixed HRG1B graphics page (pointed out by Stefano Bodrato).
+  * Fixed fullscreen toggling for SDL2 Software Renderer.
+  * Fixed bugs and other improvements.
+
 ## Version 1.2.15 Release 01-24-2021:
 
   * Added joystick emulation with mouse.
