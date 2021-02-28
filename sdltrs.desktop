@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=SDLTRS
-Comment=TRS-80 Emulator
+Comment=TRS-80 Model I/III/4/4P Emulator
 Exec=sdltrs %F
 Icon=sdltrs
 Terminal=true
