@@ -319,7 +319,7 @@ trs_nmi_mask_write(unsigned char value)
   if (!z80_state.nmi) z80_state.nmi_seen = 0;
 }
 
-void
+static void
 trs_timer_event(void)
 {
   if (timer_on) {

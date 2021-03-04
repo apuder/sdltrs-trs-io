@@ -301,15 +301,15 @@ static DiskState disk[NDRIVES];
 static const unsigned char jv1_interleave[10] = {0, 5, 1, 6, 2, 7, 3, 8, 4, 9};
 
 /* Forward */
-void real_verify(void);
-void real_restore(int curdrive);
-void real_seek(void);
-void real_read(void);
-void real_write(void);
-void real_readadr(void);
-void real_readtrk(void);
-void real_writetrk(void);
-int real_check_empty(DiskState *d);
+static void real_verify(void);
+static void real_restore(int curdrive);
+static void real_seek(void);
+static void real_read(void);
+static void real_write(void);
+static void real_readadr(void);
+static void real_readtrk(void);
+static void real_writetrk(void);
+static int  real_check_empty(DiskState *d);
 
 /* Entry point for the zbx debugger */
 void
@@ -523,7 +523,7 @@ jv3_id_compare(const void* p1, const void* p2)
 }
 
 /* (Re-)create the sorted_id data structure for the given drive */
-void
+static void
 jv3_sort_ids(int drive)
 {
   DiskState *d = &disk[drive];
@@ -558,7 +558,7 @@ jv3_sort_ids(int drive)
 }
 
 /* JV3 only */
-int
+static int
 id_index_to_size_code(DiskState *d, int id_index)
 {
   return (d->u.jv3.id[id_index].flags & JV3_SIZE) ^
@@ -566,14 +566,14 @@ id_index_to_size_code(DiskState *d, int id_index)
 }
 
 /* IBM formats only */
-int
+static int
 size_code_to_size(int code)
 {
   return 128 << code;
 }
 
 /* JV3 only */
-int
+static int
 id_index_to_size(DiskState *d, int id_index)
 {
   return 128 << id_index_to_size_code(d, id_index);
@@ -624,7 +624,7 @@ idoffset(DiskState *d, int id_index)
   }
 }
 
-int
+static int
 jv3_alloc_sector(DiskState *d, int size_code)
 {
   int maybe = d->u.jv3.free_id[size_code];
@@ -650,7 +650,7 @@ jv3_alloc_sector(DiskState *d, int size_code)
   return d->u.jv3.last_used_id;
 }
 
-void
+static void
 jv3_free_sector(DiskState *d, int id_index)
 {
   int c;
@@ -692,7 +692,7 @@ jv3_free_sector(DiskState *d, int id_index)
 
 /* Heuristic to decide what file format we have */
 /* Also decodes write-protect state */
-void
+static void
 trs_disk_emutype(DiskState *d)
 {
   int c;
@@ -944,7 +944,7 @@ trs_disk_motoroff(void)
 }
 
 /* Get the on-disk track data from the current track/side into the buffer */
-void
+static void
 dmk_get_track(DiskState* d)
 {
   if (d->phytrack == d->u.dmk.curtrack &&
@@ -1129,7 +1129,7 @@ search_adr(void)
 }
 
 
-void
+static void
 verify(void)
 {
   /* Verify that head is on the expected track */
@@ -1151,7 +1151,7 @@ verify(void)
 
 /* Return a value in [0,1) indicating how far we've rotated
  * from the leading edge of the index hole */
-float
+static float
 angle(void)
 {
   DiskState *d = &disk[state.curdrive];

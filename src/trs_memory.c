@@ -500,7 +500,7 @@ int mem_read(int address)
     return 0xff;
 }
 
-void trs80_model1_write_mem(int address, int value)
+static void trs80_model1_write_mem(int address, int value)
 {
   int bank = 0x8000;
   int offset = address;
@@ -533,7 +533,7 @@ void trs80_model1_write_mem(int address, int value)
   memory[offset] = value;
 }
 
-void trs80_model1_write_mmio(int address, int value)
+static void trs80_model1_write_mmio(int address, int value)
 {
   if (address >= VIDEO_START) {
     int vaddr = address + video_offset;
