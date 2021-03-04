@@ -244,7 +244,6 @@ extern unsigned int cycles_per_timer;
 
 extern void z80_reset(void);
 extern int z80_run(int continuous);
-extern void mem_init(void);
 extern int mem_read(int address);
 extern void mem_write(int address, int value);
 extern void mem_write_rom(int address, int value);
