@@ -203,9 +203,10 @@ extern int stringy;
 extern void mem_video_page(int which);
 extern void mem_bank(int which);
 extern void mem_map(int which);
-void mem_bank_base(int bits);
-int mem_read_bank_base(void);
+extern void mem_bank_base(int bits);
+extern int mem_read_bank_base(void);
 extern void mem_romin(int state);
+extern int cp500_a11_flipflop_toggle(void);
 
 extern void trs_debug(void);
 

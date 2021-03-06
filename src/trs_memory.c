@@ -56,6 +56,7 @@
 
 #define MAX_ROM_SIZE	(0x3800)
 #define MAX_VIDEO_SIZE	(0x0800)
+#define CP500_ROM_SIZE	(0x4000)
 
 /* 512K is the largest we support. There were it seems 1MByte
    options at some point which is the full range of the mapping.
@@ -78,6 +79,7 @@
    of the port mods rather than anything normal (512K might be more 'normal' */
 Uchar memory[0x200001]; /* +1 so strings from mem_pointer are NUL-terminated */
 Uchar rom[MAX_ROM_SIZE + 1];
+Uchar cp500_rom[CP500_ROM_SIZE + 1];
 int trs_rom_size;
 int lowercase = 1;
 int romin = 0; /* Model 4p */
@@ -100,6 +102,7 @@ static Uchar *supermem_ram = NULL;
 static int supermem_base;
 static unsigned int supermem_hi;
 static int selector_reg = 0;
+static int m_a11_flipflop;
 
 void mem_video_page(int which)
 {
@@ -205,6 +208,19 @@ int mem_read_bank_base(void)
 	return 0xFF;
 }
 
+int cp500_a11_flipflop_toggle(void)
+{
+	int block;
+
+	/* toggle the flip-flop at every read at io addresses 0xf4-f7 */
+	m_a11_flipflop ^= 1;
+
+	for (block = 0; block < 8; block++)
+		memcpy(&rom[block * 0x800], &cp500_rom[(block | m_a11_flipflop) * 0x800], 0x800);
+
+	return 0x00; /* really?! */
+}
+
 void selector_out(unsigned char value)
 {
 	/* Not all bits are necessarily really present but hey what
@@ -231,6 +247,7 @@ void selector_out(unsigned char value)
 void trs_reset(int poweron)
 {
     trs_emu_mouse = FALSE;
+    m_a11_flipflop = 0;
 
     /* Close disks opened by Z80 programs */
     do_emt_resetdisk();
@@ -335,10 +352,12 @@ void mem_write_rom(int address, int value)
 {
     address &= 0xffff;
 
-    if (address <= MAX_ROM_SIZE)
+    if (address <= MAX_ROM_SIZE) {
       rom[address] = value;
-    else
-      error("invalid ROM address: 0%x", address);
+      trs_rom_size = address;
+    }
+    if (address <= CP500_ROM_SIZE)
+      cp500_rom[address] = value;
 }
 
 /* Called by load_hex */

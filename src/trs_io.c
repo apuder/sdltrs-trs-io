@@ -258,6 +258,9 @@ void z80_out(int port, int value)
       }
       break;
     case 0xE0:
+    case 0xE1:
+    case 0xE2:
+    case 0xE3:
       trs_interrupt_mask_write(value);
       break;
     case TRSDISK3_INTERRUPT: /* 0xE4 */
@@ -513,6 +516,9 @@ int z80_in(int port)
       goto done;
       break;
     case 0xE0:
+    case 0xE1:
+    case 0xE2:
+    case 0xE3:
       value = trs_interrupt_latch_read();
       goto done;
     case 0xEC:
@@ -537,9 +543,20 @@ int z80_in(int port)
     case TRSDISK3_DATA: /* 0xF3 */
       value = trs_disk_data_read();
       goto done;
+    case 0xF4:
+    case 0xF5:
+    case 0xF6:
+    case 0xF7:
+      value = cp500_a11_flipflop_toggle();
+      goto done;
     case 0xF8:
+    case 0xF9:
+    case 0xFA:
+    case 0xFB:
       value = trs_printer_read() | (ctrlimage & 0x0F);
       goto done;
+    case 0xFC:
+    case 0xFD:
     case 0xFF:
       value = (modeimage & 0x7e) | trs_cassette_in();
       goto done;

@@ -84,6 +84,7 @@ int trs_load_cmd(const char *filename)
 static int trs_load_rom(const char *filename)
 {
   FILE *program;
+  int rom_size = 0;
   int c;
 
   if (filename[0] == 0)
@@ -125,9 +126,8 @@ static int trs_load_rom(const char *filename)
       c = getc(program);
     }
   }
-  trs_rom_size = 0;
   while (c != EOF) {
-    mem_write_rom(trs_rom_size++, c);
+    mem_write_rom(rom_size++, c);
     c = getc(program);
   }
   return 0;
