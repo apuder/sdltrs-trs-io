@@ -215,7 +215,7 @@ int cp500_a11_flipflop_toggle(void)
 	/* toggle the flip-flop at every read at io addresses 0xf4-f7 */
 	m_a11_flipflop ^= 1;
 
-	for (block = 0; block < 8; block++)
+	for (block = 0; block < 7; block++)
 		memcpy(&rom[block * 0x800], &cp500_rom[(block | m_a11_flipflop) * 0x800], 0x800);
 
 	return 0x00; /* really?! */
