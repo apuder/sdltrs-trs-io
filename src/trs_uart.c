@@ -222,7 +222,8 @@ trs_uart_reset_out(int value)
 #endif
   if (initialized == 0) trs_uart_init(0);
   if (initialized == -1) {
-    error("serial port emulation is not enabled");
+    if (trs_uart_name[0] != '\0')
+      error("serial port emulation is not enabled");
     return;
   }
 }
