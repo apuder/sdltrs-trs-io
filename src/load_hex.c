@@ -42,8 +42,7 @@
 
 #define BUFFER_SIZE 256
 
-extern void hex_transfer_address(int address);
-extern void hex_data(int address, int value);
+extern void mem_write_rom(int address, int value);
 
 static int hex_byte(char *string)
 {
@@ -88,13 +87,13 @@ int load_hex(FILE *file)
 	    /* the data */
 	    if(num_bytes == 0)
 	    {
-		/* Transfer address */
-		hex_transfer_address(address);
+		/* Transfer address UNUSED:
+		hex_transfer_address(address); */
 	    } else {
 		while(num_bytes--)
 		{
 		    value = hex_byte(b);  b += 2;
-		    hex_data(address++, value);
+		    mem_write_rom(address++, value);
 		    check += value;
 		}
 		if (address > high) high = address;

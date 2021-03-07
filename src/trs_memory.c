@@ -358,18 +358,6 @@ void mem_write_rom(int address, int value)
       cp500_rom[address] = value;
 }
 
-/* Called by load_hex */
-void hex_data(int address, int value)
-{
-    mem_write_rom(address, value);
-}
-
-/* Called by load_hex */
-void hex_transfer_address(int address)
-{
-    /* Ignore */
-}
-
 static int trs80_model1_ram(int address)
 {
   int bank = 0x8000;
