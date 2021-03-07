@@ -137,7 +137,6 @@ static void trs_load_compiled_rom(int address, int size, const unsigned char rom
 {
   int i;
 
-  trs_rom_size = address + size;
   for (i = 0; i < size; ++i)
     mem_write_rom(address + i, rom[i]);
 }
