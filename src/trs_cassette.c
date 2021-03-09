@@ -619,7 +619,7 @@ void trs_set_cassette_position(int pos)
 }
 
 /* Return value: 1 = already that state; 0 = state changed; -1 = failed */
-int assert_state(int state)
+static int assert_state(int state)
 {
   if (cassette_state == state) {
     return 1;
@@ -732,6 +732,12 @@ int assert_state(int state)
   return 0;
 }
 
+/* Call assert_state and ignore return value */
+void
+assert_state_void(int dummy)
+{
+  assert_state(dummy);
+}
 
 /* Record an output transition.
    value is either the new port value or FLUSH.
@@ -787,11 +793,11 @@ transition_out(int value)
         cassette_roundoff_error = 0.0;
       }
       if (trs_event_scheduled() == transition_out ||
-	  trs_event_scheduled() == (trs_event_func) assert_state) {
+	  trs_event_scheduled() == assert_state_void) {
         trs_cancel_event();
       }
       if (value == FLUSH) {
-        trs_schedule_event((trs_event_func)assert_state, CLOSE, 5000000);
+        trs_schedule_event(assert_state_void, CLOSE, 5000000);
       } else {
         trs_schedule_event(transition_out, FLUSH,
                            (int)(25000 * z80_state.clockMHz));
@@ -1229,11 +1235,11 @@ trs_orch90_out(int channels, int value)
   }
 
   if (trs_event_scheduled() == orch90_flush ||
-      trs_event_scheduled() == (trs_event_func) assert_state) {
+      trs_event_scheduled() == assert_state_void) {
     trs_cancel_event();
   }
   if (value == FLUSH) {
-    trs_schedule_event((trs_event_func)assert_state, CLOSE, 5000000);
+    trs_schedule_event(assert_state_void, CLOSE, 5000000);
   } else {
     trs_schedule_event(orch90_flush, FLUSH,
 		       (int)(250000 * z80_state.clockMHz));

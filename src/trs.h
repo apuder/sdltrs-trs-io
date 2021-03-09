@@ -176,7 +176,7 @@ extern void trs_cassette_update(int dummy);
 extern int cassette_default_sample_rate;
 extern void trs_orch90_out(int chan, int value);
 extern void trs_cassette_reset(void);
-extern int assert_state(int dummy);
+extern void assert_state_void(int dummy);
 extern void transition_out(int dummy);
 extern void trs_cassette_kickoff(int dummy);
 extern void orch90_flush(int dummy);
