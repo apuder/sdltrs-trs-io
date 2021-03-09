@@ -208,6 +208,8 @@ int mem_read_bank_base(void)
 	return 0xFF;
 }
 
+/* The A11 flipflop is used for enabling access to the CP-500
+   system monitor code at the EPROM address range 3800-3fff */
 int cp500_a11_flipflop_toggle(void)
 {
 	/* toggle the flip-flop at every read at io addresses 0xf4-f7 */
