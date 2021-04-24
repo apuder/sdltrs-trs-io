@@ -1,3 +1,5 @@
+This is a fork of Jens Guenther's release of [SDLTRS-JG] that integrates [TRS-IO].
+
 Updated version of Mark Grebe's [SDLTRS]:
 
   * Included all patches by [EtchedPixels]: banked memory support, Lowe LE18
@@ -71,6 +73,8 @@ Lupi's fork of [RetroPie-Setup] ...
 [SDL2.DLL]: https://www.libsdl.org/download-2.0.php
 [SDL-1.2.14]: https://www.libsdl.org/release/SDL-1.2.14-win32.zip
 [SDLTRS]: http://sdltrs.sourceforge.net
+[SDLTRS-JG]: https://gitlab.com/jengun/sdltrs
+[TRS-IO]: https://github.com/apuder/TRS-IO
 [sdltrs.exe]: bin/sdltrs.exe
 [sdl2trs.exe]: bin/sdl2trs.exe
 [sdl2trs64.exe]: bin/sdl2trs64.exe
