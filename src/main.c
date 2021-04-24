@@ -55,6 +55,13 @@
 #include "trs_rom4p.c"
 #include "trs_romesf.c"
 
+#include "frehd.h"
+
+#define USE_FREHD
+
+void init_trs_io();
+void init_socket_io();
+
 int trs_model = 1;
 char *program_name;
 
@@ -167,6 +174,11 @@ int SDLmain(int argc, char *argv[])
   int debug = FALSE;
   wordregister x;
 
+  init_trs_io();
+#ifdef USE_FREHD
+  init_socket_io();
+  init_frehd();
+#endif
   /* program_name must be set first because the error
    * printing routines use it. */
   program_name = strrchr(argv[0], DIR_SLASH);

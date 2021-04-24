@@ -53,6 +53,10 @@
 #include "trs_state_save.h"
 #include "trs_stringy.h"
 #include "trs_uart.h"
+#include "trsio-wrapper.h"
+#include "frehd.h"
+
+#define USE_FREHD
 
 static int modesel = 0;     /* Model I */
 static int modeimage = 0x8; /* Model III/4/4p */
@@ -70,6 +74,12 @@ void z80_out(int port, int value)
 
   /* First, ports common to all models */
   switch (port) {
+  case 0xc2:
+  case 0xc3:
+  case 0xc4:
+  case 0xc5:
+  case 0xc6:
+  case 0xc7:
   case TRS_HARD_WP:       /* 0xC0 */
   case TRS_HARD_CONTROL:  /* 0xC1 */
   case TRS_HARD_DATA:     /* 0xC8 */
@@ -80,7 +90,12 @@ void z80_out(int port, int value)
   case TRS_HARD_CYLHI:    /* 0xCD */
   case TRS_HARD_SDH:      /* 0xCE */
   case TRS_HARD_STATUS:   /* 0xCF */ /*=TRS_HARD_COMMAND*/
+#ifdef USE_FREHD
+    frehd_out(port, value);
+    frehd_check_action();
+#else
     trs_hard_out(port, value);
+#endif
     break;
   case TRS_UART_RESET:    /* 0xE8 */
     trs_uart_reset_out(value);
@@ -409,6 +424,12 @@ int z80_in(int port)
   case 0x00:
     value = trs_joystick_in();
     goto done;
+  case 0xc2:
+  case 0xc3:
+  case 0xc4:
+  case 0xc5:
+  case 0xc6:
+  case 0xc7:
   case TRS_HARD_WP:       /* 0xC0 */
   case TRS_HARD_CONTROL:  /* 0xC1 */
   case TRS_HARD_DATA:     /* 0xC8 */
@@ -419,7 +440,12 @@ int z80_in(int port)
   case TRS_HARD_CYLHI:    /* 0xCD */
   case TRS_HARD_SDH:      /* 0xCE */
   case TRS_HARD_STATUS:   /* 0xCF */ /*=TRS_HARD_COMMAND*/
+#ifdef USE_FREHD
+    value = frehd_in(port);
+    frehd_check_action();
+#else
     value = trs_hard_in(port);
+#endif
     goto done;
   case TRS_UART_MODEM:    /* 0xE8 */
     value = trs_uart_modem_in();
@@ -502,6 +528,12 @@ int z80_in(int port)
 	goto done;
       }
       break;
+    case 0xc2:
+    case 0xc3:
+    case 0xc4:
+    case 0xc5:
+    case 0xc6:
+    case 0xc7:
     case TRS_HARD_WP:      /* 0xC0 */
     case TRS_HARD_CONTROL: /* 0xC1 */
     case TRS_HARD_DATA:    /* 0xC8 */
@@ -512,7 +544,12 @@ int z80_in(int port)
     case TRS_HARD_CYLHI:   /* 0xCD */
     case TRS_HARD_SDH:     /* 0xCE */
     case TRS_HARD_STATUS:  /* 0xCF */ /*=TRS_HARD_COMMAND*/
+#ifdef USE_FREHD
+      value = frehd_in(port);
+      frehd_check_action();
+#else
       value = trs_hard_in(port);
+#endif
       goto done;
       break;
     case 0xE0:

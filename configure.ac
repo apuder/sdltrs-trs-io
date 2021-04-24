@@ -3,6 +3,7 @@ AC_INIT([sdltrs], [1.2.16], [dbotw@gmx.net])
 AC_CONFIG_SRCDIR([src/trs.h])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_CC
+AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN([AC_DEFINE([big_endian])])

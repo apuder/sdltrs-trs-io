@@ -1,6 +1,7 @@
 AUTOMAKE_OPTIONS=foreign
 
-AM_CFLAGS=	-Wall
+AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -Imisc
+AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -Imisc
 
 bin_PROGRAMS=	sdltrs
 dist_man_MANS=	src/sdltrs.1
@@ -28,7 +29,28 @@ sdltrs_SOURCES=	src/blit.c \
 		src/trs_stringy.c \
 		src/trs_uart.c \
 		src/z80.c \
-		src/PasteManager.c
+		src/PasteManager.c \
+		TRS-IO/src/esp/components/trs-io/trs-io.cpp \
+		TRS-IO/src/esp/components/trs-io/core.cpp \
+		TRS-IO/src/esp/components/retrostore/utils.cpp \
+		TRS-IO/src/esp/components/retrostore/pb_common.cpp \
+		TRS-IO/src/esp/components/retrostore/ApiProtos.pb.cpp \
+		TRS-IO/src/esp/components/retrostore/pb_decode.cpp \
+		TRS-IO/src/esp/components/retrostore/backend.cpp \
+		TRS-IO/src/esp/components/retrostore/retrostore.cpp \
+		TRS-IO/src/esp/components/retrostore/esp_mock.cpp \
+		TRS-IO/src/esp/components/retrostore/cJSON.cpp \
+		gen/loader_basic.cpp \
+		gen/loader_cmd.cpp \
+		gen/rsclient.cpp \
+		TRS-IO/src/esp/components/tcpip/tcpip.cpp \
+		TRS-IO/src/esp/components/frehd/trs_hard.c \
+		TRS-IO/src/esp/components/frehd/trs_extra.c \
+		TRS-IO/src/esp/components/frehd/frehd.c \
+		TRS-IO/src/esp/components/frehd/io.c \
+		TRS-IO/src/esp/components/frehd/dsk.c \
+		misc/fileio.cpp \
+		misc/trsio-wrapper.cpp
 
 appicondir=	$(datadir)/icons/hicolor/scalable/apps
 appicon_DATA=	icons/sdltrs.svg
