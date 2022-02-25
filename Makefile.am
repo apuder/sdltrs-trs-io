@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS=foreign
 
-AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -Imisc
-AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -Imisc
+AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
+AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
 
 bin_PROGRAMS=	sdltrs
 dist_man_MANS=	src/sdltrs.1
@@ -32,6 +32,7 @@ sdltrs_SOURCES=	src/blit.c \
 		src/PasteManager.c \
 		TRS-IO/src/esp/components/trs-io/trs-io.cpp \
 		TRS-IO/src/esp/components/trs-io/core.cpp \
+		TRS-IO/src/esp/components/trs-fs/trs-fs.cpp \
 		TRS-IO/src/esp/components/retrostore/utils.cpp \
 		TRS-IO/src/esp/components/retrostore/pb_common.cpp \
 		TRS-IO/src/esp/components/retrostore/ApiProtos.pb.cpp \
@@ -40,9 +41,9 @@ sdltrs_SOURCES=	src/blit.c \
 		TRS-IO/src/esp/components/retrostore/retrostore.cpp \
 		TRS-IO/src/esp/components/retrostore/esp_mock.cpp \
 		TRS-IO/src/esp/components/retrostore/cJSON.cpp \
-		gen/loader_basic.cpp \
-		gen/loader_cmd.cpp \
-		gen/rsclient.cpp \
+		gen/loader_basic.c \
+		gen/loader_cmd.c \
+		gen/rsclient.c \
 		TRS-IO/src/esp/components/tcpip/tcpip.cpp \
 		TRS-IO/src/esp/components/frehd/trs_hard.c \
 		TRS-IO/src/esp/components/frehd/trs_extra.c \

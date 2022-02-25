@@ -189,6 +189,12 @@ void z80_out(int port, int value)
   } else {
     /* Next, Models III/4/4P only */
     switch (port) {
+    case 31:
+      if (!trsio_z80_out(value)) {
+	trsio_process_in_background();
+        trs_iobus_interrupt(1);
+      }
+      break;
     case 0x43: /* Alpha Technologies SuperMem */
       if (trs_model == 3)
           mem_bank_base(value);
@@ -506,6 +512,10 @@ int z80_in(int port)
   } else {
     /* Models III/4/4P only */
     switch (port) {
+    case 31:
+      trs_iobus_interrupt(0);
+      value = trsio_z80_in();
+      goto done;
     case 0x43: /* Supermem memory expansion */
       if (trs_model == 3)
           value = mem_read_bank_base();

@@ -1,6 +1,7 @@
 
 #include "trs-io.h"
 #include "trsio-wrapper.h"
+#include <stdio.h>
 
 extern "C" {
 
@@ -12,5 +13,10 @@ uint8_t trsio_z80_in() {
   return TrsIO::inZ80();
 }
 
+void trsio_process_in_background() {
+  TrsIO::processInBackground();
 }
+
+}
+
 
