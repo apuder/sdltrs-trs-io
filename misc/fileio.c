@@ -11,6 +11,10 @@
 
 #define AM_DIR 0x10
 
+int trs_fs_mounted() {
+  return 1;
+}
+
 void f_log(const char* format, ...) {
   va_list args;
   va_start(args, format);

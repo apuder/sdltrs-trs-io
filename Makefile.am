@@ -1,7 +1,8 @@
 AUTOMAKE_OPTIONS=foreign
 
-AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
-AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
+# -DCONFIG_TRS_IO_MODEL_1 is used to activate XRAY
+AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -DCONFIG_TRS_IO_MODEL_1 -ITRS-IO/src/esp/components/retrostore-c-sdk/main/include -ITRS-IO/src/esp/components/retrostore-c-sdk/main/proto -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
+AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -DCONFIG_TRS_IO_MODEL_1 -ITRS-IO/src/esp/components/retrostore-c-sdk/main/include -ITRS-IO/src/esp/components/retrostore-c-sdk/main/proto -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
 
 bin_PROGRAMS=	sdltrs
 dist_man_MANS=	src/sdltrs.1
@@ -30,17 +31,16 @@ sdltrs_SOURCES=	src/blit.c \
 		src/trs_uart.c \
 		src/z80.c \
 		src/PasteManager.c \
+		TRS-IO/src/esp/components/retrostore-c-sdk/main/retrostore.cpp \
+		TRS-IO/src/esp/components/retrostore-c-sdk/main/proto/ApiProtos.pb.c \
+		TRS-IO/src/esp/components/retrostore-c-sdk/main/proto/pb_common.c \
+		TRS-IO/src/esp/components/retrostore-c-sdk/main/proto/pb_decode.c \
+		TRS-IO/src/esp/components/retrostore-c-sdk/main/proto/pb_encode.c \
 		TRS-IO/src/esp/components/trs-io/trs-io.cpp \
 		TRS-IO/src/esp/components/trs-io/core.cpp \
 		TRS-IO/src/esp/components/trs-fs/trs-fs.cpp \
-		TRS-IO/src/esp/components/retrostore/utils.cpp \
-		TRS-IO/src/esp/components/retrostore/pb_common.cpp \
-		TRS-IO/src/esp/components/retrostore/ApiProtos.pb.cpp \
-		TRS-IO/src/esp/components/retrostore/pb_decode.cpp \
-		TRS-IO/src/esp/components/retrostore/backend.cpp \
 		TRS-IO/src/esp/components/retrostore/retrostore.cpp \
 		TRS-IO/src/esp/components/retrostore/esp_mock.cpp \
-		TRS-IO/src/esp/components/retrostore/cJSON.cpp \
 		gen/loader_basic.c \
 		gen/loader_cmd.c \
 		gen/rsclient.c \
@@ -50,8 +50,12 @@ sdltrs_SOURCES=	src/blit.c \
 		TRS-IO/src/esp/components/frehd/frehd.c \
 		TRS-IO/src/esp/components/frehd/io.c \
 		TRS-IO/src/esp/components/frehd/dsk.c \
+		misc/esp_log.cpp \
 		misc/fileio.cpp \
-		misc/trsio-wrapper.cpp
+		misc/led.cpp \
+		misc/spi.cpp \
+		misc/trsio-wrapper.cpp \
+		misc/data-fetcher-posix.cpp
 
 appicondir=	$(datadir)/icons/hicolor/scalable/apps
 appicon_DATA=	icons/sdltrs.svg
