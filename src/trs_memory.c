@@ -53,6 +53,7 @@
 #include "trs_hard.h"
 #include "trs_imp_exp.h"
 #include "trs_state_save.h"
+#include "xray.h"
 
 #define MAX_ROM_SIZE	(0x3800)
 #define MAX_VIDEO_SIZE	(0x0800)
@@ -407,7 +408,14 @@ static int trs80_model1_mmio(int address)
 
 int mem_read(int address)
 {
+    uint8_t byte;
+
     address &= 0xffff; /* allow callers to be sloppy */
+
+
+    if (xray_mem_read(address, &byte)) {
+      return byte;
+    }
 
     /* There are some adapters that sit above the system and
        either intercept before the hardware proper, or adjust
@@ -580,6 +588,10 @@ static void trs80_model1_write_mmio(int address, int value)
 void mem_write(int address, int value)
 {
     address &= 0xffff;
+
+    if (xray_mem_write(address, value)) {
+      return;
+    }
 
     /* The SuperMem sits between the system and the Z80 */
     if (supermem) {

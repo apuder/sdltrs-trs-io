@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS=foreign
 
 # -DCONFIG_TRS_IO_MODEL_1 is used to activate XRAY
-AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -DCONFIG_TRS_IO_MODEL_1 -ITRS-IO/src/esp/components/retrostore-c-sdk/main/include -ITRS-IO/src/esp/components/retrostore-c-sdk/main/proto -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
-AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -DCONFIG_TRS_IO_MODEL_1 -ITRS-IO/src/esp/components/retrostore-c-sdk/main/include -ITRS-IO/src/esp/components/retrostore-c-sdk/main/proto -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
+AM_CFLAGS=	-Wall -DPB_FIELD_16BIT -DCONFIG_SDLTRS -ITRS-IO/src/esp/components/retrostore-c-sdk/main/include -ITRS-IO/src/esp/components/retrostore-c-sdk/main/proto -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
+AM_CXXFLAGS=	-Wall -DPB_FIELD_16BIT -DCONFIG_SDLTRS -ITRS-IO/src/esp/components/retrostore-c-sdk/main/include -ITRS-IO/src/esp/components/retrostore-c-sdk/main/proto -ITRS-IO/src/esp/components/retrostore/include -ITRS-IO/src/esp/components/trs-io/include -ITRS-IO/src/esp/components/tcpip/include -ITRS-IO/src/esp/components/frehd/include -ITRS-IO/src/esp/components/trs-fs/include -Imisc
 
 bin_PROGRAMS=	sdltrs
 dist_man_MANS=	src/sdltrs.1
@@ -44,6 +44,7 @@ sdltrs_SOURCES=	src/blit.c \
 		gen/loader_basic.c \
 		gen/loader_cmd.c \
 		gen/rsclient.c \
+		gen/xray_load.c \
 		TRS-IO/src/esp/components/tcpip/tcpip.cpp \
 		TRS-IO/src/esp/components/frehd/trs_hard.c \
 		TRS-IO/src/esp/components/frehd/trs_extra.c \
@@ -53,7 +54,7 @@ sdltrs_SOURCES=	src/blit.c \
 		misc/esp_log.cpp \
 		misc/fileio.cpp \
 		misc/led.cpp \
-		misc/spi.cpp \
+		misc/xray.cpp \
 		misc/trsio-wrapper.cpp \
 		misc/data-fetcher-posix.cpp
 
