@@ -23,7 +23,9 @@ static uint16_t xray_base_addr;
 
 static int breakpoint_idx;
 
+extern retrostore::RetroStore rs;
 extern retrostore::RsSystemState trs_state;
+extern int trs_state_token;
 
 extern "C" void mem_write(int address, int value);
 
@@ -64,11 +66,23 @@ bool xray_mem_read(uint16_t addr, uint8_t* byte)
         // Ignore screenshot
         continue;
       }
-      uint8_t* buf = region->data.get();
-      for (int j = 0; j < region->length; j++) {
-        mem_write(region->start + j, *buf++);
-      }
+      int start = region->start;
+      int left = region->length;
+      const int fragment_size = 4096;
+      do {
+        retrostore::RsMemoryRegion r;
+        rs.DownloadStateMemoryRange(trs_state_token, start, fragment_size, &r);
+        uint8_t* buf = r.data.get();
+        assert(r.start == start);
+        assert(r.length <= fragment_size);
+        for (int j = 0; j < r.length; j++) {
+          mem_write(start + j, *buf++);
+        }
+        start += r.length;
+        left -= r.length;
+      } while (left > 0);
     }
+    trs_state.regions.clear();
     return false;
   }
 
